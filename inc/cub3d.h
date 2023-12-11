@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 14:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/11 14:24:32 by cdumais          ###   ########.fr       */
+/*   Created: 2023/12/11 14:22:13 by cdumais           #+#    #+#             */
+/*   Updated: 2023/12/11 16:04:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#ifndef CUB3D_H
+# define CUB3D_H
 
-int	main(void)
-{
-	ft_printf("testing\n");
-	return (0);
-}
+# include "../lib/libft/inc/libft.h"
+# include <math.h>
+
+
+
+
+
+#endif

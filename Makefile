@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/11 12:18:10 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/11 16:46:25 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,32 +17,45 @@ NAME		:= cub3D
 ARGS		:= 
 
 INC_DIR		:= inc
-SRC_DIR		:= src
+LIB_DIR		:= lib
 OBJ_DIR		:= obj
+SRC_DIR		:= src
 TMP_DIR		:= tmp
 
-LIB_DIR		:= lib
+COMPILE		:= gcc
+C_FLAGS		:= -Wall -Wextra -Werror
+# L_FLAGS		:= 
+HEADERS		:= -I$(INC_DIR)
+
+REMOVE		:= rm -rf
+NPD			:= --no-print-directory
+VOID		:= /dev/null
+OS			:= $(shell uname -s)
+# **************************************************************************** #
+# ---------------------------------- LIBFT ----------------------------------- #
+# **************************************************************************** #
 LIBFT_DIR	:= $(LIB_DIR)/libft
+LIBFT_INC	:= $(LIBFT_DIR)/$(INC_DIR)
+LIBFT		:= $(LIBFT_DIR)/libft.a
+HEADERS		:= $(HEADERS) -I$(LIBFT_INC)
+
+# **************************************************************************** #
+# -------------------------------- MINILIBX ---------------------------------- #
+# **************************************************************************** #
 MLX_DIR		:= $(LIB_DIR)/minilibx
 
-COMPILE	:= gcc
-C_FLAGS	:= -Wall -Wextra -Werror
-L_FLAGS	:= -L$(MLX_DIR) -lmlx
-HEADERS	:= -I$(INC_DIR)
-
-REMOVE	:= rm -rf
-OS		:= $(shell uname -s)
-
 ifeq ($(OS), Linux)
-	MLX_DIR += /minilibx_linux
-	L_FLAGS += -lbsd -lXext -lX11 -lm
-
+	MLX_DIR := $(MLX_DIR)/minilibx_linux
+	L_FLAGS := -lmlx -lbsd -lXext -lX11 -lm
 else ifeq ($(OS), Darwin)
-	MLX_DIR += /minilibx_macos
-	L_FLAGS += -framework OpenGL -framework AppKit
+	MLX_DIR := $(MLX_DIR)/minilibx_macos
+	L_FLAGS := -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 else
 	$(error Unsupported operating system: $(UNAME))
 endif
+
+MLX			:= $(MLX_DIR)/libmlx.a
+HEADERS		:= $(HEADERS) -I$(MLX_DIR)
 # **************************************************************************** #
 # -------------------------------- ALL * FILES ------------------------------- #
 # **************************************************************************** #
@@ -53,8 +66,6 @@ OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # --------------------------------- C FILES ---------------------------------- #
 # **************************************************************************** #
 # SRC		:=	
-# **************************************************************************** #
-
 # **************************************************************************** #
 # --------------------------------- H FILES ---------------------------------- #
 # **************************************************************************** #
@@ -70,9 +81,18 @@ OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # **************************************************************************** #
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@$(COMPILE) $(C_FLAGS) $(OBJS) -o $@
+$(NAME): $(LIBFT) $(OBJS) $(INCS) $(MLX)
+	@$(COMPILE) $(C_FLAGS) $(HEADERS) $(OBJS) $(LIBFT) $(L_FLAGS) -o $@
 	@echo "$@ is ready"
+
+$(LIBFT):
+	@make -C $(LIBFT_DIR)
+
+$(MLX):
+	@make -C $(MLX_DIR) > $(VOID) 2>&1 || \
+		(echo "minilibx not found in $(MLX_DIR)" \
+		&& exit 1)
+	@echo "minilibx ready"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCS) | $(OBJ_DIR)
 	@$(COMPILE) $(C_FLAGS) $(HEADERS) -c $< -o $@
@@ -81,12 +101,26 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 clean:
-	@$(REMOVE) $(OBJ_DIR)
-	@echo "Object files removed"
+	@if [ -d "$(OBJ_DIR)" ]; then \
+		$(REMOVE) $(OBJ_DIR); \
+		echo "Object files removed"; \
+	else \
+		echo "No object files to remove"; \
+	fi
+	@make clean -C $(LIBFT_DIR) $(NPD)
+
+# clean:
+# 	@$(REMOVE) $(OBJ_DIR)
+# 	@echo "Object files removed"
+# 	@make clean -C $(LIBFT_DIR) $(NPD)
 
 fclean: clean
-	@$(REMOVE) $(NAME)
-	@echo "$(NAME) removed"
+	@if [ -n "$(wildcard $(NAME))" ]; then \
+		$(REMOVE) $(NAME); \
+		echo "$(NAME) removed"; \
+	else \
+		echo "No executable to remove"; \
+	fi
 
 re: fclean all
 
@@ -112,7 +146,16 @@ $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
 
 ffclean: fclean
+	@make fclean -C $(LIBFT_DIR) $(NPD)
 	@$(REMOVE) $(TMP_DIR)
+	@if [ -f $(MLX) ]; then \
+		make clean -C $(MLX_DIR) > $(VOID) 2>&1 || \
+			(echo "mlx clean error" \
+			&& exit 1); \
+		echo "$(MLX) removed"; \
+	else \
+		echo "no $(MLX) to remove"; \
+	fi
 
 .PHONY: run assembly ffclean
 # **************************************************************************** #

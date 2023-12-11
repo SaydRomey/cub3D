@@ -6,22 +6,24 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/10 22:26:22 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/11 12:18:10 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # **************************************************************************** #
 # -------------------------------- VARIABLES --------------------------------- #
 # **************************************************************************** #
-NAME	:= cub3D
-ARGS	:= 
+NAME		:= cub3D
+ARGS		:= 
 
-INC_DIR	:= inc
-LIB_DIR	:= lib
-MLX_DIR := $(LIB_DIR)/minilibx
-OBJ_DIR	:= obj
-SRC_DIR	:= src
-TMP_DIR	:= tmp
+INC_DIR		:= inc
+SRC_DIR		:= src
+OBJ_DIR		:= obj
+TMP_DIR		:= tmp
+
+LIB_DIR		:= lib
+LIBFT_DIR	:= $(LIB_DIR)/libft
+MLX_DIR		:= $(LIB_DIR)/minilibx
 
 COMPILE	:= gcc
 C_FLAGS	:= -Wall -Wextra -Werror

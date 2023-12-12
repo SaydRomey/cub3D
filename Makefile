@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/11 16:46:25 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/11 20:12:59 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ MLX_DIR		:= $(LIB_DIR)/minilibx
 
 ifeq ($(OS), Linux)
 	MLX_DIR := $(MLX_DIR)/minilibx_linux
-	L_FLAGS := -lmlx -lbsd -lXext -lX11 -lm
+	L_FLAGS := -L$(MLX_DIR) -lmlx -lbsd -lXext -lX11 -lm
 else ifeq ($(OS), Darwin)
 	MLX_DIR := $(MLX_DIR)/minilibx_macos
 	L_FLAGS := -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
@@ -86,13 +86,21 @@ $(NAME): $(LIBFT) $(OBJS) $(INCS) $(MLX)
 	@echo "$@ is ready"
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR) $(NPD)
+
+# $(MLX):
+# 	@make -C $(MLX_DIR) > $(VOID) 2>&1 || \
+# 		(echo "minilibx not found in $(MLX_DIR)" \
+# 		&& exit 1)
+# 	@echo "minilibx ready"
 
 $(MLX):
-	@make -C $(MLX_DIR) > $(VOID) 2>&1 || \
-		(echo "minilibx not found in $(MLX_DIR)" \
-		&& exit 1)
-	@echo "minilibx ready"
+	@echo "Building minilibx in $(MLX_DIR)..."
+	@$(MAKE) -C $(MLX_DIR) || (echo "Failed to build minilibx in $(MLX_DIR)" && exit 1)
+	@echo "minilibx built successfully."
+
+# @echo "Setting execute permission for minilibx configure script..."
+# @chmod +x $(MLX_DIR)/configure
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCS) | $(OBJ_DIR)
 	@$(COMPILE) $(C_FLAGS) $(HEADERS) -c $< -o $@
@@ -108,11 +116,6 @@ clean:
 		echo "No object files to remove"; \
 	fi
 	@make clean -C $(LIBFT_DIR) $(NPD)
-
-# clean:
-# 	@$(REMOVE) $(OBJ_DIR)
-# 	@echo "Object files removed"
-# 	@make clean -C $(LIBFT_DIR) $(NPD)
 
 fclean: clean
 	@if [ -n "$(wildcard $(NAME))" ]; then \
@@ -174,3 +177,10 @@ else
 endif
 
 .PHONY: pdf
+# **************************************************************************** #
+
+modules:
+	git submodule init
+	git submodule update
+
+.PHONY: modules

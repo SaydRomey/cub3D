@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/11 20:12:59 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/11 21:29:54 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ TMP_DIR		:= tmp
 
 COMPILE		:= gcc
 C_FLAGS		:= -Wall -Wextra -Werror
-# L_FLAGS		:= 
 HEADERS		:= -I$(INC_DIR)
 
 REMOVE		:= rm -rf
@@ -38,7 +37,6 @@ LIBFT_DIR	:= $(LIB_DIR)/libft
 LIBFT_INC	:= $(LIBFT_DIR)/$(INC_DIR)
 LIBFT		:= $(LIBFT_DIR)/libft.a
 HEADERS		:= $(HEADERS) -I$(LIBFT_INC)
-
 # **************************************************************************** #
 # -------------------------------- MINILIBX ---------------------------------- #
 # **************************************************************************** #
@@ -79,31 +77,29 @@ OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # **************************************************************************** #
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
-all: $(NAME)
+#TODO: fix the no message when "nothing to be done" should appear..
+all: init_submodules $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) $(INCS) $(MLX)
 	@$(COMPILE) $(C_FLAGS) $(HEADERS) $(OBJS) $(LIBFT) $(L_FLAGS) -o $@
 	@echo "$@ is ready"
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR) $(NPD)
-
-# $(MLX):
-# 	@make -C $(MLX_DIR) > $(VOID) 2>&1 || \
-# 		(echo "minilibx not found in $(MLX_DIR)" \
-# 		&& exit 1)
-# 	@echo "minilibx ready"
+	@$(MAKE) -C $(LIBFT_DIR) $(NPD)
 
 $(MLX):
+	@chmod +x $(MLX_DIR)/configure
 	@echo "Building minilibx in $(MLX_DIR)..."
-	@$(MAKE) -C $(MLX_DIR) || (echo "Failed to build minilibx in $(MLX_DIR)" && exit 1)
-	@echo "minilibx built successfully."
-
-# @echo "Setting execute permission for minilibx configure script..."
-# @chmod +x $(MLX_DIR)/configure
+	@$(MAKE) -C $(MLX_DIR) > $(VOID) 2>&1 || \
+		(echo "Failed to build minilibx in $(MLX_DIR)" && exit 1)
+	@printf "$(UP)$(ERASE_LINE)"
+	@echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
+	$(GREEN)\tbuilt successfully$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCS) | $(OBJ_DIR)
+	@echo "$(CYAN)Compiling...$(ORANGE)\t$(notdir $<)$(RESET)"
 	@$(COMPILE) $(C_FLAGS) $(HEADERS) -c $< -o $@
+	@printf "$(UP)$(ERASE_LINE)"
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
@@ -111,18 +107,22 @@ $(OBJ_DIR):
 clean:
 	@if [ -d "$(OBJ_DIR)" ]; then \
 		$(REMOVE) $(OBJ_DIR); \
-		echo "Object files removed"; \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)Object files removed$(RESET)"; \
 	else \
-		echo "No object files to remove"; \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)No object files to remove$(RESET)"; \
 	fi
-	@make clean -C $(LIBFT_DIR) $(NPD)
+	@$(MAKE) clean -C $(LIBFT_DIR) $(NPD)
 
 fclean: clean
 	@if [ -n "$(wildcard $(NAME))" ]; then \
 		$(REMOVE) $(NAME); \
-		echo "$(NAME) removed"; \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)Executable removed$(RESET)"; \
 	else \
-		echo "No executable to remove"; \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)No executable to remove$(RESET)"; \
 	fi
 
 re: fclean all
@@ -131,7 +131,7 @@ re: fclean all
 # **************************************************************************** #
 # ---------------------------------- UTILS ----------------------------------- #
 # **************************************************************************** #
-run: $(NAME)
+run: all
 	./$(NAME) $(ARGS)
 
 debug: C_FLAGS += -g
@@ -152,12 +152,13 @@ ffclean: fclean
 	@make fclean -C $(LIBFT_DIR) $(NPD)
 	@$(REMOVE) $(TMP_DIR)
 	@if [ -f $(MLX) ]; then \
-		make clean -C $(MLX_DIR) > $(VOID) 2>&1 || \
-			(echo "mlx clean error" \
+		make clean -C $(MLX_DIR) > $(VOID) 2>&1 || (echo "mlx clean error" \
 			&& exit 1); \
-		echo "$(MLX) removed"; \
+		echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
+		$(GREEN)Library removed$(RESET)"; \
 	else \
-		echo "no $(MLX) to remove"; \
+		echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
+		$(YELLOW)No library to remove(RESET)"; \
 	fi
 
 .PHONY: run assembly ffclean
@@ -178,9 +179,53 @@ endif
 
 .PHONY: pdf
 # **************************************************************************** #
+init_submodules:
+	@git submodule init
+	@git submodule update
 
-modules:
-	git submodule init
-	git submodule update
+.PHONY: init_submodules
 
-.PHONY: modules
+# **************************************************************************** #
+# ----------------------------------- DECO ----------------------------------- #
+# **************************************************************************** #
+ESC			:= \033
+
+RESET		:= $(ESC)[0m
+BOLD		:= $(ESC)[1m
+DIM			:= $(ESC)[2m
+ITALIC		:= $(ESC)[3m
+UNDERLINE	:= $(ESC)[4m
+BLINK		:= $(ESC)[5m #no effect on iterm?
+INVERT		:= $(ESC)[7m
+HIDDEN		:= $(ESC)[8m
+STRIKE		:= $(ESC)[9m
+
+# Cursor movement
+UP			:= $(ESC)[A
+DOWN		:= $(ESC)[B
+FORWARD		:= $(ESC)[C
+BACK		:= $(ESC)[D
+NEXT_LINE	:= $(ESC)[E
+PREV_LINE	:= $(ESC)[F
+COLUMN		:= $(ESC)[G
+TOP_LEFT	:= $(ESC)[1;1H
+
+# Erasing
+ERASE_REST	:= $(ESC)[K
+ERASE_LINE	:= $(ESC)[2K
+ERASE_ALL	:= $(ESC)[2J
+# **************************************************************************** #
+# ---------------------------------- COLORS ---------------------------------- #
+# **************************************************************************** #
+# Text
+BLACK		:= $(ESC)[30m
+RED			:= $(ESC)[91m
+GREEN		:= $(ESC)[32m
+YELLOW		:= $(ESC)[93m
+ORANGE		:= $(ESC)[38;5;208m
+BLUE		:= $(ESC)[94m
+PURPLE		:= $(ESC)[95m
+CYAN		:= $(ESC)[96m
+WHITE		:= $(ESC)[37m
+GRAY		:= $(ESC)[90m
+

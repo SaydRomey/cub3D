@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:43:19 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/12 19:40:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/13 14:51:23 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,28 @@
 /* bytes per pixel */
 # define PIXEL_SIZE		4
 
+/* x_event */
+# define DESTROY		17
+
 /* colors */
 
-# define HEX_BLACK			0x000000
-# define HEX_WHITE			0xFFFFFF
-# define HEX_RED			0xFF0000
-# define HEX_GREEN			0x00FF00
-# define HEX_BLUE			0x0000FF
-# define HEX_YELLOW			0xFFFF00
-# define HEX_MAGENTA		0xFF00FF
-# define HEX_CYAN			0x00FFFF
-# define HEX_ORANGE			0xED840C
-# define HEX_ORANGE2		0xFF7700
-# define HEX_PURPLE			0x800080
-# define HEX_OLILAS			0xA27CF1
-# define HEX_LILAC			0xFF22FF
-# define HEX_PINK			0xFFC0CB
-# define HEX_BROWN			0xA52A2A
+# define	TEXT_COLOR		0xFFFFFF
+
+# define	HEX_BLACK		0x000000
+# define	HEX_WHITE		0xFFFFFF
+# define	HEX_RED			0xFF0000
+# define	HEX_GREEN		0x00FF00
+# define	HEX_BLUE		0x0000FF
+# define	HEX_YELLOW		0xFFFF00
+# define	HEX_MAGENTA		0xFF00FF
+# define	HEX_CYAN		0x00FFFF
+# define	HEX_ORANGE		0xED840C
+# define	HEX_ORANGE2		0xFF7700
+# define	HEX_PURPLE		0x800080
+# define	HEX_OLILAS		0xA27CF1
+# define	HEX_LILAC		0xFF22FF
+# define	HEX_PINK		0xFFC0CB
+# define	HEX_BROWN		0xA52A2A
 
 
 #endif

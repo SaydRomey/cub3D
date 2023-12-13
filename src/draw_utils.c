@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 16:35:30 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/13 10:32:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/13 15:19:34 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void	draw_pixel(t_img *img, int x, int y, int color)
 	}
 }
 
-void	draw_line(t_img *img, t_point start, t_point end)
+void	draw_line(t_img *img, t_point start, t_point end, int color)
 {
 	t_point	step;
 	int		max;
-	int		color;
+	// int		color;
 
-	color = HEX_WHITE;
+	// color = HEX_WHITE;
 	step.x = end.x - start.x;
 	step.y = end.y - start.y;
 	max = ft_max(ft_abs(step.x), ft_abs(step.y));

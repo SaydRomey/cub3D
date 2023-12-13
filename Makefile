@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/13 10:28:10 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/13 15:21:09 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,12 @@ endif
 
 MLX			:= $(MLX_DIR)/libmlx.a
 HEADERS		:= $(HEADERS) -I$(MLX_DIR)
+# **************************************************************************** #
+# ------------------------------- SUBMODULES --------------------------------- #
+# **************************************************************************** #
+INIT_CHECK	:= $(LIB_DIR)/.init_check
+INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
+
 # **************************************************************************** #
 # -------------------------------- ALL * FILES ------------------------------- #
 # **************************************************************************** #
@@ -156,7 +162,7 @@ mlxclean:
 
 ffclean: fclean mlxclean
 	@make fclean -C $(LIBFT_DIR) $(NPD)
-	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK)
+	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
 
 .PHONY: run debug leaks assembly mlxclean ffclean
 # **************************************************************************** #
@@ -176,9 +182,6 @@ endif
 
 .PHONY: pdf
 # **************************************************************************** #
-INIT_CHECK	:= $(LIB_DIR)/.init_check
-INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
-
 init_submodules:
 	@git submodule init
 	@git submodule update
@@ -202,21 +205,12 @@ ESC			:= \033
 
 RESET		:= $(ESC)[0m
 BOLD		:= $(ESC)[1m
-DIM			:= $(ESC)[2m
 ITALIC		:= $(ESC)[3m
 UNDERLINE	:= $(ESC)[4m
-INVERT		:= $(ESC)[7m
-HIDDEN		:= $(ESC)[8m
-STRIKE		:= $(ESC)[9m
 
 # Cursor movement
 UP			:= $(ESC)[A
 DOWN		:= $(ESC)[B
-FORWARD		:= $(ESC)[C
-BACK		:= $(ESC)[D
-NEXT_LINE	:= $(ESC)[E
-PREV_LINE	:= $(ESC)[F
-COLUMN		:= $(ESC)[G
 TOP_LEFT	:= $(ESC)[1;1H
 
 # Erasing
@@ -237,4 +231,3 @@ PURPLE		:= $(ESC)[95m
 CYAN		:= $(ESC)[96m
 WHITE		:= $(ESC)[37m
 GRAY		:= $(ESC)[90m
-

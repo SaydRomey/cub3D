@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/11 21:29:54 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/12 15:53:44 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,9 @@ endif
 
 MLX			:= $(MLX_DIR)/libmlx.a
 HEADERS		:= $(HEADERS) -I$(MLX_DIR)
+# 
+INIT_CHECK	:= $(LIB_DIR)/.init_check
+INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
 # **************************************************************************** #
 # -------------------------------- ALL * FILES ------------------------------- #
 # **************************************************************************** #
@@ -78,18 +81,18 @@ OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
 #TODO: fix the no message when "nothing to be done" should appear..
-all: init_submodules $(NAME)
+# all: init_submodules $(NAME)
+all: $(INIT) $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) $(INCS) $(MLX)
 	@$(COMPILE) $(C_FLAGS) $(HEADERS) $(OBJS) $(LIBFT) $(L_FLAGS) -o $@
-	@echo "$@ is ready"
+	@echo "$(GREEN)$$TITLE$(RESET)"
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR) $(NPD)
 
 $(MLX):
-	@chmod +x $(MLX_DIR)/configure
-	@echo "Building minilibx in $(MLX_DIR)..."
+	@echo "Building minilibx in $(CYAN)$(UNDERLINE)$(MLX_DIR)$(RESET)..."
 	@$(MAKE) -C $(MLX_DIR) > $(VOID) 2>&1 || \
 		(echo "Failed to build minilibx in $(MLX_DIR)" && exit 1)
 	@printf "$(UP)$(ERASE_LINE)"
@@ -148,9 +151,7 @@ assembly: $(NAME) | $(TMP_DIR)
 $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
 
-ffclean: fclean
-	@make fclean -C $(LIBFT_DIR) $(NPD)
-	@$(REMOVE) $(TMP_DIR)
+mlxclean:
 	@if [ -f $(MLX) ]; then \
 		make clean -C $(MLX_DIR) > $(VOID) 2>&1 || (echo "mlx clean error" \
 			&& exit 1); \
@@ -158,10 +159,14 @@ ffclean: fclean
 		$(GREEN)Library removed$(RESET)"; \
 	else \
 		echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
-		$(YELLOW)No library to remove(RESET)"; \
+		$(YELLOW)No library to remove$(RESET)"; \
 	fi
 
-.PHONY: run assembly ffclean
+ffclean: fclean mlxclean
+	@make fclean -C $(LIBFT_DIR) $(NPD)
+	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK)
+
+.PHONY: run debug leaks assembly mlxclean ffclean
 # **************************************************************************** #
 # ---------------------------------- PDF ------------------------------------- #
 # **************************************************************************** #
@@ -182,11 +187,21 @@ endif
 init_submodules:
 	@git submodule init
 	@git submodule update
+	@touch $(INIT_CHECK)
+ifeq ($(OS), Linux)
+	@chmod +x $(MLX_DIR)/configure
+endif
 
 .PHONY: init_submodules
-
 # **************************************************************************** #
 # ----------------------------------- DECO ----------------------------------- #
+# **************************************************************************** #
+define TITLE
+
+$@ is ready
+
+endef
+export TITLE
 # **************************************************************************** #
 ESC			:= \033
 
@@ -195,7 +210,6 @@ BOLD		:= $(ESC)[1m
 DIM			:= $(ESC)[2m
 ITALIC		:= $(ESC)[3m
 UNDERLINE	:= $(ESC)[4m
-BLINK		:= $(ESC)[5m #no effect on iterm?
 INVERT		:= $(ESC)[7m
 HIDDEN		:= $(ESC)[8m
 STRIKE		:= $(ESC)[9m

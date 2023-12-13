@@ -3,8 +3,9 @@
 *.a
 *.s
 *.pdf
+*.init_check
 
-philo
+cub3D
 
 obj
 tmp

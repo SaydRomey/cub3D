@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:13 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/12 19:28:29 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/13 10:32:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_mlx
 
 void	clear_image(t_img *img);
 void	draw_pixel(t_img *img, int x, int y, int color);
-void	draw_line(t_mlx *mlx_struct, t_point start, t_point end);
+void	draw_line(t_img *img, t_point start, t_point end);
 
 
 

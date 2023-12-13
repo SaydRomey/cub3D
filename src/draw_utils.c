@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 16:35:30 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/12 19:40:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/13 10:32:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	draw_pixel(t_img *img, int x, int y, int color)
 	}
 }
 
-void	draw_line(t_mlx *mlx_struct, t_point start, t_point end)
+void	draw_line(t_img *img, t_point start, t_point end)
 {
 	t_point	step;
 	int		max;
@@ -51,7 +51,7 @@ void	draw_line(t_mlx *mlx_struct, t_point start, t_point end)
 	step.y /= max;
 	while ((int)(start.x - end.x) || (int)(start.y - end.y))
 	{
-		draw_pixel(&(mlx_struct->img), start.x, start.y, color);
+		draw_pixel(img, start.x, start.y, color);
 		start.x += step.x;
 		start.y += step.y;
 	}

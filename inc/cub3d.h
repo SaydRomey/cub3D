@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:13 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/13 15:19:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/13 20:15:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ typedef struct s_cub
 
 // cleanup.c
 int		terminate_mlx(t_cub *cub);
+
+// draw_test.c
+void	pixel_test(t_img *img);
 
 // draw_utils.c
 void	clear_image(t_img *img);

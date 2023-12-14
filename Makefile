@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/13 15:21:09 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/13 21:48:42 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,14 +35,16 @@ LIBFT_INC	:= $(LIBFT_DIR)/$(INC_DIR)
 LIBFT		:= $(LIBFT_DIR)/libft.a
 HEADERS		:= $(HEADERS) -I$(LIBFT_INC)
 # **************************************************************************** #
-# -------------------------------- MINILIBX ---------------------------------- #
+# -------------------------------- MINILIBX (variables) ---------------------- #
 # **************************************************************************** #
 MLX_DIR		:= $(LIB_DIR)/minilibx
 
 ifeq ($(OS), Linux)
+	END_SRC := cleanup_linux
 	MLX_DIR := $(MLX_DIR)/minilibx_linux
 	L_FLAGS := -L$(MLX_DIR) -lmlx -lbsd -lXext -lX11 -lm
 else ifeq ($(OS), Darwin)
+	END_SRC := cleanup_mac
 	MLX_DIR := $(MLX_DIR)/minilibx_macos
 	L_FLAGS := -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 else
@@ -52,11 +54,10 @@ endif
 MLX			:= $(MLX_DIR)/libmlx.a
 HEADERS		:= $(HEADERS) -I$(MLX_DIR)
 # **************************************************************************** #
-# ------------------------------- SUBMODULES --------------------------------- #
+# -------------------------------- SUBMODULES  ------------------------------- #
 # **************************************************************************** #
 INIT_CHECK	:= $(LIB_DIR)/.init_check
 INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
-
 # **************************************************************************** #
 # -------------------------------- ALL * FILES ------------------------------- #
 # **************************************************************************** #
@@ -64,13 +65,13 @@ INCS	:=	$(wildcard $(INC_DIR)/*.h)
 SRCS	:=	$(wildcard $(SRC_DIR)/*.c)
 OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # **************************************************************************** #
-# --------------------------------- C FILES ---------------------------------- #
-# **************************************************************************** #
-# SRC		:=	
-# **************************************************************************** #
 # --------------------------------- H FILES ---------------------------------- #
 # **************************************************************************** #
 # INC		:=
+# **************************************************************************** #
+# --------------------------------- C FILES ---------------------------------- #
+# **************************************************************************** #
+# SRC		:=	$(END_SRC)
 # **************************************************************************** #
 # -------------------------------- ALL FILES --------------------------------- #
 # **************************************************************************** #
@@ -130,25 +131,8 @@ re: fclean all
 
 .PHONY: all clean fclean re
 # **************************************************************************** #
-# ---------------------------------- UTILS ----------------------------------- #
+# -------------------------------- MINILIBX ---------------------------------- #
 # **************************************************************************** #
-run: all
-	./$(NAME) $(ARGS)
-
-debug: C_FLAGS += -g
-debug: re
-
-leaks: debug
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) $(ARGS)
-
-assembly: $(NAME) | $(TMP_DIR)
-	@$(COMPILE) $(C_FLAGS) -S $(SRCS) $(HEADERS)
-	@mv *.s $(TMP_DIR)
-	@echo "Assembly files created in $(TMP_DIR)"
-
-$(TMP_DIR):
-	@mkdir -p $(TMP_DIR)
-
 mlxclean:
 	@if [ -f $(MLX) ]; then \
 		make clean -C $(MLX_DIR) > $(VOID) 2>&1 || (echo "mlx clean error" \
@@ -160,11 +144,51 @@ mlxclean:
 		$(YELLOW)No library to remove$(RESET)"; \
 	fi
 
+.PHONY: mlxclean
+# **************************************************************************** #
+# ----------------------------------- GIT ------------------------------------ #
+# **************************************************************************** #
+init_submodules: $(INIT_CHECK)
+
+$(INIT_CHECK):
+	@git submodule update --init --recursive
+	@touch $@
+ifeq ($(OS), Linux)
+	@chmod +x $(MLX_DIR)/configure
+endif
+
+update:
+	@echo "Are you sure you want to update the repo and submodules? [y/N] " \
+	&& read ANSWER; \
+	if [ "$$ANSWER" = "y" ] || [ "$$ANSWER" = "Y" ]; then \
+		git pull origin main; \
+		$(MAKE) init_submodules; \
+		echo "Repository and submodules updated."; \
+	else \
+		echo "canceling update..."; \
+	fi
+
+.PHONY: init_submodules update
+# **************************************************************************** #
+# ---------------------------------- UTILS ----------------------------------- #
+# **************************************************************************** #
+run: all
+	./$(NAME) $(ARGS)
+
+debug: C_FLAGS += -g
+debug: re
+
+leaks: debug
+	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) $(ARGS)
+
+$(TMP_DIR):
+	@mkdir -p $(TMP_DIR)
+
 ffclean: fclean mlxclean
 	@make fclean -C $(LIBFT_DIR) $(NPD)
 	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
 
-.PHONY: run debug leaks assembly mlxclean ffclean
+.PHONY: run debug leaks ffclean
 # **************************************************************************** #
 # ---------------------------------- PDF ------------------------------------- #
 # **************************************************************************** #
@@ -182,15 +206,7 @@ endif
 
 .PHONY: pdf
 # **************************************************************************** #
-init_submodules:
-	@git submodule init
-	@git submodule update
-	@touch $(INIT_CHECK)
-ifeq ($(OS), Linux)
-	@chmod +x $(MLX_DIR)/configure
-endif
 
-.PHONY: init_submodules
 # **************************************************************************** #
 # ----------------------------------- DECO ----------------------------------- #
 # **************************************************************************** #
@@ -231,3 +247,52 @@ PURPLE		:= $(ESC)[95m
 CYAN		:= $(ESC)[96m
 WHITE		:= $(ESC)[37m
 GRAY		:= $(ESC)[90m
+
+# **************************************************************************** #
+
+# testing multiple option targets
+
+choose_read:
+	@echo "Are you sure you want to print \"testing\" [y/N] " && read ANSWER; \
+	if [ "$$ANSWER" = "y" ] || [ "$$ANSWER" = "Y" ]; then \
+		echo "testing"; \
+	else \
+		echo "canceling..."; \
+	fi
+
+choose_case:
+	@echo "Select a project to clone:"
+	@echo "1. Project A"
+	@echo "2. Project B"
+	@echo "3. Project C"
+	@read choice; \
+	case $$choice in \
+		1) echo "Cloning Project A..."; \
+			echo "AAAAA" ;; \
+		2) echo "Cloning Project B..."; \
+			echo "BBBBB" ;; \
+		3) echo "Cloning Project C..."; \
+			echo "CCCCC" ;; \
+		*) echo "Invalid choice. Exiting." ;; \
+	esac
+
+.PHONY: choose_read choose_case
+
+# choose:
+# 	@echo "Select a project to clone:"
+# 	@echo "1. Project A"
+# 	@echo "2. Project B"
+# 	@echo "3. Project C"
+# 	@read choice; \
+# 	case $$choice in \
+# 		1) echo "Cloning Project A..."; \
+# 			git clone --recurse-submodules <project-A-repository-url> ;; \
+# 		2) echo "Cloning Project B..."; \
+# 			git clone --recurse-submodules <project-B-repository-url> ;; \
+# 		3) echo "Cloning Project C..."; \
+# 			git clone --recurse-submodules <project-C-repository-url> ;; \
+# 		*) echo "Invalid choice. Exiting." ;; \
+# 	esac
+
+# .PHONY: choose
+

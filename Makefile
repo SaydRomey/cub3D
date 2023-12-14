@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/13 21:48:42 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/14 12:32:27 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,11 +40,11 @@ HEADERS		:= $(HEADERS) -I$(LIBFT_INC)
 MLX_DIR		:= $(LIB_DIR)/minilibx
 
 ifeq ($(OS), Linux)
-	END_SRC := cleanup_linux
+	END_SRC := cleanup_linux.c
 	MLX_DIR := $(MLX_DIR)/minilibx_linux
 	L_FLAGS := -L$(MLX_DIR) -lmlx -lbsd -lXext -lX11 -lm
 else ifeq ($(OS), Darwin)
-	END_SRC := cleanup_mac
+	END_SRC := cleanup_mac.c
 	MLX_DIR := $(MLX_DIR)/minilibx_macos
 	L_FLAGS := -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 else
@@ -59,15 +59,9 @@ HEADERS		:= $(HEADERS) -I$(MLX_DIR)
 INIT_CHECK	:= $(LIB_DIR)/.init_check
 INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
 # **************************************************************************** #
-# -------------------------------- ALL * FILES ------------------------------- #
-# **************************************************************************** #
-INCS	:=	$(wildcard $(INC_DIR)/*.h)
-SRCS	:=	$(wildcard $(SRC_DIR)/*.c)
-OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
-# **************************************************************************** #
 # --------------------------------- H FILES ---------------------------------- #
 # **************************************************************************** #
-# INC		:=
+# INC		:= 
 # **************************************************************************** #
 # --------------------------------- C FILES ---------------------------------- #
 # **************************************************************************** #
@@ -78,6 +72,12 @@ OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # INCS		:=	$(addprefix $(INC_DIR)/, $(addsuffix .h, $(INC)))
 # SRCS		:=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC)))
 # OBJS		:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+# **************************************************************************** #
+# -------------------------------- ALL * FILES ------------------------------- #
+# **************************************************************************** #
+INCS	:=	$(wildcard $(INC_DIR)/*.h)
+SRCS	:=	$(wildcard $(SRC_DIR)/*.c)
+OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # **************************************************************************** #
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
@@ -280,9 +280,16 @@ choose_case:
 
 # choose:
 # 	@echo "Select a project to clone:"
-# 	@echo "1. Project A"
-# 	@echo "2. Project B"
-# 	@echo "3. Project C"
+# 	@echo "1. libft"
+# 	@echo "2. push_swap"
+# 	@echo "3. FdF"
+# 	@echo "4. pipex"
+# 	@echo "5. Minishell"
+# 	@echo "6. Cub3D"
+# 	@echo "\n(tester projects)\n"
+# 	@echo "7. Placeholder"
+# 	@echo "8. minilibx_project"
+# 	@echo "8. MLX_project"
 # 	@read choice; \
 # 	case $$choice in \
 # 		1) echo "Cloning Project A..."; \
@@ -291,6 +298,7 @@ choose_case:
 # 			git clone --recurse-submodules <project-B-repository-url> ;; \
 # 		3) echo "Cloning Project C..."; \
 # 			git clone --recurse-submodules <project-C-repository-url> ;; \
+# 		5) echo "Cloning Project C..."; \
 # 		*) echo "Invalid choice. Exiting." ;; \
 # 	esac
 

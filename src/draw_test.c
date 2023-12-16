@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 20:14:26 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/13 20:14:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/15 17:21:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	pixel_test(t_img *img)
 	draw_line(img, start, end, HEX_ORANGE);
 	
 	draw_pixel(img, 50, 50, HEX_GREEN);
-	draw_pixel(img, 150, 150, HEX_YELLOW);
+
+	// t_point	rec_origin = {50, 50};
+	// t_point	rec_end = {55, 80};
+
+	// draw_rectangle(img, rec_origin, rec_end, HEX_PINK);
 	
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:13:16 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/13 20:14:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/15 20:28:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,10 @@
 
 void	render(t_cub *cub)
 {
-	proof("Rendering");
 	clear_image(&(cub->img));
-	// 
-	pixel_test(&(cub->img));
-	// 
+
+	draw_mini_map(&(cub->img), &(cub->map));
+	draw_player(&(cub->img), &(cub->player));
+	
 	mlx_put_image_to_window(cub->mlx_ptr, cub->win_ptr, cub->img.img_ptr, 0, 0);
-	// if (cub->param.toggle.menu == ON)
-	// 	display_menu(cub);
-	// else
-	// 	cub_text(cub, "(H)elp", MENU_X, MENU_Y);
 }

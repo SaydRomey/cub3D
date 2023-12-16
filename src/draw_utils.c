@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 16:35:30 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/13 15:19:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/15 20:39:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ void	draw_line(t_img *img, t_point start, t_point end, int color)
 {
 	t_point	step;
 	int		max;
-	// int		color;
 
-	// color = HEX_WHITE;
 	step.x = end.x - start.x;
 	step.y = end.y - start.y;
 	max = ft_max(ft_abs(step.x), ft_abs(step.y));
@@ -55,4 +53,36 @@ void	draw_line(t_img *img, t_point start, t_point end, int color)
 		start.x += step.x;
 		start.y += step.y;
 	}
+}
+
+void	draw_rectangle(t_img *img, t_point origin, t_point end, int color)
+{
+	int x;
+	int y;
+
+	y = origin.y;
+	// while (y < origin.y + end.y)
+	while (y < end.y)
+	{
+		x = origin.x;
+		// while (x < origin.x + end.x)
+		while (x < end.x)
+		{
+			draw_pixel(img, x, y, color);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	draw_player(t_img *img, t_player *player)
+{
+	t_point	size;
+
+	size.x = player->position.x + player->size;
+	size.y = player->position.y + player->size;
+
+	// draw_pixel(img, x, y, player->color);
+	// draw_line(img, player->position, size, player->color);
+	draw_rectangle(img, player->position, size, player->color);
 }

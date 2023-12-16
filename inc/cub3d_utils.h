@@ -6,29 +6,38 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:43:19 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/13 14:51:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/15 18:33:17 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_UTILS_H
 # define CUB3D_UTILS_H
 
-# ifdef __APPLE__
-#  include "../minilibx_macos/mlx.h"
-#  include "key_macos.h"
-#  define WIDTH 2560
-#  define HEIGHT 1395
-# else
-#  ifdef __linux__
-#   include "../minilibx_linux/mlx.h"
-#   include "key_linux.h"
-#   define WIDTH 1366
-#   define HEIGHT 768
-#  endif
-# endif
+// # ifdef __APPLE__
+// #  include "../minilibx_macos/mlx.h"
+// #  include "key_macos.h"
+// #  define WIDTH 2560
+// #  define HEIGHT 1395
+// # else
+// #  ifdef __linux__
+// #   include "../minilibx_linux/mlx.h"
+// #   include "key_linux.h"
+// #   define WIDTH 1366
+// #   define HEIGHT 768
+// #  endif
+// # endif
+
+/* minimap test */
+# define MINI_WIDTH 50
+# define MINI_HEIGHT 50
 
 /* bytes per pixel */
 # define PIXEL_SIZE		4
+
+# define KEY_PRESS 2
+# define KEY_RELEASE 3
+# define KEY_PRESS_MASK (1L<<0)
+# define KEY_RELEASE_MASK (1L<<1)
 
 /* x_event */
 # define DESTROY		17

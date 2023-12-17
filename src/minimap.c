@@ -6,13 +6,26 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 15:19:45 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/15 20:39:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/16 21:02:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void draw_square(t_img *img, t_point origin, t_point size, int color)
+t_map	init_map(void)
+{
+	t_map	map;
+
+	map.tile_size = 64;
+	map.width = 8;
+	map.height = 8;
+	map.bg_color = HEX_BROWN;
+	map.floor_color = HEX_WHITE;
+	map.wall_color = HEX_BLACK;
+	return (map);
+}
+
+static void draw_tile(t_img *img, t_point origin, t_point size, int color)
 {
 	int x;
 	int y;
@@ -36,11 +49,11 @@ void	draw_mini_map(t_img *img, t_map *map)
 {
 	int		x;
 	int		y;
-	t_point	origin;
+	t_point	tile;
 	t_point	size;
 	int		color;
 	// 
-	int	tmp_map[] = 
+	int		tmp_map[] = 
 	{
 		1,1,1,1,1,1,1,1,
 		1,0,1,0,0,0,0,1,
@@ -51,60 +64,26 @@ void	draw_mini_map(t_img *img, t_map *map)
 		1,0,0,0,0,0,0,1,
 		1,1,1,1,1,1,1,1,
 	};
+	//
+	fill_image(img, map->bg_color);
 	// 
-	y = 0;
 	size.x = map->tile_size - 1;
 	size.y = map->tile_size - 1;
-	while (y < map->map_y)
+	y = 0;
+	while (y < map->height)
 	{
 		x = 0;
-		while (x < map->map_x)
+		while (x < map->width)
 		{
-			origin.x = x * map->tile_size;
-			origin.y = y * map->tile_size;
-			if (tmp_map[y * map->map_x + x] == 1)
+			tile.x = x * map->tile_size;
+			tile.y = y * map->tile_size;
+			if (tmp_map[y * map->width + x] == 1)
 				color = map->wall_color;
 			else
 				color = map->floor_color;
-			// draw_rectangle(img, origin, size, color);
-			draw_square(img, origin, size, color);
+			draw_tile(img, tile, size, color);
 			x++;
 		}
 		y++;
 	}
 }
-
-// void draw_mini_map(t_img *img)
-// {
-//     int x, y, xo, yo, xi, yi;
-//     int color;
-//     int squareSize = mapS - 1; // Reducing the square size by one pixel
-	
-// 	// 
-// 	t_point	origin = {0, 0};
-// 	t_point	end = {WIDTH, HEIGHT};
-// 	draw_rectangle(img, origin, end, HEX_BROWN);
-// 	// 
-//     for (y = 0; y < mapY; y++)
-// 	{
-//         for (x = 0; x < mapX; x++)
-// 		{
-//             // Determine the color based on the map value
-//             if (map[y * mapX + x] == 1)
-//                 color = HEX_WHITE;
-//             else
-//                 color = HEX_BLACK;
-
-//             // Calculate the top-left corner of the square
-//             xo = x * mapS;
-//             yo = y * mapS;
-
-//             // Draw a square of size squareSize x squareSize
-//             for (yi = 0; yi < squareSize; yi++) {
-//                 for (xi = 0; xi < squareSize; xi++) {
-//                     draw_pixel(img, xo + xi, yo + yi, color);
-//                 }
-//             }
-//         }
-//     }
-// }

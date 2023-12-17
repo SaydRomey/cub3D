@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:43:19 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/15 18:33:17 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/16 20:49:49 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@
 // #   define HEIGHT 768
 // #  endif
 // # endif
-
-/* minimap test */
-# define MINI_WIDTH 50
-# define MINI_HEIGHT 50
 
 /* bytes per pixel */
 # define PIXEL_SIZE		4
@@ -61,6 +57,5 @@
 # define	HEX_LILAC		0xFF22FF
 # define	HEX_PINK		0xFFC0CB
 # define	HEX_BROWN		0xA52A2A
-
 
 #endif

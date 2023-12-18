@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 16:54:44 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/16 21:06:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/18 15:14:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_player	init_player(t_point start)
 	
 	player.position.x = start.x;
 	player.position.y = start.y;
-	player.angle = 90;
+	player.angle = spawning_orientation('S');
 	player.delta.x = cos(degree_to_radian(player.angle));
 	player.delta.y = -sin(degree_to_radian(player.angle));
 	player.size = PLAYER_SIZE;
@@ -45,22 +45,22 @@ void	update_player_position(t_cub *cub)
 	t_player	*player;
 
 	player = &cub->player;
-	if (cub->keys.w && player->position.y > 5) //move forward
+	if (cub->keys.up || cub->keys.w) //move forward
 	{
 		player->position.x += player->delta.x * player->speed;
 		player->position.y += player->delta.y * player->speed;
 	}
-	if (cub->keys.a && player->position.x > 5) //move left
+	if (cub->keys.a) //move left
 	{
 		player->position.x += player->delta.y * player->speed;
 		player->position.y -= player->delta.x * player->speed;
 	}
-	if (cub->keys.s && player->position.y < HEIGHT - 15) //move backward
+	if (cub->keys.down || cub->keys.s) //move backward
 	{
 		player->position.x -= player->delta.x * player->speed;
 		player->position.y -= player->delta.y * player->speed;
 	}
-	if (cub->keys.d && player->position.x < WIDTH - 15) //move right
+	if (cub->keys.d) //move right
 	{
 		player->position.x -= player->delta.y * player->speed;
 		player->position.y += player->delta.x * player->speed;
@@ -72,14 +72,14 @@ void	update_player_direction(t_cub *cub)
 	t_player	*player;
 
 	player = &cub->player;
-	if (cub->keys.left && player->position.x > 5) //turn left
+	if (cub->keys.left) //turn left
 	{
 		player->angle += player->turn_speed;
 		player->angle = fix_angle(player->angle);
 		player->delta.x = cos(degree_to_radian(player->angle));
 		player->delta.y = -sin(degree_to_radian(player->angle));
 	}
-	if (cub->keys.right && player->position.x < WIDTH - 15) //turn right
+	if (cub->keys.right) //turn right
 	{
 		player->angle -= player->turn_speed;
 		player->angle = fix_angle(player->angle);

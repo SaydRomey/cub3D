@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:09:05 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/16 20:58:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/18 14:45:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,12 @@ int	key_press(int key, t_cub *cub)
 		cub->keys.s = 1;
 	if (key == D)
 		cub->keys.d = 1;
+	if (key == UP)
+		cub->keys.up = 1;
 	if (key == LEFT)
 		cub->keys.left = 1;
+	if (key == DOWN)
+		cub->keys.down = 1;
 	if (key == RIGHT)
 		cub->keys.right = 1;
 	return (0);
@@ -41,8 +45,12 @@ int	key_release(int key, t_cub *cub)
 		cub->keys.s = 0;
 	if (key == D)
 		cub->keys.d = 0;
+	if (key == UP)
+		cub->keys.up = 0;
 	if (key == LEFT)
 		cub->keys.left = 0;
+	if (key == DOWN)
+		cub->keys.down = 0;
 	if (key == RIGHT)
 		cub->keys.right = 0;
 	return (0);
@@ -67,10 +75,10 @@ int	update_game(void *param)
 	return (0);
 }
 
-// int	key_print(int key, t_cub *cub)
-// {
-// 	(void)cub;
+int	key_print(int key, t_cub *cub)
+{
+	(void)cub;
 
-// 	ft_printf("key: %d\n", key);
-// 	return (0);
-// }
+	ft_printf("key: %d\n", key);
+	return (0);
+}

@@ -6,10 +6,13 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/17 18:54:30 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/18 11:22:39 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# **************************************************************************** #
+# --------------------------------- VARIABLES -------------------------------- #
+# **************************************************************************** #
 NAME		:= cub3D
 ARGS		:= 
 
@@ -39,6 +42,7 @@ HEADERS		:= $(HEADERS) -I$(LIBFT_INC)
 # **************************************************************************** #
 MLX_DIR		:= $(LIB_DIR)/minilibx
 
+# C_FLAGS	:= $(CFLAGS) -D OS=$(OS) #(check if this works better) ?
 ifeq ($(OS), Linux)
 	END_SRC := cleanup_linux.c
 	MLX_DIR := $(MLX_DIR)/minilibx_linux
@@ -170,31 +174,32 @@ update:
 
 .PHONY: init_submodules update
 # **************************************************************************** #
-# ---------------------------------- UTILS ----------------------------------- #
+# ---------------------------------- NORME ----------------------------------- #
 # **************************************************************************** #
-run: all
-	./$(NAME) $(ARGS)
+norm:
+	@if which norminette > $(VOID); then \
+		echo "$(BOLD)$(YELLOW)Norminetting $(PURPLE)$(NAME)$(RESET)"; \
+		norminette -o $(INCS); \
+		norminette -o $(SRCS); \
+		$(MAKE) norm -C $(LIBFT_DIR); \
+	else \
+		echo "$(BOLD)$(YELLOW)Norminette not installed$(RESET)"; \
+	fi
 
-debug: C_FLAGS += -g
-debug: re
+nm: $(NAME)
+	@echo "$(BOLD)$(YELLOW)Functions in $(PURPLE)$(UNDERLINE)$(NAME)$(RESET):"
+	@nm $(NAME) | grep U | grep -v 'ft_' \
+				| sed 's/U//g' | sed 's/__//g' | sed 's/ //g' \
+				| sort | uniq
+	@$(MAKE) nm -C $(LIBFT_DIR) $(NPD)
 
-leaks: debug
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) $(ARGS)
-
-$(TMP_DIR):
-	@mkdir -p $(TMP_DIR)
-
-ffclean: fclean mlxclean
-	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
-	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
-
-.PHONY: run debug leaks ffclean
+.PHONY: norm nm
 # **************************************************************************** #
 # ---------------------------------- PDF ------------------------------------- #
 # **************************************************************************** #
 PDF		:= cub3d_en.pdf
-GIT_URL := https://github.com/SaydRomey/42_ressources
-PDF_URL = $(GIT_URL)/blob/main/pdf/$(PDF)?raw=true
+GIT_URL	:= https://github.com/SaydRomey/42_ressources
+PDF_URL	= $(GIT_URL)/blob/main/pdf/$(PDF)?raw=true
 
 pdf: | $(TMP_DIR)
 	@curl -# -L $(PDF_URL) -o $(TMP_DIR)/$(PDF)
@@ -206,7 +211,124 @@ endif
 
 .PHONY: pdf
 # **************************************************************************** #
+# -------------------------------- LEAKS ------------------------------------- #
+# **************************************************************************** #
+VAL_CHECK	:= $(shell which valgrind > $(VOID); echo $$?)
 
+# valgrind options
+ORIGIN		:= --track-origins=yes
+LEAK_CHECK	:= --leak-check=full
+LEAK_KIND	:= --show-leak-kinds=all
+
+# valgrind additional options
+CHILDREN	:= --trace-children=yes
+FD_TRACK	:= --track-fds=yes
+HELGRIND	:= --tool=helgrind
+NO_REACH	:= --show-reachable=no
+VERBOSE		:= --verbose
+VAL_LOG		:= valgrind-out.txt
+LOG_FILE	:= --log-file=$(VAL_LOG)
+
+# suppression-related options
+SUPP_FILE	:= suppression.supp
+SUPP_GEN	:= --gen-suppressions=all
+SUPPRESS	:= --suppressions=$(SUPP_FILE)
+
+# default valgrind tool
+BASE_TOOL	= valgrind $(ORIGIN) $(LEAK_CHECK) $(LEAK_KIND)
+# **************************************************************************** #
+# specific valgrind tool (add 'valgrind option' variables as needed)
+BASE_TOOL	+= 
+# **************************************************************************** #	TODO: check if we should put messages as an echo instead of a target
+LEAK_TOOL	= $(BASE_TOOL) $(LOG_FILE)
+SUPP_TOOL	= $(BASE_TOOL) $(SUPP_GEN) $(LOG_FILE)
+
+# run valgrind
+leaks_msg:
+	@echo "[$(BOLD)$(PURPLE)valgrind$(RESET)] \
+	$(ORANGE)\tRecompiling with debug flags$(RESET)"
+
+leaks: leaks_msg debug
+	@if [ $(VAL_CHECK) -eq 0 ]; then \
+		echo "[$(BOLD)$(PURPLE)valgrind$(RESET)] \
+		$(ORANGE)Launching valgrind\n$(RESET)#"; \
+		$(LEAK_TOOL) ./$(NAME) $(ARGS); \
+		echo "#\n[$(BOLD)$(PURPLE)valgrind$(RESET)] \
+		$(ORANGE)info in: $(CYAN)$(VAL_LOG)$(RESET)"; \
+	else \
+		echo "Please install valgrind to use the 'leaks' feature"; \
+	fi
+
+# generate suppression file
+supp_msg:
+	@echo "generating suppression file"
+supp: leaks_msg supp_msg debug
+	$(SUPP_TOOL) ./$(NAME) $(ARGS) && \
+	awk '/^{/,/^}/' valgrind-out.txt > suppression.supp
+
+# use suppression file
+suppleaks_msg:
+	@echo "launching valgrind with suppression file"
+suppleaks: debug
+	$(LEAK_TOOL) $(SUPPRESS) ./$(NAME) $(ARGS)
+
+# remove suppression and log files
+vclean:
+	@if [ -n "$(wildcard suppression.supp)" ]; then \
+		$(REMOVE) $(SUPP_FILE); \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)suppression file removed$(RESET)"; \
+	else \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)no suppression file to remove$(RESET)"; \
+	fi
+	@if [ -n "$(wildcard valgrind-out.txt)" ]; then \
+		$(REMOVE) valgrind-out.txt; \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)log file removed$(RESET)"; \
+	else \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)no log file to remove$(RESET)"; \
+	fi
+
+.PHONY: leaks_msg leaks supp_msg supp suppleaks_msg suppleaks vclean
+# **************************************************************************** #
+# ---------------------------------- UTILS ----------------------------------- #
+# **************************************************************************** #
+run: all
+	./$(NAME) $(ARGS)
+
+debug: C_FLAGS += -g
+debug: re
+
+$(TMP_DIR):
+	@mkdir -p $(TMP_DIR)
+
+ffclean: fclean vclean mlxclean
+	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
+	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
+
+.PHONY: run debug ffclean
+# **************************************************************************** #
+# ---------------------------------- BACKUP (zip) ---------------------------- #
+# **************************************************************************** #
+USER		:=$(shell whoami)
+ROOT_DIR	:=$(notdir $(shell pwd))
+TIMESTAMP	:=$(shell date "+%Y%m%d_%H%M%S")
+BACKUP_NAME	:=$(ROOT_DIR)_$(USER)_$(TIMESTAMP).zip
+MOVE_TO		:= ~/Desktop/$(BACKUP_NAME)
+
+zip: ffclean
+	@if which zip > $(VOID); then \
+		zip -r --quiet $(BACKUP_NAME) ./*; \
+		mv $(BACKUP_NAME) $(MOVE_TO); \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		compressed as: $(CYAN)$(UNDERLINE)$(MOVE_TO)$(RESET)"; \
+	else \
+		echo "Please install zip to use the backup feature"; \
+	fi
+
+.PHONY: zip
 # **************************************************************************** #
 # ----------------------------------- DECO ----------------------------------- #
 # **************************************************************************** #
@@ -249,8 +371,10 @@ WHITE		:= $(ESC)[37m
 GRAY		:= $(ESC)[90m
 
 # **************************************************************************** #
-
+# ---------------------------------- TESTS ----------------------------------- #
+# **************************************************************************** #
 # testing multiple option targets
+# (add grademe ?)
 
 choose_read:
 	@echo "Are you sure you want to print \"testing\" [y/N] " && read ANSWER; \

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:13 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/17 20:01:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/18 15:15:59 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,17 @@ typedef struct s_player
 
 typedef struct s_keys
 {
-	int	esc;
+	int			esc;
 	// 
-	int	w;
-	int	a;
-	int	s;
-	int	d;
+	int			w;
+	int			a;
+	int			s;
+	int			d;
 	// 
-	int	left;
-	int	right;
+	int			up;
+	int			left;
+	int			down;
+	int			right;
 }		t_keys;
 
 typedef struct s_img
@@ -77,7 +79,13 @@ typedef struct s_cub
 	t_player	player;
 	t_keys		keys;
 	t_map		map;
+	// 
+	t_point		cursor;
+	int			line_switch; //tmp test to display mouse-player line
 }				t_cub;
+
+// cleanup.c (tmp until src are explicitly defined in makefile)
+int			terminate_mlx(t_cub *cub);
 
 // draw_utils.c
 // 
@@ -94,7 +102,7 @@ int			key_press(int keycode, t_cub *cub);
 int			key_release(int keycode, t_cub *cub);
 void		check_options(t_cub *cub);
 int			update_game(void *param);
-// int		key_print(int key, t_cub *cub); //tmp
+int			key_print(int key, t_cub *cub); //tmp
 
 // math_utils.c
 // 
@@ -109,6 +117,7 @@ void		draw_mini_map(t_img *img, t_map *map);
 // mouse.c
 // 
 int			follow_mouse(int mouse_x, int mouse_y, void *param);
+void		draw_cursor(t_img *img, t_cub *cub);
 int			read_mouse(int button, int mouse_x, int mouse_y, void *param);
 
 // player.c
@@ -122,12 +131,11 @@ void		update_player_direction(t_cub *cub);
 // 
 void		render(t_cub *cub);
 
-// terminate.c (tmp until src are explicitly defined in makefile)
-int			terminate_mlx(t_cub *cub);
-
 // utils.c
 // 
 int			mlx_text(t_cub *cub, char *str, int x, int y);
 void		proof(char *msg);
+void		toggle(int *toggle);
+int			spawning_orientation(char direction);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 16:35:30 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/16 20:51:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/17 19:41:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,25 @@ void	draw_line(t_img *img, t_point start, t_point end, int color)
 	}
 }
 
-// void	draw_rectangle(t_img *img, t_point origin, t_point end, int color)
-// {
-// 	int x;
-// 	int y;
+// 
 
-// 	y = origin.y;
-// 	// while (y < origin.y + end.y)
-// 	while (y < end.y)
-// 	{
-// 		x = origin.x;
-// 		// while (x < origin.x + end.x)
-// 		while (x < end.x)
-// 		{
-// 			draw_pixel(img, x, y, color);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
+void	draw_rect(t_img *img, t_point origin, t_point size, int color)
+{
+	int	i;
+	int	j;
 
+	i = 0;
+	while (i < size.y && i + origin.y < HEIGHT)
+	{
+		j = 0;
+		while (j < size.x && j + origin.x < WIDTH)
+		{
+			draw_pixel(img, origin.x + j, origin.y + i, color);
+			j++;
+		}
+		i++;
+	}
+}
 void	draw_circle(t_img *img, t_point origin, int radius, int color)
 {
 	int	i;

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/14 12:32:27 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/17 18:54:30 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -185,7 +185,7 @@ $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
 
 ffclean: fclean mlxclean
-	@make fclean -C $(LIBFT_DIR) $(NPD)
+	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
 	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
 
 .PHONY: run debug leaks ffclean

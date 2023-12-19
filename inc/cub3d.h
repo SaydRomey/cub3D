@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:13 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/18 15:15:59 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 14:47:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ typedef struct s_point
 
 typedef struct s_map
 {
-	// t_list		*data;
 	int			tile_size;
 	int			width;
 	int			height;
-	int			bg_color;
 	int			floor_color;
-	int			wall_color;
+	int			ceiling_color;
+	int			wall_tile_color;
+	int			floor_tile_color;
 }				t_map;
 
 typedef struct s_player
@@ -44,17 +44,16 @@ typedef struct s_player
 	int			color;
 	float		speed;
 	float		turn_speed;
+	float		mouse_turn_speed;
 }				t_player;
 
 typedef struct s_keys
 {
 	int			esc;
-	// 
 	int			w;
 	int			a;
 	int			s;
 	int			d;
-	// 
 	int			up;
 	int			left;
 	int			down;
@@ -81,20 +80,30 @@ typedef struct s_cub
 	t_map		map;
 	// 
 	t_point		cursor;
+	t_point		prev_cursor;
+	// 
+	int			info_switch; //to display info in terminal
 	int			line_switch; //tmp test to display mouse-player line
+	// 
+	t_point		horizon; //test to look up and down with mouse
 }				t_cub;
 
 // cleanup.c (tmp until src are explicitly defined in makefile)
 int			terminate_mlx(t_cub *cub);
 
+// draw_shapes.c
+// 
+void		draw_circle(t_img *img, t_point origin, int radius, int color);
+void		draw_circle_hollow(t_img *img, t_point origin, int radius, int thickness, int color);
+void		draw_tile(t_img *img, t_point origin, t_point size, int color);
+// void		draw_rect(t_img *img, t_point origin, t_point end, int color);
+
 // draw_utils.c
 // 
 void		clear_image(t_img *img);
-void		fill_image(t_img *img, int color);
+void		color_background(t_img *img, int floor_color, int ceiling_color);
 void		draw_pixel(t_img *img, int x, int y, int color);
 void		draw_line(t_img *img, t_point start, t_point end, int color);
-void		draw_rect(t_img *img, t_point origin, t_point size, int color);
-void		draw_circle(t_img *img, t_point origin, int radius, int color);
 
 // hooks.c
 // 
@@ -116,6 +125,8 @@ void		draw_mini_map(t_img *img, t_map *map);
 
 // mouse.c
 // 
+int			moving_left(t_cub *cub);
+int			moving_right(t_cub *cub);
 int			follow_mouse(int mouse_x, int mouse_y, void *param);
 void		draw_cursor(t_img *img, t_cub *cub);
 int			read_mouse(int button, int mouse_x, int mouse_y, void *param);
@@ -137,5 +148,7 @@ int			mlx_text(t_cub *cub, char *str, int x, int y);
 void		proof(char *msg);
 void		toggle(int *toggle);
 int			spawning_orientation(char direction);
+int			is_in_the_zone(t_point to_verify, t_point origin, t_point end);
+int			is_in_window(t_point to_verify);
 
 #endif

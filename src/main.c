@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/18 14:59:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 14:55:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static void	cub_loop(t_cub *cub)
 	mlx_hook(cub->win_ptr, DESTROY, 0, terminate_mlx, cub);
 // mouse hooks
 	mlx_mouse_hook(cub->win_ptr, read_mouse, cub);
-	mlx_hook(cub->win_ptr, MOUSE_MOVE, 1L<<0, follow_mouse, cub);
+	mlx_hook(cub->win_ptr, MOUSE_MOVE, 1L<<0, follow_mouse, cub); //make test with this mask on linux..
 
-// Set the loop hook for continuous updates
+// Set the loop hook for continuous updates and rendering
     mlx_loop_hook(cub->mlx_ptr, update_game, cub);
 
 // main loop
@@ -58,6 +58,7 @@ int	main(void)
 	cub = init_cub("[map title]");
 	cub.player = init_player(start);
 	cub.map = init_map();
+	cub.horizon = (t_point){WIDTH - 60, HEIGHT / 2};
 	cub_loop(&cub);
 	terminate_mlx(&cub);
 	return (0);

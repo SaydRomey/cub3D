@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 14:48:59 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/18 15:16:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 13:06:16 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,23 @@ int	spawning_orientation(char direction)
 	if (direction == 'W')
 		return (180);
 	return (-1);
+}
+
+/*
+returns true if the 'to_verify' point is within the area of 'origin' to 'end'
+*/
+int	is_in_the_zone(t_point to_verify, t_point origin, t_point end)
+{
+	if (to_verify.x >= origin.x && to_verify.x <= end.x && \
+		to_verify.y >= origin.y && to_verify.y <= end.y)
+		return (TRUE);
+	return (FALSE);
+}
+
+int	is_in_window(t_point to_verify)
+{
+	if (to_verify.x > 0 && to_verify.x < WIDTH && \
+		to_verify.y > 0 && to_verify.y < HEIGHT)
+		return (TRUE);
+	return (FALSE);
 }

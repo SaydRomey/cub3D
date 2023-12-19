@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:43:19 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/18 11:54:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 14:25:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@
 # define HEIGHT				600
 
 # define PLAYER_SIZE		10
-# define PLAYER_SPEED		2
+# define PLAYER_SPEED		3
+# define SPEED_LIMIT		10
 # define PLAYER_TURN_SPEED	5
-
+# define MOUSE_SPEED		1
 
 # define PI					3.1415926535
 
@@ -52,7 +53,7 @@
 # define KEY_PRESS_MASK		(1L<<0)
 # define KEY_RELEASE_MASK	(1L<<1)
 
-/* colors */
+/* colors */ //need to check these...
 
 # define HEX_BLACK			0x000000
 // grays?

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 15:19:45 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/16 21:02:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 15:01:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,14 @@ t_map	init_map(void)
 	map.tile_size = 64;
 	map.width = 8;
 	map.height = 8;
-	map.bg_color = HEX_BROWN;
-	map.floor_color = HEX_WHITE;
-	map.wall_color = HEX_BLACK;
+	map.floor_color = HEX_BROWN;
+	map.ceiling_color = HEX_BLUE;
+	map.wall_tile_color = HEX_BLACK;
+	map.floor_tile_color = HEX_WHITE;
 	return (map);
 }
 
-static void draw_tile(t_img *img, t_point origin, t_point size, int color)
-{
-	int x;
-	int y;
-
-	y = origin.y;
-	while (y < origin.y + size.y)
-	{
-		x = origin.x;
-		while (x < origin.x + size.x)
-		{
-			draw_pixel(img, x, y, color);
-			x++;
-		}
-		y++;
-	}
-}
-
 /* tmp map to test */
-
 void	draw_mini_map(t_img *img, t_map *map)
 {
 	int		x;
@@ -65,7 +47,8 @@ void	draw_mini_map(t_img *img, t_map *map)
 		1,1,1,1,1,1,1,1,
 	};
 	//
-	fill_image(img, map->bg_color);
+	// color_background(img, map->floor_color, map->ceiling_color);
+	// ft_memset(img->addr, HEX_PURPLE, HEIGHT * WIDTH * PIXEL_SIZE); //adding this makes 'drunk' effect
 	// 
 	size.x = map->tile_size - 1;
 	size.y = map->tile_size - 1;
@@ -78,9 +61,9 @@ void	draw_mini_map(t_img *img, t_map *map)
 			tile.x = x * map->tile_size;
 			tile.y = y * map->tile_size;
 			if (tmp_map[y * map->width + x] == 1)
-				color = map->wall_color;
+				color = map->wall_tile_color;
 			else
-				color = map->floor_color;
+				color = map->floor_tile_color;
 			draw_tile(img, tile, size, color);
 			x++;
 		}

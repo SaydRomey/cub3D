@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 16:54:44 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/18 15:14:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 15:01:03 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_player	init_player(t_point start)
 	player.size = PLAYER_SIZE;
 	player.color = HEX_PURPLE;
 	player.speed = PLAYER_SPEED;
+	player.speed = MOUSE_SPEED;
 	player.turn_speed = PLAYER_TURN_SPEED;
 	return (player);
 }
@@ -32,7 +33,7 @@ void	draw_player(t_img *img, t_player *player)
 {
 	t_point	line_size;
 	int		ray_length = 42; //tmp
-	int		ray_color = HEX_RED; //tmp
+	int		ray_color = HEX_BLUE; //tmp
 
 	line_size.x = player->position.x + player->delta.x * ray_length;
 	line_size.y = player->position.y + player->delta.y * ray_length;
@@ -72,14 +73,14 @@ void	update_player_direction(t_cub *cub)
 	t_player	*player;
 
 	player = &cub->player;
-	if (cub->keys.left) //turn left
+	if (cub->keys.left || (moving_left(cub) && cub->info_switch)) //turn left
 	{
 		player->angle += player->turn_speed;
 		player->angle = fix_angle(player->angle);
 		player->delta.x = cos(degree_to_radian(player->angle));
 		player->delta.y = -sin(degree_to_radian(player->angle));
 	}
-	if (cub->keys.right) //turn right
+	if (cub->keys.right || (moving_right(cub) && cub->info_switch)) //turn right
 	{
 		player->angle -= player->turn_speed;
 		player->angle = fix_angle(player->angle);

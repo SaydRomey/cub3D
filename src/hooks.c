@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:09:05 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/18 14:45:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 18:18:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,5 @@ int	update_game(void *param)
 	update_player_direction(cub);
 	check_options(cub);
 	render(cub);
-	return (0);
-}
-
-int	key_print(int key, t_cub *cub)
-{
-	(void)cub;
-
-	ft_printf("key: %d\n", key);
 	return (0);
 }

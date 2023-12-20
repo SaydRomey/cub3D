@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 19:09:30 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 15:06:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 18:17:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,17 @@ int follow_mouse(int mouse_x, int mouse_y, void *param)
 		// ft_printf("mouse [x = %d, y = %d]\n", mouse_x, mouse_y); //tmp
 	// 
 	update_player_direction(cub);
-	// if (cub->info_switch) //tmp
-	// {
-	// 	if (moving_left(cub))
-	// 		ft_printf("going left\n");
-	// 	if (moving_right(cub))
-	// 		ft_printf("going right\n");
-	// 	if (moving_up(cub))
-	// 		ft_printf("going up\n");
-	// 	if (moving_down(cub))
-	// 		ft_printf("going down\n");
-	// }
+	if (cub->info_switch) //tmp
+	{
+		if (moving_left(cub))
+			ft_printf("going left\n");
+		if (moving_right(cub))
+			ft_printf("going right\n");
+		if (moving_up(cub))
+			ft_printf("going up\n");
+		if (moving_down(cub))
+			ft_printf("going down\n");
+	}
 	if (moving_up(cub))
 	{
 		if (cub->horizon.y >= 100)
@@ -131,7 +131,7 @@ int read_mouse(int button, int mouse_x, int mouse_y, void *param)
 	cub = (t_cub *)param;
 	if (mouse_x < 0 || mouse_y < 0 || mouse_x > WIDTH || mouse_y > HEIGHT)
 		return (FAILURE);
-	// ft_printf("mouse button: %d\n", button); //tmp
+	ft_printf("mouse button: %d\n", button); //tmp
 	if (button == L_CLICK)
 		toggle(&cub->line_switch);
 	if (button == R_CLICK)

@@ -6,24 +6,30 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:43:19 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 14:25:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 18:19:14 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_UTILS_H
 # define CUB3D_UTILS_H
 
-# ifdef __linux__
-#  include "key_linux.h"
-// #  define WIDTH				1366
-// #  define HEIGHT			768
-# elif defined(__APPLE__) && defined(__MACH__)
-#  include "key_macos.h"
-// #  define WIDTH				2560
-// #  define HEIGHT			1395
-# else
-#  error "Unsupported Operating System"
-# endif
+// # ifdef OS
+// #  include "key_linux.h"
+// # else
+// #  include "key_macos.h"
+// # endif
+
+// # ifdef __linux__
+// #  include "key_linux.h"
+// // #  define WIDTH				1366
+// // #  define HEIGHT			768
+// # elif defined(__APPLE__) && defined(__MACH__)
+// #  include "key_macos.h"
+// // #  define WIDTH				2560
+// // #  define HEIGHT			1395
+// # else
+// #  error "Unsupported Operating System"
+// # endif
 
 
 // window with (tmp)

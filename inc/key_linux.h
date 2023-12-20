@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 22:32:52 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/18 15:17:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 18:09:41 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@
 // mouse
 
 # define L_CLICK		1
-# define R_CLICK		2
+# define R_CLICK		3
 # define SCROLL_UP		4
 # define SCROLL_DOWN	5
 

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/10 21:55:11 by cdumais           #+#    #+#              #
-#    Updated: 2023/12/18 11:22:39 by cdumais          ###   ########.fr        #
+#    Updated: 2023/12/19 18:10:32 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,8 +42,8 @@ HEADERS		:= $(HEADERS) -I$(LIBFT_INC)
 # **************************************************************************** #
 MLX_DIR		:= $(LIB_DIR)/minilibx
 
-# C_FLAGS	:= $(CFLAGS) -D OS=$(OS) #(check if this works better) ?
 ifeq ($(OS), Linux)
+	C_FLAGS	:= $(CFLAGS) -D OS=$(OS) #(check if this works better) ?
 	END_SRC := cleanup_linux.c
 	MLX_DIR := $(MLX_DIR)/minilibx_linux
 	L_FLAGS := -L$(MLX_DIR) -lmlx -lbsd -lXext -lX11 -lm

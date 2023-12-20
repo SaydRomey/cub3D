@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:13 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 18:59:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 22:12:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void		draw_circle(t_img *img, t_point origin, int radius, int color);
 void		draw_circle_hollow(t_img *img, t_point origin, int radius, int thickness, int color);
 void		draw_tile(t_img *img, t_point origin, t_point size, int color);
 void		draw_triangle(t_img *img, t_point p1, t_point p2, t_point p3, int color);
-// void		draw_rect(t_img *img, t_point origin, t_point end, int color);
+void		draw_rect(t_img *img, t_point origin, t_point end, int color);
 
 // draw_utils.c
 // 

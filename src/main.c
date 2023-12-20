@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 14:55:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 22:06:12 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ static void	cub_loop(t_cub *cub)
 // key hooks
 	mlx_hook(cub->win_ptr, KEY_PRESS, KEY_PRESS_MASK, key_press, cub);
 	mlx_hook(cub->win_ptr, KEY_RELEASE, KEY_RELEASE_MASK, key_release, cub);
+
 // clicking 'x'
 	mlx_hook(cub->win_ptr, DESTROY, 0, terminate_mlx, cub);
+
 // mouse hooks
 	mlx_mouse_hook(cub->win_ptr, read_mouse, cub);
-	mlx_hook(cub->win_ptr, MOUSE_MOVE, 1L<<0, follow_mouse, cub); //make test with this mask on linux..
+	mlx_hook(cub->win_ptr, MOUSE_MOVE, MOUSE_MOVE_MASK, follow_mouse, cub); //make test with this mask on linux..
 
 // Set the loop hook for continuous updates and rendering
     mlx_loop_hook(cub->mlx_ptr, update_game, cub);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:43:19 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 18:19:14 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/19 22:05:59 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@
 # define DESTROY			17
 # define KEY_PRESS_MASK		(1L<<0)
 # define KEY_RELEASE_MASK	(1L<<1)
+# define MOUSE_MOVE_MASK	(1L<<6)
 
 /* colors */ //need to check these...
 

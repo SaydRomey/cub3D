@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 19:09:30 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 22:43:50 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/20 11:36:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int follow_mouse(int mouse_x, int mouse_y, void *param)
 	// if (!is_in_window(cub->cursor))
 	if (mouse_x < 10 || mouse_y < 10 || mouse_x > WIDTH - 10 || mouse_y > HEIGHT - 10) //meh kinda works
 	{
-		cub->horizon.y = HEIGHT / 2; //reset to the middle of the screen
+		cub->map.horizon.y = HEIGHT / 2; //reset to the middle of the screen
 		// return (0); //?
 	}
 	// 
@@ -78,10 +78,10 @@ int follow_mouse(int mouse_x, int mouse_y, void *param)
 	// 	if (moving_down(cub))
 	// 		ft_printf("going down\n");
 	// }
-	if (moving_up(cub) && cub->horizon.y > upper_bound)
-			cub->horizon.y -= 1;
-	if (moving_down(cub) && cub->horizon.y < lower_bound)
-			cub->horizon.y += 1;
+	if (moving_up(cub) && cub->map.horizon.y > upper_bound)
+			cub->map.horizon.y -= 1;
+	if (moving_down(cub) && cub->map.horizon.y < lower_bound)
+			cub->map.horizon.y += 1;
 	return (0);
 }
 
@@ -131,7 +131,7 @@ int read_mouse(int button, int mouse_x, int mouse_y, void *param)
 	cub = (t_cub *)param;
 	if (mouse_x < 0 || mouse_y < 0 || mouse_x > WIDTH || mouse_y > HEIGHT)
 		return (FAILURE);
-	ft_printf("mouse button: %d\n", button); //tmp
+	// ft_printf("mouse button: %d\n", button); //tmp
 	if (button == L_CLICK)
 		toggle(&cub->line_switch);
 	if (button == R_CLICK)

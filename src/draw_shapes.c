@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 11:11:52 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 22:12:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/20 12:36:19 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,21 +110,24 @@ void	draw_rectangle(t_img *img, t_point origin, t_point end, int color)
 	}
 }
 
-void	color_background(t_img *img, int floor_color, int ceiling_color)
+void	color_background(t_img *img, t_map *map)
 {
 	t_point	start;
 	t_point	end;
 
+	// tmp
+	draw_rectangle(img, (t_point){0, 0}, (t_point){WIDTH - 50, HEIGHT}, HEX_GRAY);
+	// 
+
 	start.x = WIDTH - 50;
 	start.y = 0;
 	end.x = WIDTH - 50;
-	end.y = HEIGHT / 2;
-	// draw_rect(img, start, end, ceiling_color);
-	draw_line(img, start, end, ceiling_color);
+	end.y = map->horizon.y;
+	draw_rectangle(img, start, end, map->ceiling_color);
+
 	start.x = WIDTH - 50;
-	start.y = HEIGHT;
+	start.y = map->horizon.y;
 	end.x = WIDTH - 50;
-	end.y = HEIGHT / 2;
-	// draw_rect(img, start, end, floor_color);
-	draw_line(img, start, end, floor_color);
+	end.y = HEIGHT;
+	draw_rectangle(img, start, end, map->floor_color);
 }

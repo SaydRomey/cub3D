@@ -6,42 +6,32 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 15:43:19 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 22:05:59 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/20 12:36:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_UTILS_H
 # define CUB3D_UTILS_H
 
-// # ifdef OS
-// #  include "key_linux.h"
-// # else
-// #  include "key_macos.h"
-// # endif
+# ifdef __linux__
+#  include "key_linux.h"
+#  define WIDTH				1366
+#  define HEIGHT			768
+# elif defined(__APPLE__) && defined(__MACH__)
+#  include "key_macos.h"
+#  define WIDTH				2560
+#  define HEIGHT			1395
+# else
+#  error "Unsupported Operating System"
+# endif
 
-// # ifdef __linux__
-// #  include "key_linux.h"
-// // #  define WIDTH				1366
-// // #  define HEIGHT			768
-// # elif defined(__APPLE__) && defined(__MACH__)
-// #  include "key_macos.h"
-// // #  define WIDTH				2560
-// // #  define HEIGHT			1395
-// # else
-// #  error "Unsupported Operating System"
-// # endif
-
-
-// window with (tmp)
-# define WIDTH				600
-// window height (tmp)
-# define HEIGHT				600
 
 # define PLAYER_SIZE		10
 # define PLAYER_SPEED		3
 # define SPEED_LIMIT		10
 # define PLAYER_TURN_SPEED	5
 # define MOUSE_SPEED		1
+// # define MOUSE_SENSIT
 
 # define PI					3.1415926535
 
@@ -63,7 +53,7 @@
 /* colors */ //need to check these...
 
 # define HEX_BLACK			0x000000
-// grays?
+# define HEX_GRAY			0x404040
 # define HEX_WHITE			0xFFFFFF
 # define HEX_RED			0xFF0000
 # define HEX_GREEN			0x00FF00
@@ -71,12 +61,13 @@
 # define HEX_YELLOW			0xFFFF00
 # define HEX_MAGENTA		0xFF00FF
 # define HEX_CYAN			0x00FFFF
+
 # define HEX_ORANGE			0xED840C
 # define HEX_ORANGE2		0xFF7700
 # define HEX_PURPLE			0x800080
 # define HEX_OLILAS			0xA27CF1
 # define HEX_LILAC			0xFF22FF
 # define HEX_PINK			0xFFC0CB
-# define HEX_BROWN			0xA52A2A
+# define HEX_BROWN			0x663300
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 22:06:12 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/20 11:34:50 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	main(void)
 	cub = init_cub("[map title]");
 	cub.player = init_player(start);
 	cub.map = init_map();
-	cub.horizon = (t_point){WIDTH - 60, HEIGHT / 2};
 	cub_loop(&cub);
 	terminate_mlx(&cub);
 	return (0);

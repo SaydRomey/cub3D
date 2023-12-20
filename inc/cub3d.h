@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:13 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 22:12:47 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/20 12:26:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include "cub3d_utils.h"
 # include "mlx.h"
 # include <math.h>
-
-# include "key_linux.h"
 
 typedef struct s_point
 {
@@ -35,6 +33,7 @@ typedef struct s_map
 	int			ceiling_color;
 	int			wall_tile_color;
 	int			floor_tile_color;
+	t_point		horizon; //test to look up and down with mouse
 }				t_map;
 
 typedef struct s_player
@@ -87,7 +86,6 @@ typedef struct s_cub
 	int			info_switch; //to display info in terminal
 	int			line_switch; //tmp test to display mouse-player line
 	// 
-	t_point		horizon; //test to look up and down with mouse
 }				t_cub;
 
 // cleanup.c (tmp until src are explicitly defined in makefile)
@@ -104,9 +102,9 @@ void		draw_rect(t_img *img, t_point origin, t_point end, int color);
 // draw_utils.c
 // 
 void		clear_image(t_img *img);
-void		color_background(t_img *img, int floor_color, int ceiling_color);
 void		draw_pixel(t_img *img, int x, int y, int color);
 void		draw_line(t_img *img, t_point start, t_point end, int color);
+void		color_background(t_img *img, t_map *map);
 
 // hooks.c
 // 

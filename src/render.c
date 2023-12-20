@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:13:16 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 14:55:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/20 12:26:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ void	draw_horizon_line(t_img *img, t_point horizon, int color)
 
 void	render(t_cub *cub)
 {
-	// t_img	*img;
+	t_img	*img;
 
-	// img = &cub->img;
-	clear_image(&cub->img);
-	color_background(&cub->img, cub->map.floor_color, cub->map.ceiling_color);
+	img = &cub->img;
+	clear_image(img);
+	color_background(img, &cub->map);
 
-	draw_mini_map(&cub->img, &cub->map);
-	draw_player(&cub->img, &cub->player);
-	draw_cursor(&cub->img, cub);
+	draw_mini_map(img, &cub->map);
+	draw_player(img, &cub->player);
+	draw_cursor(img, cub);
 
-	draw_horizon_line(&cub->img, cub->horizon, HEX_ORANGE);
+	draw_horizon_line(img, cub->map.horizon, HEX_ORANGE);
 
 	cub->prev_cursor = cub->cursor;
 	

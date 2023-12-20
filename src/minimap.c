@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 15:19:45 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 15:01:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/20 11:34:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_map	init_map(void)
 	map.ceiling_color = HEX_BLUE;
 	map.wall_tile_color = HEX_BLACK;
 	map.floor_tile_color = HEX_WHITE;
+	map.horizon = (t_point){WIDTH - 60, HEIGHT / 2};
 	return (map);
 }
 
@@ -47,9 +48,6 @@ void	draw_mini_map(t_img *img, t_map *map)
 		1,1,1,1,1,1,1,1,
 	};
 	//
-	// color_background(img, map->floor_color, map->ceiling_color);
-	// ft_memset(img->addr, HEX_PURPLE, HEIGHT * WIDTH * PIXEL_SIZE); //adding this makes 'drunk' effect
-	// 
 	size.x = map->tile_size - 1;
 	size.y = map->tile_size - 1;
 	y = 0;

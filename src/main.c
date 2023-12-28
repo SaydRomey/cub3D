@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/20 11:34:50 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/23 22:14:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	cub_loop(t_cub *cub)
 
 // mouse hooks
 	mlx_mouse_hook(cub->win_ptr, read_mouse, cub);
-	mlx_hook(cub->win_ptr, MOUSE_MOVE, MOUSE_MOVE_MASK, follow_mouse, cub); //make test with this mask on linux..
+	mlx_hook(cub->win_ptr, MOUSE_MOVE, MOUSE_MOVE_MASK, follow_mouse, cub);
 
 // Set the loop hook for continuous updates and rendering
     mlx_loop_hook(cub->mlx_ptr, update_game, cub);
@@ -60,6 +60,12 @@ int	main(void)
 	cub = init_cub("[map title]");
 	cub.player = init_player(start);
 	cub.map = init_map();
+	// 
+	// draw_mini_map(&cub.img, &cub.map); will separate map rendering when i use multiple images..
+	// 
+	// setup_hooks(&cub); //
+
+	// 
 	cub_loop(&cub);
 	terminate_mlx(&cub);
 	return (0);

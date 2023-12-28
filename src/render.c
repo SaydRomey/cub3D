@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:13:16 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/20 12:26:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/23 22:13:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	render(t_cub *cub)
 	clear_image(img);
 	color_background(img, &cub->map);
 
-	draw_mini_map(img, &cub->map);
+	draw_mini_map(img, &cub->map); //maybe this could be done conditionnaly, not each frame ?
 	draw_player(img, &cub->player);
 	draw_cursor(img, cub);
 

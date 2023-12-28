@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:09:05 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 18:18:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2023/12/27 21:39:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,28 @@ int	key_release(int key, t_cub *cub)
 	return (0);
 }
 
+/*
+checks if a key is pressed, to call a function
+*/
 void	check_options(t_cub *cub)
 {
 	if (cub->keys.esc)
 		terminate_mlx(cub);
+	// if (cub->keys.map_key)
+		// toggle(cub->map.display); add a toggle option to display minimap
 }
 
-/* for mlx_loop_hook */
+/*
+for mlx_loop_hook
+*/
 int	update_game(void *param)
 {
 	t_cub	*cub;
 
 	cub = (t_cub *)param;
-	update_player_position(cub);
-	update_player_direction(cub);
-	check_options(cub);
+	update_player_position(cub); //wasd
+	update_player_direction(cub); //left, right and mouse
+	check_options(cub); //like terminate, (will add parameters here (display..., etc))
 	render(cub);
 	return (0);
 }

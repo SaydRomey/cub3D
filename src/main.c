@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/19 18:32:56 by oroy             ###   ########.fr       */
+/*   Updated: 2024/02/20 17:11:53 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-typedef struct s_point
-{
-	int x;
-	int y;
-}	t_point;
 
 void	error(void)
 {
@@ -53,18 +47,17 @@ void	cub_loop(t_cub *cub)
 int	main(void)
 {
 	t_cub	cub;
+	int		test; // unused variable to test makefile target 'make force'
 
 	cub = init_cub("[map title]");
 
-	if (mlx_image_to_window(cub.mlx, cub.img, 0, 0) < 0)
+	if (mlx_image_to_window(cub.mlx, cub.img, 0, 0) < SUCCESS)
 		error();
 
 	cub_loop(&cub);
 
-	// key_hooks;
-
 	mlx_delete_image(cub.mlx, cub.img);
 	mlx_terminate(cub.mlx);
 
-	return (0);
+	return (SUCCESS);
 }

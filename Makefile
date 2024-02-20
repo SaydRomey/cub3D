@@ -6,11 +6,13 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/19 16:50:18 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/20 17:27:53 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-#TODO: check to install GLFW in lib dir like we did with readline ?
+# TODO: add 'make ref' that opens mlx42 documentation and/or lodev tutorial?
+# TODO: check to install GLFW in lib dir like we did with readline ?
+# or automate the installation of required dependencies (brew, cmake, glfw)
 
 # https://lodev.org/cgtutor/raycasting.html
 
@@ -23,11 +25,15 @@ AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
 MAP			:= $(TBD)
 
+# configuration (other makefiles, scripts, etc)
+CFG_DIR		:= cfg
+IMG_DIR		:= img
 INC_DIR		:= inc
 LIB_DIR		:= lib
 OBJ_DIR		:= obj
 SRC_DIR		:= src
 TMP_DIR		:= tmp
+WAV_DIR		:= wav
 
 COMPILE		:= gcc
 C_FLAGS		:= -Wall -Wextra -Werror
@@ -41,6 +47,8 @@ OS			:= $(shell uname)
 # **************************************************************************** #
 # ---------------------------------- LIBFT ----------------------------------- #
 # **************************************************************************** #
+# TOCHECK: should we link libft.a ? (-lft)
+# 
 LIBFT_DIR	:= $(LIB_DIR)/libft
 LIBFT_INC	:= $(LIBFT_DIR)/$(INC_DIR)
 LIBFT		:= $(LIBFT_DIR)/libft.a
@@ -59,13 +67,17 @@ HEADERS		:= $(HEADERS) -I$(MLX_INC)
 # **************************************************************************** #
 # ---------------------------------- CONFIG  --------------------------------- #
 # **************************************************************************** #
+# TODO: adapt default to desired dimensions in config_*.mk
+# TOCHECK: do we need more macros, and does the norm permit compile time defined macros ?
+# 
 DEFAULT_W	:= 500
 DEFAULT_H	:= 500
+SOUND		:=
 
 ifeq ($(OS),Linux)
-include config_linux.mk
+include $(CFG_DIR)/config_linux.mk
 else ifeq ($(OS),Darwin)
-include config_mac.mk
+include $(CFG_DIR)/config_mac.mk
 else
 $(error Unsupported operating system: $(OS))
 endif
@@ -95,16 +107,18 @@ INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
 # **************************************************************************** #
 INCS	:=	$(wildcard $(INC_DIR)/*.h)
 SRCS	:=	$(wildcard $(SRC_DIR)/*.c)
-OBJS	:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
-# OBJS	:=	$(SRCS:$(SRC_DIR)/.c=$(OBJ_DIR)/.o) #instead of patsubst ?
+OBJS	:=	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # **************************************************************************** #
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
+# TODO: create a hidden file for mandatory or bonus version ?
+# TOCHECK: or do we only have one version with bonuses? (check with oli)
+# 
 all: $(INIT) $(NAME)
 
 $(NAME): $(MLX42) $(LIBFT) $(OBJS) $(INCS)
 	@$(COMPILE) $(C_FLAGS) $(HEADERS) $(OBJS) $(LIBFT) $(L_FLAGS) -o $@
-	@echo "$(GREEN)$$TITLE$(RESET)"
+	@echo "$$TITLE"
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR) $(NPD)
@@ -155,6 +169,8 @@ bonus:
 # **************************************************************************** #
 # ----------------------------------- MLX ------------------------------------ #
 # **************************************************************************** #
+# TODO: add the option to recompile MLX with debug flag in this section...
+# 
 mlxclean:
 	@if [ -f $(MLX42) ]; then \
 		$(REMOVE) $(MLX_BLD); \
@@ -175,7 +191,8 @@ WHEN	:= $(shell date "+On day %d of month %m in the year %Y at %H:%M and %S seco
 
 $(INIT_CHECK):
 	@git submodule update --init --recursive
-	@echo "$(NAME) by $(AUTHOR)\n\
+	@echo "$(NAME)\n\
+	by $(AUTHOR)\n\
 	Compiled for $(USER)\n\
 	$(WHEN)\n\
 	$(MACHINE)" > $@
@@ -221,19 +238,26 @@ nm: $(NAME)
 # **************************************************************************** #
 # ---------------------------------- PDF ------------------------------------- #
 # **************************************************************************** #
-# TODO: Add a check that if it exists, do not curl it, just open it..
 PDF		:= cub3d_en.pdf
 GIT_URL	:= https://github.com/SaydRomey/42_ressources
 PDF_URL	= $(GIT_URL)/blob/main/pdf/$(PDF)?raw=true
 
 pdf: | $(TMP_DIR)
-	@curl -# -L $(PDF_URL) -o $(TMP_DIR)/$(PDF)
+	@if [ -f $(TMP_DIR)/$(PDF) ]; then \
+		echo "Opening $(PDF)..."; \
+	else \
+		echo "Downloading $(PDF)..."; \
+		curl -# -L $(PDF_URL) -o $(TMP_DIR)/$(PDF); \
+	fi
 	@$(OPEN) $(TMP_DIR)/$(PDF)
 
 .PHONY: pdf
 # **************************************************************************** #
 # -------------------------------- LEAKS ------------------------------------- #
 # **************************************************************************** #
+# TODO: check if we should put messages as an echo instead of a target
+# TODO: maybe put this in a 'utils.mk' ?
+# 
 VAL_CHECK	:= $(shell which valgrind > $(VOID); echo $$?)
 
 # valgrind options
@@ -257,10 +281,12 @@ SUPPRESS	:= --suppressions=$(SUPP_FILE)
 
 # default valgrind tool
 BASE_TOOL	= valgrind $(ORIGIN) $(LEAK_CHECK) $(LEAK_KIND)
-# **************************************************************************** #
-# specific valgrind tool (add 'valgrind option' variables as needed)
+# **************************************************************************** # Choose valgrind options here
+# specific valgrind tool (add 'additional options' variables as needed)
+# 
 BASE_TOOL	+= 
-# **************************************************************************** #	TODO: check if we should put messages as an echo instead of a target
+# 
+# **************************************************************************** #
 LEAK_TOOL	= $(BASE_TOOL) $(LOG_FILE)
 SUPP_TOOL	= $(BASE_TOOL) $(SUPP_GEN) $(LOG_FILE)
 
@@ -318,18 +344,27 @@ vclean:
 # **************************************************************************** #
 run: all
 	./$(NAME) $(MAP)
-
+# **************************************************************************** #
+# TODO: fix debug target to recompile mlx42 correctly (check documentation)
+# 
 debug: C_FLAGS += -g
 debug: re
+# **************************************************************************** #
+FORCE_FLAGS	:= -Wno-unused-variable
 
+force: C_FLAGS += $(FORCE_FLAGS)
+force: re
+	@echo "adding flags $(YELLOW)$(FORCE_FLAGS)$(RESET)"
+	@echo "$(RED)Forced compilation$(RESET)"
+# **************************************************************************** #
 $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
-
+# **************************************************************************** #
 ffclean: fclean vclean mlxclean
 	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
 	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
 
-.PHONY: run debug ffclean
+.PHONY: run debug force ffclean
 # **************************************************************************** #
 # ---------------------------------- BACKUP (zip) ---------------------------- #
 # **************************************************************************** #
@@ -355,14 +390,27 @@ zip: ffclean
 # **************************************************************************** #
 define MAN
 
-(...)
+Available 'make' targets:
 
-'make info'   -> Prints compilation information
-'make pdf'    -> curls/open a $(NAME) instruction pdf in $(CYAN)$(TMP_DIR)$(RESET)
-'make update' -> Pull the github version"
-'make man' \t-> Show this message
-
-(...)
+'make [all]'   -> Compiles $(NAME) and necessary dependencies (libft and MLX42)
+'make clean'   -> Removes the $(OBJ_DIR)/ directory and other object files
+'make fclean'  -> Removes $(NAME) and $(LIBFT)
+'make re'      -> Same as fclean and all
+'make update'  -> Pulls the github version
+'make norm'    -> Runs 'norminette' on the files in $(SRC_DIR)/ and $(INC_DIR)/ (also in libft)
+'make nm'      -> Checks symbols in the executable (to check used functions)
+'make pdf'     -> Downloads/Opens a $(NAME) instruction pdf in $(TMP_DIR)/
+'make leaks'   -> (WIP) Runs Valgrind on $(NAME) $(MAP) (make supp and make suppleaks)
+'make run'     -> Same as 'make all', then './$(NAME) $(MAP)'
+'make debug'   -> (WIP) Recompiles with debug symbols
+'make force'   -> Recompiles with $(YELLOW)$(FORCE_FLAGS)$(RESET) (for testing)
+'make ffclean' -> Removes files and directories created by this makefile
+'make zip'     -> Creates a compressed version of this project on the desktop
+'make info'    -> Prints compilation information
+'make title'   -> Prints an example version of the title
+'make spin'    -> (WIP) Animation that waits for a process to finish
+'make sound'   -> (WIP) Plays a .wav sound
+'make man'     -> Shows this message
 
 endef
 export MAN
@@ -374,6 +422,8 @@ man:
 # **************************************************************************** #
 # ----------------------------------- INFO ----------------------------------- #
 # **************************************************************************** #
+# This is only to make sure the compilation gets everything
+# 
 define INFO
 
 $(NAME)
@@ -415,13 +465,33 @@ info:
 # **************************************************************************** #
 # ----------------------------------- DECO ----------------------------------- #
 # **************************************************************************** #
+# TODO: better title (ASCII ART?)
+# 
 define TITLE
+[$(BOLD)$(PURPLE)$@$(RESET)]\t\t$(GREEN)ready$(RESET)
+$(ORANGE)
+***************
+* PLACEHOLDER *
+***************
+$(RESET)
 
-$@ is ready
+type 'make run' to execute
+or   'make man' for more options
 
 endef
 export TITLE
 
+USER		:=$(shell whoami)
+TIME		:=$(shell date "+%H:%M:%S")
+
+title:
+	@echo "$$TITLE"
+	@echo "Compiled for $(ITALIC)$(BOLD)$(PURPLE)$(USER)$(RESET) \
+		$(CYAN)$(TIME)$(RESET)\n"
+
+.PHONY: title
+# **************************************************************************** #
+# ----------------------------------- ANSI ----------------------------------- #
 # **************************************************************************** #
 ESC			:= \033
 
@@ -439,10 +509,8 @@ TOP_LEFT	:= $(ESC)[1;1H
 ERASE_REST	:= $(ESC)[K
 ERASE_LINE	:= $(ESC)[2K
 ERASE_ALL	:= $(ESC)[2J
-# **************************************************************************** #
-# ---------------------------------- COLORS ---------------------------------- #
-# **************************************************************************** #
-# Text
+
+# Text color
 BLACK		:= $(ESC)[30m
 RED			:= $(ESC)[91m
 GREEN		:= $(ESC)[32m
@@ -453,3 +521,74 @@ PURPLE		:= $(ESC)[95m
 CYAN		:= $(ESC)[96m
 WHITE		:= $(ESC)[37m
 GRAY		:= $(ESC)[90m
+
+# Background
+BG_BLACK	:= $(ESC)[40m
+BG_RED		:= $(ESC)[101m
+BG_GREEN	:= $(ESC)[102m
+BG_YELLOW	:= $(ESC)[103m
+BG_ORANGE	:= $(ESC)[48;5;208m
+BG_BLUE		:= $(ESC)[104m
+BG_PURPLE	:= $(ESC)[105m
+BG_CYAN		:= $(ESC)[106m
+BG_WHITE	:= $(ESC)[47m
+BG_GRAY		:= $(ESC)[100m
+# **************************************************************************** #
+# ------------------------------- ANIMATIONS --------------------------------- #
+# **************************************************************************** #
+# TODO: add a chmod + x to the script
+# TODO: set this up during mlx42's compilation?
+# 
+# Animation shell script
+SPIN_SH		:= $(CFG_DIR)/spinner.sh
+
+# Message to display alongside the animation
+SPIN_MSG	:= "Simulating compilation and linking for five seconds..."
+
+# Create the file to stop the spinner (will be replaced by libmlx.a or something)
+SPIN_FILE	:= "$(CFG_DIR)/.tmptestfile"
+
+# spin time to stimulate duration (will be replaced by an other process)
+PROCESS		:= sleep 5
+
+spin:
+	@$(REMOVE) $(SPIN_FILE)
+	@echo "$(BOLD)$(PURPLE)Starting a long running task...$(RESET)"
+	@$(SPIN_SH) $(SPIN_MSG) $(SPIN_FILE) &
+	@$(PROCESS)
+	@touch $(SPIN_FILE)
+	@sleep 0.2
+	@printf "$(UP)$(ERASE_LINE)"
+	@echo "$(BOLD)$(GREEN)Long-running task completed.$(RESET)"
+	@$(MAKE) spin2 $(NPD)
+
+
+SPIN_MSG2	:= "Simulating something else for three seconds..."
+PROCESS2	:= sleep 3
+
+spin2:
+	@$(REMOVE) $(SPIN_FILE)
+	@echo "$(BOLD)$(PURPLE)Starting a shorter running task...$(RESET)"
+	@$(SPIN_SH) $(SPIN_MSG2) $(SPIN_FILE) &
+	@$(PROCESS2)
+	@touch $(SPIN_FILE)
+	@sleep 0.2
+	@printf "$(UP)$(ERASE_LINE)"
+	@echo "$(BOLD)$(GREEN)shorter task completed.$(RESET)"
+
+.PHONY: spin spin2
+# **************************************************************************** #
+# --------------------------------- SOUNDS ----------------------------------- #
+# **************************************************************************** #
+# https://sound-effects.bbcrewind.co.uk/
+# https://soundbible.com/
+# or convert youtube/mp3/etc. to .wav
+# 
+WAV_DESTROY	:= $(WAV_DIR)/destroy.wav
+
+sound:
+	@echo "testing a .wav sound"
+	@$(SOUND) $(WAV_DESTROY)
+	@echo "sound testing finished"
+
+.PHONY: sound

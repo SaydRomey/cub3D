@@ -22,5 +22,6 @@
 .init_check
 .testfile
 
-# # Executables
+# Executables
 cub3D
+a.out

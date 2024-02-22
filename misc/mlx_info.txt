@@ -1,0 +1,38 @@
+
+
+/**
+ * Main MLX handle, carries important data in regards to the program.
+ * @param window The window itself.
+ * @param context Abstracted opengl data.
+ * @param width The width of the window.
+ * @param height The height of the window.
+ * @param delta_time The time difference between the previous frame 
+ * and the current frame.
+ */
+typedef struct mlx
+{
+	void*		window;
+	void*		context;
+	int32_t		width;
+	int32_t		height;
+	double		delta_time;
+}	mlx_t;
+
+
+
+// Set these values, if necessary, before calling `mlx_init` as they define the behaviour of MLX42.
+typedef enum mlx_settings
+{
+	MLX_STRETCH_IMAGE = 0,	// Should images resize with the window as it's being resized or not. Default: false
+	MLX_FULLSCREEN,			// Should the window be in Fullscreen, note it will fullscreen at the given resolution. Default: false
+	MLX_MAXIMIZED,			// Start the window in a maximized state, overwrites the fullscreen state if this is true. Default: false
+	MLX_DECORATED,			// Have the window be decorated with a window bar. Default: true
+	MLX_HEADLESS,			// Run in headless mode, no window is created. (NOTE: Still requires some form of window manager such as xvfb)
+	MLX_SETTINGS_MAX,		// Setting count.
+}	mlx_settings_t;
+
+
+
+
+
+

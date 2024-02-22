@@ -6,58 +6,69 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/20 17:11:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/21 20:12:23 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	error(void)
-{
-	ft_putstr_fd((char *)mlx_strerror(mlx_errno), STDERR);
-	exit(FAILURE);
-}
-
 t_cub	init_cub(char *map_path)
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
-	char		*title;
+	t_cub	cub;
+	char	*title;
 
 	title = ft_strjoin("cub3D - ", map_path);
-	mlx = mlx_init(WIDTH, HEIGHT, title, FALSE);
-	if (!mlx)
-		error();
+	ft_memset(&cub, 0, sizeof(t_cub));
+	cub.mlx = mlx_init(WIDTH, HEIGHT, title, FALSE);
 	free(title);
-
-	img = mlx_new_image(mlx, WIDTH, HEIGHT);
-	if (!img)
+	if (!cub.mlx)
 		error();
-	
-	return ((t_cub){mlx, img});
+	cub.img = mlx_new_image(cub.mlx, WIDTH, HEIGHT);
+	if (!cub.img)
+		error();
+	cub.minimap_img = mlx_new_image(cub.mlx, 512, 512); //to change later?
+	if (!cub.minimap_img)
+		error();
+	return (cub);
 }
 
+void	setup_images(t_cub *cub)
+{
+	if (mlx_image_to_window(cub->mlx, cub->img, 0, 0) < SUCCESS)
+		error();
+	if (mlx_image_to_window(cub->mlx, cub->minimap_img, WIDTH - (512), 0) < SUCCESS)
+		error();
+	// 
+	background(cub->img, 0x404040FF); // draw floor and ceiling here instead
+	// 
+	background(cub->minimap_img, 0x202020FF);
+	draw_minimap(cub->minimap_img, &cub->minimap); //? test without if in update()
+}
+
+/*
+hooks and loops
+*/
 void	cub_loop(t_cub *cub)
 {
-	// hooks
+	mlx_key_hook(cub->mlx, &keyhooks, cub);
+	mlx_loop_hook(cub->mlx, update, cub);
 	
 	mlx_loop(cub->mlx);
 }
 
+
 int	main(void)
 {
 	t_cub	cub;
-	int		test; // unused variable to test makefile target 'make force'
-
+	
 	cub = init_cub("[map title]");
+	cub.minimap = init_map();
+	cub.player = init_player((t_point){100,100}, 'N');
 
-	if (mlx_image_to_window(cub.mlx, cub.img, 0, 0) < SUCCESS)
-		error();
+	setup_images(&cub);
 
 	cub_loop(&cub);
-
-	mlx_delete_image(cub.mlx, cub.img);
-	mlx_terminate(cub.mlx);
+	cleanup(&cub); //?
 
 	return (SUCCESS);
 }

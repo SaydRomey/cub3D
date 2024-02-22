@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/21 20:19:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/22 13:58:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,45 @@ void	update(void *ptr)
 	cub = (t_cub *)ptr;
 
 	// 
-	clear_img(cub->img);
+	// clear_img(cub->img);
+	// draw_ceiling(cub->img, cub->minimap.ceiling_color);
+	// draw_floor(cub->img, cub->minimap.floor_color);
+
+	// here could be the drawing of the rays? **(use another image)
 	draw_line(cub->img, (t_point){0, 0}, (t_point){WIDTH, HEIGHT}, 0xFF0000FF);
 
 	// reset minimap (also erases the player)
 	clear_img(cub->minimap_img);
+	draw_background(cub->minimap_img, cub->minimap.background_color);
 	draw_minimap(cub->minimap_img, &cub->minimap);
 
 	// update player by checking the keys pressed
 	update_player(cub);
 	// 
 }
+
+// 
+
+/*
+// checks if a key is pressed, to call a function
+void	check_options(t_cub *cub)
+{
+	if (cub->keys.esc)
+		terminate_mlx(cub);
+	// if (cub->keys.map_key)
+		// toggle(cub->map.display); add a toggle option to display minimap
+}
+
+// for mlx_loop_hook
+int	update_game(void *param)
+{
+	t_cub	*cub;
+
+	cub = (t_cub *)param;
+	update_player_position(cub); //wasd
+	update_player_direction(cub); //left, right and mouse
+	check_options(cub); //like terminate, (will add parameters here (display..., etc))
+	render(cub);
+	return (0);
+}
+*/

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/21 17:59:50 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/22 13:55:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ t_map	init_map(void)
 	map.tile_size = 64;
 	map.width = 8;
 	map.height = 8;
-	map.floor_color = 0x663300FF;
-	map.ceiling_color = 0x0000FFFF;
-	map.wall_tile_color = 0x000000FF;
-	map.floor_tile_color = 0xFFFFFFFF;
+	map.floor_color = HEX_GROUND;
+	map.ceiling_color = HEX_SKY;
+	map.wall_tile_color = HEX_BLACK;
+	map.floor_tile_color = HEX_WHITE;
+	map.background_color = HEX_GRAY;
 	return (map);
 }
 

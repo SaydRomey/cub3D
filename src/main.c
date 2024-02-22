@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/21 20:12:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/22 13:57:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,11 @@ void	setup_images(t_cub *cub)
 	if (mlx_image_to_window(cub->mlx, cub->minimap_img, WIDTH - (512), 0) < SUCCESS)
 		error();
 	// 
-	background(cub->img, 0x404040FF); // draw floor and ceiling here instead
+	// background(cub->img, 0x404040FF); // draw floor and ceiling here instead
+	draw_ceiling(cub->img, cub->minimap.ceiling_color);
+	draw_floor(cub->img, cub->minimap.floor_color);
 	// 
-	background(cub->minimap_img, 0x202020FF);
+	draw_background(cub->minimap_img, 0x202020FF);
 	draw_minimap(cub->minimap_img, &cub->minimap); //? test without if in update()
 }
 
@@ -63,7 +65,7 @@ int	main(void)
 	
 	cub = init_cub("[map title]");
 	cub.minimap = init_map();
-	cub.player = init_player((t_point){100,100}, 'N');
+	cub.player = init_player((t_point){100,100}, 'S');
 
 	setup_images(&cub);
 

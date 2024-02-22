@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/21 20:01:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/22 13:04:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,22 @@ int	is_in_window(t_point to_verify)
 		return (TRUE);
 	return (FALSE);
 }
+
+/*
+to prevent accidents..
+[...]
+if (button == SCROLL_UP)
+		cub->player.speed += 0.5;
+	if (button == SCROLL_DOWN)
+		cub->player.speed -= 0.5;
+	cub->player.speed = speed_limit(cub->player.speed, SPEED_LIMIT);
+[...]
+*/
+// static float	speed_limit(float speed, float limit)
+// {
+// 	if (speed >= limit)
+// 		return (limit);
+// 	if (speed <= 0)
+// 		return (0);
+// 	return (speed);
+// }

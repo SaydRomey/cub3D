@@ -1,0 +1,184 @@
+
+
+
+
+Steps to Include MLX42 and GLFW
+If you decide to include MLX42 and GLFW directly:
+
+Static Linking: Compile GLFW (and possibly MLX42, if not already static) into static libraries (.a files). This way, you can link them directly into your application, removing the need for external GLFW installation.
+Include Headers: Ensure that all necessary header files for GLFW and MLX42 are included in your project's include path.
+Adjust Makefile: Modify your Makefile to link against these static libraries instead of expecting them to be installed on the system.
+
+Step 1: Compile MLX42 into a Static Library
+
+# Path to MLX42 source and include files
+MLX42_SRC = /path/to/mlx42/src
+MLX42_INC = /path/to/mlx42/include
+MLX42_LIB = /path/to/your_project/libs
+
+# Compiler and flags
+CC = gcc
+AR = ar rc
+CFLAGS = -I$(MLX42_INC) -O3
+
+# Source files and object files for MLX42
+MLX42_SOURCES = $(wildcard $(MLX42_SRC)/*.c)
+MLX42_OBJECTS = $(MLX42_SOURCES:.c=.o)
+
+# Target static library
+MLX42_A = $(MLX42_LIB)/libmlx42.a
+
+# Rule to compile MLX42 into a static library
+$(MLX42_A): $(MLX42_OBJECTS)
+	$(AR) $@ $(MLX42_OBJECTS)
+
+This part of the Makefile compiles all .c files in the MLX42 source directory into .o object files, then archives these into libmlx42.a using the ar command.
+
+//
+
+Step 2: Compile Your Project and Link with MLX42
+Next, you'll compile your project's source files and link them with the statically compiled MLX42 library.
+
+# Your project's source and object files
+SRC = $(wildcard *.c)
+OBJ = $(SRC:.c=.o)
+
+# Your project's final executable name
+EXEC = cub3D
+
+# Include MLX42 in the compile and link process
+CFLAGS += -I$(MLX42_INC)
+LDFLAGS = -L$(MLX42_LIB) -lmlx42 -framework OpenGL -framework AppKit
+
+# Rule to compile your project
+$(EXEC): $(OBJ) $(MLX42_A)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
+
+# Generic rule for compiling object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Include GLFW if needed, assuming GLFW is also statically linked or installed globally
+LDFLAGS += -lglfw
+
+# Clean up
+clean:
+	rm -f $(OBJ) $(EXEC)
+
+# Phony targets
+.PHONY: all clean
+
+//
+
+Explanation:
+This Makefile compiles all .c files in your project's directory into object files, then links these along with libmlx42.a to create your executable.
+It assumes OpenGL and AppKit are required for MLX42 and your project, common for macOS projects. Adjust these frameworks according to your project's needs or the platform you're targeting.
+If GLFW is required, and you've also compiled it into a static library, you can link it similarly by adjusting the LDFLAGS to include -lglfw and ensuring its path is included if it's not in a standard location.
+
+//
+
+Compiling GLFW from source and including it in your project via static linking involves a few steps. GLFW, like MLX42, can be compiled into a static library (.a file) which you can then link to your project. Below, I'll outline the process and provide an example Makefile snippet for compiling GLFW and linking it with your project.
+
+Step 1: Download and Prepare GLFW Source
+
+Download GLFW Source: Go to the GLFW GitHub repository and download the source code.
+
+https://chat.openai.com/c/63608a7d-1586-4279-8513-8906e2d2505c#:~:text=the%20GLFW%20GitHub-,repository,-and%20download%20the
+
+Extract: Extract the source code to a directory in your project, or somewhere accessible.
+Step 2: Compile GLFW as a Static Library
+GLFW uses CMake for its build process, so you will need CMake installed. Here's how you can compile GLFW:
+
+Navigate to the GLFW source directory.
+Create a build directory inside it, e.g., mkdir build && cd build.
+Run CMake with options to build a static library: cmake -DBUILD_SHARED_LIBS=OFF ...
+Compile the library: make.
+After completing these steps, you should have libglfw3.a in the build/src directory.
+
+//
+
+Step 3: Include GLFW in Your Makefile
+Here's how you can modify the Makefile to include GLFW in the compilation and linking process, assuming you have already compiled GLFW as outlined above:
+
+# Paths to GLFW and MLX42
+GLFW_DIR = /path/to/glfw/build/src
+MLX42_DIR = /path/to/mlx42
+INCLUDE_PATHS = -I/path/to/glfw/include -I/path/to/mlx42/include
+
+# Compiler and linker flags
+CC = gcc
+CFLAGS = $(INCLUDE_PATHS) -O2
+LDFLAGS = -L$(GLFW_DIR) -lglfw3 -L$(MLX42_DIR) -lmlx42 -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+
+# Your project's files
+SRC = $(wildcard *.c)
+OBJ = $(SRC:.c=.o)
+EXEC = cub3D
+
+# Rule to compile your project and link with MLX42 and GLFW
+$(EXEC): $(OBJ)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
+
+# Generic rule for compiling object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean up
+clean:
+	rm -f $(OBJ) $(EXEC)
+
+.PHONY: all clean
+
+//
+
+Explanation
+This Makefile compiles your project's .c files, linking them with the statically compiled GLFW (libglfw3.a) and MLX42 libraries.
+LDFLAGS includes paths to GLFW and MLX42 static libraries and links against the required system frameworks. GLFW typically requires OpenGL, Cocoa, IOKit, and CoreVideo frameworks on macOS.
+Adjust the paths in GLFW_DIR, MLX42_DIR, and INCLUDE_PATHS to match where GLFW and MLX42 are located on your system.
+
+Conclusion
+By following these steps, you can compile GLFW from source as a static library and include it in your project. Ensure all paths are correctly set in your Makefile to reflect where the GLFW and MLX42 libraries and headers are located. This approach allows you to distribute your application without requiring separate installation of these libraries, provided that your distribution complies with the licensing terms of GLFW, MLX42, and any other libraries you use.
+
+////
+
+Yes, you can create the binaries for GLFW and MLX42, then include these static libraries (*.a files) and their corresponding header files directly within your project. This approach allows anyone compiling your project to do so without needing to install GLFW or MLX42 separately, assuming the binaries are compatible with their system. This method is particularly useful for ensuring a consistent build environment and simplifying the build process for others, like your evaluators at School 42. Here's how you can do it:
+
+Step 1: Compile GLFW and MLX42 Static Libraries
+GLFW: Follow the steps outlined earlier to compile GLFW as a static library. The output will be a file named libglfw3.a (or similarly named, depending on your GLFW version and build options).
+MLX42: Compile MLX42 according to its build instructions to produce a static library, typically named libmlx42.a.
+Step 2: Include Binaries and Headers in Your Project
+Create Directories for Libraries and Headers: In your project, create directories to hold the libraries and headers. For example:
+
+libs/ for static libraries (.a files).
+include/ for header files.
+Copy Static Libraries and Headers:
+
+Copy libglfw3.a and libmlx42.a into the libs/ directory.
+Copy GLFW's and MLX42's header files into the include/ directory or into more specific subdirectories within include/ if you prefer to keep them organized (e.g., include/GLFW/ for GLFW headers, include/MLX42/ for MLX42 headers).
+Step 3: Adjust Your Makefile
+Modify your Makefile to link against these included static libraries and to include the headers from your project directory, like so:
+
+# Compiler and flags
+CC = gcc
+CFLAGS = -Iinclude -O2
+LDFLAGS = -Llibs -lglfw3 -lmlx42 -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+
+# Your project's source files
+SRC = $(wildcard *.c)
+OBJ = $(SRC:.c=.o)
+EXEC = cub3D
+
+# Rule to compile your project and link with included GLFW and MLX42
+$(EXEC): $(OBJ)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
+
+# Generic rule for compiling object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean up
+clean:
+	rm -f $(OBJ) $(EXEC)
+
+.PHONY: all clean
+

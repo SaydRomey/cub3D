@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/21 19:44:43 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/22 13:24:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,13 @@ t_player	init_player(t_point start, char direction)
 	player.angle = spawning_orientation(direction);
 	player.delta.x = cos(degree_to_radian(player.angle));
 	player.delta.y = -sin(degree_to_radian(player.angle));
-	player.respawn = start;
-	
+	// 
 	player.size = PLAYER_SIZE;
 	player.color = 0xFF00FFFF;
 	player.speed = PLAYER_SPEED;
 	player.turn_speed = PLAYER_TURN_SPEED;
+	// 
+	player.respawn = &player;
 	return (player);
 }
 
@@ -51,8 +52,6 @@ void	update_player_position(t_cub *cub)
 	t_player	*player;
 
 	player = &cub->player;
-	if (cub->keys.backspace)
-		player->position = player->respawn;
 	if (cub->keys.up || cub->keys.w) //move forward
 	{
 		player->position.x += player->delta.x * player->speed;
@@ -98,6 +97,12 @@ void	update_player_direction(t_cub *cub)
 
 void	update_player(t_cub *cub)
 {
+	t_player	*player;
+
+	player = &cub->player;
+	if (cub->keys.backspace)
+		*player = *player->respawn;
+	// 
 	update_player_position(cub);
 	update_player_direction(cub);
 	if (cub->keys.p)
@@ -123,7 +128,7 @@ void	draw_player2(mlx_image_t *img, t_player *player)
 	t_point	front;
 	t_point	left;
 	t_point	right;
-	t_point	base_center;
+	// t_point	base_center;
 	float	half_base;
 	
 	half_base = player->size * tan(degree_to_radian(30)); // 30 degrees for equilateral triangle
@@ -139,10 +144,10 @@ void	draw_player2(mlx_image_t *img, t_player *player)
 	right.y = player->position.y - player->delta.x * half_base;
 
 	// Calculating the midpoint of the base
-	base_center.x = (left.x + right.x) / 2;
-    base_center.y = (left.y + right.y) / 2;
+	// base_center.x = (left.x + right.x) / 2;
+	// base_center.y = (left.y + right.y) / 2;
 
 	draw_triangle(img, front, left, right, player->color);
-	draw_line(img, base_center, front, player->color);
+	// draw_line(img, base_center, front, player->color);
 	// draw_circle_hollow(img, player->position, player->size, 2, HEX_ORANGE);
 }

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/21 12:06:52 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/22 13:07:09 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,26 @@
 # TODO: check to install GLFW in lib dir like we did with readline ?
 # or automate the installation of required dependencies (brew, cmake, glfw)
 
+# TOCHECK: using evaluator image in sgoinfre
+
 # https://lodev.org/cgtutor/raycasting.html
 
 # https://doomwiki.org/wiki/Doom_rendering_engine
+
+# https://pulgamecanica.herokuapp.com/posts/mlx42-intro
+
+# assets:
+# https://crusenho.itch.io/complete-gui-essential-pack
+
+
+#TODO/TOCHECK:
+# replace L_FLAGS by LDFLAGS:
+# Extra flags to give to compilers when they are supposed to invoke the linker,
+# 'ld', such as -L.
+# Non-library linker flags, such as -L, should go in the LDFLAGS variable.
+# Libraries (-lfoo) should be added to the LDLIBS variable instead.
+
+# https://www.gnu.org/software/make/manual/make.html#Conditionals
 
 # **************************************************************************** #
 # --------------------------------- VARIABLES -------------------------------- #
@@ -70,8 +87,8 @@ HEADERS		:= $(HEADERS) -I$(MLX_INC)
 # TODO: adapt default to desired dimensions in config_*.mk
 # TOCHECK: do we need more macros, and does the norm permit compile time defined macros ?
 # 
-DEFAULT_W	:= 500
-DEFAULT_H	:= 500
+include $(CFG_DIR)/leaks.mk
+
 SOUND		:=
 
 ifeq ($(OS),Linux)
@@ -181,7 +198,10 @@ mlxclean:
 		$(YELLOW)No library to remove$(RESET)"; \
 	fi
 
-.PHONY: mlxclean
+mlxref:
+	@$(OPEN) "https://github.com/codam-coding-college/MLX42/tree/master/docs"
+
+.PHONY: mlxclean mlxref
 # **************************************************************************** #
 # ----------------------------------- GIT ------------------------------------ #
 # **************************************************************************** #
@@ -240,7 +260,7 @@ nm: $(NAME)
 # **************************************************************************** #
 PDF		:= cub3d_en.pdf
 GIT_URL	:= https://github.com/SaydRomey/42_ressources
-PDF_URL	= $(GIT_URL)/blob/main/pdf/$(PDF)?raw=true
+PDF_URL	:= $(GIT_URL)/blob/main/pdf/$(PDF)?raw=true
 
 pdf: | $(TMP_DIR)
 	@if [ -f $(TMP_DIR)/$(PDF) ]; then \
@@ -253,110 +273,18 @@ pdf: | $(TMP_DIR)
 
 .PHONY: pdf
 # **************************************************************************** #
-# -------------------------------- LEAKS ------------------------------------- #
-# **************************************************************************** #
-# TODO: check if we should put messages as an echo instead of a target
-# TODO: maybe put this in a 'utils.mk' ?
-# 
-VAL_CHECK	:= $(shell which valgrind > $(VOID); echo $$?)
-
-# valgrind options
-ORIGIN		:= --track-origins=yes
-LEAK_CHECK	:= --leak-check=full
-LEAK_KIND	:= --show-leak-kinds=all
-
-# valgrind additional options
-CHILDREN	:= --trace-children=yes
-FD_TRACK	:= --track-fds=yes
-HELGRIND	:= --tool=helgrind
-NO_REACH	:= --show-reachable=no
-VERBOSE		:= --verbose
-VAL_LOG		:= valgrind-out.txt
-LOG_FILE	:= --log-file=$(VAL_LOG)
-
-# suppression-related options
-SUPP_FILE	:= suppression.supp
-SUPP_GEN	:= --gen-suppressions=all
-SUPPRESS	:= --suppressions=$(SUPP_FILE)
-
-# default valgrind tool
-BASE_TOOL	= valgrind $(ORIGIN) $(LEAK_CHECK) $(LEAK_KIND)
-# **************************************************************************** # Choose valgrind options here
-# specific valgrind tool (add 'additional options' variables as needed)
-# 
-BASE_TOOL	+= 
-# 
-# **************************************************************************** #
-LEAK_TOOL	= $(BASE_TOOL) $(LOG_FILE)
-SUPP_TOOL	= $(BASE_TOOL) $(SUPP_GEN) $(LOG_FILE)
-
-# run valgrind
-leaks_msg:
-	@echo "[$(BOLD)$(PURPLE)valgrind$(RESET)] \
-	$(ORANGE)\tRecompiling with debug flags$(RESET)"
-
-leaks: leaks_msg debug
-	@if [ $(VAL_CHECK) -eq 0 ]; then \
-		echo "[$(BOLD)$(PURPLE)valgrind$(RESET)] \
-		$(ORANGE)Launching valgrind\n$(RESET)#"; \
-		$(LEAK_TOOL) ./$(NAME) $(ARGS); \
-		echo "#\n[$(BOLD)$(PURPLE)valgrind$(RESET)] \
-		$(ORANGE)info in: $(CYAN)$(VAL_LOG)$(RESET)"; \
-	else \
-		echo "Please install valgrind to use the 'leaks' feature"; \
-	fi
-
-# generate suppression file
-supp_msg:
-	@echo "generating suppression file"
-supp: leaks_msg supp_msg debug
-	$(SUPP_TOOL) ./$(NAME) $(ARGS) && \
-	awk '/^{/,/^}/' valgrind-out.txt > suppression.supp
-
-# use suppression file
-suppleaks_msg:
-	@echo "launching valgrind with suppression file"
-suppleaks: debug
-	$(LEAK_TOOL) $(SUPPRESS) ./$(NAME) $(ARGS)
-
-# remove suppression and log files
-vclean:
-	@if [ -n "$(wildcard suppression.supp)" ]; then \
-		$(REMOVE) $(SUPP_FILE); \
-		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
-		$(GREEN)suppression file removed$(RESET)"; \
-	else \
-		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
-		$(YELLOW)no suppression file to remove$(RESET)"; \
-	fi
-	@if [ -n "$(wildcard valgrind-out.txt)" ]; then \
-		$(REMOVE) valgrind-out.txt; \
-		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
-		$(GREEN)log file removed$(RESET)"; \
-	else \
-		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
-		$(YELLOW)no log file to remove$(RESET)"; \
-	fi
-
-.PHONY: leaks_msg leaks supp_msg supp suppleaks_msg suppleaks vclean
-# **************************************************************************** #
 # ---------------------------------- UTILS ----------------------------------- #
 # **************************************************************************** #
 run: all
 	./$(NAME) $(MAP)
-# **************************************************************************** #
-# TODO: fix debug target to recompile mlx42 correctly (check documentation)
-# 
-debug: C_FLAGS += -g
-debug: re
-# **************************************************************************** #
+
 FORCE_FLAGS	:= -Wno-unused-variable
 
 force: C_FLAGS += $(FORCE_FLAGS)
 force: re
 	@echo "adding flags $(YELLOW)$(FORCE_FLAGS)$(RESET)"
 	@echo "$(RED)Forced compilation$(RESET)"
-# **************************************************************************** #
+
 $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
 # **************************************************************************** #
@@ -400,6 +328,7 @@ Available 'make' targets:
 'make norm'    -> Runs 'norminette' on the files in $(SRC_DIR)/ and $(INC_DIR)/ (also in libft)
 'make nm'      -> Checks symbols in the executable (to check used functions)
 'make pdf'     -> Downloads/Opens a $(NAME) instruction pdf in $(TMP_DIR)/
+'make mlxref'  -> Opens the MLX42 documentation
 'make leaks'   -> (WIP) Runs Valgrind on $(NAME) $(MAP) (make supp and make suppleaks)
 'make run'     -> Same as 'make all', then './$(NAME) $(MAP)'
 'make debug'   -> (WIP) Recompiles with debug symbols
@@ -537,7 +466,7 @@ BG_GRAY		:= $(ESC)[100m
 # ------------------------------- ANIMATIONS --------------------------------- #
 # **************************************************************************** #
 # TODO: add a chmod + x to the script
-# TODO: set this up during mlx42's compilation?
+# TODO: set this up during mlx42's compilation? or when installing brew, cmake, glfw
 # 
 # Animation shell script
 SPIN_SH		:= $(CFG_DIR)/spinner.sh

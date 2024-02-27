@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/26 22:11:04 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/27 17:07:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@ t_map	init_map(t_scene *scene)
 {
 	t_map	map;
 
+	(void)scene; //tmp
+
 	map.tile_size = 64;
 	map.width = 8;
 	map.height = 8;
 	// map.floor_color = HEX_GROUND;
-	map.floor_color = rgb_to_int(scene->floor);
+	map.floor_color = get_color(scene, FLOOR);
 	// map.ceiling_color = HEX_SKY;
-	map.ceiling_color = rgb_to_int(scene->ceiling);
+	map.ceiling_color = get_color(scene, CEILING);
 	map.wall_tile_color = HEX_BLACK;
 	map.floor_tile_color = HEX_WHITE;
 	map.background_color = HEX_GRAY;
@@ -80,6 +82,7 @@ void	draw_minimap(mlx_image_t *img, t_map *map)
 		{
 			tile.x = x * map->tile_size;
 			tile.y = y * map->tile_size;
+			// if (map->map_array[y][x] == 1)
 			if (tmp_map[y * map->width + x] == 1)
 				color = map->wall_tile_color;
 			else

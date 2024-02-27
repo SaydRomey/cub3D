@@ -12,7 +12,7 @@ NO img/north.png
 
 
 
-        F 155,           0,             155
+        F 204,           238,             221
 
 
 
@@ -20,7 +20,7 @@ NO img/north.png
 SO img/south.png
                         WE img/west.png
 
-C 55,          155,255
+C 42,          42,255
 
 11111
 10001

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/22 15:54:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/27 17:02:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ static void	set_key(int key, t_keys *keys, bool state)
 void	keyhooks(mlx_key_data_t data, void *param)
 {
 	t_cub		*cub;
-	t_keys		*keys;
+	// t_keys		*keys;
 
 	cub = (t_cub *)param;
-	keys = &cub->keys;
+	// keys = &cub->keys;
 	if (data.key == ESC && data.action == PRESS)
 	{
 		mlx_close_window(cub->mlx);
@@ -95,29 +95,3 @@ void	update(void *ptr)
 	update_player(cub);
 	// 
 }
-
-// 
-
-/*
-// checks if a key is pressed, to call a function
-void	check_options(t_cub *cub)
-{
-	if (cub->keys.esc)
-		terminate_mlx(cub);
-	// if (cub->keys.map_key)
-		// toggle(cub->map.display); add a toggle option to display minimap
-}
-
-// for mlx_loop_hook
-int	update_game(void *param)
-{
-	t_cub	*cub;
-
-	cub = (t_cub *)param;
-	update_player_position(cub); //wasd
-	update_player_direction(cub); //left, right and mouse
-	check_options(cub); //like terminate, (will add parameters here (display..., etc))
-	render(cub);
-	return (0);
-}
-*/

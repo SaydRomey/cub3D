@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/26 22:18:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/27 16:10:00 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,6 @@ void	setup_images(t_cub *cub)
 		error();
 	if (mlx_image_to_window(cub->mlx, cub->minimap_img, WIDTH - (512), 0) < SUCCESS)
 		error();
-	// 
-	draw_ceiling(cub->img, cub->minimap.ceiling_color);
-	draw_floor(cub->img, cub->minimap.floor_color);
-	// 
 }
 
 /*
@@ -87,18 +83,7 @@ int	main(int argc, char **argv)
 
 	validate_arguments(argc, argv);
 	scene = parse_cubfile(argv[1]);
-
-	// 
-	ft_printf("\nTexture paths:\n");
-	ft_printf("North: %s\n", scene.wall_textures[NO]);
-	ft_printf("South: %s\n", scene.wall_textures[SO]);
-	ft_printf("East: %s\n", scene.wall_textures[EA]);
-	ft_printf("West: %s\n", scene.wall_textures[WE]);
-	// 
-	ft_printf("\nFloor and Ceiling colors:\n");
-	ft_printf("F: R[%d] G[%d] B[%d]\n", scene.floor.r, scene.floor.g, scene.floor.b);
-	ft_printf("C: R[%d] G[%d] B[%d]\n", scene.ceiling.r, scene.ceiling.g, scene.ceiling.b);
-	// 
+	// validate_scene(&scene);
 
 	cub = init_cub(argv[1]);
 	cub.minimap = init_map(&scene);
@@ -111,3 +96,25 @@ int	main(int argc, char **argv)
 
 	return (SUCCESS);
 }
+
+/*
+	ft_printf("\nTexture paths:\n");
+	ft_printf("North: %s\n", scene.wall_textures[NO]);
+	ft_printf("South: %s\n", scene.wall_textures[SO]);
+	ft_printf("East: %s\n", scene.wall_textures[EA]);
+	ft_printf("West: %s\n", scene.wall_textures[WE]);
+	// 
+	ft_printf("\nFloor and Ceiling colors:\n");
+	ft_printf("RED:   %s\n", scene.colors[FLOOR][R]);
+	ft_printf("GREEN: %s\n", scene.colors[FLOOR][G]);
+	ft_printf("BLUE:  %s\n", scene.colors[FLOOR][B]);
+	scene.floor = get_color(&scene, FLOOR);
+	ft_printf("Hexa value: %X\n", scene.floor);
+
+	ft_printf("\nCeiling colors:\n");
+	ft_printf("RED:   %s\n", scene.colors[CEILING][R]);
+	ft_printf("GREEN: %s\n", scene.colors[CEILING][G]);
+	ft_printf("BLUE:  %s\n", scene.colors[CEILING][B]);
+	scene.ceiling = get_color(&scene, CEILING);
+	ft_printf("Hexa value: %X\n", scene.ceiling);
+	*/

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/26 13:15:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/27 11:14:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	draw_pixel(mlx_image_t *img, int x, int y, int color)
 }
 
 /* ************************************************************************** */
+
 static int get_rgba(int r, int g, int b, int a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);

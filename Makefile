@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/26 18:50:56 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/27 12:17:15 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -276,12 +276,15 @@ include $(CFG_DIR)/leaks.mk
 run: all
 	./$(NAME) $(MAP)
 
-FORCE_FLAGS	:= -Wno-unused-variable
+FORCE_FLAGS	:= \
+-Wno-unused-variable \
+-Wno-unused-function
 
 force: C_FLAGS += $(FORCE_FLAGS)
 force: re
 	@echo "adding flags $(YELLOW)$(FORCE_FLAGS)$(RESET)"
 	@echo "$(RED)Forced compilation$(RESET)"
+	./$(NAME) $(MAP)
 
 $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/26 22:21:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/27 18:04:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,11 @@ typedef struct s_point
 
 typedef struct s_map
 {
-	int	tile_size;
+	int	**map_array; //2d array for the map
+
 	int	width;
 	int	height;
+	int	tile_size;
 	int	floor_color;
 	int	ceiling_color;
 	int	wall_tile_color;
@@ -131,22 +133,37 @@ enum wall_id
 	WE
 };
 
-typedef struct s_rgb
+# define COLOR_TYPE_LEN 2
+
+enum color_id
 {
-	int	r;
-	int	g;
-	int	b;
-}		t_rgb; // to replace t_color in libft..
+	FLOOR,
+	CEILING
+};
+
+# define RGB_LEN 3
+
+enum rgb_id
+{
+	R,
+	G,
+	B
+};
+
+# define MAP_CHARS "01NSEW"
 
 typedef struct s_scene
 {
-	char	*wall_textures[WALL_TEXTURE_LEN];
-	// mlx_texture_t	*wall_textures[WALL_TEXTURE_LEN]; //?
+	// parse_cubfile
+	char	*wall_textures[WALL_TEXTURE_LEN]; //maybe change for mlx_texture_t ?
+	char	*colors[COLOR_TYPE_LEN][RGB_LEN];
 
-	t_rgb	floor;
-	t_rgb	ceiling;
+	t_list	*map_list;
+
+	// validate_scene
+	int		floor;
+	int		ceiling;
 	
-	// int		**map_array;
 	t_point	starting_position;	
 	char	spawn_orientation;
 }			t_scene;
@@ -211,7 +228,9 @@ void	draw_player2(mlx_image_t *img, t_player *player);
 
 
 // utils.c
-int		rgb_to_int(t_rgb color);
+int		rgb_to_int(int r, int g, int b);
+int		get_color(t_scene *scene, int id);
+// 
 void	toggle(bool *choice);
 void	clear_img(mlx_image_t *img);
 void	cleanup(t_cub *cub);

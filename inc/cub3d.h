@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/22 13:55:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/26 22:21:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,53 @@ typedef struct s_keys
 	bool	backspace; //to reset player position
 }			t_keys;
 
+/* ************************************************************************** */
+
+// in map section
+enum point_type
+{
+	EMPTY_SPACE,
+	WALL,
+	PLAYER
+};
+
+typedef struct s_map_point
+{
+	int				x;
+	int				y;
+	enum point_type	point_type;
+}					t_map_point;
+
+# define WALL_TEXTURE_LEN 4 //change name later
+
+enum wall_id
+{
+	NO,
+	SO,
+	EA,
+	WE
+};
+
+typedef struct s_rgb
+{
+	int	r;
+	int	g;
+	int	b;
+}		t_rgb; // to replace t_color in libft..
+
+typedef struct s_scene
+{
+	char	*wall_textures[WALL_TEXTURE_LEN];
+	// mlx_texture_t	*wall_textures[WALL_TEXTURE_LEN]; //?
+
+	t_rgb	floor;
+	t_rgb	ceiling;
+	
+	// int		**map_array;
+	t_point	starting_position;	
+	char	spawn_orientation;
+}			t_scene;
+
 typedef struct s_cub
 {
 	mlx_t       *mlx;
@@ -116,6 +163,9 @@ typedef struct s_cub
 }   t_cub;
 
 /* ************************************************************************** */
+
+// bres_line.c
+void	bres_line(mlx_image_t *img, t_point start, t_point end, int color);
 
 // draw.c
 void	draw_line(mlx_image_t *img, t_point start, t_point end, int color);
@@ -139,13 +189,16 @@ int	    fix_angle(int angle);
 float	distance(t_point a, t_point b, float angle);
 
 // minimap.c
-t_map	init_map(void);
+t_map	init_map(t_scene *scene);
 void	draw_tile(mlx_image_t *img, t_point origin, t_point size, int color);
 void	draw_minimap(mlx_image_t *img, t_map *map);
 
+// parsing.c
+t_scene	parse_cubfile(char *filepath);
+
 // pixels.c
 void	draw_pixel(mlx_image_t *img, int x, int y, int color);
-t_u8	get_pixel(mlx_image_t *img, int x, int y);
+int		get_pixel(mlx_image_t *img, int x, int y);
 void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
 
 // player.c
@@ -158,6 +211,7 @@ void	draw_player2(mlx_image_t *img, t_player *player);
 
 
 // utils.c
+int		rgb_to_int(t_rgb color);
 void	toggle(bool *choice);
 void	clear_img(mlx_image_t *img);
 void	cleanup(t_cub *cub);

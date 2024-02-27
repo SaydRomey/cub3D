@@ -6,11 +6,27 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/22 13:04:02 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/26 22:17:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int	rgb_to_int(t_rgb color)
+{
+	int	red;
+	int	green;
+	int	blue;
+	int	alpha;
+	int	combined_color;
+
+	red = color.r << 24;
+	green = color.g << 16;
+	blue = color.b << 8;
+	alpha = 0xFF;
+	combined_color = red | green | blue | alpha;
+	return (combined_color);
+}
 
 void	toggle(bool *choice)
 {

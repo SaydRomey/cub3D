@@ -6,21 +6,23 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/22 13:55:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/26 22:11:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_map	init_map(void)
+t_map	init_map(t_scene *scene)
 {
 	t_map	map;
 
 	map.tile_size = 64;
 	map.width = 8;
 	map.height = 8;
-	map.floor_color = HEX_GROUND;
-	map.ceiling_color = HEX_SKY;
+	// map.floor_color = HEX_GROUND;
+	map.floor_color = rgb_to_int(scene->floor);
+	// map.ceiling_color = HEX_SKY;
+	map.ceiling_color = rgb_to_int(scene->ceiling);
 	map.wall_tile_color = HEX_BLACK;
 	map.floor_tile_color = HEX_WHITE;
 	map.background_color = HEX_GRAY;

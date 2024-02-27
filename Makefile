@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/22 17:35:17 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/26 18:50:56 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@
 # **************************************************************************** #
 AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
-MAP			:= $(TBD)
+MAP			:= map/parse_test.cub
 
 CFG_DIR		:= cfg
 IMG_DIR		:= img
@@ -84,7 +84,6 @@ HEADERS		:= $(HEADERS) -I$(MLX_INC)
 # TODO: adapt default to desired dimensions in config_*.mk
 # TOCHECK: do we need more macros, and does the norm permit compile time defined macros ?
 # 
-include $(CFG_DIR)/leaks.mk
 
 SOUND		:=
 
@@ -272,6 +271,8 @@ pdf: | $(TMP_DIR)
 # **************************************************************************** #
 # ---------------------------------- UTILS ----------------------------------- #
 # **************************************************************************** #
+include $(CFG_DIR)/leaks.mk
+
 run: all
 	./$(NAME) $(MAP)
 

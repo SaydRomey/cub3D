@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/22 13:49:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/26 13:18:32 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	draw_ceiling(mlx_image_t *img, int color)
 	end.y = img->height / 2;
 	draw_rectangle(img, start, end, color);
 }
+
 void	draw_floor(mlx_image_t *img, int color)
 {
 	t_point	start;

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/21 20:01:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/26 13:15:53 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,12 @@ void	draw_pixel(mlx_image_t *img, int x, int y, int color)
 }
 
 /* ************************************************************************** */
-
 static int get_rgba(int r, int g, int b, int a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-t_u8	get_pixel(mlx_image_t *img, int x, int y)
+int	get_pixel(mlx_image_t *img, int x, int y)
 {
 	unsigned char	*pixel;
 
@@ -57,12 +56,9 @@ t_u8	get_pixel(mlx_image_t *img, int x, int y)
 /*
 in case the dst image is smaller
 */
-static int	pixel_is_valid(mlx_image_t* img, int x, int y)
+static int	pixel_is_valid(mlx_image_t* img, t_u32 x, t_u32 y)
 {
-	if (x < (int)img->width && y < (int)img->height && get_pixel(img, x, y) != 0)
-		return (TRUE);
-	else
-		return (FALSE);
+	return (x < img->width && y < img->height);
 }
 
 /*

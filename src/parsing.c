@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/27 18:38:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/28 18:41:41 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,13 @@ static void	parse_wall_texture(char *line, t_scene *scene)
 	{
 		if (ft_strncmp(line, wall[id], 3) == SAME)
 		{
-			// add check if wall texture is already set
-			scene->wall_textures[id] = ft_strdup(line + 3);
+			if (scene->checklist.wall[id])
+			{
+				// error: duplicate wall texture definition
+				return;
+			}
+			scene->checklist.wall[id] = TRUE;
+			scene->wall_texture_set[id] = TRUE;
 			return;
 		}
 		id++;
@@ -47,8 +52,15 @@ static void	parse_floor_ceiling(char *line, t_scene *scene)
 	id = 0;
 	while (id < COLOR_TYPE_LEN)
 	{
-		if (ft_strncmp(line, colors[id], 2) == SAME)
+		if (ft_strncmp(line, color[id], 2) == SAME)
 		{
+			if (scene->checklist.color[id])
+			{
+				// error: duplicate floor/ceiling color definition
+				return;
+			}
+			scene->checklist.color[id] = TRUE;
+			
 			split = ft_split(line + 2, ',');
 			int	i = 0;
 			while (i < RGB_LEN) //implement a check_split(split, RGB_LEN) function ?
@@ -86,6 +98,28 @@ static int	is_map_line(const char *line)
 	return (has_non_space_map_char);
 }
 
+/*
+
+static int	is_wall_line(char *line) //fix this to detect the first and last line of the map portion
+{
+	while (*line)
+	{
+		if (*line != '1' && *line != ' ')
+			return (FALSE);
+		line++;
+	}
+	return (TRUE);
+}
+
+checklist to detect an invalid map line, once the map portion has started
+
+if (checklist.in_map_section == FALSE && is_wall_line(line))
+	checklist.in_map_section = TRUE; // start of the map portion
+else if (checklist.in_map_section == TRUE && is_wall_line(line))
+	checklist.in_map_section = FALSE; // end of the map portion
+
+*/
+
 t_scene	parse_cubfile(char *filepath)
 {
 	t_scene	scene;
@@ -115,20 +149,33 @@ t_scene	parse_cubfile(char *filepath)
 	}
 	free(line);
 	close(fd);
+	// 
+	int	i = 0;
+	while (i < WALL_TEXTURE_LEN)
+	{
+		if (!checklist.wall[i])
+		{
+			// error: missing texture
+			return;
+		}
+		i++;
+	}
+	if (!scene.checklist.wall[FLOOR] || !scene.checklist.wall[CEILING])
+	{
+		// error: missing floor or ceiling color
+		return;
+	}
+	if (scene.map_list == NULL)
+	{
+		// error: no map data found
+		return;
+	}
+
+	// 
 	return (scene);
 }
 
 /*
-static int	is_wall_line(char *line)
-{
-	while (*line)
-	{
-		if (*line != '1' && *line != ' ')
-			return (FALSE);
-		line++;
-	}
-	return (TRUE);
-}
 
 t_scene	parse_cubfile(char *filepath)
 {

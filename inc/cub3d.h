@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/27 18:04:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/28 18:33:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,15 @@ enum rgb_id
 	B
 };
 
-# define MAP_CHARS "01NSEW"
+# define MAP_CHARS "01 NSEW"
+
+typedef struct s_checklist
+{
+	int	wall[WALL_TEXTURE_LEN];
+	int	color[COLOR_TYPE_LEN];
+	int	in_map_section;
+
+}		t_checklist;
 
 typedef struct s_scene
 {
@@ -160,12 +168,15 @@ typedef struct s_scene
 
 	t_list	*map_list;
 
-	// validate_scene
+	// checklist
+	t_checklist	checklist;
+
 	int		floor;
 	int		ceiling;
 	
 	t_point	starting_position;	
 	char	spawn_orientation;
+	// struct s_scene	*next;
 }			t_scene;
 
 typedef struct s_cub

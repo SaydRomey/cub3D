@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/27 16:10:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/28 17:39:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	main(int argc, char **argv)
 
 	validate_arguments(argc, argv);
 	scene = parse_cubfile(argv[1]);
+	// &scene.next = parse_cubfile("./map/lvl2.cub");
 	// validate_scene(&scene);
 
 	cub = init_cub(argv[1]);
@@ -90,14 +91,7 @@ int	main(int argc, char **argv)
 	cub.player = init_player((t_point){100,100}, 'S');
 
 	setup_images(&cub);
-
-	cub_loop(&cub);
-	cleanup(&cub);
-
-	return (SUCCESS);
-}
-
-/*
+	
 	ft_printf("\nTexture paths:\n");
 	ft_printf("North: %s\n", scene.wall_textures[NO]);
 	ft_printf("South: %s\n", scene.wall_textures[SO]);
@@ -117,4 +111,13 @@ int	main(int argc, char **argv)
 	ft_printf("BLUE:  %s\n", scene.colors[CEILING][B]);
 	scene.ceiling = get_color(&scene, CEILING);
 	ft_printf("Hexa value: %X\n", scene.ceiling);
+
+	cub_loop(&cub);
+	cleanup(&cub);
+
+	return (SUCCESS);
+}
+
+/*
+	
 	*/

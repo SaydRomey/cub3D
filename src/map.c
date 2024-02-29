@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/28 18:38:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/28 22:25:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,6 @@ int	get_map_height(t_list *map_list)
 	return (ft_lstsize(map_list));
 }
 
-typedef enum e_map_elem
-{
-	SPACE = -2,
-	UNVISITED = -1,
-	WALL = 1,
-	DOOR = 2,
-	INVALID = -3
-}	t_map_elem;
-
 static int	char_to_int(char c) //change this later
 {
 	if (c == ' ')
@@ -75,25 +66,58 @@ static int	char_to_int(char c) //change this later
 		return (INVALID);
 }
 
-int	**init_map(int height, int width)
+int **allocate_map(int height, int width)
 {
-	// 
+	int	**map;
+	int	i;
+	
+	map = (int **)ft_calloc(height, sizeof(int *));
+	if (!map)
+	{
+		// error: map allocation
+		return (NULL);
+	}
+	i = 0;
+	while (i < height)
+	{
+		map[i] = (int *)ft_calloc(width, sizeof(int));
+		if (!map[i])
+		{
+			while (--i >= 0)
+				free(map[i]);
+			free(map);
+			// error: map row allocation
+			return (NULL);
+		}
+		i++;
+	}
+	return (map);
 }
 
 void	free_map(int **map, int height)
 {
-	// 
+	int	i;
+
+	if (!map)
+		return;
+	i = 0;
+	while (i < height)
+	{
+		if (map[i])
+			free(map[i]);
+		i++;
+	}
+	free(map);
 }
 
 int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_position)
 {
-	int	**map;
-	int	i;
-	int	row;
-	int	col;
+	int		**map;
+	int		row;
+	int		col;
 	char	*line;
 
-	map = init_map(height, width);
+	map = allocate_map(height, width);
 	if (!map)
 		return (NULL);
 	
@@ -123,7 +147,7 @@ int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_positio
 				start_position->x = col;
 				start_position->y = row;
 			}
-			map[row][col] = value);
+			map[row][col] = value;
 			col++;
 		}
 		row++;

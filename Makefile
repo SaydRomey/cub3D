@@ -6,15 +6,12 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/27 12:17:15 by cdumais          ###   ########.fr        #
+#    Updated: 2024/02/28 20:59:26 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# TODO: add 'make ref' that opens mlx42 documentation and/or lodev tutorial?
 # TODO: check to install GLFW in lib dir like we did with readline ?
 # or automate the installation of required dependencies (brew, cmake, glfw)
-
-# TOCHECK: using evaluator image in sgoinfre
 
 # https://lodev.org/cgtutor/raycasting.html
 
@@ -522,3 +519,34 @@ sound:
 	@echo "sound testing finished"
 
 .PHONY: sound
+# **************************************************************************** #
+
+# TOCHECK: using evaluator image in sgoinfre
+# (mac only)
+# find ~/sgoinfre -name "$(whoami).JPG" -exec sh -c 'sips -s format png "$0" --out "$(pwd)/img/$(basename "$0" .JPG).png"' {} \;
+
+SGOINFRE	:= ~/sgoinfre
+PROFILE_PIC	:= $(shell whoami).JPG
+PICTURE		:= $(IMG_DIR)/$(PROFILE_PIC:.JPG=.png)
+
+user_picture:
+	@echo "searching for $(PROFILE_PIC) in $(SGOINFRE)..."
+	@FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC)); \
+	if [ -z "$$FILE_PATH" ]; then \
+		echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
+		exit 1; \
+	else \
+		echo "Found file at $$FILE_PATH"; \
+	fi
+	@echo "Converting $$FILE_PATH to PNG..."
+	@sips -s format png "$$FILE_PATH" --out $(PICTURE) 2>$(VOID); \
+	if [$$? -ne 0 ]; then \
+		echo "Error: Conversion failed."; \
+		exit 1; \
+	else \
+		echo "Conversion successful. File saved to $(PICTURE)"; \
+	fi
+
+# maybe change the file name to a generic one, to be called in cub3D ..?
+
+.PHONY: user_picture

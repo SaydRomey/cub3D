@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/28 18:33:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/28 20:19:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,20 +108,14 @@ typedef struct s_keys
 
 /* ************************************************************************** */
 
-// in map section
-enum point_type
+typedef enum e_map_elem
 {
-	EMPTY_SPACE,
-	WALL,
-	PLAYER
-};
-
-typedef struct s_map_point
-{
-	int				x;
-	int				y;
-	enum point_type	point_type;
-}					t_map_point;
+	SPACE = -2,
+	UNVISITED = -1,
+	WALL = 1,
+	DOOR = 2,
+	INVALID = -3
+}	t_map_elem;
 
 # define WALL_TEXTURE_LEN 4 //change name later
 

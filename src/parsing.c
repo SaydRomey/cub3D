@@ -6,12 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/28 18:41:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/28 22:30:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-// #include "parsing.h"
 
 static void	parse_wall_texture(char *line, t_scene *scene)
 {
@@ -33,7 +32,6 @@ static void	parse_wall_texture(char *line, t_scene *scene)
 				return;
 			}
 			scene->checklist.wall[id] = TRUE;
-			scene->wall_texture_set[id] = TRUE;
 			return;
 		}
 		id++;
@@ -52,7 +50,7 @@ static void	parse_floor_ceiling(char *line, t_scene *scene)
 	id = 0;
 	while (id < COLOR_TYPE_LEN)
 	{
-		if (ft_strncmp(line, color[id], 2) == SAME)
+		if (ft_strncmp(line, colors[id], 2) == SAME)
 		{
 			if (scene->checklist.color[id])
 			{
@@ -98,27 +96,17 @@ static int	is_map_line(const char *line)
 	return (has_non_space_map_char);
 }
 
-/*
-
-static int	is_wall_line(char *line) //fix this to detect the first and last line of the map portion
+static int	is_wall_line(char *line)
 {
 	while (*line)
 	{
-		if (*line != '1' && *line != ' ')
+		if (*line != '1' && !ft_isspace(*line))
 			return (FALSE);
 		line++;
 	}
 	return (TRUE);
 }
 
-checklist to detect an invalid map line, once the map portion has started
-
-if (checklist.in_map_section == FALSE && is_wall_line(line))
-	checklist.in_map_section = TRUE; // start of the map portion
-else if (checklist.in_map_section == TRUE && is_wall_line(line))
-	checklist.in_map_section = FALSE; // end of the map portion
-
-*/
 
 t_scene	parse_cubfile(char *filepath)
 {
@@ -134,8 +122,28 @@ t_scene	parse_cubfile(char *filepath)
 	{
 		if (is_map_line(line))
 		{
-			ft_printf("map->%s", line);
-			ft_lstadd_back(&scene.map_list, ft_lstnew(ft_strdup(line)));
+			// 
+			if (scene.checklist.in_map_section == FALSE && is_wall_line(line))
+				scene.checklist.in_map_section = TRUE; // start of the map portion
+			else if (scene.checklist.in_map_section == FALSE && is_wall_line(line))
+				scene.checklist.in_map_section = FALSE; // end of the map portion
+			
+			if (scene.checklist.in_map_section || is_wall_line(line))
+			{
+				ft_printf("map->%s", line);
+				ft_lstadd_back(&scene.map_list, ft_lstnew(ft_strdup(line)));
+			}
+			else
+			{
+				// error: invalid map line (does 'is_map_line()' prevent this error ?)
+				// or do we end up here if the first line is not only '1' and spaces..?
+				ft_printf("error\n");
+			}
+		}
+		else if (scene.checklist.in_map_section)
+		{
+			// error: non-map line found within map section
+			ft_printf("error\n");
 		}
 		else
 		{
@@ -153,25 +161,23 @@ t_scene	parse_cubfile(char *filepath)
 	int	i = 0;
 	while (i < WALL_TEXTURE_LEN)
 	{
-		if (!checklist.wall[i])
+		if (!scene.checklist.wall[i])
 		{
 			// error: missing texture
-			return;
+			ft_printf("error\n");
 		}
 		i++;
 	}
 	if (!scene.checklist.wall[FLOOR] || !scene.checklist.wall[CEILING])
 	{
 		// error: missing floor or ceiling color
-		return;
+		ft_printf("error\n");
 	}
 	if (scene.map_list == NULL)
 	{
 		// error: no map data found
-		return;
+		ft_printf("error\n");
 	}
-
-	// 
 	return (scene);
 }
 

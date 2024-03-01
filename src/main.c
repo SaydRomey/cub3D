@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/28 17:39:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/29 21:54:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,16 @@ void	setup_images(t_cub *cub)
 	cub->img = mlx_new_image(cub->mlx, WIDTH, HEIGHT);
 	if (!cub->img)
 		error();
-	cub->minimap_img = mlx_new_image(cub->mlx, 512, 512); //to change later?
+	cub->minimap_img = mlx_new_image(cub->mlx, WIDTH, HEIGHT); //to change later?
 	if (!cub->minimap_img)
 		error();
 	// 
 	if (mlx_image_to_window(cub->mlx, cub->img, 0, 0) < SUCCESS)
 		error();
-	if (mlx_image_to_window(cub->mlx, cub->minimap_img, WIDTH - (512), 0) < SUCCESS)
+	cub->img->instances->enabled = false; //tmp
+	if (mlx_image_to_window(cub->mlx, cub->minimap_img, 0, 0) < SUCCESS)
 		error();
+	// cub->minimap_img.instance.enabled = false; //tmp
 }
 
 /*

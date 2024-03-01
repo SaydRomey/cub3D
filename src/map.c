@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/28 22:25:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/29 21:32:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,24 @@ int	get_map_height(t_list *map_list)
 	return (ft_lstsize(map_list));
 }
 
+void	free_map(int **map, int height)
+{
+	int	i;
+
+	if (!map)
+		return;
+	i = 0;
+	while (i < height)
+	{
+		if (map[i])
+			free(map[i]);
+		i++;
+	}
+	free(map);
+}
+
+//
+
 static int	char_to_int(char c) //change this later
 {
 	if (c == ' ')
@@ -66,7 +84,7 @@ static int	char_to_int(char c) //change this later
 		return (INVALID);
 }
 
-int **allocate_map(int height, int width)
+static int **allocate_map(int height, int width)
 {
 	int	**map;
 	int	i;
@@ -92,22 +110,6 @@ int **allocate_map(int height, int width)
 		i++;
 	}
 	return (map);
-}
-
-void	free_map(int **map, int height)
-{
-	int	i;
-
-	if (!map)
-		return;
-	i = 0;
-	while (i < height)
-	{
-		if (map[i])
-			free(map[i]);
-		i++;
-	}
-	free(map);
 }
 
 int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_position)
@@ -160,6 +162,8 @@ int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_positio
 	}
 	return (map);
 }
+
+//
 
 void	flood_fill(int **map, int x, int y, int height, int width)
 {

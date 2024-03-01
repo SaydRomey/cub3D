@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/21 19:46:29 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/29 21:27:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@ int	fix_angle(int angle)
 	else if (angle < 0)
 		angle += 360;
 	return (angle);
+}
+
+int	is_inside_circle(t_point to_check, t_point circle_center, int radius)
+{
+	t_point	distance; // from to_check to the circle of the center
+	int		distance_squared;
+
+	distance.x = to_check.x - circle_center.x;
+	distance.y = to_check.y - circle_center.y;
+	distance_squared = distance.x * distance.x - distance.y * distance.y;
+
+	return (distance_squared <= radius * radius);
 }
 
 /*

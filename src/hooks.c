@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/27 17:02:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/29 21:52:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,9 @@ void	update(void *ptr)
 	// here could be the drawing of the rays? **(use another image)
 	draw_line(cub->img, (t_point){0, 0}, (t_point){WIDTH, HEIGHT}, 0xFF0000FF);
 
-	// reset minimap (also erases the player)
-	draw_background(cub->minimap_img, cub->minimap.background_color);
-	draw_minimap(cub->minimap_img, &cub->minimap);
+	// // reset minimap (also erases the player)
+	// draw_background(cub->minimap_img, cub->minimap.background_color);
+	// draw_minimap(cub->minimap_img, &cub->minimap);
 
 	// update player by checking the keys pressed
 	update_player(cub);

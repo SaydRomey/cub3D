@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/28 20:19:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/29 21:44:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,9 +205,19 @@ void    error(void);
 void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
 
+// map.c
+void	store_map_line(t_list **map_list, char *line);
+int	get_map_width(t_list *map_list);
+int	get_map_height(t_list *map_list);
+void	free_map(int **map, int height);
+
+int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_position);
+
+
 // math_utils.c
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
+int		is_inside_circle(t_point to_check, t_point circle_center, int radius);
 float	distance(t_point a, t_point b, float angle);
 
 // minimap.c

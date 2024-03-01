@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/28 22:30:37 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/02/29 16:48:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	parse_wall_texture(char *line, t_scene *scene)
 				// error: duplicate wall texture definition
 				return;
 			}
+			scene->wall_textures[id] = ft_strdup(line + 3);
 			scene->checklist.wall[id] = TRUE;
 			return;
 		}

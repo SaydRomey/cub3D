@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/02/28 20:59:26 by cdumais          ###   ########.fr        #
+#    Updated: 2024/03/01 14:18:52 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -525,9 +525,10 @@ sound:
 # (mac only)
 # find ~/sgoinfre -name "$(whoami).JPG" -exec sh -c 'sips -s format png "$0" --out "$(pwd)/img/$(basename "$0" .JPG).png"' {} \;
 
-SGOINFRE	:= ~/sgoinfre
+SGOINFRE	:= ~/sgoinfre/photos_etudiants/*/*
 PROFILE_PIC	:= $(shell whoami).JPG
-PICTURE		:= $(IMG_DIR)/$(PROFILE_PIC:.JPG=.png)
+PICTURE		:= ./$(IMG_DIR)/username.png
+# PICTURE		:= ./$(IMG_DIR)/$(PROFILE_PIC:.JPG=.png)
 
 user_picture:
 	@echo "searching for $(PROFILE_PIC) in $(SGOINFRE)..."
@@ -539,13 +540,16 @@ user_picture:
 		echo "Found file at $$FILE_PATH"; \
 	fi
 	@echo "Converting $$FILE_PATH to PNG..."
-	@sips -s format png "$$FILE_PATH" --out $(PICTURE) 2>$(VOID); \
+	@sips -s format png "$$FILE_PATH" --out $(PICTURE); \
 	if [$$? -ne 0 ]; then \
 		echo "Error: Conversion failed."; \
 		exit 1; \
 	else \
 		echo "Conversion successful. File saved to $(PICTURE)"; \
 	fi
+
+convert:
+	@sips -s format png "./misc/$(shell whoami).JPG" --out generic.png
 
 # maybe change the file name to a generic one, to be called in cub3D ..?
 

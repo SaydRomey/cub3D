@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/29 21:32:36 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/01 16:01:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	store_map_line(t_list **map_list, char *line)
 {
 	t_list	*node;
 
-	node = ft_lstnew(ft_strdup(line));
+	node = ft_lstnew(ft_strtrim(line, "\n"));
 	if (!node)
 		return ; //malloc error
 	ft_lstadd_back(map_list, node);

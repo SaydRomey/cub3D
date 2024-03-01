@@ -6,15 +6,9 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/29 21:44:47 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/01 15:51:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// ideas to check:
-/*
-boussole en haut, stripe a la skyrim?
-
-*/
 
 #ifndef CUB3D_H
 # define CUB3D_H
@@ -46,11 +40,10 @@ boussole en haut, stripe a la skyrim?
 # define HEX_ORANGE 		0xFF7700FF //best orange on mac
 # define HEX_ORANGEY		0xED840CFF //between orange and yellow on mac
 # define HEX_PURPLE			0x800080FF //weak on MAC
-# define HEX_OLILAS			0xA27CF1FF //bluish purple on mac
+# define HEX_OLILAS			0xA27CF1FF //blueish purple on mac
 # define HEX_PINK			0xFFC0CBFF //pale pink on mac
 # define HEX_BROWN			0x663300FF //weak dark orange on mac
-
-# define HEX_OLIVE      0x808000FF
+# define HEX_OLIVE      	0x808000FF
 
 # define PI			3.1415926535
 
@@ -58,11 +51,68 @@ boussole en haut, stripe a la skyrim?
 # define PLAYER_SPEED		5
 # define PLAYER_TURN_SPEED	5
 
+# define WALL_TEXTURE_LEN 4 //change name later
+# define COLOR_TYPE_LEN 2
+# define RGB_LEN 3
+
+# define MAP_CHARS "01 NSEW"
+
 typedef struct s_point
 {
 	float	x;
 	float	y;
 }			t_point;
+
+
+
+typedef enum e_map_elem
+{
+	SPACE = -2,
+	UNVISITED = -1,
+	WALL = 1,
+	DOOR = 2,
+	INVALID = -3
+}	t_map_elem;
+
+enum wall_id
+{
+	NO,
+	SO,
+	EA,
+	WE
+};
+
+enum color_id
+{
+	FLOOR,
+	CEILING
+};
+
+enum rgb_id
+{
+	R,
+	G,
+	B
+};
+
+/* ************************************************************************** */
+typedef struct s_info
+{
+	bool	problem;
+	bool	wall_check[WALL_TEXTURE_LEN];
+	bool	color_check[COLOR_TYPE_LEN];
+	bool	in_map;
+
+	// int		mlx_errno;
+	char	*error_msg;
+}			t_info;
+
+t_info	*call_info(void);
+void	free_info(void);
+bool    there_is_a_problem(void);
+bool	in_map(void);
+/* ************************************************************************** */
+
 
 typedef struct s_map
 {
@@ -108,44 +158,6 @@ typedef struct s_keys
 
 /* ************************************************************************** */
 
-typedef enum e_map_elem
-{
-	SPACE = -2,
-	UNVISITED = -1,
-	WALL = 1,
-	DOOR = 2,
-	INVALID = -3
-}	t_map_elem;
-
-# define WALL_TEXTURE_LEN 4 //change name later
-
-enum wall_id
-{
-	NO,
-	SO,
-	EA,
-	WE
-};
-
-# define COLOR_TYPE_LEN 2
-
-enum color_id
-{
-	FLOOR,
-	CEILING
-};
-
-# define RGB_LEN 3
-
-enum rgb_id
-{
-	R,
-	G,
-	B
-};
-
-# define MAP_CHARS "01 NSEW"
-
 typedef struct s_checklist
 {
 	int	wall[WALL_TEXTURE_LEN];
@@ -168,9 +180,8 @@ typedef struct s_scene
 	int		floor;
 	int		ceiling;
 	
-	t_point	starting_position;	
+	t_point	starting_position;
 	char	spawn_orientation;
-	// struct s_scene	*next;
 }			t_scene;
 
 typedef struct s_cub
@@ -199,7 +210,11 @@ void	draw_circle(mlx_image_t *img, t_point origin, int radius, int color);
 void	draw_triangle(mlx_image_t *img, t_point p1, t_point p2, t_point p3, int color);
 
 // error.c
+void	set_error(char *str);
+void	set_error_arg(char *str, char *arg);
+char	*get_error(void);
 void    error(void);
+void	parse_error(char *line, int fd, t_scene *scene);
 
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
@@ -249,5 +264,8 @@ int		get_color(t_scene *scene, int id);
 void	toggle(bool *choice);
 void	clear_img(mlx_image_t *img);
 void	cleanup(t_cub *cub);
+
+// validate.c
+void	validate_arguments(int argc, char **argv);
 
 #endif // CUB3D_H

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 12:05:40 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 16:53:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct s_info
 	bool	wall_check[WALL_TEXTURE_LEN];
 	bool	color_check[COLOR_TYPE_LEN];
 	
-	bool	in_map;
 	bool	found_direction;
 
 	// int		mlx_errno;
@@ -113,7 +112,6 @@ typedef struct s_info
 t_info	*call_info(void);
 void	free_info(void);
 bool    there_is_a_problem(void);
-bool	in_map(void);
 void	set_in_map(bool choice);
 /* ************************************************************************** */
 
@@ -168,6 +166,7 @@ typedef struct s_scene
 	char		*wall_textures[WALL_TEXTURE_LEN]; //maybe change for mlx_texture_t ?
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
+	char		spawn_orientation;
 
 	// extract?
 	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
@@ -175,7 +174,6 @@ typedef struct s_scene
 	int			ceiling;
 	
 	t_point	starting_position;
-	char	spawn_orientation;
 }			t_scene;
 
 typedef struct s_cub

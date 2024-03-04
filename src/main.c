@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/01 16:03:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 17:18:09 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,17 +183,22 @@ int	main(int argc, char **argv)
 
 	scene = parse_cubfile(argv[1]);
 
+/* ************************************************************************** */
+// tests
+/* ************************************************************************** */
 	ft_printf("\n");
 	ft_printf("map width -> %d\n", get_map_width(scene.map_list));
 	ft_printf("map height-> %d\n", ft_lstsize(scene.map_list));
 	ft_printf("\n");
 	while (scene.map_list)
 	{
-		ft_printf("%s$!\n", (char *)scene.map_list->content);
+		ft_printf("%s$\n", (char *)scene.map_list->content);
 		
 		scene.map_list = scene.map_list->next;
 	}
 	ft_printf("\n");
+	ft_printf("Starting orientation-> %c\n", scene.spawn_orientation);
+/* ************************************************************************** */
 
 		
 	// &scene.next = parse_cubfile("./map/lvl2.cub");

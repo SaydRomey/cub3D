@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/01 14:39:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 11:36:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	set_error(char *str)
 	t_info	*info;
 
 	info = call_info();
-	// if (info->error_msg != NULL)
-	// 	free(info->error_msg);
 	info->error_msg = str;
 	info->problem = true;
 }
@@ -55,18 +53,13 @@ followed by an explicit error message of your choice.
 */
 void	error(void)
 {
-	char	*red_error;
-
 	ft_putstr_fd("Error\n", STDERR);
-	red_error = ft_strjoin_with(RED, get_error(), RESET);
 	ft_fprintf(STDERR, "%s%s%s\n", RED, get_error(), RESET);
-	// ft_putendl_fd(get_error(), STDERR);
-
 	free_info();
 	exit(FAILURE);
 }
 
-void	parse_error(char *line, int fd, t_scene *scene)
+void	parsing_error(char *line, int fd, t_scene *scene)
 {
 	int	i;
 

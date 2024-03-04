@@ -6,11 +6,53 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/01 16:01:48 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 10:53:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+/*
+
+bool check_vertical_isolation(int **map, int width, int height) {
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            if (map[y][x] == 0) {
+                // Check above unless at the top row
+                if (y > 0 && (map[y - 1][x] != 1 && map[y - 1][x] != -1)) {
+                    return false;
+                }
+                // Check below unless at the bottom row
+                if (y < height - 1 && (map[y + 1][x] != 1 && map[y + 1][x] != -1)) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+
+bool check_vertical_isolation(int **map, int width, int height) {
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            // Check if the current element is '0'
+            if (map[y][x] == 0) {
+                // Check the element above unless we're at the top row
+                if (y > 0 && (map[y - 1][x] != 1 || map[y - 1][x] == -1)) {
+                    return false; // Invalid if above is not '1' or is a space
+                }
+                // Check the element below unless we're at the bottom row
+                if (y < height - 1 && (map[y + 1][x] != 1 || map[y + 1][x] == -1)) {
+                    return false; // Invalid if below is not '1' or is a space
+                }
+            }
+        }
+    }
+    return true; // The map is valid if no '0' is improperly isolated
+}
+
+*/
 
 void	store_map_line(t_list **map_list, char *line)
 {

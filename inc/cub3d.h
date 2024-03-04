@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/03 21:21:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 12:05:40 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_point
 }			t_point;
 
 
-
+// change these values later...
 typedef enum e_map_elem
 {
 	SPACE = -2,
@@ -165,13 +165,14 @@ typedef struct s_keys
 typedef struct s_scene
 {
 	// parse_cubfile
-	char	*wall_textures[WALL_TEXTURE_LEN]; //maybe change for mlx_texture_t ?
-	char	*colors[COLOR_TYPE_LEN][RGB_LEN];
+	char		*wall_textures[WALL_TEXTURE_LEN]; //maybe change for mlx_texture_t ?
+	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
+	t_list		*map_list;
 
-	t_list	*map_list;
-
-	int		floor;
-	int		ceiling;
+	// extract?
+	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
+	int			floor;
+	int			ceiling;
 	
 	t_point	starting_position;
 	char	spawn_orientation;
@@ -207,7 +208,7 @@ void	set_error(char *str);
 void	set_error_arg(char *str, char *arg);
 char	*get_error(void);
 void    error(void);
-void	parse_error(char *line, int fd, t_scene *scene);
+void	parsing_error(char *line, int fd, t_scene *scene);
 
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
@@ -232,6 +233,15 @@ float	distance(t_point a, t_point b, float angle);
 t_map	init_map(t_scene *scene);
 void	draw_tile(mlx_image_t *img, t_point origin, t_point size, int color);
 void	draw_minimap(mlx_image_t *img, t_map *map);
+
+// parsing_floor_ceiling.c
+void	parse_floor_ceiling(char *cubline, t_scene *scene);
+
+// parsing_map.c
+void	parse_map_line(char *line, t_scene *scene);
+
+// parsing_walls.c
+void	parse_wall_texture(char *cubline, t_scene *scene);
 
 // parsing.c
 t_scene	parse_cubfile(char *filepath);

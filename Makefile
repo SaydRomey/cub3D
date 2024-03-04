@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/03/01 14:18:52 by cdumais          ###   ########.fr        #
+#    Updated: 2024/03/02 18:48:37 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
 MAP			:= map/parse_test.cub
 
-CFG_DIR		:= cfg
+CFG_DIR		:= .cfg
 IMG_DIR		:= img
 INC_DIR		:= inc
 LIB_DIR		:= lib

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/01 15:51:02 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/03 21:21:00 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,12 @@ enum rgb_id
 typedef struct s_info
 {
 	bool	problem;
+	
 	bool	wall_check[WALL_TEXTURE_LEN];
 	bool	color_check[COLOR_TYPE_LEN];
+	
 	bool	in_map;
+	bool	found_direction;
 
 	// int		mlx_errno;
 	char	*error_msg;
@@ -111,6 +114,7 @@ t_info	*call_info(void);
 void	free_info(void);
 bool    there_is_a_problem(void);
 bool	in_map(void);
+void	set_in_map(bool choice);
 /* ************************************************************************** */
 
 
@@ -158,14 +162,6 @@ typedef struct s_keys
 
 /* ************************************************************************** */
 
-typedef struct s_checklist
-{
-	int	wall[WALL_TEXTURE_LEN];
-	int	color[COLOR_TYPE_LEN];
-	int	in_map_section;
-
-}		t_checklist;
-
 typedef struct s_scene
 {
 	// parse_cubfile
@@ -173,9 +169,6 @@ typedef struct s_scene
 	char	*colors[COLOR_TYPE_LEN][RGB_LEN];
 
 	t_list	*map_list;
-
-	// checklist
-	t_checklist	checklist;
 
 	int		floor;
 	int		ceiling;

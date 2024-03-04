@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/01 15:52:14 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/03 21:46:09 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,57 @@ static void	parse_floor_ceiling(char *cubline, t_scene *scene)
 
 /* ************************************************************************** */
 
+static int	map_line_is_valid(char *cubline, bool *found_direction)
+{
+	char	*line;
+	int		len;
+	int		i;
+	char	c;
+	bool	valid = true;
+
+	line = ft_strtrim(cubline, " \t\n");
+	len = ft_strlen(line);
+	if (len < 1 || line[0] != '1' || line[len - 1] != '1')
+		valid = false;
+	else
+	{
+		i = 0;
+		while (valid == true && i < len)
+		{
+			c = line[i];
+			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+			{
+				if (*found_direction)
+				{
+					valid =  false;
+					set_error("More than one directional character found in map");
+					break;
+				}
+				*found_direction = true;
+			}
+			else if (c == '0' || (c == ' ' && i != len - 1))
+			{
+				if (i == 0 || line[i - 1] != '1' || (i < len - 1 && line[i + 1] != '1'))
+				{
+					valid = false;
+					set_error("'0' or space not properly bordered by a '1'");
+					break;
+				}
+			}
+			else if (c != '1' && !ft_strchr("NSEW", c))
+			{
+				valid = false;
+				set_error("Invalid character found in map");
+				break;
+			}
+
+			i++; //or ++i ?
+		}
+	}
+	free(line);
+	return (valid);
+}
+
 static int	is_map_line(const char *line)
 {
 	int	has_non_space_map_char;
@@ -125,20 +176,65 @@ static int	is_wall_line(char *line)
 	return (TRUE);
 }
 
+
 static void	parse_map_line(char *line, t_scene *scene)
 {
 	if (is_map_line(line))
 	{
-		if (in_map() == false && is_wall_line(line))
-			call_info()->in_map = true; // start of the map portion
-		else if (in_map() == true && is_wall_line(line))
-			call_info()->in_map = false; // end of the map portion
-		if (in_map() || is_wall_line(line))
+		if (!in_map() && is_wall_line(line))
+		{
+			set_in_map(true); // start of the map portion
 			store_map_line(&scene->map_list, line);
+		}
+		else if (in_map())
+		{
+			store_map_line(&scene->map_list, line);
+		}
+		else_if (!is_wall_line(line))
+		{
+			set_error("Invalid map first line");
+		}
 	}
-	else if (in_map() == true)
-		set_error("Non-map line found within the map section");
+	else
+	{
+		if (in_map())
+			set_error("Non-map line found within the map section");
+	}
+	if (in_map() && is_wall_line(line))
+		set_in_map(false); // end of the map portion
 }
+
+// add starting char validation (exactly one else invalid)
+static void	parse_map_line(char *line, t_scene *scene)
+{
+	static bool	potential_end = false;
+	
+	if (in_map())
+	{
+		if (!is_map_line(line))
+			set_error("Non-map line found within the map section");
+		else
+		{
+			store_map_line(&scene->map_list, line);
+			if (is_wall_line(line))
+				set_in_map(false);
+		}
+	}
+	else
+	{
+		if (is_map_line(line))
+		{
+			if (is_wall_line(line))
+			{
+				set_in_map(true);
+				store_map_line(&scene->map_list, line);
+			}
+			else
+				set_error("Invalid map first line");
+		}
+	}
+}
+
 
 t_scene	parse_cubfile(char *filepath)
 {
@@ -162,6 +258,7 @@ t_scene	parse_cubfile(char *filepath)
 	}
 	free(line);
 	close(fd);
+	// checklist(&scene);
 	// 
 	// int	i = 0;
 	// while (i < WALL_TEXTURE_LEN)

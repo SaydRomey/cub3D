@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 11:01:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/01 15:50:50 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/02 19:21:07 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,9 @@ bool	there_is_a_problem(void)
 bool	in_map(void)
 {
 	return (call_info()->in_map);
+}
+
+void	set_in_map(bool choice)
+{
+	call_info()-in_map = choice;
 }

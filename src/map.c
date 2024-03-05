@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 10:53:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 22:22:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,21 @@ bool check_vertical_isolation(int **map, int width, int height) {
 void	store_map_line(t_list **map_list, char *line)
 {
 	t_list	*node;
+	char	*copy;
+	size_t	len;
 
-	node = ft_lstnew(ft_strtrim(line, "\n"));
-	if (!node)
+	copy = ft_strdup(line);
+	if (!copy)
 		return ; //malloc error
+	len = ft_strlen(copy);
+	if (len > 0 && copy[len - 1] == '\n')
+		copy[len - 1] = '\0';
+	node = ft_lstnew(copy);
+	if (!node)
+	{
+		free(copy);
+		return ; //malloc error
+	}
 	ft_lstadd_back(map_list, node);
 }
 
@@ -80,20 +91,6 @@ int	get_map_width(t_list *map_list)
 	return (max_width);
 }
 
-int	get_map_height(t_list *map_list)
-{
-	// int	height;
-
-	// height = 0;
-	// while (map_list)
-	// {
-	// 	height++;
-	// 	map_list = map_list->next;
-	// }
-	// return (height);
-	return (ft_lstsize(map_list));
-}
-
 void	free_map(int **map, int height)
 {
 	int	i;
@@ -110,62 +107,59 @@ void	free_map(int **map, int height)
 	free(map);
 }
 
-//
-
-static int	char_to_int(char c) //change this later
-{
-	if (c == ' ')
-		return (SPACE);
-	else if (c == '1')
-		return (WALL);
-	else if (c == '0')
-		return (UNVISITED);
-	else if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		return (UNVISITED);
-	else
-		return (INVALID);
-}
-
 static int **allocate_map(int height, int width)
 {
 	int	**map;
 	int	i;
 	
-	map = (int **)ft_calloc(height, sizeof(int *));
+	// map = (int **)ft_calloc(height, sizeof(int *));
+	map = (int **)malloc(sizeof (int *) * height);
 	if (!map)
-	{
-		// error: map allocation
 		return (NULL);
-	}
 	i = 0;
 	while (i < height)
 	{
-		map[i] = (int *)ft_calloc(width, sizeof(int));
+		// map[i] = (int *)ft_calloc(width, sizeof(int));
+		map[i] = (int *)malloc(sizeof(int) * width);
 		if (!map[i])
 		{
 			while (--i >= 0)
 				free(map[i]);
 			free(map);
-			// error: map row allocation
 			return (NULL);
 		}
+		ft_memset(map[i], 2, width * sizeof(int));
 		i++;
 	}
 	return (map);
 }
 
-int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_position)
+static int	char_to_int(char c) //change this later
 {
-	int		**map;
+	if (c == ' ')
+		return (-1);
+	else if (c == '1')
+		return (1);
+	else if (c == '0')
+		return (0);
+	else if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		return (0);
+	else
+		return (-2); //tmp, should not get here
+}
+
+int		**get_2d_map(t_list *map_list, int height, int width)
+{
+	int		**map_array;
 	int		row;
 	int		col;
 	char	*line;
-
-	map = allocate_map(height, width);
-	if (!map)
-		return (NULL);
+	int		value;
 	
-	int	start_count = 0;
+	// map_array = allocate_map(ft_lstsize(map_list), get_map_width(map_list));
+	map_array = allocate_map(height, width);
+	if (!map_array)
+		return (NULL);
 	row = 0;
 	while (row < height && map_list)
 	{
@@ -173,78 +167,92 @@ int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_positio
 		col = 0;
 		while (col < width && line[col])
 		{
-			int	value = char_to_int(line[col]);
-			if (value == INVALID)
-			{
-				free_map(map, height);
-				return (NULL);
-			}
-			if (ft_strchr("NSEW", line[col]))
-			{
-				start_count++;
-				if (start_count > 1)
-				{
-					free_map(map, height);
-					return (NULL);
-				}
-				// player-> or scene->spawn_orientation = line[col];
-				start_position->x = col;
-				start_position->y = row;
-			}
-			map[row][col] = value;
+			value = char_to_int(line[col]);
+			map_array[row][col] = value;
+			// printf("[%2c=%2d] ",line[col], value); //tmp
 			col++;
 		}
+		// printf("\n"); //tmp
 		row++;
 		map_list = map_list->next;
 	}
-	if (start_count != 1)
-	{
-		free_map(map, height);
-		return (NULL);
-	}
-	return (map);
+	// printf("\n"); //tmp
+	return (map_array);
 }
 
-//
+// int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_position)
+// {
+// 	int		**map;
+// 	int		row;
+// 	int		col;
+// 	char	*line;
+// 	(void)start_position;
 
-void	flood_fill(int **map, int x, int y, int height, int width)
-{
-	if (x < 0 || x >= width || y < 0 || y >= height || map[y][x] != UNVISITED)
-		return;
-	
-	map[y][x] = 0; //mark as accessible/visited
+// 	map = allocate_map(height, width);
+// 	if (!map)
+// 		return (NULL);
+// 	row = 0;
+// 	while (row < height && map_list)
+// 	{
+// 		line = (char *)map_list->content;
+// 		col = 0;
+// 		while (col < width && line[col])
+// 		{
+// 			int	value = char_to_int(line[col]);
 
-	flood_fill(map, x + 1, y, height, width);
-	flood_fill(map, x - 1, y, height, width);
-	flood_fill(map, x , y + 1, height, width);
-	flood_fill(map, x , y - 1, height, width);
-}
+// 			if (ft_strchr("NSEW", line[col]))
+// 			{
+// 				printf("Start x = %d\n", col);
+// 				printf("Start y = %d\n", row);
+// 			}
+// 			map[row][col] = value;
+// 			// printf("[%2d, %2d] ",col, row);
+// 			// printf("[%c] ", line[col]);
+// 			// printf("[%2d] ", value);
+// 			col++;
+// 		}
+// 		// printf("\n");
+// 		row++;
+// 		map_list = map_list->next;
+// 	}
+// 	// printf("\n");
+// 	return (map);
+// }
 
-int	validate_flood_fill(int **map, int height, int width)
-{
-	int	y;
-	int	x;
 
-	y = 0;
-	while (y < height)
-	{
-		x = 0;
-		while (x < width)
-		{
-			if ((x == 0 || x == width -1 || y == 0 || y == height -1) && map[y][x] == 0)
-			{
-				// error: map leaks at the border
-				// add logic for smaller row or col *!!!
-				return (FALSE);
-			}
-			if (map[y][x] == UNVISITED)
-			{
-				// error ? or not.. (Unvisited accessible area found within the map)
-				return (FALSE);
-			}
-			x++;
-		}
-		y++;
-	}
-	return (TRUE);
-}
+// int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_position)
+// {
+// 	int		**map;
+// 	int		row;
+// 	int		col;
+// 	char	*line;
+
+// 	map = allocate_map(height, width);
+// 	if (!map)
+// 		return (NULL);
+// 	row = 0;
+// 	while (row < height && map_list)
+// 	{
+// 		line = (char *)map_list->content;
+// 		col = 0;
+// 		while (col < width && line[col])
+// 		{
+// 			int	value = char_to_int(line[col]);
+// 			if (value == -2)
+// 			{
+// 				free_map(map, height);
+// 				return (NULL);
+// 			}
+// 			if (ft_strchr("NSEW", line[col]))
+// 			{
+// 				start_position->x = col;
+// 				start_position->y = row;
+// 			}
+// 			map[row][col] = value;
+// 			col++;
+// 		}
+// 		row++;
+// 		map_list = map_list->next;
+// 	}
+// 	return (map);
+// }

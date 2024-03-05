@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 17:18:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 22:21:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,101 +56,6 @@ hooks and loops
 
 /* ************************************************************************** */
 
-/*
-cub3d flow
-
-check arguments
-
-parse the cubfile
-
-*(either validate cubfile during parsing,
-or during the extraction of the info)*
-
-convert the parsed info into usefull data:
-
-wall texture paths: exists
-no duplicate, all 4 a present
-
-rgb color values are in range [0-255]
-have exactly 3 values (check split[3],
-should be null), no duplicate, all 2 present
-
-map part: starts with a valid wall line (all '1' or '1' and empty spaces)
-each following line starts with spaces until a 1
-each line is composed of valid map chars ("10 NSEW") and not only ' '
-use a char to store the starting orientation (maybe position too?) init it to '\0'
-then check if not '\0', then duplicate starting char, also if still '\0' after map parsing, no starting char
-map must also end with a valid wall line
-
-//
-
-extract the info from the t_scene, then free the t_scene (for the next room maybe?)
-
-the wall texture paths could be converted to a usable array of images (check for proper dimensions)
-or they could be textures
-
-the rgb values should be converted to an int, usable by the function that draws
-the floor image and the ceiling image
-(currently we are drawing the pixels of upper half of an image, then the bottom half, to eventually draw the rays over them..)
-so maybe have an floor image, a ceiling image, use memset to set the whole pixel data instead of calling the draw pixel function
-(this also makes the images accessible to be textured (c'est pour toi ca oli ;) )
-
-the map is currently a t_list where each node is a row.
-it must be converted to a 2d int array
-
-the conversion part is a bit more complex..
-
-the height and width must be defined to malloc the int**
-count nodes with ft_lstsize to get number of rows (height)
-and a simple function using ft_max on each ft_strlen of the rows gives the largest number of columns (width)
-
-*(check if space and tabs create a problem here..)
-
-after the memory allocation, we need to get a specific int for each map chars
-*(ideally, validation of map chars done in parsing)
-then place that int at the corresponding position of the int **array
-
-*(test here if the array printed is what we want)
-
-we should retain the coordinates of the starting point as a (x, y) in the 2d array
-*(ideally, the verification for uniqueness and presence of starting point done in parsing)
-
-then use a flood fill to validate the map array:
-the flood fill should start at the player position, and recursively convert the walkable space to a '0' char
-
-the validation: !** (implement more complex checking for map that have extruding sections, a.k.a. not square or rectangular)
-
-
-once all the infos are parsed, validated and extracted, we free the t_scene
-
-////
-error and leaks handling:
-
-during arg check, if failure, close fd and exit
-
-during parsing,
-if wall texture path or rgb fails, free the currently allocated ones, then exit
-
-if the t_list of the map portion fails, free the wall texture paths, the colors and nodes allocated up to now
-
-if no t_list was done, free the paths and the rgb strings
-
-** a function freeing all parsed info should be accessible during the extracting of parsed info **
-
-during extracting info, if mlx functions fail, use the mlx_strerror, but free the t_scene before exiting
-
-//
-
-
-
-////
-
-init the t_cub struct
-
-init mlx
-
-*/
-
 // static void	test_parsing(t_scene scene)
 // {
 // 	ft_printf("\nTexture paths:\n");
@@ -172,7 +77,63 @@ init mlx
 // 	ft_printf("BLUE:  %s\n", scene.colors[CEILING][B]);
 // 	scene.ceiling = get_color(&scene, CEILING);
 // 	ft_printf("Hexa value: %X\n", scene.ceiling);
+
+// 	ft_printf("\nMap section:\n");
+// 	while (scene.map_list)
+// 	{
+// 		ft_printf("%s$\n", (char *)scene.map_list->content);
+// 		scene.map_list = scene.map_list->next;
+// 	}
+// 	ft_printf("map width -> %d\n", get_map_width(scene.map_list));
+// 	ft_printf("map height-> %d\n", ft_lstsize(scene.map_list));
+// 	ft_printf("Starting orientation-> %c\n", scene.spawn_orientation);
 // }
+
+/*
+void printIntDoublePointerArray(int **array, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%2d ", array[i][j]);
+        }
+        printf("\n");
+    }
+}
+*/
+
+void	print_2d_array(int **array, int height, int width)
+{
+	int	i;
+	int	j;
+	// int	value;
+	
+	i = 0;
+	printf("height: %d\n", height);
+	printf("width: %d\n", width);
+	while (i < height)
+	{
+		printf("row %2d-> ", i);
+		j = 0;
+		while (j < width)
+		{
+			if (array[i][j] == -2)
+				break;
+			printf("[%2d] ", array[i][j]);
+			// value = array[i][j];
+			// if (value == 1)
+			// 	printf("%s█%s", VIOLET, RESET);
+			// if (value == 0)
+			// 	printf("%s█%s", MAGENTA, RESET);
+			// if (value == -1)
+			// 	printf("%s█%s", ORANGE, RESET);
+			// if (value == -2)
+			// 	printf("%s█%s", RED, RESET);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+	printf("\n");
+}
 
 int	main(int argc, char **argv)
 {
@@ -183,26 +144,22 @@ int	main(int argc, char **argv)
 
 	scene = parse_cubfile(argv[1]);
 
+	// test_parsing(scene); //tmp
 /* ************************************************************************** */
-// tests
-/* ************************************************************************** */
-	ft_printf("\n");
-	ft_printf("map width -> %d\n", get_map_width(scene.map_list));
-	ft_printf("map height-> %d\n", ft_lstsize(scene.map_list));
-	ft_printf("\n");
-	while (scene.map_list)
-	{
-		ft_printf("%s$\n", (char *)scene.map_list->content);
-		
-		scene.map_list = scene.map_list->next;
-	}
-	ft_printf("\n");
-	ft_printf("Starting orientation-> %c\n", scene.spawn_orientation);
-/* ************************************************************************** */
+	
+	int		width = get_map_width(scene.map_list);
+	int		height = ft_lstsize(scene.map_list);
+	ft_printf("map width: %d\nmap height: %d\n", width, height);
 
-		
-	// &scene.next = parse_cubfile("./map/lvl2.cub");
-	// validate_scene(&scene);
+	ft_printf("\nTesting map_array\n");
+	int		**map_array = get_2d_map(scene.map_list, height, width);
+	
+	if (!map_array)
+		ft_printf("No 2d array\n");
+	else
+		print_2d_array(map_array, width, height);
+		// ft_printf("We have the 2d array\n");
+
 
 	// cub = init_cub(argv[1]);
 	// cub.minimap = init_map(&scene);
@@ -217,7 +174,3 @@ int	main(int argc, char **argv)
 
 	return (SUCCESS);
 }
-
-/*
-	
-	*/

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/27 15:57:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 19:01:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	get_color(t_scene *scene, int id)
 	b = ft_atoi(scene->colors[id][B]);
 	if (color_is_invalid(r, g, b))
 	{
-		// error: invalid color
+		ft_printf("\033[34mInvalid color\033[0m\n");
 		return (0x000000FF);
 	}
 	color_int = rgb_to_int(r, g, b);

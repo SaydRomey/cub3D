@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 17:29:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 17:51:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ void	parse_map_line(char *cubline, t_scene *scene)
 	char	*line;
 
 	line = ft_strtrim(cubline, " \t\n");
-	
 	if (is_map_line(line)) //must have only valid chars from "01 NSEW"
 	{
 		if (map_line_is_valid(line))

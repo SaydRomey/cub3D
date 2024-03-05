@@ -6,41 +6,24 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/29 21:57:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 20:38:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	print_2d_array(int **array, int rows, int cols)
-{
-	int	i = 0;
-	int	j = 0;
-
-	while (i < rows)
-	{
-		while (j < cols)
-		{
-			printf("%2d ", array[i][j]);
-			j++;
-		}
-		i++;
-	}
-	ft_printf("\n");
-}
 
 t_map	init_map(t_scene *scene)
 {
 	t_map	map;
 	t_list	*map_list;
-	t_point	start_position; //tmp
 
 	map_list = scene->map_list;
 	ft_memset(&map, 0, sizeof(t_map));
 
 	map.width = get_map_width(map_list);
-	map.height = get_map_height(map_list);
-	map.map_array = get_2d_map(scene->map_list, map.height, map.width, &start_position);
+	map.height = ft_lstsize(map_list);
+	map.map_array = get_2d_map(scene->map_list, map.height, map.width);
 
 	map.tile_size = 24;
 	// map.tile_size = 64;
@@ -54,7 +37,7 @@ t_map	init_map(t_scene *scene)
 	map.floor_tile_color = HEX_WHITE;
 	map.background_color = HEX_GRAY;
 
-	print_2d_array(map.map_array, map.height, map.width);
+	// print_2d_array(map.map_array, map.height, map.width);
 	
 	return (map);
 }

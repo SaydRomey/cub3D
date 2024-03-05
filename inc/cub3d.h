@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 16:53:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 20:37:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@
 
 # define MAP_CHARS "01 NSEW"
 
+// change to t_fpoint later
 typedef struct s_point
 {
 	float	x;
@@ -64,14 +65,13 @@ typedef struct s_point
 }			t_point;
 
 
-// change these values later...
+// change these names/values later...
 typedef enum e_map_elem
 {
-	SPACE = -2,
-	UNVISITED = -1,
+	SPACE = -1,
+	ACCESSIBLE = 0,
 	WALL = 1,
-	DOOR = 2,
-	INVALID = -3
+	DOOR = 2
 }	t_map_elem;
 
 enum wall_id
@@ -99,10 +99,8 @@ enum rgb_id
 typedef struct s_info
 {
 	bool	problem;
-	
 	bool	wall_check[WALL_TEXTURE_LEN];
 	bool	color_check[COLOR_TYPE_LEN];
-	
 	bool	found_direction;
 
 	// int		mlx_errno;
@@ -187,10 +185,8 @@ typedef struct s_cub
 	t_map		minimap;
 }   t_cub;
 
-/* ************************************************************************** */
 
-// bres_line.c
-void	bres_line(mlx_image_t *img, t_point start, t_point end, int color);
+/* ************************************************************************** */
 
 // draw.c
 void	draw_line(mlx_image_t *img, t_point start, t_point end, int color);
@@ -214,11 +210,11 @@ void	update(void *ptr);
 
 // map.c
 void	store_map_line(t_list **map_list, char *line);
-int	get_map_width(t_list *map_list);
-int	get_map_height(t_list *map_list);
+int		get_map_width(t_list *map_list);
 void	free_map(int **map, int height);
 
-int	**get_2d_map(t_list *map_list, int height, int width, t_point *start_position);
+// int		**get_2d_map(t_list *map_list, int height, int width, t_point *start_position);
+int		**get_2d_map(t_list *map_list, int height, int width);
 
 
 // math_utils.c

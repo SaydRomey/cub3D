@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/01 14:33:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 19:20:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,5 @@ void	validate_arguments(int argc, char **argv)
 	}
 	if (there_is_a_problem())
 		error();
-	ft_printf("Args valid\n"); //tmp
+	// ft_printf("Args valid\n"); //tmp
 }

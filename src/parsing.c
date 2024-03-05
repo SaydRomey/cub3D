@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 17:30:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 17:57:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ static bool	checklist(t_scene *scene)
 			return (set_error("Missing wall texture"), false);
 		i++;
 	}
+	
 	if (!call_info()->wall_check[FLOOR])
 		return (set_error("Missing floor color"), false);
 	if (!call_info()->wall_check[CEILING])
 		return (set_error("Missing ceiling color"), false);
+	
 	if (scene->map_list)
 	{
 		if (!is_wall_line((char *)scene->map_list->content))

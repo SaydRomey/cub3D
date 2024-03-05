@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 11:58:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/04 18:57:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void	split_rgb(int id, char *line, t_scene *scene)
 			break;
 		}
 		scene->colors[id][i] = ft_strtrim(split[i], " ");
-		ft_printf("color_id[%d], color_channel[%d] : %s\n", id, i, scene->colors[id][i]); //tmp
 		i++;
 	}
 	call_info()->color_check[id] = true;

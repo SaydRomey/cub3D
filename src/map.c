@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 22:22:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/05 17:59:40 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,42 @@ bool check_vertical_isolation(int **map, int width, int height) {
 
 */
 
+// void	store_map_line(t_list **map_list, char *line)
+// {
+// 	t_list	*node;
+
+// 	node = ft_lstnew(ft_strtrim(line, "\n"));
+// 	if (!node)
+// 		return ; //malloc error
+// 	ft_lstadd_back(map_list, node);
+// }
+
 void	store_map_line(t_list **map_list, char *line)
 {
 	t_list	*node;
 	char	*copy;
-	size_t	len;
+	char	*last_one;
+	char	*trimmed;
+	size_t	new_len;
 
 	copy = ft_strdup(line);
 	if (!copy)
 		return ; //malloc error
-	len = ft_strlen(copy);
-	if (len > 0 && copy[len - 1] == '\n')
-		copy[len - 1] = '\0';
-	node = ft_lstnew(copy);
+	last_one = ft_strrchr(copy, '1');
+	if (last_one != NULL)
+	{
+		new_len = last_one - copy + 1; // calculate length from start to the last '1'
+		trimmed = ft_substr(copy, 0, new_len);
+		if (!trimmed)
+		{
+			free(copy);
+			return ; //malloc error
+		}
+		free(copy);
+	}
+	else
+		trimmed = copy;
+	node = ft_lstnew(trimmed);
 	if (!node)
 	{
 		free(copy);
@@ -107,31 +130,39 @@ void	free_map(int **map, int height)
 	free(map);
 }
 
-static int **allocate_map(int height, int width)
+static int **allocate_grid(int height, int width)
 {
-	int	**map;
+	int	**grid;
 	int	i;
 	
-	// map = (int **)ft_calloc(height, sizeof(int *));
-	map = (int **)malloc(sizeof (int *) * height);
-	if (!map)
+	// grid = (int **)ft_calloc(height, sizeof(int *));
+	grid = (int **)malloc(sizeof(int *) * height);
+	if (!grid)
 		return (NULL);
+	
 	i = 0;
 	while (i < height)
 	{
-		// map[i] = (int *)ft_calloc(width, sizeof(int));
-		map[i] = (int *)malloc(sizeof(int) * width);
-		if (!map[i])
+		grid[i] = (int *)ft_calloc(width, sizeof(int));
+		// grid[i] = (int *)malloc(sizeof(int) * width);
+		if (!grid[i])
 		{
 			while (--i >= 0)
-				free(map[i]);
-			free(map);
+				free(grid[i]);
+			free(grid);
 			return (NULL);
 		}
-		ft_memset(map[i], 2, width * sizeof(int));
+		// ft_memset(map[i], 2, width * sizeof(int));
+		// ?
+		int	j = 0;
+		while (j < width)
+		{
+			grid[i][j] = -2;
+			j++;
+		}
 		i++;
 	}
-	return (map);
+	return (grid);
 }
 
 static int	char_to_int(char c) //change this later
@@ -145,7 +176,7 @@ static int	char_to_int(char c) //change this later
 	else if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 		return (0);
 	else
-		return (-2); //tmp, should not get here
+		return (-2); //tmp, should not get here?
 }
 
 int		**get_2d_map(t_list *map_list, int height, int width)
@@ -154,29 +185,26 @@ int		**get_2d_map(t_list *map_list, int height, int width)
 	int		row;
 	int		col;
 	char	*line;
-	int		value;
+	// int		value;
 	
 	// map_array = allocate_map(ft_lstsize(map_list), get_map_width(map_list));
-	map_array = allocate_map(height, width);
+	map_array = allocate_grid(height, width);
 	if (!map_array)
 		return (NULL);
+	
 	row = 0;
-	while (row < height && map_list)
+	while (map_list) // && row < height)
 	{
 		line = (char *)map_list->content;
 		col = 0;
 		while (col < width && line[col])
 		{
-			value = char_to_int(line[col]);
-			map_array[row][col] = value;
-			// printf("[%2c=%2d] ",line[col], value); //tmp
+			map_array[row][col] = char_to_int(line[col]);
 			col++;
 		}
-		// printf("\n"); //tmp
-		row++;
 		map_list = map_list->next;
+		row++;
 	}
-	// printf("\n"); //tmp
 	return (map_array);
 }
 
@@ -255,4 +283,26 @@ int		**get_2d_map(t_list *map_list, int height, int width)
 // 		map_list = map_list->next;
 // 	}
 // 	return (map);
+// }
+
+
+// void	store_map_line(t_list **map_list, char *line)
+// {
+// 	t_list	*node;
+// 	char	*copy;
+// 	size_t	len;
+
+// 	copy = ft_strdup(line);
+// 	if (!copy)
+// 		return ; //malloc error
+// 	len = ft_strlen(copy);
+// 	if (len > 0 && copy[len - 1] == '\n')
+// 		copy[len - 1] = '\0';
+// 	node = ft_lstnew(copy);
+// 	if (!node)
+// 	{
+// 		free(copy);
+// 		return ; //malloc error
+// 	}
+// 	ft_lstadd_back(map_list, node);
 // }

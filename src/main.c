@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 22:21:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/05 18:10:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,22 +104,27 @@ void	print_2d_array(int **array, int height, int width)
 {
 	int	i;
 	int	j;
-	// int	value;
+	int	value;
 	
 	i = 0;
-	printf("height: %d\n", height);
-	printf("width: %d\n", width);
+	// printf("height: %d\n", height);
+	// printf("width: %d\n", width);
 	while (i < height)
 	{
 		printf("row %2d-> ", i);
 		j = 0;
 		while (j < width)
 		{
-			if (array[i][j] == -2)
-				break;
-			printf("[%2d] ", array[i][j]);
-			// value = array[i][j];
-			// if (value == 1)
+			// printf("%2d ", array[i][j]);
+			value = array[i][j];
+			if (value == 0)
+				printf("  ");
+			if (value == 1)
+				printf("██");
+			if (value == -1)
+				printf("  ");
+			if (value == -2)
+				printf("  ");
 			// 	printf("%s█%s", VIOLET, RESET);
 			// if (value == 0)
 			// 	printf("%s█%s", MAGENTA, RESET);
@@ -146,18 +151,19 @@ int	main(int argc, char **argv)
 
 	// test_parsing(scene); //tmp
 /* ************************************************************************** */
+	ft_printf("\nTesting map_array\n");
 	
 	int		width = get_map_width(scene.map_list);
 	int		height = ft_lstsize(scene.map_list);
+
 	ft_printf("map width: %d\nmap height: %d\n", width, height);
 
-	ft_printf("\nTesting map_array\n");
 	int		**map_array = get_2d_map(scene.map_list, height, width);
 	
 	if (!map_array)
 		ft_printf("No 2d array\n");
 	else
-		print_2d_array(map_array, width, height);
+		print_2d_array(map_array, height, width);
 		// ft_printf("We have the 2d array\n");
 
 

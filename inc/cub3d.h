@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 16:21:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 18:41:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,13 @@ enum rgb_id
 };
 
 /* ************************************************************************** */
+typedef	struct s_ref
+{
+	int	width;
+	int	height;
+	int	**array;
+}		t_ref;
+
 typedef struct s_info
 {
 	bool	problem;
@@ -179,6 +186,7 @@ typedef struct s_texture
 typedef struct s_player
 {
 	t_fpoint		position;
+	char			spawn_orientation;
 	t_fpoint		delta;
 	t_fpoint		cam_plane;
 	float			angle;
@@ -232,7 +240,7 @@ typedef struct s_scene
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
 	char		spawn_orientation;
-	t_point		starting_position;
+	t_fpoint	starting_position;
 }				t_scene;
 
 typedef struct s_cub
@@ -241,6 +249,10 @@ typedef struct s_cub
 	mlx_image_t *img;
 	// 
 	mlx_image_t	*texture[7]; //change to have this in t_map
+	// 
+	// t_scene		scene;
+	t_fpoint	starting_position; //tmp
+	char		*spawn_orientation; //tmp
 	// 
 	t_map		map;
 	t_player	player;
@@ -316,6 +328,7 @@ int		get_pixel(mlx_image_t *img, int x, int y);
 void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
 
 // player.c
+t_player	init_player2(t_scene *scene);
 t_player	init_player(t_fpoint start, char direction);
 void	update_player_position(t_cub *cub);
 void	update_player_direction(t_cub *cub);
@@ -338,6 +351,8 @@ void	test_scene(t_scene scene);
 void    test_map(t_map map);
 void	test_term_colors(void);
 
+void	print_2d_array(int **array, int height, int width);
+
 
 // utils.c
 mlx_image_t *load_png(char *filepath, mlx_t *mlx);
@@ -351,5 +366,14 @@ void	cleanup(t_cub *cub);
 
 // validate.c
 void	validate_arguments(int argc, char **argv);
+
+
+// call.c
+t_cub	*call_cub(void);
+void	call_clean(void);
+int		**call_array(void);
+int		call_width(void);
+int		call_height(void);
+
 
 #endif // CUB3D_H

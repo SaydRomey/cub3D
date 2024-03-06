@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 14:21:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 18:19:19 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void	scan_for_start(char *line, t_scene *scene)
 			{
 				call_info()->found_direction = true;
 				scene->spawn_orientation = line[i];
+				// call_cub()->scene.spawn_orientation = line[i];
+				// call_cub()->spawn_orientation = line[i];
 			}
 		}
 		i++;

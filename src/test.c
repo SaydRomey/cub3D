@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 14:49:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 17:42:19 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	print_2d_array(int **array, int height, int width)
 	}
 	printf("\n");
 }
+
+
 
 void	test_map(t_map map)
 {

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 14:56:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 17:50:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,10 @@ void	cleanup(t_cub *cub)
 	mlx_delete_image(cub->mlx, cub->img);
 	mlx_terminate(cub->mlx);
 	proof("mlx terminated");
+}
+
+void	call_clean(void)
+{
+	ft_printf("*!*!*! call cleaned\n");
+	cleanup(call_cub());
 }

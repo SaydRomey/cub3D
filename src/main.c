@@ -6,31 +6,64 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 16:45:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 18:51:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_cub	init_cub(char *filepath)
+t_cub	*init_cub(char *filepath)
 {
-	t_cub	cub;
+	t_cub	*cub;
 	char	*title;
 
-	ft_memset(&cub, 0, sizeof(t_cub));
+	cub = call_cub();
 	title = ft_strjoin("cub3D - ", filepath);
-	cub.mlx = mlx_init(WIDTH, HEIGHT, title, FALSE);
+	mlx_set_window_title(cub->mlx, title);
 	free(title);
-	if (!cub.mlx)
-		error_mlx();
-	// 
-	cub.img = mlx_new_image(cub.mlx, WIDTH, HEIGHT);
-	if (!cub.img)
-		error();
-	// 
-	proof("init ok");
+	return (cub);	
+}
+
+t_cub	*call_cub(void)
+{
+	static t_cub	*cub;
+	// char	*title;
+
+	if (cub == NULL)
+	{
+		cub = ft_calloc(1, sizeof(*cub));
+		if (!cub)
+			return (NULL);
+		cub->mlx = mlx_init(WIDTH, HEIGHT, "static title", FALSE);
+		if (!cub->mlx)
+			error_mlx();
+		cub->img = mlx_new_image(cub->mlx, WIDTH, HEIGHT);
+		if (!cub->img)
+			error_mlx();
+	}
+	// proof("init ok");
 	return (cub);
 }
+
+// t_cub	init_cub(char *filepath)
+// {
+// 	t_cub	cub;
+// 	char	*title;
+
+// 	ft_memset(&cub, 0, sizeof(t_cub));
+// 	title = ft_strjoin("cub3D - ", filepath);
+// 	cub.mlx = mlx_init(WIDTH, HEIGHT, title, FALSE);
+// 	free(title);
+// 	if (!cub.mlx)
+// 		error_mlx();
+// 	// 
+// 	cub.img = mlx_new_image(cub.mlx, WIDTH, HEIGHT);
+// 	if (!cub.img)
+// 		error();
+// 	// 
+// 	proof("init ok");
+// 	return (cub);
+// }
 
 void	setup_images(t_cub *cub)
 {
@@ -63,31 +96,46 @@ void	cub_loop(t_cub *cub)
 	mlx_loop(cub->mlx);
 }
 
+int	**call_array(void)
+{
+	return (call_cub()->map.map_array);
+}
+
+int	call_width(void)
+{
+	return (call_cub()->map.width);
+}
+
+int	call_height(void)
+{
+	return (call_cub()->map.height);
+}
+
 
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
-	t_cub	cub;
+	t_cub	*cub;
+	// t_cub	cub;
 
 	validate_arguments(argc, argv);
+	// cub = init_cub(argv[1]);
+	// cub->scene = parse_cubfile(argv[1]);
 	scene = parse_cubfile(argv[1]);
 
-	cub = init_cub(argv[1]);
+	cub = call_cub();
 	
-	cub.map = init_map(&scene);
-
-	ft_printf("Width %d\n", cub.map.width);
-	ft_printf("Height %d\n", cub.map.height);
-	// cub.player = init_player(&scene);
-	cub.player = init_player((t_fpoint){8, 2}, 'S');
+	cub->map = init_map(&scene);
+	cub->player = init_player2(&scene);
 	
-	cleanup_scene(&scene); //all info should be transfered to the map
+	// cleanup_scene(cub.scene); //all info should be transfered to the map
 
 	// cub.raycast = ...
 
-	setup_images(&cub);
-	cub_loop(&cub);
-	cleanup(&cub);
+	setup_images(cub);
+	cub_loop(cub);
+	// cleanup(cub);
+	call_clean();
 
 	return (SUCCESS);
 }

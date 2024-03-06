@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:49:53 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/06 16:50:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 17:59:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	get_hit_data(t_player *p, t_raycast *r)
 {
-	printf("CHECK HIT\n");
+	// ft_printf("GET_HIT_DATA\n");
 	if (r->side == 0)
 	{
 		r->wall_perp_dist = r->length.x - r->grid_dist.x;
@@ -51,13 +51,13 @@ static void	get_hit_data(t_player *p, t_raycast *r)
 
 int	check_hit2(int map_x, int map_y, int **map_array)
 {
-	int	width = 21;
-	int	height = 13;
+	int	width = call_width();
+	int	height = call_height();
 	
-	printf("CHECKHIT 2\n");
-	if (map_x > width || map_y > height)
+	// ft_printf("CHECKHIT 2\n");
+	if (map_x >= width || map_y >= height)
 	{
-		printf("Out of bounds\n");
+		// ft_printf("Out of bounds\n");
 		return (false);
 	}
 	else if (map_array[map_y][map_x] > 0)
@@ -96,18 +96,18 @@ void	execute_dda_algo(t_player *p, t_raycast *r, int **map_array)
 	bool	hit;
 
 	hit = 0;
-	printf("\n\niteration\n\n");
+	// ft_printf("\n\niteration\n\n");
 	while (!hit)
 	{
-		printf("r->length.x %f\n", r->length.x);
-		printf("r->length.y %f\n", r->length.x);
-		printf("r->ray_pos.x %d\n", r->ray_pos.x);
-		printf("r->ray_pos.y %d\n", r->ray_pos.y);
-		printf("r->step.x %d\n", r->step.x);
-		printf("r->step.y %d\n", r->step.y);
-		printf("r->grid_dist.x %f\n", r->grid_dist.x);
-		printf("r->grid_dist.y %f\n", r->grid_dist.y);
-		printf("%s----------%s\n", CYAN, RESET);
+		// ft_printf("r->length.x %f\n", r->length.x);
+		// ft_printf("r->length.y %f\n", r->length.x);
+		// ft_printf("r->ray_pos.x %d\n", r->ray_pos.x);
+		// ft_printf("r->ray_pos.y %d\n", r->ray_pos.y);
+		// ft_printf("r->step.x %d\n", r->step.x);
+		// ft_printf("r->step.y %d\n", r->step.y);
+		// ft_printf("r->grid_dist.x %f\n", r->grid_dist.x);
+		// ft_printf("r->grid_dist.y %f\n", r->grid_dist.y);
+		// ft_printf("%s----------%s\n", CYAN, RESET);
 		// 
 		if (r->length.x < r->length.y)
 		{

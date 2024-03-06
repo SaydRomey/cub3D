@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 16:21:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 18:26:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,38 @@ static int	spawning_orientation(char direction)
 	return (-1);
 }
 
+t_player	init_player2(t_scene *scene)
+{
+	t_player	player;
+	
+	player.position.x = call_cub()->starting_position.x + 0.5;
+	player.position.y = call_cub()->starting_position.y + 0.5;
+	// player.position.x = scene->starting_position.x;
+	// player.position.y = scene->starting_position.y;
+	player.angle = spawning_orientation(scene->spawn_orientation);
+	player.fov = PLAYER_FOV;
+	player.delta.x = cos(degree_to_radian(player.angle));
+	player.delta.y = -sin(degree_to_radian(player.angle));
+	player.cam_plane.x = -player.delta.y * player.fov;
+	player.cam_plane.y = player.delta.x * player.fov;
+	// 
+	player.size = PLAYER_SIZE;
+	player.color = 0xFF00FFFF;
+	player.speed = PLAYER_SPEED;
+	player.turn_speed = PLAYER_TURN_SPEED;
+	// 
+	player.respawn = &player;
+	return (player);
+}
+
+
 t_player	init_player(t_fpoint start, char direction)
 {
 	t_player	player;
 	
-	player.position.x = start.x;
+	player.position.x = start.x; //scene->starting_position.x...
 	player.position.y = start.y;
-	player.angle = spawning_orientation(direction);
+	player.angle = spawning_orientation(direction); //scene->spawn_orientation
 	player.fov = PLAYER_FOV;
 	player.delta.x = cos(degree_to_radian(player.angle));
 	player.delta.y = -sin(degree_to_radian(player.angle));

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 16:25:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 18:17:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,13 @@ int		**get_2d_map(t_list *map_list, int height, int width)
 		col = 0;
 		while (col < width && line[col])
 		{
-			// if (ft_strchr("NSEW", line[col]))
-			// {
-			// 	ft_printf("Start x = %d\n", col);
-			// 	ft_printf("Start y = %d\n", row);
-			// }
+			if (ft_strchr("NSEW", line[col]))
+			{
+				call_cub()->starting_position.x = col;
+				call_cub()->starting_position.y = row;
+				// ft_printf("Start x = %d\n", col);
+				// ft_printf("Start y = %d\n", row);
+			}
 			map_array[row][col] = char_to_int(line[col]);
 			col++;
 		}

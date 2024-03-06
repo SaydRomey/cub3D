@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 13:57:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 18:52:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void	split_rgb(int id, char *line, t_scene *scene)
 		scene->colors[id][i] = ft_strtrim(split[i], " ");
 		i++;
 	}
+	if (split[RGB_LEN + 1])
+		set_error("Too many colors");
 	call_info()->color_check[id] = true;
 	free_split(split);
 }

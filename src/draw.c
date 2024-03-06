@@ -6,15 +6,15 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/26 13:18:32 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 12:30:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	draw_line(mlx_image_t *img, t_point start, t_point end, int color)
+void	draw_line(mlx_image_t *img, t_fpoint start, t_fpoint end, int color)
 {
-	t_point	step;
+	t_fpoint	step;
 	int		max;
 
 	step.x = end.x - start.x;
@@ -30,7 +30,7 @@ void	draw_line(mlx_image_t *img, t_point start, t_point end, int color)
 	}
 }
 
-void	draw_rectangle(mlx_image_t *img, t_point origin, t_point end, int color)
+void	draw_rectangle(mlx_image_t *img, t_fpoint origin, t_fpoint end, int color)
 {
 	int	x;
 	int	y;
@@ -49,8 +49,8 @@ void	draw_rectangle(mlx_image_t *img, t_point origin, t_point end, int color)
 
 void	draw_ceiling(mlx_image_t *img, int color)
 {
-	t_point	start;
-	t_point	end;
+	t_fpoint	start;
+	t_fpoint	end;
 	
 	start.x = 0;
 	start.y = 0;
@@ -61,8 +61,8 @@ void	draw_ceiling(mlx_image_t *img, int color)
 
 void	draw_floor(mlx_image_t *img, int color)
 {
-	t_point	start;
-	t_point	end;
+	t_fpoint	start;
+	t_fpoint	end;
 	
 	start.x = 0;
 	start.y = img->height / 2;
@@ -73,16 +73,16 @@ void	draw_floor(mlx_image_t *img, int color)
 
 void	draw_background(mlx_image_t *img, int color)
 {
-	t_point	dimensions;
+	t_fpoint	dimensions;
 	
 	dimensions.x = img->width;
 	dimensions.y = img->height;
-	draw_rectangle(img, (t_point){0, 0}, dimensions, color);
+	draw_rectangle(img, (t_fpoint){0, 0}, dimensions, color);
 }
 
 /* ************************************************************************** */
 
-void	draw_circle(mlx_image_t *img, t_point origin, int radius, int color)
+void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color)
 {
 	int	i;
 	int	j;
@@ -108,14 +108,14 @@ void	draw_circle(mlx_image_t *img, t_point origin, int radius, int color)
 	}
 }
 
-void	draw_triangle(mlx_image_t *img, t_point p1, t_point p2, t_point p3, int color)
+void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color)
 {
 	draw_line(img, p1, p2, color);
 	draw_line(img, p2, p3, color);
 	draw_line(img, p3, p1, color);
 }
 
-// void	draw_circle_hollow(mlx_image_t *img, t_point origin, int radius, int thickness, int color)
+// void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color)
 // {
 // 	int	i;
 // 	int	j;
@@ -153,17 +153,17 @@ function to test colors
 // 	int	mini_color = color;
 // 	int	mini_compare = color_compare;
 
-// 	draw_line(cub.img, (t_point){0, 0}, (t_point){WIDTH, HEIGHT}, color); //diagonal
-// 	draw_line(cub.img, (t_point){10, 0}, (t_point){WIDTH + 10, HEIGHT - 10}, color_compare); //diagonal
-// 	draw_line(cub.img, (t_point){WIDTH / 2, 0}, (t_point){WIDTH / 2, HEIGHT}, color); //vertical
-// 	draw_line(cub.img, (t_point){WIDTH / 2 + 10, 0}, (t_point){WIDTH / 2 + 10, HEIGHT}, color_compare); //vertical
-// 	draw_line(cub.img, (t_point){0, HEIGHT / 2}, (t_point){WIDTH, HEIGHT / 2}, color); //horizontal
-// 	draw_line(cub.img, (t_point){0, HEIGHT / 2 + 10}, (t_point){WIDTH, HEIGHT / 2 + 10}, color_compare); //horizontal
+// 	draw_line(cub.img, (t_fpoint){0, 0}, (t_fpoint){WIDTH, HEIGHT}, color); //diagonal
+// 	draw_line(cub.img, (t_fpoint){10, 0}, (t_fpoint){WIDTH + 10, HEIGHT - 10}, color_compare); //diagonal
+// 	draw_line(cub.img, (t_fpoint){WIDTH / 2, 0}, (t_fpoint){WIDTH / 2, HEIGHT}, color); //vertical
+// 	draw_line(cub.img, (t_fpoint){WIDTH / 2 + 10, 0}, (t_fpoint){WIDTH / 2 + 10, HEIGHT}, color_compare); //vertical
+// 	draw_line(cub.img, (t_fpoint){0, HEIGHT / 2}, (t_fpoint){WIDTH, HEIGHT / 2}, color); //horizontal
+// 	draw_line(cub.img, (t_fpoint){0, HEIGHT / 2 + 10}, (t_fpoint){WIDTH, HEIGHT / 2 + 10}, color_compare); //horizontal
 // 	// 
-// 	draw_line(cub.mini, (t_point){0, 0}, (t_point){cub.config.minimap_width, cub.config.minimap_height}, mini_color); //diagonal
-// 	draw_line(cub.mini, (t_point){10, 0}, (t_point){cub.config.minimap_width + 10, cub.config.minimap_height}, mini_compare); //diagonal
-// 	draw_line(cub.mini, (t_point){cub.config.minimap_width / 2, 0}, (t_point){cub.config.minimap_width / 2, cub.config.minimap_height}, mini_color); //vertical
-// 	draw_line(cub.mini, (t_point){cub.config.minimap_width / 2 + 10, 0}, (t_point){cub.config.minimap_width / 2 + 10, cub.config.minimap_height}, mini_compare); //vertical
-// 	draw_line(cub.mini, (t_point){0, cub.config.minimap_height / 2}, (t_point){WIDTH, cub.config.minimap_height / 2}, mini_color); //horizontal
-// 	draw_line(cub.mini, (t_point){0, cub.config.minimap_height / 2 + 10}, (t_point){WIDTH, cub.config.minimap_height / 2 + 10}, mini_compare); //horizontal
+// 	draw_line(cub.mini, (t_fpoint){0, 0}, (t_fpoint){cub.config.minimap_width, cub.config.minimap_height}, mini_color); //diagonal
+// 	draw_line(cub.mini, (t_fpoint){10, 0}, (t_fpoint){cub.config.minimap_width + 10, cub.config.minimap_height}, mini_compare); //diagonal
+// 	draw_line(cub.mini, (t_fpoint){cub.config.minimap_width / 2, 0}, (t_fpoint){cub.config.minimap_width / 2, cub.config.minimap_height}, mini_color); //vertical
+// 	draw_line(cub.mini, (t_fpoint){cub.config.minimap_width / 2 + 10, 0}, (t_fpoint){cub.config.minimap_width / 2 + 10, cub.config.minimap_height}, mini_compare); //vertical
+// 	draw_line(cub.mini, (t_fpoint){0, cub.config.minimap_height / 2}, (t_fpoint){WIDTH, cub.config.minimap_height / 2}, mini_color); //horizontal
+// 	draw_line(cub.mini, (t_fpoint){0, cub.config.minimap_height / 2 + 10}, (t_fpoint){WIDTH, cub.config.minimap_height / 2 + 10}, mini_compare); //horizontal
 // }

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/03/02 18:48:37 by cdumais          ###   ########.fr        #
+#    Updated: 2024/03/06 11:46:19 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,9 +81,6 @@ HEADERS		:= $(HEADERS) -I$(MLX_INC)
 # TODO: adapt default to desired dimensions in config_*.mk
 # TOCHECK: do we need more macros, and does the norm permit compile time defined macros ?
 # 
-
-SOUND		:=
-
 ifeq ($(OS),Linux)
 include $(CFG_DIR)/config_linux.mk
 else ifeq ($(OS),Darwin)
@@ -122,6 +119,7 @@ OBJS	:=	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
 # TODO: create a hidden file for mandatory or bonus version ?
+# Maybe define a macro BONUS and check if it exists in the .c files ?
 # TOCHECK: or do we only have one version with bonuses? (check with oli)
 # 
 all: $(INIT) $(NAME)

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 20:37:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 16:21:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 # include "libft.h"
 # include <math.h>
 
-# define PIXEL_SIZE	4
+# define PIXEL_SIZE			4
+# define PI					3.1415926535
 
-/* colors */ //need to check these...
+/* ************************************************************************** */
 
 // https://imagecolorpicker.com/en
 // https://htmlcolorcodes.com/
 
-# define HEX_GROUND			0x8E8849FF
-# define HEX_SKY			0x6DC0C3FF
-
+/* colors
+*/
 # define HEX_BLACK			0x000000FF
 # define HEX_GRAY			0x404040FF
 # define HEX_WHITE			0xFFFFFFFF
@@ -36,7 +36,7 @@
 # define HEX_YELLOW			0xFFFF00FF
 # define HEX_MAGENTA		0xFF00FFFF //bright on mac
 # define HEX_CYAN			0x00FFFFFF
-
+// 
 # define HEX_ORANGE 		0xFF7700FF //best orange on mac
 # define HEX_ORANGEY		0xED840CFF //between orange and yellow on mac
 # define HEX_PURPLE			0x800080FF //weak on MAC
@@ -44,26 +44,46 @@
 # define HEX_PINK			0xFFC0CBFF //pale pink on mac
 # define HEX_BROWN			0x663300FF //weak dark orange on mac
 # define HEX_OLIVE      	0x808000FF
+// 
+# define HEX_GROUND			0x8E8849FF
+# define HEX_SKY			0x6DC0C3FF
+/* ************************************************************************** */
 
-# define PI			3.1415926535
-
+/* player
+*/
+# define PLAYER_FOV			0.80
 # define PLAYER_SIZE		10
-# define PLAYER_SPEED		5
-# define PLAYER_TURN_SPEED	5
+# define PLAYER_SPEED		0.1
+# define PLAYER_TURN_SPEED	0.1
 
-# define WALL_TEXTURE_LEN 4 //change name later
-# define COLOR_TYPE_LEN 2
-# define RGB_LEN 3
+/* textures (do we need this or we use a TILE_SIZE or something like this?)
+*/
+# define TEX_WIDTH			64
+# define TEX_HEIGHT			64
+
+# define MAP_HEIGHT	10
+# define MAP_WIDTH	10
+
+/* lengths of enums
+*/
+# define WALL_TEXTURE_LEN	4
+# define COLOR_TYPE_LEN 	2
+# define RGB_LEN			3
 
 # define MAP_CHARS "01 NSEW"
 
 // change to t_fpoint later
-typedef struct s_point
+typedef struct s_fpoint
 {
 	float	x;
 	float	y;
-}			t_point;
+}			t_fpoint;
 
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}		t_point;
 
 // change these names/values later...
 typedef enum e_map_elem
@@ -73,6 +93,14 @@ typedef enum e_map_elem
 	WALL = 1,
 	DOOR = 2
 }	t_map_elem;
+
+// # define NO					0
+// # define SO					1
+// # define WE					2
+// # define EA					3
+# define F					4
+# define C					5
+# define I					6
 
 enum wall_id
 {
@@ -110,35 +138,57 @@ typedef struct s_info
 t_info	*call_info(void);
 void	free_info(void);
 bool    there_is_a_problem(void);
-void	set_in_map(bool choice);
 /* ************************************************************************** */
 
-
-typedef struct s_map
+typedef struct s_line
 {
-	int	**map_array; //2d array for the map
+	int		height;
+	int		start;
+	int		end;
+}			t_line;
 
-	int	width;
-	int	height;
-	int	tile_size;
-	int	floor_color;
-	int	ceiling_color;
-	int	wall_tile_color;
-	int	floor_tile_color;
-	int	background_color;
-}		t_map;
+typedef struct s_mouse
+{
+	bool	left;
+	bool	right;
+	float	rotate_x;
+}			t_mouse;
+
+typedef struct s_raycast
+{
+	float		wall_perp_dist;
+	float		wall_hit_pos;
+	bool		side;
+	t_point		step;
+	t_point		ray_pos;
+	t_fpoint	grid_dist;
+	t_fpoint	length;
+	t_fpoint	ray_dir;
+	t_fpoint	ray_dir_min;
+	t_fpoint	ray_dir_max;
+}				t_raycast;
+
+typedef struct s_texture
+{
+	mlx_image_t	*to_draw;
+	t_point		pixel;
+	float		pos_y;
+	float		step_y;
+}				t_texture;
 
 typedef struct s_player
 {
-	t_point			position;
-	t_point			delta;
+	t_fpoint		position;
+	t_fpoint		delta;
+	t_fpoint		cam_plane;
 	float			angle;
+	float			fov;
 	int				size;
 	int				color;
 	float			speed;
 	float			turn_speed;
 	struct s_player	*respawn;
-}					t_player;
+}						t_player;
 
 typedef struct s_keys
 {
@@ -158,44 +208,62 @@ typedef struct s_keys
 
 /* ************************************************************************** */
 
+typedef struct s_map
+{
+	int			height;
+	int			width;
+	int			**map_array; //2d array for the map
+	// 
+	int			floor_color;
+	int			ceiling_color;
+	// mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN]; //need to implement this
+	
+	// mlx_image_t *minimap_img; //maybe in a minimap struct ?
+
+	// int	tile_size;
+	// int	wall_tile_color;
+	// int	floor_tile_color;
+	// int	background_color;
+}		t_map;
+
 typedef struct s_scene
 {
-	// parse_cubfile
-	char		*wall_textures[WALL_TEXTURE_LEN]; //maybe change for mlx_texture_t ?
+	char		*wall_textures[WALL_TEXTURE_LEN];
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
 	char		spawn_orientation;
-
-	// extract?
-	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
-	int			floor;
-	int			ceiling;
-	
-	t_point	starting_position;
-}			t_scene;
+	t_point		starting_position;
+}				t_scene;
 
 typedef struct s_cub
 {
 	mlx_t       *mlx;
-	mlx_image_t *img; //main game image
-	mlx_image_t *minimap_img; //minimap image (check if we move this in t_map struct?)
+	mlx_image_t *img;
 	// 
+	mlx_image_t	*texture[7]; //change to have this in t_map
+	// 
+	t_map		map;
 	t_player	player;
+	t_raycast	raycast;
 	t_keys		keys;
-	t_map		minimap;
-}   t_cub;
-
+	t_mouse		mouse;
+}   			t_cub;
 
 /* ************************************************************************** */
 
+// cleanup.c
+void	cleanup_scene(t_scene *scene);
+void	cleanup_map(t_map *map);
+void	cleanup(t_cub *cub);
+
 // draw.c
-void	draw_line(mlx_image_t *img, t_point start, t_point end, int color);
-void	draw_rectangle(mlx_image_t *img, t_point origin, t_point end, int color);
+void	draw_line(mlx_image_t *img, t_fpoint start, t_fpoint end, int color);
+void	draw_rectangle(mlx_image_t *img, t_fpoint origin, t_fpoint end, int color);
 void	draw_ceiling(mlx_image_t *img, int color);
 void	draw_floor(mlx_image_t *img, int color);
 void	draw_background(mlx_image_t *img, int color);
-void	draw_circle(mlx_image_t *img, t_point origin, int radius, int color);
-void	draw_triangle(mlx_image_t *img, t_point p1, t_point p2, t_point p3, int color);
+void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
+void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color);
 
 // error.c
 void	set_error(char *str);
@@ -203,6 +271,7 @@ void	set_error_arg(char *str, char *arg);
 char	*get_error(void);
 void    error(void);
 void	parsing_error(char *line, int fd, t_scene *scene);
+void	error_mlx(void);
 
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
@@ -212,21 +281,22 @@ void	update(void *ptr);
 void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
 void	free_map(int **map, int height);
-
-// int		**get_2d_map(t_list *map_list, int height, int width, t_point *start_position);
 int		**get_2d_map(t_list *map_list, int height, int width);
-
 
 // math_utils.c
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
-int		is_inside_circle(t_point to_check, t_point circle_center, int radius);
-float	distance(t_point a, t_point b, float angle);
+int		is_inside_circle(t_fpoint to_check, t_fpoint circle_center, int radius);
+float	distance(t_fpoint a, t_fpoint b, float angle);
 
 // minimap.c
 t_map	init_map(t_scene *scene);
-void	draw_tile(mlx_image_t *img, t_point origin, t_point size, int color);
+void	draw_tile(mlx_image_t *img, t_fpoint origin, t_fpoint size, int color);
 void	draw_minimap(mlx_image_t *img, t_map *map);
+
+// mouse.c
+void	set_mouse(t_cub *cub);
+void	cursor_hook(double xpos, double ypos, void *param);
 
 // parsing_floor_ceiling.c
 void	parse_floor_ceiling(char *cubline, t_scene *scene);
@@ -246,15 +316,32 @@ int		get_pixel(mlx_image_t *img, int x, int y);
 void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
 
 // player.c
-t_player	init_player(t_point start, char direction);
+t_player	init_player(t_fpoint start, char direction);
 void	update_player_position(t_cub *cub);
 void	update_player_direction(t_cub *cub);
 void	update_player(t_cub *cub);
 void	draw_player(mlx_image_t *img, t_player *player);
 void	draw_player2(mlx_image_t *img, t_player *player);
 
+// raycast.c
+// int		check_hit(int map_y, int map_x);
+int		check_hit2(int map_y, int map_x, int **map_array); //tmp
+void	draw_ceiling_floor(t_cub *cub, int y);
+void	draw_wall_stripe(t_cub *cub, int x);
+// void	execute_dda_algo(t_player *p, t_raycast *r);
+void	execute_dda_algo(t_player *p, t_raycast *r, int **map_array);
+void	raycast(t_cub *cub);
+
+// test.c
+void	proof(char *str);
+void	test_scene(t_scene scene);
+void    test_map(t_map map);
+void	test_term_colors(void);
+
 
 // utils.c
+mlx_image_t *load_png(char *filepath, mlx_t *mlx);
+// 
 int		rgb_to_int(int r, int g, int b);
 int		get_color(t_scene *scene, int id);
 // 

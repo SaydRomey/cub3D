@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_map.c                                      :+:      :+:    :+:   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 17:51:37 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 14:21:34 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ static bool	is_map_line(const char *line)
 	return (has_valid_char);
 }
 
+/*
+for each map square, validates its horizontal neighbouring spaces
+*/
 static bool	check_contour(const char *line, int i)
 {
 	char	current;
@@ -66,6 +69,11 @@ static bool	check_contour(const char *line, int i)
 	return (true);
 }
 
+/*
+checks if first and last map squares are walls
+*(after having trimmed leading and trailing spaces)
+also checks for valid contours for each values
+*/
 static bool map_line_is_valid(const char *line)
 {
 	int	len;
@@ -108,6 +116,10 @@ void	scan_for_start(char *line, t_scene *scene)
 	}
 }
 
+/*
+maybe change the trimming, to keep leading whitespace for player pos ?
+
+*/
 void	parse_map_line(char *cubline, t_scene *scene)
 {
 	char	*line;
@@ -118,6 +130,8 @@ void	parse_map_line(char *cubline, t_scene *scene)
 		if (map_line_is_valid(line))
 		{
 			store_map_line(&scene->map_list, cubline);
+			
+			// *?? maybe scan for start with cubline instead? to set player pos?
 			scan_for_start(line, scene); //will set error if duplicate start
 		}
 		else
@@ -127,88 +141,7 @@ void	parse_map_line(char *cubline, t_scene *scene)
 }
 
 /* ************************************************************************** */
-/* ************************************************************************** */
-/* ************************************************************************** */
 
-/*
-		// if (!check_contour(line, i, '0') || !check_contour(line, i, ' ') ||
-		// 	!check_contour(line, i, 'N') || !check_contour(line, i, 'S') ||
-		// 	!check_contour(line, i, 'E') || !check_contour(line, i, 'W'))
-
-static bool	check_contour(const char *line, int i, char check_char)
-{
-	char	prev;
-	char	next;
-
-	if (line[i] != check_char)
-		return (true); //skip if not the char we are checking
-	if (i == 0 || line[i + 1] == '\0')
-	{
-		return (false);
-	}
-	prev = line[i - 1];
-	next = line[i + 1];
-	
-	// '0' and ' ' must be contoured by same as them or a '1'
-	if (check_char == '0' || check_char == ' ')
-	{
-		if ((prev == '1' || prev == check_char) && (next == '1' || next == check_char))
-			return (true);
-		return (false);
-	}
-	
-	// for N,S,E,W contour must be '1' or '0'
-	if ((prev == '1' || prev == '0') && (next == '1' || next == '0'))
-		return (true);
-	return (false);
-}
-*/
-
-/*
-static bool	map_line_is_valid(char *cubline)
-{
-	bool	valid;
-	char	*line;
-	int		len;
-	int		i;
-	char	c;
-
-	valid = true;
-	line = ft_strtrim(cubline, " \t\n");
-	len = ft_strlen(line);
-
-	// check first and last char of the trimmed line
-	if (len < 1 || line[0] != '1' || line[len - 1] != '1')
-		valid = false;
-	else
-	{
-		i = 0;
-		while (valid == true && i < len)
-		{
-			c = line[i];
-			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-			{
-				if (call_info()->found_direction)
-				{
-					valid = false;
-					set_error("More than one starting point found in map");
-					break;
-				}
-				call_info()->found_direction = true;
-			}
-			else if (c == '0')
-			{
-				if (line[i - 1] != '1' || line[i - 1] != '0' || line[i - 1] != '0' || line[i - 1] != '1')
-				{
-					valid = false;
-					set_error("'0' character not properly bordered by a '1'");
-					break;
-				}
-			}
-			i++;
-		}
-	}
-	free(line)
-	return (valid);
-}
-*/
+// if (!check_contour(line, i, '0') || !check_contour(line, i, ' ') ||
+	// !check_contour(line, i, 'N') || !check_contour(line, i, 'S') ||
+	// !check_contour(line, i, 'E') || !check_contour(line, i, 'W'))

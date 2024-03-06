@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/02/29 21:27:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 10:50:23 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	fix_angle(int angle)
 	return (angle);
 }
 
-int	is_inside_circle(t_point to_check, t_point circle_center, int radius)
+int	is_inside_circle(t_fpoint to_check, t_fpoint circle_center, int radius)
 {
-	t_point	distance; // from to_check to the circle of the center
+	t_fpoint	distance; // from to_check to the circle of the center
 	int		distance_squared;
 
 	distance.x = to_check.x - circle_center.x;
@@ -41,7 +41,7 @@ int	is_inside_circle(t_point to_check, t_point circle_center, int radius)
 /*
 float distance(ax,ay,bx,by,ang){ return cos(degToRad(ang))*(bx-ax)-sin(degToRad(ang))*(by-ay);}
 */
-float	distance(t_point a, t_point b, float angle)
+float	distance(t_fpoint a, t_fpoint b, float angle)
 {
 	float	rad_angle;
 	float	delta_x;

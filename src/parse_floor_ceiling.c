@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_floor_ceiling.c                            :+:      :+:    :+:   */
+/*   parse_floor_ceiling.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 18:57:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 13:57:07 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 /*
 use itoa to validate color channel range in parsing directly?
-
 */
 
 /*
@@ -67,4 +66,3 @@ void	parse_floor_ceiling(char *cubline, t_scene *scene)
 	free(line);
 	return;
 }
-

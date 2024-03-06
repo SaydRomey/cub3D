@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 19:20:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 16:04:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ static void	set_key(int key, t_keys *keys, bool state)
 		keys->right = state;
 	if (key == BACKSPACE)
 		keys->backspace = state;
+	// if (key == M && state == ON)
+	// 	toggle(keys->m);
+	// if (key == P && state == ON)
+	// 	toggle(keys->p);
 }
 
 void	keyhooks(mlx_key_data_t data, void *param)
@@ -59,14 +63,15 @@ void	keyhooks(mlx_key_data_t data, void *param)
 	// keys = &cub->keys;
 	if (data.key == ESC && data.action == PRESS)
 	{
+		proof("Pressed ESC");
 		mlx_close_window(cub->mlx);
 		cleanup(cub);
 		exit(SUCCESS);
 	}
-	if (data.key == M && data.action == PRESS)
-		toggle(&(cub->minimap_img->enabled));
-	if (data.key == P && data.action == PRESS)
-		toggle(&cub->keys.p);
+	// if (data.key == M && data.action == PRESS)
+	// 	toggle(&(cub->minimap_img->enabled));
+	// if (data.key == P && data.action == PRESS)
+	// 	toggle(&cub->keys.p);
 	// 
 	if (data.action == PRESS)
 		set_key(data.key, &cub->keys, ON);
@@ -83,15 +88,15 @@ void	update(void *ptr)
 
 	cub = (t_cub *)ptr;
 
+	raycast(cub);
 
-	// here could be the drawing of the rays? **(use another image)
-	draw_line(cub->img, (t_point){0, 0}, (t_point){WIDTH, HEIGHT}, 0xFF0000FF);
+	// draw_line(cub->img, (t_fpoint){0, 0}, (t_fpoint){WIDTH, HEIGHT}, 0xFF0000FF); //tmp test
 
 	// // reset minimap (also erases the player)
 	// draw_background(cub->minimap_img, cub->minimap.background_color);
 	// draw_minimap(cub->minimap_img, &cub->minimap);
 
-	// update player by checking the keys pressed
+	// // update player by checking the keys pressed
 	update_player(cub);
 	// 
 }

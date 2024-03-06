@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 19:20:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 12:01:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ void	validate_arguments(int argc, char **argv)
 	int		check;
 
 	if (argc != 2)
+	{
 		va_exit_error("Usage: %s <filename>.cub", argv[0]);
-
+	}
 	extension = ft_strrchr(argv[1], '.');
 	if (!extension)
 		set_error("Missing extension");
@@ -35,5 +36,5 @@ void	validate_arguments(int argc, char **argv)
 	}
 	if (there_is_a_problem())
 		error();
-	// ft_printf("Args valid\n"); //tmp
+	proof("Valid args");
 }

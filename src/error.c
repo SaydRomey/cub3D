@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 11:36:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/06 13:00:13 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,37 +61,45 @@ void	error(void)
 
 void	parsing_error(char *line, int fd, t_scene *scene)
 {
-	int	i;
-
 	if (line)
 		free(line);
 	close(fd);
-	i = 0;
-	while (i < WALL_TEXTURE_LEN)
-	{
-		if (scene->wall_textures[i])
-			free(scene->wall_textures[i]);
-		i++;
-	}
-	i = 0;
-	while (i < RGB_LEN)
-	{
-		if (scene->colors[FLOOR][i])
-			free(scene->colors[FLOOR][i]);
-		if (scene->colors[CEILING][i])
-			free(scene->colors[CEILING][i]);
-		i++;
-	}
-	if (scene->map_list)
-		ft_lstclear(&scene->map_list, free); //tmp, this should be handled in the map part..
+	cleanup_scene(scene);
+	// int	i;
+
+	// if (line)
+	// 	free(line);
+	// close(fd);
+	// i = 0;
+	// while (i < WALL_TEXTURE_LEN)
+	// {
+	// 	if (scene->wall_textures[i])
+	// 		free(scene->wall_textures[i]);
+	// 	i++;
+	// }
+	// i = 0;
+	// while (i < RGB_LEN)
+	// {
+	// 	if (scene->colors[FLOOR][i])
+	// 		free(scene->colors[FLOOR][i]);
+	// 	if (scene->colors[CEILING][i])
+	// 		free(scene->colors[CEILING][i]);
+	// 	i++;
+	// }
+	// if (scene->map_list)
+	// 	ft_lstclear(&scene->map_list, free);
 	error();
 }
 
-// void	error(void)
-// {
-// 	ft_putstr_fd((char *)mlx_strerror(mlx_errno), STDERR);
-// 	exit(FAILURE);
-// }
+void	error_mlx(void)
+{
+	// ft_putstr_fd((char *)mlx_strerror(mlx_errno), STDERR);
+	set_error((char *)mlx_strerror(mlx_errno));
+	// 
+	// add conditional freeing of mlx ressources ?
+	// 
+	error();
+}
 
 
 // 

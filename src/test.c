@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 17:42:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/07 22:01:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,8 @@ void	test_map(t_map map)
 	ft_printf("Floor:   %X\n", map.floor_color);
 	ft_printf("Ceiling: %X\n", map.ceiling_color);
 	// 
-	// test for the images?	
+	// test for the images?
+	// test for position and orientation ?
 }
 /* ************************************************************************** */
 

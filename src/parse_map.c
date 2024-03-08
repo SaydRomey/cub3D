@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 18:19:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/07 22:00:23 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,10 @@ static bool map_line_is_valid(const char *line)
 	return (true);	
 }
 
+/*
+sets the spawn orientation in scene
+also sets the boolean flag 'found_direction'
+*/
 void	scan_for_start(char *line, t_scene *scene)
 {
 	int	i;
@@ -110,17 +114,13 @@ void	scan_for_start(char *line, t_scene *scene)
 			{
 				call_info()->found_direction = true;
 				scene->spawn_orientation = line[i];
-				// call_cub()->scene.spawn_orientation = line[i];
-				// call_cub()->spawn_orientation = line[i];
 			}
 		}
 		i++;
 	}
 }
 
-/*
-maybe change the trimming, to keep leading whitespace for player pos ?
-
+/* **will need to change all this for doors...
 */
 void	parse_map_line(char *cubline, t_scene *scene)
 {
@@ -132,9 +132,7 @@ void	parse_map_line(char *cubline, t_scene *scene)
 		if (map_line_is_valid(line))
 		{
 			store_map_line(&scene->map_list, cubline);
-			
-			// *?? maybe scan for start with cubline instead? to set player pos?
-			scan_for_start(line, scene); //will set error if duplicate start
+			scan_for_start(cubline, scene); //will set error if duplicate start
 		}
 		else
 			set_error("Invalid map line");

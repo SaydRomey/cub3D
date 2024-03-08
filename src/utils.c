@@ -6,13 +6,13 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 15:27:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/07 22:02:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-mlx_image_t *load_png(char *filepath, mlx_t *mlx)
+mlx_image_t *load_png(char *filepath, mlx_t *mlx) //add img to win, add enable = false ?**
 {
 	mlx_image_t		*img;
 	mlx_texture_t	*texture;
@@ -63,7 +63,7 @@ int	get_color(t_scene *scene, int id)
 	if (color_is_invalid(r, g, b))
 	{
 		ft_printf("\033[91mInvalid color\033[0m\n");
-		return (0x000000FF);
+		return (0x000000FF); //should set an error and be verified in init_map to free scene and array..
 	}
 	color_int = rgb_to_int(r, g, b);
 	return (color_int);
@@ -91,23 +91,24 @@ void	clear_img(mlx_image_t *img)
 
 /*
 returns true if the 'to_verify' point is within the area of 'origin' to 'end'
+
+int	is_in_the_zone(t_fpoint to_verify, t_fpoint origin, t_fpoint end)
+{
+	if (to_verify.x >= origin.x && to_verify.x <= end.x && \
+		to_verify.y >= origin.y && to_verify.y <= end.y)
+		return (TRUE);
+	return (FALSE);
+}
 */
-// int	is_in_the_zone(t_fpoint to_verify, t_fpoint origin, t_fpoint end)
-// {
-// 	if (to_verify.x >= origin.x && to_verify.x <= end.x && \
-// 		to_verify.y >= origin.y && to_verify.y <= end.y)
-// 		return (TRUE);
-// 	return (FALSE);
-// }
-
+/*
 // int	is_in_window(t_fpoint to_verify)
-// {
-// 	if (to_verify.x > 0 && to_verify.x < WIDTH && \
-// 		to_verify.y > 0 && to_verify.y < HEIGHT)
-// 		return (TRUE);
-// 	return (FALSE);
-// }
-
+{
+	if (to_verify.x > 0 && to_verify.x < WIDTH && \
+		to_verify.y > 0 && to_verify.y < HEIGHT)
+		return (TRUE);
+	return (FALSE);
+}
+*/
 /*
 to prevent accidents..
 [...]

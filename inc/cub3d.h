@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 18:41:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/07 21:49:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,7 @@ typedef struct s_player
 {
 	t_fpoint		position;
 	char			spawn_orientation;
+	// 
 	t_fpoint		delta;
 	t_fpoint		cam_plane;
 	float			angle;
@@ -249,10 +250,6 @@ typedef struct s_cub
 	mlx_image_t *img;
 	// 
 	mlx_image_t	*texture[7]; //change to have this in t_map
-	// 
-	// t_scene		scene;
-	t_fpoint	starting_position; //tmp
-	char		*spawn_orientation; //tmp
 	// 
 	t_map		map;
 	t_player	player;
@@ -328,13 +325,10 @@ int		get_pixel(mlx_image_t *img, int x, int y);
 void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
 
 // player.c
-t_player	init_player2(t_scene *scene);
-t_player	init_player(t_fpoint start, char direction);
+t_player	init_player(t_scene *scene);
 void	update_player_position(t_cub *cub);
 void	update_player_direction(t_cub *cub);
 void	update_player(t_cub *cub);
-void	draw_player(mlx_image_t *img, t_player *player);
-void	draw_player2(mlx_image_t *img, t_player *player);
 
 // raycast.c
 // int		check_hit(int map_y, int map_x);

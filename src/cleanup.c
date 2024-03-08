@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 17:50:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/07 21:57:57 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ void	cleanup(t_cub *cub)
 
 void	call_clean(void)
 {
-	ft_printf("*!*!*! call cleaned\n");
+	proof("called clean");
 	cleanup(call_cub());
 }

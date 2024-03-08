@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 16:04:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/07 21:54:53 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,7 @@ void	update(void *ptr)
 	raycast(cub);
 
 	// draw_line(cub->img, (t_fpoint){0, 0}, (t_fpoint){WIDTH, HEIGHT}, 0xFF0000FF); //tmp test
-
-	// // reset minimap (also erases the player)
-	// draw_background(cub->minimap_img, cub->minimap.background_color);
-	// draw_minimap(cub->minimap_img, &cub->minimap);
-
-	// // update player by checking the keys pressed
+	// 
 	update_player(cub);
 	// 
 }

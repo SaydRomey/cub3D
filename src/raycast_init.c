@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/06 16:18:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 01:11:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,16 @@ void	raycast(t_cub *cub)
 	x = 0;
 	y = HEIGHT / 2;
 	clear_img(cub->img);
-	while (y < HEIGHT)
-	{
-		draw_ceiling_floor(cub, y);
-		y++;
-	}
+	// 
+	(void)y; //tmp
+	draw_ceiling(cub->img, cub->map.ceiling_color);
+	draw_floor(cub->img, cub->map.floor_color);
+	// 
+	// while (y < HEIGHT)
+	// {
+	// 	draw_ceiling_floor(cub, y);
+	// 	y++;
+	// }
 	while (x < WIDTH)
 	{
 		init_raycast_data(&cub->player, &cub->raycast, x);

@@ -6,13 +6,26 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 22:02:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 01:02:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-mlx_image_t *load_png(char *filepath, mlx_t *mlx) //add img to win, add enable = false ?**
+mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible)
+{
+	mlx_image_t	*img;
+
+	img = mlx_new_image(mlx, width, height);
+	if (!img)
+		error_mlx();
+	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
+		error_mlx();
+	img->instances->enabled = visible;
+	return (img);
+}
+
+mlx_image_t *load_png(char *filepath, mlx_t *mlx)
 {
 	mlx_image_t		*img;
 	mlx_texture_t	*texture;
@@ -23,8 +36,28 @@ mlx_image_t *load_png(char *filepath, mlx_t *mlx) //add img to win, add enable =
 	img = mlx_texture_to_image(mlx, texture);
 	if (!img)
 		error_mlx();
+	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
+		error_mlx();
+	img->instances->enabled = false;
 	mlx_delete_texture(texture);
 	return (img);
+}
+
+void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
+{
+	int	i;
+
+	i = 0;
+	while (i < WALL_TEXTURE_LEN)
+	{
+		if (scene->wall_textures[i])
+		{
+			map->wall_textures_img[i] = load_png(scene->wall_textures[i], mlx);
+		}
+		else
+			map->wall_textures_img[i] = NULL;
+		i++;
+	}
 }
 
 /* ************************************************************************** */
@@ -64,6 +97,7 @@ int	get_color(t_scene *scene, int id)
 	{
 		ft_printf("\033[91mInvalid color\033[0m\n");
 		return (0x000000FF); //should set an error and be verified in init_map to free scene and array..
+		// (will fix this in parsing...)
 	}
 	color_int = rgb_to_int(r, g, b);
 	return (color_int);

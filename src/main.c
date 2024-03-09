@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 21:58:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 01:01:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,7 @@ implement a function to get all the textures in t_map **
 */
 void	setup_images(t_cub *cub)
 {
-	cub->img = mlx_new_image(cub->mlx, WIDTH, HEIGHT);
-	if (!cub->img)
-		error_mlx();
-	if (mlx_image_to_window(cub->mlx, cub->img, 0, 0) < SUCCESS)
-		error_mlx();
-	// cub->img->instances->enabled = false; //tmp
+	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 	// 
 	cub->texture[NO] = load_png("img/bluestone.png", cub->mlx);
 	cub->texture[SO] = load_png("img/eagle.png", cub->mlx);
@@ -101,18 +96,44 @@ int	main(int argc, char **argv)
 	validate_arguments(argc, argv);
 	
 	scene = parse_cubfile(argv[1]);
+	validate_scene(&scene);
 	
 	cub = init_cub(argv[1]);
 	cub->map = init_map(&scene);
 	cub->player = init_player(&scene);
-	
 	cleanup_scene(&scene);
 
 	setup_images(cub);
 	cub_loop(cub);
 	
 	cleanup(cub);
-	// call_clean(); //tmp test
-
 	return (SUCCESS);
 }
+
+// int	main_bonus(int argc, char **argv)
+// {
+// 	t_scene	scene;
+// 	t_cub	*cub;
+
+// 	validate_arguments_bonus(argc, argv); //if any two maps can be entered
+	
+// 	scene = parse_cubfile(argv[1]);
+// 	validate_scene(&scene);
+	
+// 	cub = init_cub(argv[1]);
+// 	cub->map = init_map(&scene);
+// 	cub->player = init_player(&scene);
+// 	cleanup_scene(&scene);
+	
+// 	scene = parse_cubfile(argv[2]);
+// 	validate_scene(&scene);
+// 	cub->next_map = init_map(&scene);
+// 	cub->next_player = init_player(&scene);
+// 	cleanup_scene(&scene);
+	
+// 	setup_images(cub);
+// 	cub_loop(cub);
+	
+// 	cleanup(cub);
+// 	return (SUCCESS);
+// }

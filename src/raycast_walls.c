@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/06 16:25:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 01:00:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,30 @@ static mlx_image_t	*get_texture_to_draw(t_cub *cub)
 	if (check_hit2(cub->raycast.ray_pos.x, cub->raycast.ray_pos.y, cub->map.map_array) == 2)
 		return (cub->texture[I]);
 	if (cub->raycast.side == 1 && cub->raycast.ray_dir.y < 0)
-		return (cub->texture[NO]);
+		return (cub->map.wall_textures_img[NO]);
 	if (cub->raycast.side == 1 && cub->raycast.ray_dir.y > 0)
-		return (cub->texture[SO]);
+		return (cub->map.wall_textures_img[SO]);
 	if (cub->raycast.side == 0 && cub->raycast.ray_dir.x < 0)
-		return (cub->texture[WE]);
+		return (cub->map.wall_textures_img[WE]);
 	if (cub->raycast.side == 0 && cub->raycast.ray_dir.x > 0)
-		return (cub->texture[EA]);
+		return (cub->map.wall_textures_img[EA]);
 	return (NULL);
 }
+
+// static mlx_image_t	*get_texture_to_draw(t_cub *cub)
+// {
+// 	if (check_hit2(cub->raycast.ray_pos.x, cub->raycast.ray_pos.y, cub->map.map_array) == 2)
+// 		return (cub->texture[I]);
+// 	if (cub->raycast.side == 1 && cub->raycast.ray_dir.y < 0)
+// 		return (cub->texture[NO]);
+// 	if (cub->raycast.side == 1 && cub->raycast.ray_dir.y > 0)
+// 		return (cub->texture[SO]);
+// 	if (cub->raycast.side == 0 && cub->raycast.ray_dir.x < 0)
+// 		return (cub->texture[WE]);
+// 	if (cub->raycast.side == 0 && cub->raycast.ray_dir.x > 0)
+// 		return (cub->texture[EA]);
+// 	return (NULL);
+// }
 
 static int	get_x_coordinate(t_raycast *r)
 {

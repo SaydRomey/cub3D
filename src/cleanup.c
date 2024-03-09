@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 21:57:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 23:02:06 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,16 @@ void	cleanup_scene(t_scene *scene)
 		i++;
 	}
 	if (scene->map_list)
-		ft_lstclear(&scene->map_list, free); //tmp, this should be handled in the map part..?
+		ft_lstclear(&scene->map_list, free);
 	proof("t_scene cleaned up");
 }
 
 void	cleanup_map(t_map *map)
 {
 	free_map(map->map_array, map->height);
+
+	// function to delete all images of wall textures..
+	
 	proof("t_map cleaned up");
 }
 
@@ -57,6 +60,9 @@ void	cleanup(t_cub *cub)
 	proof("mlx terminated");
 }
 
+/*
+test function
+*/
 void	call_clean(void)
 {
 	proof("called clean");

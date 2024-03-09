@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:34:21 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 13:38:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 22:41:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,38 @@ void	store_map_line(t_list **map_list, char *line)
 		return ; //malloc error
 	ft_lstadd_back(map_list, node);
 }
+
+int	get_map_width(t_list *map_list)
+{
+	int	max_width;
+	int	current_length;
+
+	max_width = 0;
+	while (map_list)
+	{
+		current_length = ft_strlen((char *)map_list->content);
+		if (current_length > max_width)
+			max_width = current_length;
+		map_list = map_list->next;
+	}
+	return (max_width);
+}
+
+/*
+check for first and last lines of the map
+(used in 'validate_scene')
+*/
+bool	is_wall_line(char *line)
+{
+	while (*line)
+	{
+		if (*line != '1' && !ft_isspace(*line))
+			return (false);
+		line++;
+	}
+	return (true);
+}
+
 
 // void	store_map_line(t_list **map_list, char *line)
 // {
@@ -55,19 +87,3 @@ void	store_map_line(t_list **map_list, char *line)
 // 	}
 // 	ft_lstadd_back(map_list, node);
 // }
-
-int	get_map_width(t_list *map_list)
-{
-	int	max_width;
-	int	current_length;
-
-	max_width = 0;
-	while (map_list)
-	{
-		current_length = ft_strlen((char *)map_list->content);
-		if (current_length > max_width)
-			max_width = current_length;
-		map_list = map_list->next;
-	}
-	return (max_width);
-}

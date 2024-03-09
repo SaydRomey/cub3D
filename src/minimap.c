@@ -6,11 +6,13 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:35:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 21:44:05 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 23:38:57 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+// t_minimap	*init_minimap()
 
 /* maybe use this version for minimap ?
 */
@@ -162,7 +164,7 @@ tests for more intricate minimap display
 // }
 
 /*
-1. prepare the large map pimage
+1. prepare the large map image
 
 set enable = false;
 

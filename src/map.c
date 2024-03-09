@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 17:54:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 00:59:18 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_map	init_map(t_scene *scene)
 	map.floor_color = get_color(scene, FLOOR);
 	map.ceiling_color = get_color(scene, CEILING);
 	// 
-	// map.wall_textures_img = extract_wall_textures(scene);
+	extract_wall_textures(scene, &map, call_cub()->mlx);
 	// 
 	// map.tile_size = 64;
 	// map.wall_tile_color = HEX_BLACK;

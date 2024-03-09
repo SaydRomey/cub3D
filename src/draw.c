@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 12:30:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 21:39:32 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	draw_line(mlx_image_t *img, t_fpoint start, t_fpoint end, int color)
 {
 	t_fpoint	step;
-	int		max;
+	int			max;
 
 	step.x = end.x - start.x;
 	step.y = end.y - start.y;

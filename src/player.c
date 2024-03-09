@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 21:44:13 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 23:06:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ t_player	init_player(t_scene *scene)
 	player.delta.y = -sin(degree_to_radian(player.angle));
 	player.cam_plane.x = -player.delta.y * player.fov;
 	player.cam_plane.y = player.delta.x * player.fov;
-	// 
-	player.size = PLAYER_SIZE;
-	player.color = 0xFF00FFFF;
 	player.speed = PLAYER_SPEED;
 	player.turn_speed = PLAYER_TURN_SPEED;
 	// 
-	player.respawn = &player;
+	player.size = PLAYER_SIZE;
+	player.color = 0xFF00FFFF;
+	// 
+	// player.respawn = &player; //need to fix this to create a full copy of player instead..
 	return (player);
 }
 
@@ -138,17 +138,12 @@ void	update_player_direction(t_cub *cub)
 
 void	update_player(t_cub *cub)
 {
-	t_player	*player;
+	// t_player	*player;
 
-	player = &cub->player;
-	if (cub->keys.backspace)
-		*player = *player->respawn;
+	// player = &cub->player;
+	// if (cub->keys.backspace)
+	// 	*player = *player->respawn; //needs a fixing
 	// 
 	update_player_position(cub);
 	update_player_direction(cub);
-	// 
-	// if (cub->keys.p)
-	// 	draw_player2(cub->minimap_img, &cub->player);
-	// else
-	// 	draw_player(cub->minimap_img, &cub->player);
 }

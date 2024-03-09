@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 17:24:12 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 22:14:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 /*
 use itoa to validate color channel range in parsing directly?
 */
+static bool	color_is_invalid(char *color[RGB_LEN])
+{
+	int	i;
+	int	value;
+
+	i = 0;
+	while (i < RGB_LEN)
+	{
+		value = ft_atoi(color[i]);
+		if (value < 0 || value > 255)
+			return (true);
+		i++;
+	}
+	return (false);
+}
 
 /*
 need to add check for 'split[RGB_LEN + 1]' (must be NULL)
@@ -38,8 +53,10 @@ static void	split_rgb(int id, char *line, t_scene *scene)
 	}
 	if (split[RGB_LEN])
 		set_error("Too many colors");
-	call_info()->color_check[id] = true;
 	free_split(split);
+	if (color_is_invalid(scene->colors[id]))
+		set_error("Color value out of range (0 - 255)");
+	call_info()->color_check[id] = true;
 }
 
 void	parse_floor_ceiling(char *cubline, t_scene *scene)

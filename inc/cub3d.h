@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 21:49:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 23:59:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,17 @@
 */
 # define TEX_WIDTH			64
 # define TEX_HEIGHT			64
+// # define TEX_WIDTH			256
+// # define TEX_HEIGHT			256
 
 # define MAP_HEIGHT	10
 # define MAP_WIDTH	10
+
+# define CLOSE				0
+# define OPEN				1
+
+# define DOOR_DISTANCE		1
+# define DOOR_CHAR			2
 
 /* lengths of enums
 */
@@ -72,7 +80,6 @@
 
 # define MAP_CHARS "01 NSEW"
 
-// change to t_fpoint later
 typedef struct s_fpoint
 {
 	float	x;
@@ -124,13 +131,10 @@ enum rgb_id
 };
 
 /* ************************************************************************** */
-typedef	struct s_ref
-{
-	int	width;
-	int	height;
-	int	**array;
-}		t_ref;
 
+/*
+used for checklist and errors
+*/
 typedef struct s_info
 {
 	bool	problem;
@@ -154,17 +158,11 @@ typedef struct s_line
 	int		end;
 }			t_line;
 
-typedef struct s_mouse
-{
-	bool	left;
-	bool	right;
-	float	rotate_x;
-}			t_mouse;
-
 typedef struct s_raycast
 {
 	float		wall_perp_dist;
 	float		wall_hit_pos;
+	bool		door;
 	bool		side;
 	t_point		step;
 	t_point		ray_pos;
@@ -183,21 +181,12 @@ typedef struct s_texture
 	float		step_y;
 }				t_texture;
 
-typedef struct s_player
+typedef struct s_mouse
 {
-	t_fpoint		position;
-	char			spawn_orientation;
-	// 
-	t_fpoint		delta;
-	t_fpoint		cam_plane;
-	float			angle;
-	float			fov;
-	int				size;
-	int				color;
-	float			speed;
-	float			turn_speed;
-	struct s_player	*respawn;
-}						t_player;
+	bool	left;
+	bool	right;
+	float	rotate_x;
+}			t_mouse;
 
 typedef struct s_keys
 {
@@ -217,6 +206,33 @@ typedef struct s_keys
 
 /* ************************************************************************** */
 
+typedef struct s_player
+{
+	t_fpoint		position;
+	char			spawn_orientation;
+	// 
+	t_fpoint		delta;
+	t_fpoint		cam_plane;
+	float			angle;
+	float			fov;
+	float			speed;
+	float			turn_speed;
+	// 
+	int				size; //in minimap
+	int				color; //in minimap
+	struct s_player	*respawn;
+}					t_player;
+
+typedef struct s_minimap
+{
+	mlx_image_t	*img;
+	// 
+	// int	tile_size;
+	// int	wall_tile_color;
+	// int	floor_tile_color;
+	// int	background_color;
+}				t_minimap;
+
 typedef struct s_map
 {
 	int			height;
@@ -225,19 +241,12 @@ typedef struct s_map
 	// 
 	int			floor_color;
 	int			ceiling_color;
-	// mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN]; //need to implement this
-	
-	// mlx_image_t *minimap_img; //maybe in a minimap struct ?
-
-	// int	tile_size;
-	// int	wall_tile_color;
-	// int	floor_tile_color;
-	// int	background_color;
+	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
 }		t_map;
 
 typedef struct s_scene
 {
-	char		*wall_textures[WALL_TEXTURE_LEN];
+	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
 	char		spawn_orientation;
@@ -289,6 +298,7 @@ void	update(void *ptr);
 // map.c
 void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
+bool	is_wall_line(char *line);
 void	free_map(int **map, int height);
 int		**get_2d_map(t_list *map_list, int height, int width);
 
@@ -326,8 +336,8 @@ void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
 
 // player.c
 t_player	init_player(t_scene *scene);
-void	update_player_position(t_cub *cub);
-void	update_player_direction(t_cub *cub);
+// void	update_player_position(t_cub *cub);
+// void	update_player_direction(t_cub *cub);
 void	update_player(t_cub *cub);
 
 // raycast.c
@@ -347,9 +357,10 @@ void	test_term_colors(void);
 
 void	print_2d_array(int **array, int height, int width);
 
-
 // utils.c
 mlx_image_t *load_png(char *filepath, mlx_t *mlx);
+mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
+void		extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx);
 // 
 int		rgb_to_int(int r, int g, int b);
 int		get_color(t_scene *scene, int id);
@@ -360,7 +371,7 @@ void	cleanup(t_cub *cub);
 
 // validate.c
 void	validate_arguments(int argc, char **argv);
-
+void	validate_scene(t_scene *scene);
 
 // call.c
 t_cub	*call_cub(void);

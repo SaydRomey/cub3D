@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 12:01:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 23:08:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,61 @@ void	validate_arguments(int argc, char **argv)
 	if (there_is_a_problem())
 		error();
 	proof("Valid args");
+}
+
+/* ************************************************************************** */
+
+static void	check_walls(void)
+{
+	int	i;
+
+	i = 0;
+	while (i < WALL_TEXTURE_LEN)
+	{
+		if (!call_info()->wall_check[i])
+		{
+			set_error("Missing wall texture path");
+			break;
+		}
+		i++;
+	}
+}
+
+static void	check_colors(void)
+{
+	if (!call_info()->wall_check[FLOOR])
+		set_error("Missing floor color");
+	else if (!call_info()->wall_check[CEILING])
+		set_error("Missing ceiling color");
+}
+
+static void	check_map(t_list *map_list)
+{
+	if (map_list)
+	{
+		if (!is_wall_line((char *)map_list->content))
+			set_error("Invalid first map line");
+		else if (!is_wall_line((char *)ft_lstlast(map_list)->content))
+			set_error("Invalid last map line");
+	}
+	else
+		set_error("No map data found");
+}
+
+/*
+checks if we have parsed all required info from .cub file
+(with the boolean checklist in t_info)
+
+*/
+void	validate_scene(t_scene *scene)
+{
+	check_walls();
+	check_colors();
+	check_map(scene->map_list);
+	if (there_is_a_problem())
+	{
+		cleanup_scene(scene);
+		error();
+	}
+	proof("Valid scene");
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/07 21:54:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/08 23:22:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,5 @@ void	update(void *ptr)
 
 	raycast(cub);
 
-	// draw_line(cub->img, (t_fpoint){0, 0}, (t_fpoint){WIDTH, HEIGHT}, 0xFF0000FF); //tmp test
-	// 
 	update_player(cub);
-	// 
 }

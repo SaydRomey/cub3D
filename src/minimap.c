@@ -6,13 +6,32 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:35:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 23:38:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 11:01:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// t_minimap	*init_minimap()
+t_minimap	init_minimap(t_cub *cub)
+{
+	t_minimap	mini;
+
+	ft_memset(&mini, 0, sizeof(t_minimap));
+	// 
+	mini.img = new_img(cub->mlx, WIDTH, HEIGHT, true);
+	// 
+	mini.tile_size = 64;
+	// 
+	mini.player_tile_color = HEX_PURPLE;
+	mini.floor_tile_color = HEX_GREEN;
+	mini.wall_tile_color = HEX_ORANGE;
+	mini.door_tile_color = HEX_BLUE;
+	mini.out_tile_color = HEX_GRAY;
+	mini.background_color = HEX_BLACK;
+
+	return (mini);
+
+}
 
 /* maybe use this version for minimap ?
 */
@@ -64,6 +83,21 @@
 // 	}
 // }
 
+static int	tile_color(t_minimap *minimap, int value)
+{
+	
+	if (value == 0)
+		return (minimap->floor_tile_color);
+	else if (value == 1)
+		return (minimap->wall_tile_color);
+	else if (value == 2)
+		return (minimap->door_tile_color);
+	else if (value == -1 || value == -2)
+		return (minimap->out_tile_color);
+	else
+		return (HEX_RED); //should not get here
+}
+
 void	draw_tile(mlx_image_t *img, t_fpoint origin, t_fpoint size, int color)
 {
 	int	x;
@@ -83,49 +117,69 @@ void	draw_tile(mlx_image_t *img, t_fpoint origin, t_fpoint size, int color)
 }
 
 /*
-tmp map to test
+test to fit all map in image
 */
-// void	draw_minimap(mlx_image_t *img, t_map *map)
-// {
-// 	int		x;
-// 	int		y;
-// 	t_fpoint	tile;
-// 	t_fpoint	size;
-// 	int		color;
-// 	// 
-// 	// int		tmp_map[] = 
-// 	// {
-// 	// 	1,1,1,1,1,1,1,1,
-// 	// 	1,0,1,0,0,0,0,1,
-// 	// 	1,0,1,0,0,0,0,1,
-// 	// 	1,0,1,0,0,0,0,1,
-// 	// 	1,0,0,0,0,0,0,1,
-// 	// 	1,0,0,0,0,1,0,1,
-// 	// 	1,0,0,0,0,0,0,1,
-// 	// 	1,1,1,1,1,1,1,1,
-// 	// };
-// 	//
-// 	size.x = map->tile_size - 1;
-// 	size.y = map->tile_size - 1;
-// 	y = 0;
-// 	while (y < map->height)
-// 	{
-// 		x = 0;
-// 		while (x < map->width)
-// 		{
-// 			tile.x = x * map->tile_size;
-// 			tile.y = y * map->tile_size;
-// 			if (map->map_array[y][x] == 1)
-// 			// if (tmp_map[y * map->width + x] == 1)
-// 				color = map->wall_tile_color;
-// 			else
-// 				color = map->floor_tile_color;
-// 			draw_tile(img, tile, size, color);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
+static void	draw_dynamic_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap)
+{
+	int			x;
+	int			y;
+	t_fpoint	tile;
+	t_fpoint	size;
+
+	int	max_tile_width = img->width / map->width;
+	int	max_tile_height = img->height / map->height;
+
+	minimap->tile_size = ft_min(max_tile_width, max_tile_height);
+	size.x = minimap->tile_size - 1;
+	size.y = minimap->tile_size - 1;
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			tile.x = x * minimap->tile_size;
+			tile.y = y * minimap->tile_size;
+			if (x == (int)call_cub()->player.position.x && y == (int)call_cub()->player.position.y)
+				draw_tile(img, tile, size, minimap->player_tile_color);
+			else
+				draw_tile(img, tile, size, tile_color(minimap, map->map_array[y][x]));
+			x++;
+		}
+		y++;
+	}
+}
+
+void	draw_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap)
+{
+	clear_img(img);
+	draw_dynamic_minimap(img, map, minimap);
+	// int			x;
+	// int			y;
+	// t_fpoint	tile;
+	// t_fpoint	size;
+	// int			color;
+
+	// size.x = minimap->tile_size - 1;
+	// size.y = minimap->tile_size - 1;
+	// y = 0;
+	// while (y < map->height)
+	// {
+	// 	x = 0;
+	// 	while (x < map->width)
+	// 	{
+	// 		tile.x = x * minimap->tile_size;
+	// 		tile.y = y * minimap->tile_size;
+	// 		if (map->map_array[y][x] == 1)
+	// 			color = minimap->wall_tile_color;
+	// 		else
+	// 			color = minimap->floor_tile_color;
+	// 		draw_tile(img, tile, size, color);
+	// 		x++;
+	// 	}
+	// 	y++;
+	// }
+}
 
 /*
 tests for more intricate minimap display

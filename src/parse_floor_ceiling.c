@@ -6,14 +6,14 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 22:14:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 08:56:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 /*
-use itoa to validate color channel range in parsing directly?
+use itoa to validate color channel range in parsing directly
 */
 static bool	color_is_invalid(char *color[RGB_LEN])
 {

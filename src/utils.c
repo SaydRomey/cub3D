@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 01:02:04 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 09:35:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,7 @@ int	get_color(t_scene *scene, int id)
 	b = ft_atoi(scene->colors[id][B]);
 	if (color_is_invalid(r, g, b))
 	{
-		ft_printf("\033[91mInvalid color\033[0m\n");
-		return (0x000000FF); //should set an error and be verified in init_map to free scene and array..
-		// (will fix this in parsing...)
+		return (0x000000FF); //do we keep this ? color is already validated in parsing
 	}
 	color_int = rgb_to_int(r, g, b);
 	return (color_int);
@@ -119,6 +117,18 @@ void	clear_img(mlx_image_t *img)
 
 	total_pixels = img->width * img->height * PIXEL_SIZE;
 	ft_bzero(img->pixels, total_pixels);
+}
+
+void	fill_img(mlx_image_t *img, unsigned int grayscale)
+{
+	int	total_pixels;
+	int	color;
+
+	color = grayscale;
+	if (grayscale > 255)
+		color = 0;
+	total_pixels = img->width * img->height * PIXEL_SIZE;
+	ft_memset(img->pixels, color, total_pixels);
 }
 
 /* ************************************************************************** */

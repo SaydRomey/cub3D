@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 23:59:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 10:37:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@
 # define COLOR_TYPE_LEN 	2
 # define RGB_LEN			3
 
-# define MAP_CHARS "01 NSEW"
+# define MAP_CHARS "01NSEW"
 
 typedef struct s_fpoint
 {
@@ -144,6 +144,9 @@ typedef struct s_info
 
 	// int		mlx_errno;
 	char	*error_msg;
+	// 
+	unsigned int	grayscale; //tmp test
+	// 
 }			t_info;
 
 t_info	*call_info(void);
@@ -227,10 +230,14 @@ typedef struct s_minimap
 {
 	mlx_image_t	*img;
 	// 
-	// int	tile_size;
-	// int	wall_tile_color;
-	// int	floor_tile_color;
-	// int	background_color;
+	int			tile_size;
+	// 
+	int			player_tile_color;
+	int			floor_tile_color;
+	int			wall_tile_color;
+	int			door_tile_color;
+	int			out_tile_color;
+	int			background_color;
 }				t_minimap;
 
 typedef struct s_map
@@ -261,6 +268,7 @@ typedef struct s_cub
 	mlx_image_t	*texture[7]; //change to have this in t_map
 	// 
 	t_map		map;
+	t_minimap	minimap;
 	t_player	player;
 	t_raycast	raycast;
 	t_keys		keys;
@@ -296,6 +304,7 @@ void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
 
 // map.c
+t_map	init_map(t_scene *scene);
 void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
 bool	is_wall_line(char *line);
@@ -309,9 +318,9 @@ int		is_inside_circle(t_fpoint to_check, t_fpoint circle_center, int radius);
 float	distance(t_fpoint a, t_fpoint b, float angle);
 
 // minimap.c
-t_map	init_map(t_scene *scene);
+t_minimap	init_minimap(t_cub *cub);
 void	draw_tile(mlx_image_t *img, t_fpoint origin, t_fpoint size, int color);
-void	draw_minimap(mlx_image_t *img, t_map *map);
+void	draw_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap);
 
 // mouse.c
 void	set_mouse(t_cub *cub);
@@ -354,6 +363,7 @@ void	proof(char *str);
 void	test_scene(t_scene scene);
 void    test_map(t_map map);
 void	test_term_colors(void);
+void	grayscale_test(t_cub *cub);
 
 void	print_2d_array(int **array, int height, int width);
 
@@ -367,7 +377,10 @@ int		get_color(t_scene *scene, int id);
 // 
 void	toggle(bool *choice);
 void	clear_img(mlx_image_t *img);
-void	cleanup(t_cub *cub);
+void	fill_img(mlx_image_t *img, unsigned int grayscale);
+
+
+
 
 // validate.c
 void	validate_arguments(int argc, char **argv);

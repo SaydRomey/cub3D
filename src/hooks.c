@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 23:22:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 10:59:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void	keyhooks(mlx_key_data_t data, void *param)
 		cleanup(cub);
 		exit(SUCCESS);
 	}
-	// if (data.key == M && data.action == PRESS)
-	// 	toggle(&(cub->minimap_img->enabled));
+	if (data.key == M && data.action == PRESS)
+		toggle(&(cub->minimap).img->enabled);
 	// if (data.key == P && data.action == PRESS)
 	// 	toggle(&cub->keys.p);
 	// 
@@ -89,6 +89,11 @@ void	update(void *ptr)
 	cub = (t_cub *)ptr;
 
 	raycast(cub);
-
 	update_player(cub);
+	// 
+	// draw_line((cub->minimap).img, (t_fpoint){0, 0}, (t_fpoint){(cub->minimap).img->width, (cub->minimap).img->height}, HEX_BLUE);
+	draw_minimap((cub->minimap).img, &cub->map, &cub->minimap);
+	// 
+	// grayscale_test(cub); // tmp test to set grayscale
+
 }

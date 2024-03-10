@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 10:37:37 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 21:51:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,12 +232,6 @@ typedef struct s_minimap
 	// 
 	int			tile_size;
 	// 
-	int			player_tile_color;
-	int			floor_tile_color;
-	int			wall_tile_color;
-	int			door_tile_color;
-	int			out_tile_color;
-	int			background_color;
 }				t_minimap;
 
 typedef struct s_map
@@ -319,7 +313,6 @@ float	distance(t_fpoint a, t_fpoint b, float angle);
 
 // minimap.c
 t_minimap	init_minimap(t_cub *cub);
-void	draw_tile(mlx_image_t *img, t_fpoint origin, t_fpoint size, int color);
 void	draw_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap);
 
 // mouse.c

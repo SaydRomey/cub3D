@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:35:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 11:01:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/09 22:24:03 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,12 @@ t_minimap	init_minimap(t_cub *cub)
 {
 	t_minimap	mini;
 
-	ft_memset(&mini, 0, sizeof(t_minimap));
+	ft_memset(&mini, 0, sizeof(t_minimap)); //not necessary if minimap is inside t_cub ? (already memset)
 	// 
-	mini.img = new_img(cub->mlx, WIDTH, HEIGHT, true);
+	mini.img = new_img(cub->mlx, WIDTH, HEIGHT, true); //this will start as 'false' instead
 	// 
 	mini.tile_size = 64;
 	// 
-	mini.player_tile_color = HEX_PURPLE;
-	mini.floor_tile_color = HEX_GREEN;
-	mini.wall_tile_color = HEX_ORANGE;
-	mini.door_tile_color = HEX_BLUE;
-	mini.out_tile_color = HEX_GRAY;
-	mini.background_color = HEX_BLACK;
-
 	return (mini);
 
 }
@@ -83,22 +76,32 @@ t_minimap	init_minimap(t_cub *cub)
 // 	}
 // }
 
-static int	tile_color(t_minimap *minimap, int value)
+/* ************************************************************************** */
+/* ************************************************************************** */
+
+static int	tile_color(int y, int x)
 {
-	
-	if (value == 0)
-		return (minimap->floor_tile_color);
+	int			value;
+	t_fpoint	player_pos;
+
+	value = call_cub()->map.map_array[y][x];
+	player_pos = call_cub()->player.position;
+
+	if (x == (int)player_pos.x && y == (int)player_pos.y)
+		return (HEX_PURPLE);
+	else if (value == 0)
+		return (HEX_GREEN);
 	else if (value == 1)
-		return (minimap->wall_tile_color);
-	else if (value == 2)
-		return (minimap->door_tile_color);
+		return (HEX_ORANGE);
+	else if (value == 2) //door?
+		return (HEX_BLUE);
 	else if (value == -1 || value == -2)
-		return (minimap->out_tile_color);
+		return (HEX_GRAY);
 	else
 		return (HEX_RED); //should not get here
 }
 
-void	draw_tile(mlx_image_t *img, t_fpoint origin, t_fpoint size, int color)
+static void	draw_tile(mlx_image_t *img, t_point origin, t_point size, int color)
 {
 	int	x;
 	int	y;
@@ -116,69 +119,112 @@ void	draw_tile(mlx_image_t *img, t_fpoint origin, t_fpoint size, int color)
 	}
 }
 
+// static int	adjust_tile_size(mlx_image_t *img, t_map *map)
+// {
+// 	int	tile_width;
+// 	int	tile_height;
+
+// 	tile_width = img->width / map->width;
+// 	tile_height = img->height / map->height;
+// 	return (ft_min(tile_width, tile_height));
+// }
+
 /*
 test to fit all map in image
 */
-static void	draw_dynamic_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap)
+// static void	draw_dynamic_minimap(t_minimap *minimap, t_map *map)
+// {
+// 	int		x;
+// 	int		y;
+// 	t_point	tile;
+// 	t_point	size;
+
+// 	minimap->tile_size = adjust_tile_size(img, map);
+// 	size.x = minimap->tile_size - 1;
+// 	size.y = minimap->tile_size - 1;
+// 	y = 0;
+// 	while (y < map->height)
+// 	{
+// 		x = 0;
+// 		while (x < map->width)
+// 		{
+// 			tile.x = x * minimap->tile_size;
+// 			tile.y = y * minimap->tile_size;
+// 			draw_tile(minimap->img, tile, size, tile_color(y, x));
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// }
+
+/* ************************************************************************** */
+
+static t_point	find_center(t_map *map, int half_width, int half_height)
 {
-	int			x;
-	int			y;
-	t_fpoint	tile;
-	t_fpoint	size;
+	t_point		center;
+	t_fpoint	player_pos;
 
-	int	max_tile_width = img->width / map->width;
-	int	max_tile_height = img->height / map->height;
+	player_pos = call_cub()->player.position;
 
-	minimap->tile_size = ft_min(max_tile_width, max_tile_height);
+	center.x = ft_max(ft_min((int)player_pos.x, map->width - half_width), half_width);
+	center.y = ft_max(ft_min((int)player_pos.y, map->height - half_height), half_height);
+	return (center);
+}
+
+static void draw_centered_minimap(t_minimap *minimap, t_map *map)
+{
+	t_point	center;
+	int		half_width;
+	int		half_height;
+
+	half_width = minimap->img->width / (2 * minimap->tile_size);
+	half_height = minimap->img->height / (2 * minimap->tile_size);
+
+	// Calculate center based on player position, ensuring it's not out of bounds
+	center = find_center(map, half_width, half_height);
+
+	t_point	start;
+	t_point	end;
+
+	start.x = center.x - half_width;
+	start.y = center.y - half_height;
+	end.x = center.x + half_width;
+	end.y = center.y + half_height;
+
+	// Adjust for the image's dimensions
+	t_point	tile;
+	t_point	size;
 	size.x = minimap->tile_size - 1;
 	size.y = minimap->tile_size - 1;
-	y = 0;
-	while (y < map->height)
+
+	int	x;
+	int	y;
+
+	y = start.y;
+	while (y < end.y)
 	{
-		x = 0;
-		while (x < map->width)
+		x = start.x;
+		while (x < end.x)
 		{
-			tile.x = x * minimap->tile_size;
-			tile.y = y * minimap->tile_size;
-			if (x == (int)call_cub()->player.position.x && y == (int)call_cub()->player.position.y)
-				draw_tile(img, tile, size, minimap->player_tile_color);
-			else
-				draw_tile(img, tile, size, tile_color(minimap, map->map_array[y][x]));
+			// Translate map coordinates to image coordinates
+			tile.x = (x - start.x) * minimap->tile_size;
+			tile.y = (y - start.y) * minimap->tile_size;
+			
+			if (x >= 0 && x < map->width && y >= 0 && y < map->height)
+				draw_tile(minimap->img, tile, size, tile_color(y, x));			
 			x++;
 		}
 		y++;
 	}
 }
 
-void	draw_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap)
+/* ************************************************************************** */
+
+void	draw_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap) //change signature later
 {
 	clear_img(img);
-	draw_dynamic_minimap(img, map, minimap);
-	// int			x;
-	// int			y;
-	// t_fpoint	tile;
-	// t_fpoint	size;
-	// int			color;
-
-	// size.x = minimap->tile_size - 1;
-	// size.y = minimap->tile_size - 1;
-	// y = 0;
-	// while (y < map->height)
-	// {
-	// 	x = 0;
-	// 	while (x < map->width)
-	// 	{
-	// 		tile.x = x * minimap->tile_size;
-	// 		tile.y = y * minimap->tile_size;
-	// 		if (map->map_array[y][x] == 1)
-	// 			color = minimap->wall_tile_color;
-	// 		else
-	// 			color = minimap->floor_tile_color;
-	// 		draw_tile(img, tile, size, color);
-	// 		x++;
-	// 	}
-	// 	y++;
-	// }
+	// draw_dynamic_minimap(minimap, map);
+	draw_centered_minimap(minimap, map);
 }
 
 /*

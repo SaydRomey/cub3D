@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:35:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 11:44:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/11 15:08:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ static void	draw_tiles(t_minimap *minimap, t_point start, t_point end)
 	t_point	tile;
 	t_point	size;
 
+	// size.x = minimap->tile_size;
+	// size.y = minimap->tile_size;
 	size.x = minimap->tile_size - 1;
 	size.y = minimap->tile_size - 1;
 	y = start.y;
@@ -207,17 +209,17 @@ static void	features_testing(t_minimap *minimap, t_map *map)
 
 /* ************************************************************************** */
 
-void	draw_mini_player(t_minimap *minimap, t_player *player)
-{
-	t_fpoint	line_size;
-	int			ray_length = 42; //tmp
-	int			ray_color = 0x00FF00FF; //tmp
+// void	draw_mini_player(t_minimap *minimap, t_player *player)
+// {
+// 	t_fpoint	line_size;
+// 	int			ray_length = 42; //tmp
+// 	int			ray_color = 0x00FF00FF; //tmp
 
-	line_size.x = player->position.x + player->delta.x * ray_length;
-	line_size.y = player->position.y + player->delta.y * ray_length;
-	draw_line(minimap->img, player->position, line_size, ray_color);
-	draw_circle(minimap->img, player->position, player->size, player->color);
-}
+// 	line_size.x = player->position.x + player->delta.x * ray_length;
+// 	line_size.y = player->position.y + player->delta.y * ray_length;
+// 	draw_line(minimap->img, player->position, line_size, ray_color);
+// 	draw_circle(minimap->img, player->position, player->size, player->color);
+// }
 
 void	draw_minimap(t_minimap *minimap, t_map *map)
 {
@@ -231,7 +233,7 @@ void	draw_minimap(t_minimap *minimap, t_map *map)
 		features_testing(minimap, map);
 		calculate_bounds(find_center(minimap, map), &start, &end);
 		draw_tiles(minimap, start, end);
-		draw_mini_player(minimap, &call_cub()->player);
+		// draw_mini_player(minimap, &call_cub()->player);
 
 		make_it_round(minimap, map);
 	}

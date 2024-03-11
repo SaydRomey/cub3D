@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 10:59:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/10 16:24:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,17 @@ static void	set_key(int key, t_keys *keys, bool state)
 		keys->right = state;
 	if (key == BACKSPACE)
 		keys->backspace = state;
-	// if (key == M && state == ON)
-	// 	toggle(keys->m);
-	// if (key == P && state == ON)
-	// 	toggle(keys->p);
+	if (key == M && state == ON)
+		toggle(&keys->m);
+	if (key == P && state == ON)
+		toggle(&keys->p);
 }
 
 void	keyhooks(mlx_key_data_t data, void *param)
 {
 	t_cub		*cub;
-	// t_keys		*keys;
 
 	cub = (t_cub *)param;
-	// keys = &cub->keys;
 	if (data.key == ESC && data.action == PRESS)
 	{
 		proof("Pressed ESC");
@@ -68,15 +66,7 @@ void	keyhooks(mlx_key_data_t data, void *param)
 		cleanup(cub);
 		exit(SUCCESS);
 	}
-	if (data.key == M && data.action == PRESS)
-		toggle(&(cub->minimap).img->enabled);
-	// if (data.key == P && data.action == PRESS)
-	// 	toggle(&cub->keys.p);
-	// 
-	if (data.action == PRESS)
-		set_key(data.key, &cub->keys, ON);
-	if (data.action == RELEASE)
-		set_key(data.key, &cub->keys, OFF);
+	set_key(data.key, &cub->keys, data.action);
 }
 
 /*
@@ -90,10 +80,11 @@ void	update(void *ptr)
 
 	raycast(cub);
 	update_player(cub);
-	// 
+
+	draw_minimap(&cub->minimap, &cub->map); //only put in this function if the minimap changes, else draw only once
+	
+	/* tests */
 	// draw_line((cub->minimap).img, (t_fpoint){0, 0}, (t_fpoint){(cub->minimap).img->width, (cub->minimap).img->height}, HEX_BLUE);
-	draw_minimap((cub->minimap).img, &cub->map, &cub->minimap);
-	// 
 	// grayscale_test(cub); // tmp test to set grayscale
 
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:35:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 22:24:03 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/10 21:29:50 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,76 +18,24 @@ t_minimap	init_minimap(t_cub *cub)
 
 	ft_memset(&mini, 0, sizeof(t_minimap)); //not necessary if minimap is inside t_cub ? (already memset)
 	// 
-	mini.img = new_img(cub->mlx, WIDTH, HEIGHT, true); //this will start as 'false' instead
+	mini.img = new_img(cub->mlx, WIDTH / 3, WIDTH / 3, true);
+	mini.img->instances->x = WIDTH - mini.img->width; //place on the right
 	// 
-	mini.tile_size = 64;
+	mini.tile_size = 42;
 	// 
 	return (mini);
 
 }
 
-/* maybe use this version for minimap ?
-*/
-// void	old_update_player_position(t_cub *cub)
-// {
-// 	t_player	*player;
-
-// 	player = &cub->player;
-// 	if (cub->keys.up || cub->keys.w) //move forward
-// 	{
-// 		player->position.x += player->delta.x * player->speed;
-// 		player->position.y += player->delta.y * player->speed;
-// 	}
-// 	if (cub->keys.a) //move left
-// 	{
-// 		player->position.x += player->delta.y * player->speed;
-// 		player->position.y -= player->delta.x * player->speed;
-// 	}
-// 	if (cub->keys.down || cub->keys.s) //move backward
-// 	{
-// 		player->position.x -= player->delta.x * player->speed;
-// 		player->position.y -= player->delta.y * player->speed;
-// 	}
-// 	if (cub->keys.d) //move right
-// 	{
-// 		player->position.x -= player->delta.y * player->speed;
-// 		player->position.y += player->delta.x * player->speed;
-// 	}
-// }
-
-// void	old_update_player_direction(t_cub *cub)
-// {
-// 	t_player	*player;
-
-// 	player = &cub->player;
-// 	if (cub->keys.left) //turn left
-// 	{
-// 		player->angle += player->turn_speed;
-// 		player->angle = fix_angle(player->angle);
-// 		player->delta.x = cos(degree_to_radian(player->angle));
-// 		player->delta.y = -sin(degree_to_radian(player->angle));
-// 	}
-// 	if (cub->keys.right) //turn right
-// 	{
-// 		player->angle -= player->turn_speed;
-// 		player->angle = fix_angle(player->angle);
-// 		player->delta.x = cos(degree_to_radian(player->angle));
-// 		player->delta.y = -sin(degree_to_radian(player->angle));
-// 	}
-// }
-
-/* ************************************************************************** */
-/* ************************************************************************** */
-
 static int	tile_color(int y, int x)
 {
 	int			value;
-	t_fpoint	player_pos;
+	t_fpoint	position;
 
 	value = call_cub()->map.map_array[y][x];
-	player_pos = call_cub()->player.position;
+	position = call_cub()->player.position;
 
-	if (x == (int)player_pos.x && y == (int)player_pos.y)
+	if (x == (int)position.x && y == (int)position.y)
 		return (HEX_PURPLE);
 	else if (value == 0)
 		return (HEX_GREEN);
@@ -119,112 +67,119 @@ static void	draw_tile(mlx_image_t *img, t_point origin, t_point size, int color)
 	}
 }
 
-// static int	adjust_tile_size(mlx_image_t *img, t_map *map)
-// {
-// 	int	tile_width;
-// 	int	tile_height;
-
-// 	tile_width = img->width / map->width;
-// 	tile_height = img->height / map->height;
-// 	return (ft_min(tile_width, tile_height));
-// }
-
-/*
-test to fit all map in image
-*/
-// static void	draw_dynamic_minimap(t_minimap *minimap, t_map *map)
-// {
-// 	int		x;
-// 	int		y;
-// 	t_point	tile;
-// 	t_point	size;
-
-// 	minimap->tile_size = adjust_tile_size(img, map);
-// 	size.x = minimap->tile_size - 1;
-// 	size.y = minimap->tile_size - 1;
-// 	y = 0;
-// 	while (y < map->height)
-// 	{
-// 		x = 0;
-// 		while (x < map->width)
-// 		{
-// 			tile.x = x * minimap->tile_size;
-// 			tile.y = y * minimap->tile_size;
-// 			draw_tile(minimap->img, tile, size, tile_color(y, x));
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
-
 /* ************************************************************************** */
 
-static t_point	find_center(t_map *map, int half_width, int half_height)
+/* maybe put in libft? */
+int	ft_clamp(int value, int min, int max)
 {
-	t_point		center;
-	t_fpoint	player_pos;
-
-	player_pos = call_cub()->player.position;
-
-	center.x = ft_max(ft_min((int)player_pos.x, map->width - half_width), half_width);
-	center.y = ft_max(ft_min((int)player_pos.y, map->height - half_height), half_height);
-	return (center);
+	return (ft_max(ft_min(value, max), min));
 }
 
-static void draw_centered_minimap(t_minimap *minimap, t_map *map)
+static t_point	find_center(t_minimap *minimap, t_map *map)
 {
-	t_point	center;
-	int		half_width;
-	int		half_height;
+	int			half_width;
+	int			half_height;
+	t_fpoint	pos;
+	t_point		center;
 
 	half_width = minimap->img->width / (2 * minimap->tile_size);
 	half_height = minimap->img->height / (2 * minimap->tile_size);
+	pos = call_cub()->player.position;
+	center.x = ft_clamp((int)pos.x, half_width, map->width - half_width);
+	center.y = ft_clamp((int)pos.y, half_height, map->height - half_height);
+	return (center);
+}
 
-	// Calculate center based on player position, ensuring it's not out of bounds
-	center = find_center(map, half_width, half_height);
+static void	calculate_bounds(t_point center, t_point *start, t_point *end)
+{
+	int		half_width;
+	int		half_height;
+	// t_point	center;
+	t_minimap	*minimap = &call_cub()->minimap;
 
-	t_point	start;
-	t_point	end;
+	half_width = minimap->img->width / (2 * minimap->tile_size);
+	half_height = minimap->img->height / (2 * minimap->tile_size);
+	start->x = center.x - half_width;
+	start->y = center.y - half_height;
+	end->x = center.x + half_width;
+	end->y = center.y + half_height;
+}
 
-	start.x = center.x - half_width;
-	start.y = center.y - half_height;
-	end.x = center.x + half_width;
-	end.y = center.y + half_height;
-
-	// Adjust for the image's dimensions
+static void	draw_tiles(t_minimap *minimap, t_point start, t_point end)
+{
+	int		x;
+	int		y;
 	t_point	tile;
 	t_point	size;
+
 	size.x = minimap->tile_size - 1;
 	size.y = minimap->tile_size - 1;
-
-	int	x;
-	int	y;
-
 	y = start.y;
 	while (y < end.y)
 	{
 		x = start.x;
 		while (x < end.x)
 		{
-			// Translate map coordinates to image coordinates
 			tile.x = (x - start.x) * minimap->tile_size;
 			tile.y = (y - start.y) * minimap->tile_size;
-			
-			if (x >= 0 && x < map->width && y >= 0 && y < map->height)
-				draw_tile(minimap->img, tile, size, tile_color(y, x));			
+			draw_tile(minimap->img, tile, size, tile_color(y, x));
 			x++;
 		}
 		y++;
 	}
 }
 
+/* ************************************************************************** */ //iso?
+
+
+/* ************************************************************************** */ //circle map
+
+// static bool	is_in_circle(t_point point, t_point center, int radius)
+// {
+// 	t_point	distance;
+
+// 	distance.x = point.x - center.x;
+// 	distance.y = point.y - center.y;
+// 	return ((distance.x * distance.x + distance.y * distance.y) <= radius * radius);
+// }
+
+/* ************************************************************************** */ //features (options)
+
+static int	adjust_tile_size(mlx_image_t *img, t_map *map)
+{
+	int	tile_width;
+	int	tile_height;
+
+	tile_width = img->width / map->width;
+	tile_height = img->height / map->height;
+	return (ft_min(tile_width, tile_height));
+}
+
+static void	features_testing(t_minimap *minimap, t_map *map)
+{
+	bool	dynamic = false;
+
+	if (dynamic == true)
+		minimap->tile_size = adjust_tile_size(minimap->img, map);
+	
+}
+
 /* ************************************************************************** */
 
-void	draw_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap) //change signature later
+void	draw_minimap(t_minimap *minimap, t_map *map)
 {
-	clear_img(img);
-	// draw_dynamic_minimap(minimap, map);
-	draw_centered_minimap(minimap, map);
+	t_point	start;
+	t_point	end;
+
+	clear_img(minimap->img);
+	if (call_cub()->keys.m)
+	{
+		features_testing(minimap, map);
+		calculate_bounds(find_center(minimap, map), &start, &end);
+		draw_tiles(minimap, start, end);
+	}
+	
+	
 }
 
 /*
@@ -326,6 +281,60 @@ when the player moves (hooks)
 
 /* ************************************************************************** */
 
+
+/* maybe use this version for minimap ?
+*/
+// void	old_update_positionition(t_cub *cub)
+// {
+// 	t_player	*player;
+
+// 	player = &cub->player;
+// 	if (cub->keys.up || cub->keys.w) //move forward
+// 	{
+// 		player->position.x += player->delta.x * player->speed;
+// 		player->position.y += player->delta.y * player->speed;
+// 	}
+// 	if (cub->keys.a) //move left
+// 	{
+// 		player->position.x += player->delta.y * player->speed;
+// 		player->position.y -= player->delta.x * player->speed;
+// 	}
+// 	if (cub->keys.down || cub->keys.s) //move backward
+// 	{
+// 		player->position.x -= player->delta.x * player->speed;
+// 		player->position.y -= player->delta.y * player->speed;
+// 	}
+// 	if (cub->keys.d) //move right
+// 	{
+// 		player->position.x -= player->delta.y * player->speed;
+// 		player->position.y += player->delta.x * player->speed;
+// 	}
+// }
+
+// void	old_update_player_direction(t_cub *cub)
+// {
+// 	t_player	*player;
+
+// 	player = &cub->player;
+// 	if (cub->keys.left) //turn left
+// 	{
+// 		player->angle += player->turn_speed;
+// 		player->angle = fix_angle(player->angle);
+// 		player->delta.x = cos(degree_to_radian(player->angle));
+// 		player->delta.y = -sin(degree_to_radian(player->angle));
+// 	}
+// 	if (cub->keys.right) //turn right
+// 	{
+// 		player->angle -= player->turn_speed;
+// 		player->angle = fix_angle(player->angle);
+// 		player->delta.x = cos(degree_to_radian(player->angle));
+// 		player->delta.y = -sin(degree_to_radian(player->angle));
+// 	}
+// }
+
+/* ************************************************************************** */
+/* ************************************************************************** */
+
 // void	draw_player(mlx_image_t *img, t_player *player)
 // {
 // 	t_fpoint	line_size;
@@ -365,4 +374,34 @@ when the player moves (hooks)
 // 	draw_triangle(img, front, left, right, player->color);
 // 	// draw_line(img, base_center, front, player->color);
 // 	// draw_circle_hollow(img, player->position, player->size, 2, HEX_ORANGE);
+// }
+
+//
+
+/*
+test to fit all map in image
+*/
+// static void	draw_dynamic_minimap(t_minimap *minimap, t_map *map)
+// {
+// 	int		x;
+// 	int		y;
+// 	t_point	tile;
+// 	t_point	size;
+
+// 	minimap->tile_size = adjust_tile_size(img, map);
+// 	size.x = minimap->tile_size - 1;
+// 	size.y = minimap->tile_size - 1;
+// 	y = 0;
+// 	while (y < map->height)
+// 	{
+// 		x = 0;
+// 		while (x < map->width)
+// 		{
+// 			tile.x = x * minimap->tile_size;
+// 			tile.y = y * minimap->tile_size;
+// 			draw_tile(minimap->img, tile, size, tile_color(y, x));
+// 			x++;
+// 		}
+// 		y++;
+// 	}
 // }

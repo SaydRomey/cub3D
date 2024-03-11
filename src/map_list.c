@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:34:21 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 22:41:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/10 16:15:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ bool	is_wall_line(char *line)
 	return (true);
 }
 
-
+/* **this version removes trailing whitespaces after last 'wall' char
+*/
 // void	store_map_line(t_list **map_list, char *line)
 // {
 // 	t_list	*node;

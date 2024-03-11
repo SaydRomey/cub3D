@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 21:51:29 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/10 16:21:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,7 @@ typedef struct s_player
 typedef struct s_minimap
 {
 	mlx_image_t	*img;
+	mlx_image_t	*round_img;
 	// 
 	int			tile_size;
 	// 
@@ -313,7 +314,7 @@ float	distance(t_fpoint a, t_fpoint b, float angle);
 
 // minimap.c
 t_minimap	init_minimap(t_cub *cub);
-void	draw_minimap(mlx_image_t *img, t_map *map, t_minimap *minimap);
+void	draw_minimap(t_minimap *minimap, t_map *map);
 
 // mouse.c
 void	set_mouse(t_cub *cub);

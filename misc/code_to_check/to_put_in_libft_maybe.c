@@ -6,9 +6,14 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 15:57:51 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 14:52:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/11 15:56:06 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+int	ft_clamp(int value, int min, int max)
+{
+	return (ft_max(ft_min(value, max), min));
+}
 
 int	is_within_limits(int value, int min, int max)
 {

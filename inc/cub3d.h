@@ -6,9 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/10 16:21:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/11 19:01:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// TODO: add the build folder of mlx to git ignore
 
 #ifndef CUB3D_H
 # define CUB3D_H
@@ -80,6 +82,7 @@
 
 # define MAP_CHARS "01NSEW"
 
+
 typedef struct s_fpoint
 {
 	float	x;
@@ -92,7 +95,7 @@ typedef struct s_point
 	int	y;
 }		t_point;
 
-// change these names/values later...
+// change these names/values later... (currently not using this..)
 typedef enum e_map_elem
 {
 	SPACE = -1,
@@ -186,6 +189,8 @@ typedef struct s_texture
 
 typedef struct s_mouse
 {
+	bool	enabled;
+
 	bool	left;
 	bool	right;
 	float	rotate_x;
@@ -205,6 +210,9 @@ typedef struct s_keys
 	bool	m; //minimap toggle
 	bool	p; //player icon style
 	bool	backspace; //to reset player position
+	bool	one;
+	bool	two;
+	bool	three;
 }			t_keys;
 
 /* ************************************************************************** */
@@ -226,6 +234,18 @@ typedef struct s_player
 	struct s_player	*respawn;
 }					t_player;
 
+/* ************************************************************************** */
+
+# define TILE_SIZE 42
+
+typedef struct s_options
+{
+	bool	dynamic_tile_size; //1
+	bool	round; //2
+	bool	rectangular; //!2
+	bool	visible; //m
+}			t_options;
+
 typedef struct s_minimap
 {
 	mlx_image_t	*img;
@@ -233,6 +253,7 @@ typedef struct s_minimap
 	// 
 	int			tile_size;
 	// 
+	t_options	options;
 }				t_minimap;
 
 typedef struct s_map
@@ -240,6 +261,7 @@ typedef struct s_map
 	int			height;
 	int			width;
 	int			**map_array; //2d array for the map
+	// int			**elevator_array; //2d array for the elevator ?
 	// 
 	int			floor_color;
 	int			ceiling_color;
@@ -314,7 +336,7 @@ float	distance(t_fpoint a, t_fpoint b, float angle);
 
 // minimap.c
 t_minimap	init_minimap(t_cub *cub);
-void	draw_minimap(t_minimap *minimap, t_map *map);
+void	draw_minimap(t_minimap *mini, t_map *map);
 
 // mouse.c
 void	set_mouse(t_cub *cub);
@@ -372,6 +394,7 @@ int		get_color(t_scene *scene, int id);
 void	toggle(bool *choice);
 void	clear_img(mlx_image_t *img);
 void	fill_img(mlx_image_t *img, unsigned int grayscale);
+void	move_img(mlx_image_t *img, int x, int y);
 
 
 

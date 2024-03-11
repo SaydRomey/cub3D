@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 09:35:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/11 18:29:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 		if (scene->wall_textures[i])
 		{
 			map->wall_textures_img[i] = load_png(scene->wall_textures[i], mlx);
+			// check texture dimensions? is power of 2
+			// if (map->wall_textures_img[i]->width % 2 == 0 && ..)
 		}
 		else
 			map->wall_textures_img[i] = NULL;
@@ -95,7 +97,7 @@ int	get_color(t_scene *scene, int id)
 	b = ft_atoi(scene->colors[id][B]);
 	if (color_is_invalid(r, g, b))
 	{
-		return (0x000000FF); //do we keep this ? color is already validated in parsing
+		return (0x000000FF); // color is already validated in parsing
 	}
 	color_int = rgb_to_int(r, g, b);
 	return (color_int);
@@ -131,43 +133,15 @@ void	fill_img(mlx_image_t *img, unsigned int grayscale)
 	ft_memset(img->pixels, color, total_pixels);
 }
 
-/* ************************************************************************** */
-
 /*
-returns true if the 'to_verify' point is within the area of 'origin' to 'end'
-
-int	is_in_the_zone(t_fpoint to_verify, t_fpoint origin, t_fpoint end)
+if 'x' or 'y' is negative, the image's 'x' or 'y' stays the same
+*/
+void	move_img(mlx_image_t *img, int x, int y)
 {
-	if (to_verify.x >= origin.x && to_verify.x <= end.x && \
-		to_verify.y >= origin.y && to_verify.y <= end.y)
-		return (TRUE);
-	return (FALSE);
+	if (!img)
+		return ;
+	if (x > 0)
+		img->instances->x = x;
+	if (y > 0)
+		img->instances->y = y;
 }
-*/
-/*
-// int	is_in_window(t_fpoint to_verify)
-{
-	if (to_verify.x > 0 && to_verify.x < WIDTH && \
-		to_verify.y > 0 && to_verify.y < HEIGHT)
-		return (TRUE);
-	return (FALSE);
-}
-*/
-/*
-to prevent accidents..
-[...]
-if (button == SCROLL_UP)
-		cub->player.speed += 0.5;
-	if (button == SCROLL_DOWN)
-		cub->player.speed -= 0.5;
-	cub->player.speed = speed_limit(cub->player.speed, SPEED_LIMIT);
-[...]
-*/
-// static float	speed_limit(float speed, float limit)
-// {
-// 	if (speed >= limit)
-// 		return (limit);
-// 	if (speed <= 0)
-// 		return (0);
-// 	return (speed);
-// }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:35:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 19:00:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/11 21:38:59 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,16 @@ t_minimap	init_minimap(t_cub *cub)
 	// 
 	mini.img = new_img(cub->mlx, width, height, true);
 	move_img(mini.img, WIDTH - (mini.img->width - TILE_SIZE), TILE_SIZE);
+	// move_img(mini.img, (WIDTH - mini.img->width) / 2, (HEIGHT - mini.img->height) / 2);
 	// 
 	mini.round_img = new_img(cub->mlx, width, height, true);
-	mini.round_img->instances->x = WIDTH - mini.round_img->width;
+	move_img(mini.round_img, WIDTH - (mini.round_img->width - TILE_SIZE), TILE_SIZE);
+	// move_img(mini.round_img, (WIDTH - mini.round_img->width) / 2, (HEIGHT - mini.round_img->height) / 2);
 	// 
 	mini.tile_size = TILE_SIZE;
-	// mini.radius = 
-	// mini.center = find_center...
+	mini.radius = ft_min(mini.round_img->width, mini.round_img->height) / 2;
+	mini.center.x = mini.round_img->width / 2;
+	mini.center.y = mini.round_img->height / 2;
 	// 
 	return (mini);
 
@@ -128,13 +131,21 @@ static void	calculate_bounds(t_point center, t_point *start, t_point *end)
 	int			half_width;
 	int			half_height;
 	t_minimap	*mini = &call_cub()->minimap;
+	t_map		*map = &call_cub()->map;
 
 	half_width = mini->img->width / (2 * mini->tile_size);
 	half_height = mini->img->height / (2 * mini->tile_size);
+
+	start->x = ft_max(0, center.x - half_width);
+	start->y = ft_max(0, center.y - half_height);
+	end->x = ft_min(map->width, center.x + half_width);
+	end->y = ft_min(map->height, center.y + half_height);
+
 	start->x = center.x - half_width;
 	start->y = center.y - half_height;
+
 	end->x = center.x + half_width;
-	end->y = center.y + half_height;
+	end->y = center.y + half_height; //this seems to give the same result ?
 }
 
 /* ************************************************************************** */ //circle map
@@ -150,6 +161,9 @@ static bool	is_in_circle(t_point point, t_point center, int radius)
 	
 }
 
+/*
+applies a circular mask when copying existing minimap
+*/
 static void	make_it_round(t_minimap *mini, t_map *map)
 {
 	int		radius = mini->round_img->width / 3;
@@ -191,7 +205,7 @@ static void	make_it_round(t_minimap *mini, t_map *map)
 
 /* ************************************************************************** */ //features (options)
 
-static int	adjust_tile_size(mlx_image_t *img, t_map *map)
+static int	adjust_tile_size(mlx_image_t *img, t_map *map) //fits all the tiles in the map
 {
 	int	tile_width;
 	int	tile_height;
@@ -203,13 +217,18 @@ static int	adjust_tile_size(mlx_image_t *img, t_map *map)
 
 static void	setup_visibility(t_minimap *mini)
 {
-	mini->img->instances->enabled = mini->options.rectangular;
-	mini->round_img->instances->enabled = mini->options.round;
+	if (mini->options.visible == false)
+	{
+		mini->img->instances->enabled = false;
+		mini->round_img->instances->enabled = false;
+	}
+	else
+	{
+		mini->img->instances->enabled = mini->options.rectangular;
+		mini->round_img->instances->enabled = mini->options.round;
+	}
 }
 
-/*
-adjusts the t_option flags by checking the t_keys flags
-*/
 static void	update_options(t_minimap *mini, t_options *options)
 {
 	t_keys		keys;
@@ -217,9 +236,11 @@ static void	update_options(t_minimap *mini, t_options *options)
 	keys = call_cub()->keys;
 	
 	options->visible = keys.m;
-	options->dynamic_tile_size = keys.one;
-	options->rectangular = !keys.two;
-	options->round = keys.two;
+
+	options->dynamic_tile_size = keys.two;
+	options->rectangular = !keys.one;
+	options->round = keys.one; // = !options->rectangular
+	
 	setup_visibility(mini);
 }
 
@@ -229,17 +250,44 @@ static void	features_testing(t_minimap *mini, t_map *map)
 
 	options = mini->options;
 
-	// dynamic tile size
 	if (options.rectangular && options.dynamic_tile_size)
 		mini->tile_size = adjust_tile_size(mini->img, map);
 	else
 		mini->tile_size = TILE_SIZE;
-	move_img(mini->img, WIDTH - (mini->img->width - mini->tile_size), mini->tile_size);
-	
-	// 
 }
 
-/* ************************************************************************** */
+/* ************************************************************************** */ //wip tests
+
+// void	rotate_image(mlx_image_t *src, mlx_image_t *dst, double angle)
+// {
+// 	int		x;
+// 	int		y;
+// 	int		new_x;
+// 	int		new_y;
+// 	int		center_x;
+// 	int		center_y;
+// 	double	cos_a;
+// 	double	sin_a;
+
+// 	center_x = src->width / 2;
+// 	center_y = src->height / 2;
+// 	cos_a = cos(angle);
+// 	sin_a = sin(angle);
+
+// 	y = 0;
+// 	while (y < dst->height)
+// 	{
+// 		x = 0;
+// 		while (x < dst->width)
+// 		{
+// 			new_x = (int)((x - center_x) * cos_a - (y - center_y) * sin_a) + center_x;
+// 			new_y = (int)((x - center_x) * sin_a + (y - center_y) * cos_a) + center_y;
+// 			draw_pixel(dst, x, y, get_pixel(src, new_x, new_y));
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// }
 
 // void	draw_mini_player(t_minimap *mini, t_player *player)
 // {
@@ -260,45 +308,20 @@ void	draw_minimap(t_minimap *mini, t_map *map)
 
 	clear_img(mini->img);
 	clear_img(mini->round_img);
+
+	// fill_img(mini->img, 242);
+	// fill_img(mini->round_img, 242);
 	
 	update_options(mini, &mini->options);
 	features_testing(mini, map);
-	
-	if (mini->options.visible)
-	{
-		calculate_bounds(find_center(mini, map), &start, &end);
-		draw_tiles(mini, start, end);
-		// draw_mini_player(minimap, &call_cub()->player);
-		make_it_round(mini, map);
-	}
+
+	calculate_bounds(find_center(mini, map), &start, &end);
+	draw_tiles(mini, start, end);
+	make_it_round(mini, map);
 }
 
 //////////////////////////////////////
-// static t_point	find_center(t_minimap *mini, t_map *map)
-// {
-// 	int half_width = mini->img->width / (2 * mini->tile_size);
-// 	int half_height = mini->img->height / (2 * mini->tile_size);
-// 	t_fpoint pos = call_cub()->player.position;
 
-// 	// Ensure the center calculations consider the edges of the map to keep the player centered
-// 	t_point center;
-// 	center.x = ft_clamp((int)pos.x, half_width, map->width - half_width);
-// 	center.y = ft_clamp((int)pos.y, half_height, map->height - half_height);
-
-// 	return center;
-// }
-
-// static void	calculate_bounds(t_point center, t_point *start, t_point *end, t_minimap *mini, t_map *map)
-// {
-// 	int half_width = mini->img->width / (2 * mini->tile_size);
-// 	int half_height = mini->img->height / (2 * mini->tile_size);
-
-// 	// Adjust start and end to ensure the player remains in the center until close to the map edges
-// 	start->x = ft_max(0, center.x - half_width);
-// 	start->y = ft_max(0, center.y - half_height);
-// 	end->x = ft_min(map->width, center.x + half_width);
-// 	end->y = ft_min(map->height, center.y + half_height);
-// }
 
 // void draw_minimap(t_minimap *mini, t_map *map)
 // {

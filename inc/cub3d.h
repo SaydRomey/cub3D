@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 19:01:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/11 19:57:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,8 @@ typedef struct s_minimap
 	mlx_image_t	*round_img;
 	// 
 	int			tile_size;
+	int			radius;
+	t_point		center;
 	// 
 	t_options	options;
 }				t_minimap;

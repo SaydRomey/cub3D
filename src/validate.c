@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 23:08:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/13 11:54:03 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,87 @@ void	validate_scene(t_scene *scene)
 		error();
 	}
 	proof("Valid scene");
+}
+
+/* ************************************************************************** */
+
+/*
+11111111111
+10000000001
+10111111101
+101 11  101
+101 11  111
+101101   11
+100001    1
+111111
+
+** ' ' will be '-1' **
+
+if [][] == '0', up must be 0 or 1 (or 2 or 3),
+	down must be 0 or 1 (or 2 or 3)
+if [][] == ' ', up must be ' ' or 1,
+	down must be ' ' or 1
+*/
+static bool	check_vertical(int **map_array, int y, int x)
+{
+	int	current;
+	int	up;
+	int	down;
+	
+	current = map_array[y][x];
+	up = map_array[y - 1][x];
+	down = map_array[y + 1][x];
+
+	if (current == 0) //EMPTY)
+	{
+		// if ((up == current || up == 1 || up == 2 || up == 3) &&	(down == current || down == 1 || down == 2 || down == 3))
+		if (up >= current && down >= current)
+			return (true);
+		else
+			return (false);
+	}
+	if (current == -1) //SPACE)
+	{
+		if ((up == current || up == 1) && (down == current || down == 1))
+			return (true);
+		else
+			return (false);
+	}
+	return (true);
+}
+
+static bool	columns_are_valid(int **map_array, int width, int height)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (x < width)
+	{
+		y = 0;
+		while (y < height)
+		{
+			if (y > 0 && y < height - 1) //don't check first and last line
+				if (!check_vertical(map_array, y, x))
+					return (false);		
+			y++;
+		}
+		x++;
+	}
+	return (true);
+}
+
+void	validate_map(t_map *map)
+{
+	if (!columns_are_valid(map->map_array, map->width, map->height))
+		set_error("Invalid array column");
+	// 
+	// valid elevator
+	// valid doors
+	// 
+	if (there_is_a_problem())
+	{
+		// cleanup_map
+		error();
+	}
 }

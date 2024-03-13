@@ -6,11 +6,34 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:35:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 21:38:59 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/13 12:28:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+// void	update_minimap(t_cub *cub, t_minimap *minimap)
+// {
+// 	// Convert player's position to minimap coordinates
+// 	t_fpoint	minimap_pos = 
+// 	{
+// 		.x = (cub->player.position.x / cub->map.width) * minimap->width,
+// 		.y = (cub->player.position.y / cub->map.height) * minimap->height
+// 	};
+
+// 	// Convert player's orientation to a visual indicator on the minimap
+// 	t_fpoint minimap_dir = 
+// 	{
+// 		.x = cos(degree_to_radian(cub->player.angle)) * line_maybe,
+// 		.y = -sin(degree_to_radian(cub->player.angle)) * line_maybe
+// 	};
+
+// 	// Update the minimap with the player's position and direction
+// 	draw_player_on_minimap(minimap, &minimap_pos, &minimap_dir);
+// }
+
+
+//
 
 t_minimap	init_minimap(t_cub *cub)
 {

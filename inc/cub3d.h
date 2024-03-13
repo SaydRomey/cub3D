@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 19:57:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/12 17:29:40 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,19 +98,19 @@ typedef struct s_point
 // change these names/values later... (currently not using this..)
 typedef enum e_map_elem
 {
+	OUTOFBOUND = -2,
 	SPACE = -1,
-	ACCESSIBLE = 0,
+	EMPTY = 0,
 	WALL = 1,
-	DOOR = 2
+	ELEVATOR = 2,
+	DOOR = 3,
 }	t_map_elem;
 
-// # define NO					0
-// # define SO					1
-// # define WE					2
-// # define EA					3
-# define F					4
-# define C					5
-# define I					6
+// do we add them in parsing?
+// we could have default textures, overridable by definition in .cub file ?
+# define F	4
+# define C	5
+# define I	6
 
 enum wall_id
 {

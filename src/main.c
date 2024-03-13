@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 17:54:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/12 16:52:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int	main(int argc, char **argv)
 	cub->map = init_map(&scene);
 	cub->player = init_player(&scene);
 	cleanup_scene(&scene);
+	// 
+	// validate_map(cub->map); //?
 	// 
 	cub->minimap = init_minimap(cub); //test
 	// 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 18:29:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 00:10:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,47 +60,6 @@ void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 			map->wall_textures_img[i] = NULL;
 		i++;
 	}
-}
-
-/* ************************************************************************** */
-
-int	rgb_to_int(int r, int g, int b)
-{
-	int	red;
-	int	green;
-	int	blue;
-	int	alpha;
-
-	red = r << 24;
-	green = g << 16;
-	blue = b << 8;
-	alpha = 0xFF;
-	return (red | green | blue | alpha);
-}
-
-static int	color_is_invalid(int r, int g, int b)
-{
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return (TRUE);
-	return (FALSE);
-}
-
-int	get_color(t_scene *scene, int id)
-{
-	int	r;
-	int	g;
-	int	b;
-	int	color_int;
-
-	r = ft_atoi(scene->colors[id][R]);
-	g = ft_atoi(scene->colors[id][G]);
-	b = ft_atoi(scene->colors[id][B]);
-	if (color_is_invalid(r, g, b))
-	{
-		return (0x000000FF); // color is already validated in parsing
-	}
-	color_int = rgb_to_int(r, g, b);
-	return (color_int);
 }
 
 /* ************************************************************************** */

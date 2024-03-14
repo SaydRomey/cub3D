@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 17:55:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/13 22:11:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@
 # define K_1 49
 # define K_2 50
 # define K_3 51
+# define SPACEBAR 32
 # define BACKSPACE 259
+# define LEFTSHIFT 340
 
 static void	set_toggle_keys(int key, t_keys *keys, bool state)
 {
@@ -66,8 +68,12 @@ static void	set_keys(int key, t_keys *keys, bool state)
 		keys->down = state;
 	if (key == RIGHT)
 		keys->right = state;
+	if (key == SPACEBAR)
+		keys->spacebar = state;
 	if (key == BACKSPACE)
 		keys->backspace = state;
+	if (key == LEFTSHIFT)
+		keys->leftshift = state;
 	set_toggle_keys(key, keys, state);
 }
 
@@ -84,7 +90,6 @@ void	keyhooks(mlx_key_data_t data, void *param)
 		exit(SUCCESS);
 	}
 	set_keys(data.key, &cub->keys, data.action);
-	// set_toggle_keys(data.key, &cub->keys, data.action);
 }
 
 /*

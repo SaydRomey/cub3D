@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/12 16:49:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/13 22:56:06 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,17 @@ static int **allocate_grid(int height, int width)
 static int	char_to_int(char c) //change this later to use macros/enum and add door
 {
 	if (c == ' ')
-		return (-1);
+		return (-1); //SPACE
 	else if (c == '1')
-		return (1);
+		return (1); //WALL
 	else if (c == '0')
-		return (0);
+		return (0); //WALKABLE
 	else if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		return (0);
+		return (0); //WALKABLE
+	else if (c == '2')
+		return (2); //DOOR
+	else if (c == '3')
+		return (3); //ELEVATOR
 	else
 		return (-2);
 }

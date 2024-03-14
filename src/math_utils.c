@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 10:50:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 00:23:16 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,113 @@ int	is_inside_circle(t_fpoint to_check, t_fpoint circle_center, int radius)
 	return (distance_squared <= radius * radius);
 }
 
+/* ************************************************************************** */
+// to put in libft ?
+
+float	ft_fmax(float this, float that)
+{
+	if (this > that)
+		return (this);
+	else
+		return (that);
+}
+
+float	ft_fmin(float this, float that)
+{
+	if (this < that)
+		return (this);
+	else
+		return (that);
+}
+
+float	ft_fclamp(float value, float min, float max)
+{
+	return (ft_fmax(ft_fmin(value, max), min));
+}
+
+float	ft_percentage(float value, float total)
+{
+	if (total == 0)
+		return (0);
+	return ((value / total) * 100);
+}
+
+/*
+'a' start value
+'b' end value
+'t' interpolation factor that ranges from 0 to 1*/
+float	ft_lerp(float a, float b, float t)
+{
+	return ((1 - t) * a + t * b);
+	// return (a + (b - a) * t);
+}
+
+
+
+/* example
+t_rgb	start_color = {255, 0, 0}; //red
+t_rgb	end_color = {0, 0, 255}; //blue
+float	progress = 0.5; //halfway through the transition
+
+t_rgb	current_color;
+current_color.r = (int)ft_lerp(start_color.r, end_color.r, progress);
+current_color.g = (int)ft_lerp(start_color.g, end_color.g, progress);
+current_color.b = (int)ft_lerp(start_color.b, end_color.b, progress);
+*/
+
+/*
+if we need to always return a positive remainder
+*( % can return a negative?)
+useful for array indices or circular buffers, to avoid an invalid negative index
+*/
+int	ft_mod(int a, int b)
+{
+	int	mod;
+	
+	mod = a % b;
+	if (mod < 0)
+		mod += b;
+	return (mod);
+}
+
+/*
+** less accurate than the real 'exp'
+* modify 'n_terms' for accuracy vs performance (to test)
+*/
+float	ft_exp(float x)
+{
+	int			n;
+	const int	n_terms = 20; //number of terms in Taylor series for the approximation
+	float		sum = 1.0f; //start with the first term of the series
+	float		term = 1.0f; //current term, starting with 1 (which is x^0/0!)
+
+	n = 1;
+	while (n <= n_terms)
+	{
+		term *= x / n; //calculate next term in the series
+		sum += term; //add current term to the sum
+		n++;
+	}
+	return (sum);
+}
+
+
+
+
+
+/* ************************************************************************** */
+
 /*
 float distance(ax,ay,bx,by,ang){ return cos(degToRad(ang))*(bx-ax)-sin(degToRad(ang))*(by-ay);}
 */
-float	distance(t_fpoint a, t_fpoint b, float angle)
-{
-	float	rad_angle;
-	float	delta_x;
-	float	delta_y;
+// float	distance(t_fpoint a, t_fpoint b, float angle)
+// {
+// 	float	rad_angle;
+// 	float	delta_x;
+// 	float	delta_y;
 
-	rad_angle = degree_to_radian(angle);
-	delta_x = b.x - a.x;
-	delta_y = b.y - a.y;
-	return (cos(rad_angle) * delta_x - sin(rad_angle) * delta_y);
-}
+// 	rad_angle = degree_to_radian(angle);
+// 	delta_x = b.x - a.x;
+// 	delta_y = b.y - a.y;
+// 	return (cos(rad_angle) * delta_x - sin(rad_angle) * delta_y);
+// }

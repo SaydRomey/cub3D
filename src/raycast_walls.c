@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/09 01:00:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 00:47:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,17 @@ void	draw_wall_stripe(t_cub *cub, int x)
 	while (y <= line.end)
 	{
 		// Is Bitwise AND really necessary here ?
+		// ensures the texture coordinates wraps correctly, if our textures loop or if we want the behaviour, we keep it..
 		tex.pixel.y = (int) tex.pos_y & (TEX_HEIGHT - 1);
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
-		draw_pixel(cub->img, x, y, color);
+		// 
+		float	dist = cub->raycast.wall_perp_dist;
+		// int	modified_color = shadow_effect(color, dist, 0.0f, 5.0f);
+		// int	modified_color = fog_effect(color, dist, 0.0f, 5.0f, (int)HEX_BLACK); //same as shadow effect
+		int	modified_color = fog_effect(color, dist, 2.0f, 5.0f, (int)HEX_GREEN);
+		// 
+		draw_pixel(cub->img, x, y, modified_color);
 		y++;
 	}
 }

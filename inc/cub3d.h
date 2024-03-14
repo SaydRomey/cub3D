@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/12 17:29:40 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 00:29:40 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@
 # define PLAYER_SPEED		0.1
 # define PLAYER_TURN_SPEED	0.1
 
-/* textures (do we need this or we use a TILE_SIZE or something like this?)
-*/
 # define TEX_WIDTH			64
 # define TEX_HEIGHT			64
 // # define TEX_WIDTH			256
@@ -91,19 +89,30 @@ typedef struct s_fpoint
 
 typedef struct s_point
 {
-	int	x;
-	int	y;
-}		t_point;
+	int		x;
+	int		y;
+}			t_point;
+
+typedef struct s_rgba
+{
+	int	r;
+	int	g;
+	int	b;
+	int	a;
+}		t_rgba;
+
+t_rgba	int_to_rgba(int color);
+int		rgba_to_int(t_rgba rgba);
 
 // change these names/values later... (currently not using this..)
 typedef enum e_map_elem
 {
 	OUTOFBOUND = -2,
 	SPACE = -1,
-	EMPTY = 0,
+	WALKABLE = 0,
 	WALL = 1,
-	ELEVATOR = 2,
-	DOOR = 3,
+	DOOR = 2,
+	ELEVATOR = 3,
 }	t_map_elem;
 
 // do we add them in parsing?
@@ -189,7 +198,7 @@ typedef struct s_texture
 
 typedef struct s_mouse
 {
-	bool	enabled;
+	bool	enabled; //state
 
 	bool	left;
 	bool	right;
@@ -209,7 +218,9 @@ typedef struct s_keys
 	bool	right;
 	bool	m; //minimap toggle
 	bool	p; //player icon style
+	bool	spacebar; //to open elevators
 	bool	backspace; //to reset player position
+	bool	leftshift; //to speedup
 	bool	one;
 	bool	two;
 	bool	three;
@@ -228,6 +239,8 @@ typedef struct s_player
 	float			fov;
 	float			speed;
 	float			turn_speed;
+	// 
+	bool			speedup;
 	// 
 	int				size; //in minimap
 	int				color; //in minimap
@@ -318,6 +331,10 @@ void    error(void);
 void	parsing_error(char *line, int fd, t_scene *scene);
 void	error_mlx(void);
 
+// fog.c
+int		fog_effect(int color, float raw_dist, float min, float max, int fog_color);
+int		shadow_effect(int color, float raw_dist, float min, float max);
+
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
@@ -334,7 +351,8 @@ int		**get_2d_map(t_list *map_list, int height, int width);
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
 int		is_inside_circle(t_fpoint to_check, t_fpoint circle_center, int radius);
-float	distance(t_fpoint a, t_fpoint b, float angle);
+float	ft_fclamp(float value, float min, float max);
+float	ft_lerp(float a, float b, float t);
 
 // minimap.c
 t_minimap	init_minimap(t_cub *cub);
@@ -358,8 +376,13 @@ t_scene	parse_cubfile(char *filepath);
 
 // pixels.c
 void	draw_pixel(mlx_image_t *img, int x, int y, int color);
+int		combine_rgba(int r, int g, int b, int a);
 int		get_pixel(mlx_image_t *img, int x, int y);
 void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
+int		get_red(int color);
+int		get_green(int color);
+int		get_blue(int color);
+int		get_alpha(int color);
 
 // player.c
 t_player	init_player(t_scene *scene);

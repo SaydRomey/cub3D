@@ -6,72 +6,89 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 11:56:13 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/13 12:24:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 00:47:03 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// utils functions for this:
-
-float	ft_fclamp(float value, float min, float max);
-
-/*
-'a' start value
-'b' end value
-'t' interpolation factor that ranges from 0 to 1*/
-float	ft_lerp(float a, float b, float t)
+static float	normalize_fog(float distance, float min, float max)
 {
-	return ((1 - t) * a + t * b);
-}
+	float	clamped_dist;
+	float	normalized_dist;
 
-/* example
-t_rgb	start_color = {255, 0, 0}; //red
-t_rgb	end_color = {0, 0, 255}; //blue
-float	progress = 0.5; //halfway through the transition
+	clamped_dist = ft_fclamp(distance, min, max);
 
-t_rgb	current_color;
-current_color.r = (int)ft_lerp(start_color.r, end_color.r, progress);
-current_color.g = (int)ft_lerp(start_color.g, end_color.g, progress);
-current_color.b = (int)ft_lerp(start_color.b, end_color.b, progress);
-*/
-
-
-/*
-if we need to always return a positive remainder
-*( % can return a negative?)
-useful for array indices or circular buffers, to avoid an invalid negative index
-*/
-int	ft_mod(int a, int b)
-{
-	int	mod;
+	// normalize the distance to a [0, 1] range, based on bounds
+	normalized_dist = (clamped_dist - min) / (max - min);
 	
-	mod = a % b;
-	if (mod < 0)
-		mod += b;
-	return (mod);
+	return (normalized_dist);
 }
 
-
-/*
-** less accurate than the real 'exp'
-* modify 'n_terms' for accuracy vs performance (to test)
-*/
-float	ft_exp(float x)
+int	lerp_color(int color1, int color2, float fraction)
 {
-	int			n;
-	const int	n_terms = 20; //number of terms in Taylor series for the approximation
-	float		sum = 1.0f; //start with the first term of the series
-	float		term = 1.0f; //current term, starting with 1 (which is x^0/0!)
+	int	red;
+	int	green;
+	int	blue;
+	int	alpha;
 
-	n = 1;
-	while (n <= n_terms)
-	{
-		term *= x / n; //calculate next term in the series
-		sum += term; //add current term to the sum
-		n++;
-	}
-	return (sum);
+	red = (int)ft_lerp(get_red(color1), get_red(color2), fraction);
+	green = (int)ft_lerp(get_green(color1), get_green(color2), fraction);
+	blue = (int)ft_lerp(get_blue(color1), get_blue(color2), fraction);
+	alpha = (int)ft_lerp(get_alpha(color1), get_alpha(color2), fraction);
+
+	return (combine_rgba(red, green, blue, alpha));
+}
+
+int	fog_effect(int color, float raw_dist, float min, float max, int fog_color)
+{
+	float	dist;
+
+	dist = normalize_fog(raw_dist, min, max);
+	return (lerp_color(color, fog_color, dist));
+}
+
+/* ************************************************************************** */
+
+static float	normalize_shadow(float distance, float min, float max)
+{
+	float	clamped_dist;
+	float	normalized_dist;
+
+	clamped_dist = ft_fclamp(distance, min, max);
+
+	// normalize the distance to a [0, 1] range, based on bounds
+	normalized_dist = (clamped_dist - min) / (max - min);
+
+	// invert normalized for shadow calculation
+	return (1.0f - normalized_dist);
+}
+
+int	shadow_effect(int color, float raw_dist, float min, float max)
+{
+	int		red;
+	int		green;
+	int		blue;
+	int		alpha;
+	float	dist;
+	
+	dist = normalize_shadow(raw_dist, min, max);
+
+	red = (color >> 24) & 0xFF;
+	green = (color >> 16) & 0xFF;
+	blue = (color >> 8) & 0xFF;
+	alpha = color & 0xFF;
+
+	red = (int)(red * dist);
+	green = (int)(green * dist);
+	blue = (int)(blue * dist);
+	
+	// red = (get_red(color) * dist);
+	// green = (get_green(color) * dist);
+	// blue = (get_blue(color) * dist);
+	// alpha = get_alpha(color);
+	
+	return (combine_rgba(red, green, blue, alpha));
 }
 
 /*
@@ -84,16 +101,6 @@ the further away an object is, the more it blends with the fog _color
 use this distance to compute blend factor between pixel's original _color and fog's _color
 the further away a pixel is, the closer it is to the fog _color
 */
-void	fog_test(void)
-{
-	float	fog_factor = (fog_end - distance) / (fog_end - fog_start);
-	fog_factor = ft_fclamp(fog_factor, 0.0, 0.1); //fog factor must be within [0, 1]
-	
-	int	pixel__color = get_pixel(img, x, y);
-	int	fog__color = FOG__cOLOR;
-	
-	int	final__color = ft_lerp(pixel__color, fog__color, fog_factor);
-}
 
 /*
 Exponential fog
@@ -106,11 +113,11 @@ Similar to distance-based fog,
 but we use an exponential function to calculate the blend factor.
 Adjust the density parameter to control how quickly the fog effect increases with distance.
 */
-void	fog_test(void)
-{
-	float	fog_factor = ft_exp(-distance * fog_density);
-	fog_factor = ft_fclamp(fog_factor, 0.0, 1.0);
-}
+// void	fog_test(void)
+// {
+// 	float	fog_factor = ft_exp(-distance * fog_density);
+// 	fog_factor = ft_fclamp(fog_factor, 0.0, 1.0);
+// }
 
 
 /*

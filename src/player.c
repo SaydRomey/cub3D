@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 23:06:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/13 22:10:49 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,13 +136,25 @@ void	update_player_direction(t_cub *cub)
 	}
 }
 
+static void	update_player_stats(t_player *player, t_keys *keys)
+{
+	player->speedup = keys->leftshift;
+
+	if (player->speedup)
+		player->speed = PLAYER_SPEED * 2;
+	else
+		player->speed = PLAYER_SPEED;
+}
+
 void	update_player(t_cub *cub)
 {
-	// t_player	*player;
+	t_player	*player;
 
-	// player = &cub->player;
+	player = &cub->player;
 	// if (cub->keys.backspace)
 	// 	*player = *player->respawn; //needs a fixing
+	// 
+	update_player_stats(player, &cub->keys); //test, might use this for inventory ?
 	// 
 	update_player_position(cub);
 	update_player_direction(cub);

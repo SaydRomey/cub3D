@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/13 11:54:03 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 05:18:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ static bool	check_vertical(int **map_array, int y, int x)
 	}
 	if (current == -1) //SPACE)
 	{
-		if ((up == current || up == 1) && (down == current || down == 1))
+		if ((up == current || up == 1 || up == -2) && (down == current || down == 1 || down == -2))
 			return (true);
 		else
 			return (false);
@@ -174,7 +174,7 @@ void	validate_map(t_map *map)
 	// 
 	if (there_is_a_problem())
 	{
-		// cleanup_map
+		cleanup_map(map);
 		error();
 	}
 }

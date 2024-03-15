@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 00:29:40 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 19:25:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 /* colors
 */
 # define HEX_BLACK			0x000000FF
-# define HEX_GRAY			0x404040FF
+# define HEX_GRAY			0x424242FF
+# define HEX_DGRAY			0x2A2A2AFF
 # define HEX_WHITE			0xFFFFFFFF
 # define HEX_RED			0xFF0000FF
 # define HEX_GREEN			0x00FF00FF
@@ -79,6 +80,7 @@
 # define RGB_LEN			3
 
 # define MAP_CHARS "01NSEW"
+// # define MAP_CHARS "0123NSEW"
 
 
 typedef struct s_fpoint
@@ -150,15 +152,16 @@ used for checklist and errors
 typedef struct s_info
 {
 	bool	problem;
+	char	*error_msg;
+	
+	// parsing checklist
 	bool	wall_check[WALL_TEXTURE_LEN];
 	bool	color_check[COLOR_TYPE_LEN];
 	bool	found_direction;
 
-	// int		mlx_errno;
-	char	*error_msg;
-	// 
-	unsigned int	grayscale; //tmp test
-	// 
+	// for testing
+	bool	print_proof; //for proof() and vaproof()
+	t_u32	grayscale; //tmp test
 }			t_info;
 
 t_info	*call_info(void);
@@ -216,11 +219,12 @@ typedef struct s_keys
 	bool	left;
 	bool	down;
 	bool	right;
-	bool	m; //minimap toggle
-	bool	p; //player icon style
 	bool	spacebar; //to open elevators
 	bool	backspace; //to reset player position
 	bool	leftshift; //to speedup
+	bool	leftcontrol;
+	bool	m; //minimap toggle
+	bool	p; //player icon style
 	bool	one;
 	bool	two;
 	bool	three;
@@ -250,6 +254,7 @@ typedef struct s_player
 /* ************************************************************************** */
 
 # define TILE_SIZE 42
+# define RADIUS 500
 
 typedef struct s_options
 {
@@ -276,7 +281,6 @@ typedef struct s_map
 	int			height;
 	int			width;
 	int			**map_array; //2d array for the map
-	// int			**elevator_array; //2d array for the elevator ?
 	// 
 	int			floor_color;
 	int			ceiling_color;
@@ -292,6 +296,23 @@ typedef struct s_scene
 	t_fpoint	starting_position;
 }				t_scene;
 
+typedef struct s_vfx
+{
+	bool	textures_enabled;
+	
+	bool	shadow_enabled;
+	float	shadow_intensity; //?
+	float	shadow_min;
+	float	shadow_max;
+	
+	bool	fog_enabled; //fog effect on walls, floor and ceiling **(if no textures, adapt draw_floor and draw_ceiling)
+	int		fog_color;
+	bool	floor_fog_enabled; //fog effect on floor and a portion of walls *(can exist without 'fog_enabled also)
+	float	floor_fog_level; //defines how high on the wall the floor fog goes [0.0f is none, 1.0f is all the way up]
+	int		floor_fog_color;
+	
+}			t_vfx;
+
 typedef struct s_cub
 {
 	mlx_t       *mlx;
@@ -305,6 +326,7 @@ typedef struct s_cub
 	t_raycast	raycast;
 	t_keys		keys;
 	t_mouse		mouse;
+	t_vfx		vfx;
 }   			t_cub;
 
 /* ************************************************************************** */
@@ -350,13 +372,14 @@ int		**get_2d_map(t_list *map_list, int height, int width);
 // math_utils.c
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
-int		is_inside_circle(t_fpoint to_check, t_fpoint circle_center, int radius);
+bool	is_in_circle(t_point point, t_point center, int radius);
+int		ft_clamp(int value, int min, int max);
 float	ft_fclamp(float value, float min, float max);
 float	ft_lerp(float a, float b, float t);
 
 // minimap.c
 t_minimap	init_minimap(t_cub *cub);
-void	draw_minimap(t_minimap *mini, t_map *map);
+void		draw_minimap(t_minimap *mini, t_map *map);
 
 // mouse.c
 void	set_mouse(t_cub *cub);
@@ -379,6 +402,8 @@ void	draw_pixel(mlx_image_t *img, int x, int y, int color);
 int		combine_rgba(int r, int g, int b, int a);
 int		get_pixel(mlx_image_t *img, int x, int y);
 void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
+int		rgb_to_int(int r, int g, int b);
+int		get_color(t_scene *scene, int id);
 int		get_red(int color);
 int		get_green(int color);
 int		get_blue(int color);
@@ -391,16 +416,15 @@ t_player	init_player(t_scene *scene);
 void	update_player(t_cub *cub);
 
 // raycast.c
-// int		check_hit(int map_y, int map_x);
-int		check_hit2(int map_y, int map_x, int **map_array); //tmp
+int		check_hit(int map_y, int map_x);
 void	draw_ceiling_floor(t_cub *cub, int y);
 void	draw_wall_stripe(t_cub *cub, int x);
-// void	execute_dda_algo(t_player *p, t_raycast *r);
-void	execute_dda_algo(t_player *p, t_raycast *r, int **map_array);
+void	execute_dda_algo(t_player *p, t_raycast *r);
 void	raycast(t_cub *cub);
 
 // test.c
 void	proof(char *str);
+void	vaproof(char *str, ...);
 void	test_scene(t_scene scene);
 void    test_map(t_map map);
 void	test_term_colors(void);
@@ -412,23 +436,23 @@ void	print_2d_array(int **array, int height, int width);
 mlx_image_t *load_png(char *filepath, mlx_t *mlx);
 mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
 void		extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx);
-// 
-int		rgb_to_int(int r, int g, int b);
-int		get_color(t_scene *scene, int id);
+void		cleanup_wall_textures(t_map *map);
 // 
 void	toggle(bool *choice);
 void	clear_img(mlx_image_t *img);
 void	fill_img(mlx_image_t *img, unsigned int grayscale);
 void	move_img(mlx_image_t *img, int x, int y);
 
-
-
-
 // validate.c
 void	validate_arguments(int argc, char **argv);
 void	validate_scene(t_scene *scene);
+void	validate_map(t_map *map);
 
-// call.c
+// vfx.c
+void	update_vfx(t_vfx *vfx);
+void	wall_vfx(int *color, float distance, float tex_pos_y);
+
+// call.c ?
 t_cub	*call_cub(void);
 void	call_clean(void);
 int		**call_array(void);

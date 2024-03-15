@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/13 22:11:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 19:25:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define SPACEBAR 32
 # define BACKSPACE 259
 # define LEFTSHIFT 340
+# define LEFTCONTROL 341
 
 static void	set_toggle_keys(int key, t_keys *keys, bool state)
 {
@@ -74,6 +75,8 @@ static void	set_keys(int key, t_keys *keys, bool state)
 		keys->backspace = state;
 	if (key == LEFTSHIFT)
 		keys->leftshift = state;
+	if (key == LEFTCONTROL)
+		keys->leftcontrol = state;
 	set_toggle_keys(key, keys, state);
 }
 
@@ -101,10 +104,11 @@ void	update(void *ptr)
 
 	cub = (t_cub *)ptr;
 
+	update_vfx(&cub->vfx);
 	raycast(cub);
 	update_player(cub);
 
-	draw_minimap(&cub->minimap, &cub->map); //only put in this function if the minimap changes, else draw only once
+	// draw_minimap(&cub->minimap, &cub->map); //only put in this function if the minimap changes, else draw only once
 	
 	/* tests */
 	// draw_line((cub->minimap).img, (t_fpoint){0, 0}, (t_fpoint){(cub->minimap).img->width, (cub->minimap).img->height}, HEX_BLUE);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/14 00:47:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 19:14:17 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static mlx_image_t	*get_texture_to_draw(t_cub *cub)
 {
-	if (check_hit2(cub->raycast.ray_pos.x, cub->raycast.ray_pos.y, cub->map.map_array) == 2)
+	if (check_hit(cub->raycast.ray_pos.x, cub->raycast.ray_pos.y) == 2)
 		return (cub->texture[I]);
 	if (cub->raycast.side == 1 && cub->raycast.ray_dir.y < 0)
 		return (cub->map.wall_textures_img[NO]);
@@ -26,21 +26,6 @@ static mlx_image_t	*get_texture_to_draw(t_cub *cub)
 		return (cub->map.wall_textures_img[EA]);
 	return (NULL);
 }
-
-// static mlx_image_t	*get_texture_to_draw(t_cub *cub)
-// {
-// 	if (check_hit2(cub->raycast.ray_pos.x, cub->raycast.ray_pos.y, cub->map.map_array) == 2)
-// 		return (cub->texture[I]);
-// 	if (cub->raycast.side == 1 && cub->raycast.ray_dir.y < 0)
-// 		return (cub->texture[NO]);
-// 	if (cub->raycast.side == 1 && cub->raycast.ray_dir.y > 0)
-// 		return (cub->texture[SO]);
-// 	if (cub->raycast.side == 0 && cub->raycast.ray_dir.x < 0)
-// 		return (cub->texture[WE]);
-// 	if (cub->raycast.side == 0 && cub->raycast.ray_dir.x > 0)
-// 		return (cub->texture[EA]);
-// 	return (NULL);
-// }
 
 static int	get_x_coordinate(t_raycast *r)
 {
@@ -85,24 +70,21 @@ void	draw_wall_stripe(t_cub *cub, int x)
 	t_line		line;
 	int			color;
 	int			y;
+	float		distance;
 
 	line = get_stripe_data(cub->raycast.wall_perp_dist);
 	tex = get_texture_info(cub, &line);
 	y = line.start;
 	while (y <= line.end)
 	{
-		// Is Bitwise AND really necessary here ?
-		// ensures the texture coordinates wraps correctly, if our textures loop or if we want the behaviour, we keep it..
 		tex.pixel.y = (int) tex.pos_y & (TEX_HEIGHT - 1);
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
-		// 
-		float	dist = cub->raycast.wall_perp_dist;
-		// int	modified_color = shadow_effect(color, dist, 0.0f, 5.0f);
-		// int	modified_color = fog_effect(color, dist, 0.0f, 5.0f, (int)HEX_BLACK); //same as shadow effect
-		int	modified_color = fog_effect(color, dist, 2.0f, 5.0f, (int)HEX_GREEN);
-		// 
-		draw_pixel(cub->img, x, y, modified_color);
+	
+		distance = cub->raycast.wall_perp_dist;
+		wall_vfx(&color, distance, (float)tex.pos_y);
+
+		draw_pixel(cub->img, x, y, color);		
 		y++;
 	}
 }

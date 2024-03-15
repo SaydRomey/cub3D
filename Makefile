@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/03/10 15:30:11 by cdumais          ###   ########.fr        #
+#    Updated: 2024/03/14 15:41:36 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@
 # **************************************************************************** #
 AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
-MAP			:= map/pdf.cub
+MAP			:= map/test.cub
 
 CFG_DIR		:= .cfg
 IMG_DIR		:= img

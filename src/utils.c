@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 00:10:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 04:45:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,22 @@ void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 		}
 		else
 			map->wall_textures_img[i] = NULL;
+		i++;
+	}
+}
+
+void	cleanup_wall_textures(t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (i < WALL_TEXTURE_LEN)
+	{
+		if (map->wall_textures_img[i])
+		{
+			mlx_delete_image(call_cub()->mlx, map->wall_textures_img[i]);
+			vaproof("Deleted wall texture image %d", i);
+		}
 		i++;
 	}
 }

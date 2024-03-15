@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/12 16:52:04 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 19:09:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,22 @@ t_cub	*init_cub(char *filepath)
 */
 void	setup_images(t_cub *cub)
 {
-	cub->texture[NO] = load_png("img/bluestone.png", cub->mlx);
-	cub->texture[SO] = load_png("img/eagle.png", cub->mlx);
-	cub->texture[EA] = load_png("img/redbrick.png", cub->mlx);
-	cub->texture[WE] = load_png("img/wood.png", cub->mlx);
-	// 
 	cub->texture[F] = load_png("img/wood.png", cub->mlx);
 	cub->texture[C] = load_png("img/pikachu.png", cub->mlx);
 	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
-	// 
+}
+
+t_vfx	setup_vfx(void)
+{
+	t_vfx	vfx;
+	
+	ft_memset(&vfx, 0, sizeof(t_vfx));
+
+	vfx.fog_color = (int)HEX_GREEN;
+	vfx.floor_fog_color = (int)HEX_PURPLE;
+	vfx.floor_fog_level = 0.42f;
+	
+	return (vfx);
 }
 
 /*
@@ -95,6 +102,8 @@ int	main(int argc, char **argv)
 	t_scene	scene;
 	t_cub	*cub;
 
+	call_info()->print_proof = true; //test
+
 	validate_arguments(argc, argv);
 	
 	scene = parse_cubfile(argv[1]);
@@ -105,41 +114,15 @@ int	main(int argc, char **argv)
 	cub->player = init_player(&scene);
 	cleanup_scene(&scene);
 	// 
-	// validate_map(cub->map); //?
+	validate_map(&cub->map);
 	// 
 	cub->minimap = init_minimap(cub); //test
 	// 
-	setup_images(cub);
+	cub->vfx = setup_vfx(); //tmp
+	// 
+	setup_images(cub); //tmp
+	// 
 	cub_loop(cub);
-	
 	cleanup(cub);
 	return (SUCCESS);
 }
-
-// int	main_bonus(int argc, char **argv)
-// {
-// 	t_scene	scene;
-// 	t_cub	*cub;
-
-// 	validate_arguments_bonus(argc, argv); //if any two maps can be entered
-	
-// 	scene = parse_cubfile(argv[1]);
-// 	validate_scene(&scene);
-	
-// 	cub = init_cub(argv[1]);
-// 	cub->map = init_map(&scene);
-// 	cub->player = init_player(&scene);
-// 	cleanup_scene(&scene);
-	
-// 	scene = parse_cubfile(argv[2]);
-// 	validate_scene(&scene);
-// 	cub->next_map = init_map(&scene);
-// 	cub->next_player = init_player(&scene);
-// 	cleanup_scene(&scene);
-	
-// 	setup_images(cub);
-// 	cub_loop(cub);
-	
-// 	cleanup(cub);
-// 	return (SUCCESS);
-// }

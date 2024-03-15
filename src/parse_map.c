@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/11 16:47:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 16:18:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static bool	is_map_line(const char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (ft_strchr("01NSEW", line[i]))
+		if (ft_strchr(MAP_CHARS, line[i]))
 			has_valid_char = true;
 		else if (!ft_isspace(line[i]))
 			return (false);
@@ -38,6 +38,9 @@ static bool	is_map_line(const char *line)
 
 /*
 for each map square, validates its horizontal neighbouring spaces
+
+** need to add doors and elevators
+
 */
 static bool	check_contour(const char *line, int i)
 {
@@ -121,6 +124,8 @@ void	scan_for_start(char *line, t_scene *scene)
 }
 
 /* **will need to change all this for doors...
+
+also fix the edge case when 2 starting chars are on the same map
 */
 void	parse_map_line(char *cubline, t_scene *scene)
 {
@@ -139,9 +144,3 @@ void	parse_map_line(char *cubline, t_scene *scene)
 	}
 	free(line);
 }
-
-/* ************************************************************************** */
-
-// if (!check_contour(line, i, '0') || !check_contour(line, i, ' ') ||
-	// !check_contour(line, i, 'N') || !check_contour(line, i, 'S') ||
-	// !check_contour(line, i, 'E') || !check_contour(line, i, 'W'))

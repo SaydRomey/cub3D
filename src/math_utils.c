@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 00:23:16 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 04:35:57 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,18 @@ int	fix_angle(int angle)
 	return (angle);
 }
 
-int	is_inside_circle(t_fpoint to_check, t_fpoint circle_center, int radius)
+bool	is_in_circle(t_point point, t_point center, int radius)
 {
-	t_fpoint	distance; // from to_check to the circle of the center
+	t_point	distance;
 	int		distance_squared;
 
-	distance.x = to_check.x - circle_center.x;
-	distance.y = to_check.y - circle_center.y;
+	distance.x = point.x - center.x;
+	distance.y = point.y - center.y;
 	distance_squared = distance.x * distance.x - distance.y * distance.y;
-
 	return (distance_squared <= radius * radius);
+	// return (pow(point.x - center.x, 2) + pow(point.y - center.y, 2)) <= pow(radius, 2);
 }
+
 
 /* ************************************************************************** */
 // to put in libft ?
@@ -55,6 +56,11 @@ float	ft_fmin(float this, float that)
 		return (this);
 	else
 		return (that);
+}
+
+int	ft_clamp(int value, int min, int max)
+{
+	return (ft_max(ft_min(value, max), min));
 }
 
 float	ft_fclamp(float value, float min, float max)
@@ -127,10 +133,6 @@ float	ft_exp(float x)
 	}
 	return (sum);
 }
-
-
-
-
 
 /* ************************************************************************** */
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 23:02:06 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 04:49:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ void	cleanup_scene(t_scene *scene)
 void	cleanup_map(t_map *map)
 {
 	free_map(map->map_array, map->height);
-
-	// function to delete all images of wall textures..
-	
+	cleanup_wall_textures(map);
 	proof("t_map cleaned up");
 }
 
@@ -53,6 +51,18 @@ void	cleanup(t_cub *cub)
 {
 	// our allocations:
 	cleanup_map(&cub->map);
+	// cleanup_minimap(&cub->mini);
+	
+	int	i = 0;
+	while (i < 7)
+	{
+		if (cub->texture[i])
+		{
+			mlx_delete_image(cub->mlx, cub->texture[i]);
+			vaproof("Deleted bonus texture %d", i);
+		}
+		i++;
+	}
 	
 	// mlx allocations:
 	mlx_delete_image(cub->mlx, cub->img);

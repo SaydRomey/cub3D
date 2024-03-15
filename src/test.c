@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/09 10:21:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 04:42:07 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,29 @@ void	proof(char *str)
 {
 	char	*color = ORANGE;
 
-	ft_printf("\n%s*->%s", color, RESET);
-	ft_printf("%s", str);
-	ft_printf("%s<-*%s\n", color, RESET);
+	if (call_info()->print_proof)
+	{
+		ft_printf("\n%s*->%s", color, RESET);
+		ft_printf("%s", str);
+		ft_printf("%s<-*%s\n", color, RESET);
+	}
 }
+
+void	vaproof(char *str, ...)
+{
+	char	*color = ORANGE;
+	va_list	args;
+
+	va_start(args, str);
+	if (call_info()->print_proof)
+	{
+		ft_printf("\n%s*->%s", color, RESET);
+		ft_vprintf(str, args);
+		ft_printf("%s<-*%s\n", color, RESET);
+	}
+	va_end(args);
+}
+
 
 /* ************************************************************************** */
 
@@ -118,8 +137,6 @@ void	print_2d_array(int **array, int height, int width)
 	}
 	printf("\n");
 }
-
-
 
 void	test_map(t_map map)
 {

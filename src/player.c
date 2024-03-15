@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/13 22:10:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 19:39:09 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ t_player	init_player(t_scene *scene)
 use t_map instead? **
 
 */
-static float	get_move_value(int x, int y, float rtn_value, int **map_array)
+static float	get_move_value(int x, int y, float rtn_value)
 {
-	if (!check_hit2(x, y, map_array))
+	if (!check_hit(x, y))
 		return (rtn_value);
 	return (0);
 }
@@ -67,33 +67,32 @@ static t_fpoint	get_velocity(t_cub *cub) //change to t_player?
 	return (velocity);
 }
 
-void	update_player_position(t_cub *cub)
+void	update_player_position(t_cub *cub) //tmp cannot move if leftcontrol is pressed
 {
 	t_fpoint	velocity;
 	t_fpoint	*pos;
-	int			**map_array = cub->map.map_array;
 
 	pos = &cub->player.position;
 	velocity = get_velocity(cub);
-	if (cub->keys.up || cub->keys.w)
+	if (cub->keys.w || (cub->keys.up && !cub->keys.leftcontrol))
 	{
-		pos->x += get_move_value(pos->x + velocity.x, pos->y, velocity.x, map_array);
-		pos->y += get_move_value(pos->x, pos->y + velocity.y, velocity.y, map_array);
+		pos->x += get_move_value(pos->x + velocity.x, pos->y, velocity.x);
+		pos->y += get_move_value(pos->x, pos->y + velocity.y, velocity.y);
 	}
 	if (cub->keys.a)
 	{
-		pos->x += get_move_value(pos->x + velocity.y, pos->y, velocity.y, map_array);
-		pos->y -= get_move_value(pos->x, pos->y - velocity.x, velocity.x, map_array);
+		pos->x += get_move_value(pos->x + velocity.y, pos->y, velocity.y);
+		pos->y -= get_move_value(pos->x, pos->y - velocity.x, velocity.x);
 	}
-	if (cub->keys.down || cub->keys.s)
+	if (cub->keys.s || (cub->keys.down && !cub->keys.leftcontrol))
 	{
-		pos->x -= get_move_value(pos->x - velocity.x, pos->y, velocity.x, map_array);
-		pos->y -= get_move_value(pos->x, pos->y - velocity.y, velocity.y, map_array);
+		pos->x -= get_move_value(pos->x - velocity.x, pos->y, velocity.x);
+		pos->y -= get_move_value(pos->x, pos->y - velocity.y, velocity.y);
 	}
 	if (cub->keys.d)
 	{
-		pos->x -= get_move_value(pos->x - velocity.y, pos->y, velocity.y, map_array);
-		pos->y += get_move_value(pos->x, pos->y + velocity.x, velocity.x, map_array);
+		pos->x -= get_move_value(pos->x - velocity.y, pos->y, velocity.y);
+		pos->y += get_move_value(pos->x, pos->y + velocity.x, velocity.x);
 	}
 }
 
@@ -112,12 +111,12 @@ void	update_player_direction(t_cub *cub)
 	t_player	*player;
 
 	player = &cub->player;
-	if (cub->keys.right)
+	if (cub->keys.right && !cub->keys.leftcontrol)
 	{
 		apply_rotation_matrix(&player->delta, player->turn_speed);
 		apply_rotation_matrix(&player->cam_plane, player->turn_speed);
 	}
-	if (cub->keys.left)
+	if (cub->keys.left && !cub->keys.leftcontrol)
 	{
 		apply_rotation_matrix(&player->delta, -player->turn_speed);
 		apply_rotation_matrix(&player->cam_plane, -player->turn_speed);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 11:01:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/06 17:28:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/14 04:28:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	free_info(void)
 	t_info	*info;
 	
 	info = call_info();
-	// 
 	free(info);
 }
 

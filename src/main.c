@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 19:09:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 02:29:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ t_cub	*init_cub(char *filepath)
 void	setup_images(t_cub *cub)
 {
 	cub->texture[F] = load_png("img/wood.png", cub->mlx);
-	cub->texture[C] = load_png("img/pikachu.png", cub->mlx);
+	cub->texture[C] = load_png("img/wood.png", cub->mlx);
+	// cub->texture[C] = load_png("img/pikachu.png", cub->mlx);
 	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
 }
 
@@ -78,8 +79,9 @@ t_vfx	setup_vfx(void)
 	ft_memset(&vfx, 0, sizeof(t_vfx));
 
 	vfx.fog_color = (int)HEX_GREEN;
+	// vfx.fog_color = (int)HEX_PURPLE; //test for floor_fog
 	vfx.floor_fog_color = (int)HEX_PURPLE;
-	vfx.floor_fog_level = 0.42f;
+	vfx.floor_fog_level = 0.9f;
 	
 	return (vfx);
 }

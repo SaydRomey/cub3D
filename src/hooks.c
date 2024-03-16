@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 19:25:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 00:45:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,12 @@ void	update(void *ptr)
 	cub = (t_cub *)ptr;
 
 	update_vfx(&cub->vfx);
+	// clear_img(cub->img); //if something changed ?
+	// if (cub->vfx.textures_enabled == false)
+	// {
+	// 	draw_ceiling(cub->img, cub->map.ceiling_color);
+	// 	draw_floor(cub->img, cub->map.floor_color);
+	// }
 	raycast(cub);
 	update_player(cub);
 

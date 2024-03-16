@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/14 17:03:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 00:46:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
 	get_initial_offset(p, r);
 }
 
-void	raycast(t_cub *cub)
+void	raycast(t_cub *cub) //should we limit calls to this to only when something changed ? (player pos, options, etc)
 {
 	int	x;
 	int	y;
@@ -71,8 +71,7 @@ void	raycast(t_cub *cub)
 	y = HEIGHT / 2;
 	while (y < HEIGHT)
 	{
-		if (cub->vfx.textures_enabled)
-			draw_ceiling_floor(cub, y);
+		draw_ceiling_floor(cub, y);
 		y++;
 	}
 	x = 0;

@@ -6,9 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 19:25:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 01:10:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// when fixing libft, add %f to ft_printf..
 
 // TODO: add the build folder of mlx to git ignore
 
@@ -298,12 +300,13 @@ typedef struct s_scene
 
 typedef struct s_vfx
 {
-	bool	textures_enabled;
+	bool	textures_enabled; //add a separate flag for floor/celing ?
 	
 	bool	shadow_enabled;
+	
 	float	shadow_intensity; //?
-	float	shadow_min;
-	float	shadow_max;
+	float	shadow_min; //?
+	float	shadow_max; //?
 	
 	bool	fog_enabled; //fog effect on walls, floor and ceiling **(if no textures, adapt draw_floor and draw_ceiling)
 	int		fog_color;
@@ -451,6 +454,7 @@ void	validate_map(t_map *map);
 // vfx.c
 void	update_vfx(t_vfx *vfx);
 void	wall_vfx(int *color, float distance, float tex_pos_y);
+void	floor_ceiling_vfx(int *color[2], float distance);
 
 // call.c ?
 t_cub	*call_cub(void);

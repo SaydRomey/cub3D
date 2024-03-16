@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:36:14 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 19:45:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 02:37:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,16 @@ void	update_vfx(t_vfx *vfx)
 		if (keys.leftcontrol && keys.up)
 		{
 			vfx->floor_fog_level -= 0.01f;
-			if (vfx->floor_fog_level < 0)
+			if (vfx->floor_fog_level <= 0)
 				vfx->floor_fog_level = 0;
+			// printf("fog level: %f\n", vfx->floor_fog_level);
 		}
 		if (keys.leftcontrol && keys.down)
 		{
 			vfx->floor_fog_level += 0.01f;
-			if (vfx->floor_fog_level > 1)
+			if (vfx->floor_fog_level >= 1)
 				vfx->floor_fog_level = 1;
+			// printf("fog level: %f\n", vfx->floor_fog_level);
 		}
 		ft_fclamp(vfx->floor_fog_level, 0.0f, 1.0f);
 	}
@@ -96,6 +98,8 @@ void	wall_vfx(int *color, float distance, float tex_pos_y)
 	int		tmp_color;
 	bool	side;
 	t_vfx	*vfx;
+
+	(void)tex_pos_y; //tmp
 	
 	tmp_color = *color;
 	modified_color = *color;
@@ -113,31 +117,76 @@ void	wall_vfx(int *color, float distance, float tex_pos_y)
 		modified_color = shadow_effect(tmp_color, distance, 0.0f, 5.0f);
 	else if (vfx->fog_enabled)
 		modified_color = fog_effect(tmp_color, distance, 0.0f, 5.0f, vfx->fog_color); //if hex_black, same as shadow..
-	else if (vfx->floor_fog_enabled && tex_pos_y >= (TEX_HEIGHT * vfx->floor_fog_level))
-		modified_color = fog_effect(tmp_color, distance, 1.0f, 5.0f, vfx->floor_fog_color);
-	
+	else if (vfx->floor_fog_enabled)
+	{
+		modified_color = fog_effect(tmp_color, distance, 0.0f, (3.0f / (1.0f - vfx->floor_fog_level)), vfx->floor_fog_color);
+		
+		// if (tex_pos_y <= (TEX_HEIGHT * vfx->floor_fog_level))
+			// modified_color = fog_effect(tmp_color, distance, 0.0f, (3.0f / (1.0 - vfx->floor_fog_level)), vfx->fog_color);
+	}	
 	*color = modified_color;
 }
 
-// void	floor_ceiling_vfx(int *color[2], float distance) //missing info on what returns the distance..
+void	floor_ceiling_vfx(int *color[2], float distance)
+{
+	t_vfx	*vfx;
+	int		tmp_color[2];
+	int		modified_color[2];
+	
+	tmp_color[FLOOR] = *color[FLOOR];
+	tmp_color[CEILING] = *color[CEILING];
+	modified_color[FLOOR] = *color[FLOOR];
+	modified_color[CEILING] = *color[CEILING];
+	vfx = &call_cub()->vfx;
+	if (!vfx->textures_enabled) //maybe use a different flag specific for floor/ceiling
+	{
+		tmp_color[FLOOR] = call_cub()->map.floor_color;
+		tmp_color[CEILING] = call_cub()->map.ceiling_color;
+		modified_color[FLOOR] = tmp_color[FLOOR];
+		modified_color[CEILING] = tmp_color[CEILING];
+	}
+	if (vfx->shadow_enabled)
+	{
+		modified_color[FLOOR] = shadow_effect(tmp_color[FLOOR], distance, 0.0f, 3.0f);
+		modified_color[CEILING] = shadow_effect(tmp_color[CEILING], distance, 0.0f, 3.0f);
+	}
+	else if (vfx->fog_enabled)
+	{
+		modified_color[FLOOR] = fog_effect(tmp_color[FLOOR], distance, 0.0f, 5.0f, vfx->fog_color);
+		modified_color[CEILING] = fog_effect(tmp_color[CEILING], distance, 0.0f, 5.0f, vfx->fog_color);
+	}
+	else if (vfx->floor_fog_enabled)
+	{
+		modified_color[FLOOR] = fog_effect(tmp_color[FLOOR], distance, 0.0f, (3.0f / (1.0f - vfx->floor_fog_level)), vfx->floor_fog_color);
+		modified_color[CEILING] = fog_effect(tmp_color[CEILING], distance, 0.0f, (3.0f / (1.0f - vfx->floor_fog_level)), vfx->floor_fog_color);
+	}
+	*color[FLOOR] = modified_color[FLOOR];
+	*color[CEILING] = modified_color[CEILING];
+}
+
+/*
+for floor fog effect, try having a very light fog,
+and for the fog in fog_level, we do it denser?
+maybe will have a smoother contrast...
+
+idea: layered opacity, gradient effect instead of solid separation line..
+
+ex: if floor fog level is at the middle of the walls,
+ground level to quarter level will be 100% floor_fog_color,
+quarter level to third level will be 80%, rest up to fog level at 60%.. or something like that
+
+** implement another fog function, which plays with the density (so with min, max)
+
+*** then try combinations with the floor_fog function..
+
+*/
+
+// void	adjust_shadow(t_vfx *vfx); //tmp test with shadow first, then fog and floor fog
 // {
-// 	t_vfx	*vfx;
-// 	int		new_floor_color;
-// 	int		new_ceiling_color;
-
-// 	vfx = call_cub()->vfx;
-// 	if (vfx->fog_enabled || vfx->floor_fog_enabled)
-// 	{
-// 		new_floor_color = fog_effect(*color[FLOOR], distance, vfx->floor_fog_color); //add fog level and the rest inside another function?
-// 		if (vfx->fog_enabled)
-// 			new_ceiling_color = fog_effect(*color[CEILING], distance, vfx->fog_color);
-// 	}
-// 	else if (vfx->shadow_enabled)
-// 	{
-// 		new_floor_color = shadow_effect();
-// 		new_ceiling_color = shadow_effect();
-
-// 		*color[FLOOR] = new_floor_color;
-// 		*color[CEILING] = new_ceiling_color;
-// 	}
+// 	// density
 // }
+
+// void	adjust_fog(t_vfx *vfx); //add color control, and adapt density
+// void	control_fog(t_vfx *vfx); //add base fog level, adapt density with floor fog,
+// try having the fog level from ground up, from ceiling down, from far to close
+// might need subfunctions, ceiling sweep control seems complex..

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 11:56:13 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 12:30:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 01:15:50 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,6 @@ int	fog_effect(int color, float raw_dist, float min, float max, int fog_color)
 	dist = normalize_fog(raw_dist, min, max);
 	return (lerp_color(color, fog_color, dist));
 }
-
-// int	fog_effect(int color, float raw_dist, int fog_color)
-// {
-// 	t_vfx	*vfx = call_cub()->vfx;
-// 	float	min = 1.0f;
-// 	float	max = 5.0f;
-// 	float	dist = normalize_fog(raw_dist, min, max);
-	
-// 	return (lerp_color(color, fog_color, dist));
-// }
 
 /* ************************************************************************** */
 

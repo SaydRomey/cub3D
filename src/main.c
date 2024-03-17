@@ -6,41 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 02:29:36 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 22:53:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-t_cub	*call_cub(void)
-{
-	static t_cub	*cub;
-
-	if (cub == NULL)
-	{
-		cub = ft_calloc(1, sizeof(*cub));
-		if (!cub)
-			return (NULL);
-	}
-	return (cub);
-}
-
-int	**call_array(void)
-{
-	return (call_cub()->map.map_array);
-}
-
-int	call_width(void)
-{
-	return (call_cub()->map.width);
-}
-
-int	call_height(void)
-{
-	return (call_cub()->map.height);
-}
-
-/* ************************************************************************** */
 
 t_cub	*init_cub(char *filepath)
 {
@@ -72,19 +42,18 @@ void	setup_images(t_cub *cub)
 	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
 }
 
-t_vfx	setup_vfx(void)
-{
-	t_vfx	vfx;
+// t_vfx	setup_vfx(void)
+// {
+// 	t_vfx	vfx;
 	
-	ft_memset(&vfx, 0, sizeof(t_vfx));
+// 	ft_memset(&vfx, 0, sizeof(t_vfx));
 
-	vfx.fog_color = (int)HEX_GREEN;
-	// vfx.fog_color = (int)HEX_PURPLE; //test for floor_fog
-	vfx.floor_fog_color = (int)HEX_PURPLE;
-	vfx.floor_fog_level = 0.9f;
+// 	vfx.fog_color = (int)HEX_GREEN;
+// 	vfx.floor_fog_color = (int)HEX_PURPLE;
+// 	vfx.floor_fog_level = 0.9f;
 	
-	return (vfx);
-}
+// 	return (vfx);
+// }
 
 /*
 hooks and loops
@@ -104,7 +73,7 @@ int	main(int argc, char **argv)
 	t_scene	scene;
 	t_cub	*cub;
 
-	call_info()->print_proof = true; //test
+	// call_info()->print_proof = true; //test
 
 	validate_arguments(argc, argv);
 	
@@ -118,9 +87,9 @@ int	main(int argc, char **argv)
 	// 
 	validate_map(&cub->map);
 	// 
-	cub->minimap = init_minimap(cub); //test
+	cub->mini = init_minimap(cub); //test
 	// 
-	cub->vfx = setup_vfx(); //tmp
+	// cub->vfx = setup_vfx(); //tmp
 	// 
 	setup_images(cub); //tmp
 	// 

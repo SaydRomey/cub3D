@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 11:56:13 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 01:15:50 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 19:51:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,22 @@ static float	normalize_fog(float distance, float min, float max)
 	float	normalized_dist;
 
 	clamped_dist = ft_fclamp(distance, min, max);
-
-	// normalize the distance to a [0, 1] range, based on bounds
 	normalized_dist = (clamped_dist - min) / (max - min);
 	
 	return (normalized_dist);
 }
 
-int	lerp_color(int color1, int color2, float fraction)
+int	lerp_color(int color1, int color2, float factor)
 {
 	int	red;
 	int	green;
 	int	blue;
 	int	alpha;
 
-	red = (int)ft_lerp(get_red(color1), get_red(color2), fraction);
-	green = (int)ft_lerp(get_green(color1), get_green(color2), fraction);
-	blue = (int)ft_lerp(get_blue(color1), get_blue(color2), fraction);
-	alpha = (int)ft_lerp(get_alpha(color1), get_alpha(color2), fraction);
+	red = (int)ft_lerp(get_red(color1), get_red(color2), factor);
+	green = (int)ft_lerp(get_green(color1), get_green(color2), factor);
+	blue = (int)ft_lerp(get_blue(color1), get_blue(color2), factor);
+	alpha = (int)ft_lerp(get_alpha(color1), get_alpha(color2), factor);
 
 	return (combine_rgba(red, green, blue, alpha));
 }
@@ -48,6 +46,36 @@ int	fog_effect(int color, float raw_dist, float min, float max, int fog_color)
 	return (lerp_color(color, fog_color, dist));
 }
 
+/* ************************************************************************** */
+int	blend_colors(int color1, int color2, float factor)
+{
+	int	red;
+	int	green;
+	int	blue;
+	int	alpha;
+
+	factor = ft_fclamp(factor, 0.0f, 1.0f);
+	red = (int)ft_lerp(get_red(color1), get_red(color2), factor);
+	green = (int)ft_lerp(get_green(color1), get_green(color2), factor);
+	blue = (int)ft_lerp(get_blue(color1), get_blue(color2), factor);
+	alpha = (int)get_alpha(color1);
+	
+	return (combine_rgba(red, green, blue, alpha));
+}
+
+int	fog_effect2(int color, float distance)
+{
+	t_fog	*fog;
+	float	factor;
+
+	fog = &call_cub()->vfx.fog;
+	factor = distance / fog->max;
+	factor = ft_fclamp(factor, 0.0f, 1.0f);
+	return (blend_colors(color, fog->color, factor));
+}
+
+
+/* ************************************************************************** */
 /* ************************************************************************** */
 
 static float	normalize_shadow(float distance, float min, float max)
@@ -91,36 +119,39 @@ int	shadow_effect(int color, float raw_dist, float min, float max)
 	return (combine_rgba(red, green, blue, alpha));
 }
 
-/*
-Distance based fog
+/* ************************************************************************** */
+int	apply_shadow(int color, float shadow_factor)
+{
+	int	red;
+	int	green;
+	int	blue;
+	int	alpha;
 
-modify the _color of the pixels based on their distance from the camera/viewpoint
-the further away an object is, the more it blends with the fog _color
+	shadow_factor = ft_fclamp(shadow_factor, 0.0f, 1.0f);
+	red = (int)(get_red(color) * (1 - shadow_factor));
+	green = (int)(get_green(color) * (1 - shadow_factor));
+	blue = (int)(get_blue(color) * (1 - shadow_factor));
+	alpha = get_alpha(color);
 
-- calculate distance between camera and pixel being rendered,
-use this distance to compute blend factor between pixel's original _color and fog's _color
-the further away a pixel is, the closer it is to the fog _color
-*/
+	return (combine_rgba(red, green, blue, alpha));
+}
 
-/*
-Exponential fog
+int	apply_bright(int color, float bright_factor)
+{
+	int	red;
+	int	green;
+	int	blue;
+	int	alpha;
 
-calculate the blend factor using an exponential function of the distance.
-This creates a denser fog effect as the distance increases,
-which can appear more realistic.
+	bright_factor = ft_fclamp(bright_factor, 0.0f, 1.0f);
+	red = (int)get_red(color) + (int)((255 - get_red(color)) * bright_factor);
+	green = (int)get_green(color) + (int)((255 - get_green(color)) * bright_factor);
+	blue = (int)get_blue(color) + (int)((255 - get_blue(color)) * bright_factor);
+	alpha = get_alpha(color);
 
-Similar to distance-based fog,
-but we use an exponential function to calculate the blend factor.
-Adjust the density parameter to control how quickly the fog effect increases with distance.
-*/
-// void	fog_test(void)
-// {
-// 	float	fog_factor = ft_exp(-distance * fog_density);
-// 	fog_factor = ft_fclamp(fog_factor, 0.0, 1.0);
-// }
+	red = ft_clamp(red, 0, 255);
+	green = ft_clamp(green, 0, 255);
+	blue = ft_clamp(blue, 0, 255);
 
-
-/*
-Using a fog layer?
-
-*/
+	return (combine_rgba(red, green, blue, alpha));
+}

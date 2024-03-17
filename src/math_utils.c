@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 04:35:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 20:02:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,24 @@ float	degree_to_radian(int degree)
 {
 	return (degree * PI / 180.0);
 }
+
+// int	ft_wrap(int value, int min, int max)
+// {
+// 	int	range;
+
+// 	range = max - min + 1;
+// 	if (value > max)
+// 		return (min + (value - min) % range);
+// 	else if (value < min)
+// 		return (max - (min - value -1) % range);
+// 	else
+// 		return (value);
+// }
+
+// int	fix_angle(int angle)
+// {
+// 	return (ft_wrap(angle, 0, 360));
+// }
 
 int	fix_angle(int angle)
 {
@@ -65,6 +83,11 @@ int	ft_clamp(int value, int min, int max)
 
 float	ft_fclamp(float value, float min, float max)
 {
+	// if (value < min)
+	// 	return (min);
+	// if (value > max)
+	// 	return (max);
+	// return (value);
 	return (ft_fmax(ft_fmin(value, max), min));
 }
 
@@ -78,13 +101,19 @@ float	ft_percentage(float value, float total)
 /*
 'a' start value
 'b' end value
-'t' interpolation factor that ranges from 0 to 1*/
+'t' interpolation factor that ranges from 0 to 1
+*/
 float	ft_lerp(float a, float b, float t)
 {
-	return ((1 - t) * a + t * b);
-	// return (a + (b - a) * t);
+	// return ((1 - t) * a + t * b);
+	return (a + (b - a) * t);
 }
 
+/* ************************************************************************** */
+float	ft_fnormalize(float value, float min, float max)
+{
+	return ((value - min) / (max - min));
+}
 
 
 /* example

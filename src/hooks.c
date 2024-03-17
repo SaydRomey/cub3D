@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 00:45:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 21:12:53 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,18 @@ static void	set_toggle_keys(int key, t_keys *keys, bool state)
 	}
 }
 
+static void	set_extra_keys(int key, t_keys *keys, bool state)
+{
+	if (key == SPACEBAR)
+		keys->spacebar = state;
+	if (key == BACKSPACE)
+		keys->backspace = state;
+	if (key == LEFTSHIFT)
+		keys->leftshift = state;
+	if (key == LEFTCONTROL)
+		keys->leftcontrol = state;
+}
+
 static void	set_keys(int key, t_keys *keys, bool state)
 {
 	if (key == W)
@@ -69,14 +81,7 @@ static void	set_keys(int key, t_keys *keys, bool state)
 		keys->down = state;
 	if (key == RIGHT)
 		keys->right = state;
-	if (key == SPACEBAR)
-		keys->spacebar = state;
-	if (key == BACKSPACE)
-		keys->backspace = state;
-	if (key == LEFTSHIFT)
-		keys->leftshift = state;
-	if (key == LEFTCONTROL)
-		keys->leftcontrol = state;
+	set_extra_keys(key, keys, state);
 	set_toggle_keys(key, keys, state);
 }
 
@@ -103,24 +108,11 @@ void	update(void *ptr)
 	t_cub	*cub;
 
 	cub = (t_cub *)ptr;
-
-	update_vfx(&cub->vfx);
-	// clear_img(cub->img); //if something changed ?
-	// if (cub->vfx.textures_enabled == false)
-	// {
-	// 	draw_ceiling(cub->img, cub->map.ceiling_color);
-	// 	draw_floor(cub->img, cub->map.floor_color);
-	// }
+	// update_vfx(&cub->vfx);
 	raycast(cub);
 	update_player(cub);
-
-	// draw_minimap(&cub->minimap, &cub->map); //only put in this function if the minimap changes, else draw only once
 	
-	/* tests */
-	// draw_line((cub->minimap).img, (t_fpoint){0, 0}, (t_fpoint){(cub->minimap).img->width, (cub->minimap).img->height}, HEX_BLUE);
-	// grayscale_test(cub); // tmp test to set grayscale
-
-
+	draw_minimap(&cub->mini, &cub->map);
 }
 /* ************************************************************************** */
 /* ************************************************************************** */

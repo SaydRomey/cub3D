@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 21:39:32 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 21:08:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,27 +143,10 @@ void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int 
 // 	}
 // }
 
-/*
-function to test colors
-*/
-// void	test_line(t_cub cub)
+// void	draw_ortho_cube(mlx_image_t *img, t_point origin, int unit_size, int color)
 // {
-// 	int	color = HEX_PURPLE;
-// 	int	color_compare = HEX_MAGENTA;
-// 	int	mini_color = color;
-// 	int	mini_compare = color_compare;
-
-// 	draw_line(cub.img, (t_fpoint){0, 0}, (t_fpoint){WIDTH, HEIGHT}, color); //diagonal
-// 	draw_line(cub.img, (t_fpoint){10, 0}, (t_fpoint){WIDTH + 10, HEIGHT - 10}, color_compare); //diagonal
-// 	draw_line(cub.img, (t_fpoint){WIDTH / 2, 0}, (t_fpoint){WIDTH / 2, HEIGHT}, color); //vertical
-// 	draw_line(cub.img, (t_fpoint){WIDTH / 2 + 10, 0}, (t_fpoint){WIDTH / 2 + 10, HEIGHT}, color_compare); //vertical
-// 	draw_line(cub.img, (t_fpoint){0, HEIGHT / 2}, (t_fpoint){WIDTH, HEIGHT / 2}, color); //horizontal
-// 	draw_line(cub.img, (t_fpoint){0, HEIGHT / 2 + 10}, (t_fpoint){WIDTH, HEIGHT / 2 + 10}, color_compare); //horizontal
-// 	// 
-// 	draw_line(cub.mini, (t_fpoint){0, 0}, (t_fpoint){cub.config.minimap_width, cub.config.minimap_height}, mini_color); //diagonal
-// 	draw_line(cub.mini, (t_fpoint){10, 0}, (t_fpoint){cub.config.minimap_width + 10, cub.config.minimap_height}, mini_compare); //diagonal
-// 	draw_line(cub.mini, (t_fpoint){cub.config.minimap_width / 2, 0}, (t_fpoint){cub.config.minimap_width / 2, cub.config.minimap_height}, mini_color); //vertical
-// 	draw_line(cub.mini, (t_fpoint){cub.config.minimap_width / 2 + 10, 0}, (t_fpoint){cub.config.minimap_width / 2 + 10, cub.config.minimap_height}, mini_compare); //vertical
-// 	draw_line(cub.mini, (t_fpoint){0, cub.config.minimap_height / 2}, (t_fpoint){WIDTH, cub.config.minimap_height / 2}, mini_color); //horizontal
-// 	draw_line(cub.mini, (t_fpoint){0, cub.config.minimap_height / 2 + 10}, (t_fpoint){WIDTH, cub.config.minimap_height / 2 + 10}, mini_compare); //horizontal
+	
 // }
+
+
+

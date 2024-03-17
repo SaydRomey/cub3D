@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/16 01:09:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 20:12:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,15 @@ void	draw_ceiling_floor(t_cub *cub, int y)
 	t_point		tex_pos;
 	t_fpoint	pos;
 	t_fpoint	step;
-	float		distance;
+	// float		distance;
 	int			color[2];
-	int			*color_ptrs[2] = {&color[FLOOR], &color[CEILING]};
+	// int			*color_ptrs[2] = {&color[FLOOR], &color[CEILING]};
 	int			x;
 
 	x = 0;
 	get_ray_bounds(cub);
-	distance = get_position_and_step(cub, &pos, &step, y);
+	// distance = get_position_and_step(cub, &pos, &step, y);
+	get_position_and_step(cub, &pos, &step, y);
 	while (x < WIDTH)
 	{
 		tex_pos.x = ft_abs((int)(TEX_WIDTH * (pos.x - (int)pos.x)));
@@ -61,7 +62,6 @@ void	draw_ceiling_floor(t_cub *cub, int y)
 		color[CEILING] = get_pixel(cub->texture[C], tex_pos.x, tex_pos.y);
 
 		// floor_ceiling_vfx(color_ptrs, distance);
-		floor_ceiling_vfx(color_ptrs, distance);
 
 		draw_pixel(cub->img, x, y, color[FLOOR]);
 		draw_pixel(cub->img, x, HEIGHT - y - 1, color[CEILING]);

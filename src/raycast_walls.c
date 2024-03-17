@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/16 00:02:32 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 20:12:00 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	draw_wall_stripe(t_cub *cub, int x)
 {
 	t_texture	tex;
 	t_line		line;
-	float		distance;
+	// float		distance;
 	int			color;
 	int			y;
 
@@ -81,8 +81,8 @@ void	draw_wall_stripe(t_cub *cub, int x)
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
 	
-		distance = cub->raycast.wall_perp_dist;
-		wall_vfx(&color, distance, (float)tex.pos_y); //check with only y instead?
+		// distance = cub->raycast.wall_perp_dist;
+		// wall_vfx(&color, distance, (float)tex.pos_y);
 
 		draw_pixel(cub->img, x, y, color);		
 		y++;

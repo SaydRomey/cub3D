@@ -6,9 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 01:10:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/17 01:37:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// change all colors to unsigned ?
 
 // when fixing libft, add %f to ft_printf..
 
@@ -23,6 +25,7 @@
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
+# define ISO_ANGLE			0.523599
 
 /* ************************************************************************** */
 
@@ -256,26 +259,33 @@ typedef struct s_player
 /* ************************************************************************** */
 
 # define TILE_SIZE 42
-# define RADIUS 500
 
-typedef struct s_options
-{
-	bool	dynamic_tile_size; //1
-	bool	round; //2
-	bool	rectangular; //!2
-	bool	visible; //m
-}			t_options;
+// typedef struct s_options
+// {
+// 	bool	dynamic_tile_size; //1
+// 	bool	round; //2
+// 	bool	rectangular; //!2
+// 	bool	visible; //m
+// }			t_options;
+
+// typedef struct s_minimap
+// {
+// 	mlx_image_t	*img;
+// 	mlx_image_t	*round_img;
+// 	// 
+// 	int			tile_size;
+// 	int			radius;
+// 	t_point		center;
+// 	// 
+// 	t_options	options;
+// }				t_minimap;
 
 typedef struct s_minimap
 {
 	mlx_image_t	*img;
-	mlx_image_t	*round_img;
-	// 
 	int			tile_size;
-	int			radius;
-	t_point		center;
-	// 
-	t_options	options;
+
+	// mlx_image_t *radar;
 }				t_minimap;
 
 typedef struct s_map
@@ -298,15 +308,38 @@ typedef struct s_scene
 	t_fpoint	starting_position;
 }				t_scene;
 
+/* ************************************************************************** */
+typedef struct s_shadow
+{
+	bool	enabled;
+	float	density;
+	float	max;
+
+	// bool	flashlight; maybe a class itself, with enabled(on/off), range, light color, battery level?
+}			t_shadow;
+
+typedef struct s_fog
+{
+	bool	enabled;
+	int		color;
+	float	density;
+	float	max;
+}			t_fog;
+
 typedef struct s_vfx
 {
 	bool	textures_enabled; //add a separate flag for floor/celing ?
 	
-	bool	shadow_enabled;
 	
+	t_shadow	shadow;
+	
+	bool	shadow_enabled;
 	float	shadow_intensity; //?
 	float	shadow_min; //?
 	float	shadow_max; //?
+	
+	
+	t_fog	fog;
 	
 	bool	fog_enabled; //fog effect on walls, floor and ceiling **(if no textures, adapt draw_floor and draw_ceiling)
 	int		fog_color;
@@ -324,7 +357,7 @@ typedef struct s_cub
 	mlx_image_t	*texture[7]; //change to have this in t_map
 	// 
 	t_map		map;
-	t_minimap	minimap;
+	t_minimap	mini;
 	t_player	player;
 	t_raycast	raycast;
 	t_keys		keys;
@@ -333,6 +366,12 @@ typedef struct s_cub
 }   			t_cub;
 
 /* ************************************************************************** */
+// call.c
+t_cub	*call_cub(void);
+void	call_clean(void);
+int		**call_array(void);
+int		call_width(void);
+int		call_height(void);
 
 // cleanup.c
 void	cleanup_scene(t_scene *scene);
@@ -358,7 +397,11 @@ void	error_mlx(void);
 
 // fog.c
 int		fog_effect(int color, float raw_dist, float min, float max, int fog_color);
+int		fog_effect2(int color, float distance); //to test
 int		shadow_effect(int color, float raw_dist, float min, float max);
+int		apply_shadow(int color, float shadow_factor); //to test
+int		apply_bright(int color, float bright_factor); //to test
+
 
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
@@ -456,12 +499,7 @@ void	update_vfx(t_vfx *vfx);
 void	wall_vfx(int *color, float distance, float tex_pos_y);
 void	floor_ceiling_vfx(int *color[2], float distance);
 
-// call.c ?
-t_cub	*call_cub(void);
-void	call_clean(void);
-int		**call_array(void);
-int		call_width(void);
-int		call_height(void);
+
 
 
 #endif // CUB3D_H

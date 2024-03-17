@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 04:42:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 21:16:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,6 @@ void	grayscale_test(t_cub *cub)
 	}
 	if (cub->keys.backspace)
 		ft_printf("grayscale: %u\n", call_info()->grayscale);
-	fill_img((cub->minimap).img, call_info()->grayscale); // tmp test to set grayscale
+	fill_img((cub->mini).img, call_info()->grayscale); // tmp test to set grayscale
 }
 /* ************************************************************************** */

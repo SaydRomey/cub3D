@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 21:12:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/19 00:50:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	keyhooks(mlx_key_data_t data, void *param)
 		cleanup(cub);
 		exit(SUCCESS);
 	}
-	set_keys(data.key, &cub->keys, data.action);
+	set_keys(data.key, &cub->keys, data.action);	
 }
 
 /*
@@ -112,7 +112,7 @@ void	update(void *ptr)
 	raycast(cub);
 	update_player(cub);
 	
-	draw_minimap(&cub->mini, &cub->map);
+	draw_minimap(&cub->mini);
 }
 /* ************************************************************************** */
 /* ************************************************************************** */

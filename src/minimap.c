@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/17 13:08:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/19 00:51:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,15 @@ static void	draw_tile(mlx_image_t *img, t_point origin, t_point size, int color)
 
 static void	draw_tiles(t_minimap *mini, t_point start, t_point end)
 {
-	t_map	*map = &call_cub()->map;
+	t_map	*map;
 	int		x;
 	int		y;
 	t_point	tile;
-	t_point	size = {.x = mini->tile_size - 1, .y = mini->tile_size - 1};
+	t_point	size;
 
+	map = &call_cub()->map;
+	size.x = mini->tile_size - 1;
+	size.y = mini->tile_size - 1;
 	y = start.y;
 	while (y < end.y)
 	{
@@ -78,41 +81,99 @@ static void	draw_tiles(t_minimap *mini, t_point start, t_point end)
 	}
 }
 
-
-// static int	adjust_tile_size(mlx_image_t *img, t_map *map)
-// {
-// 	int	tile_width;
-// 	int	tile_height;
-
-// 	tile_width = img->width / map->width;
-// 	tile_height = img->height / map->height;
-// 	return (ft_min(tile_width, tile_height));
-// }
-
-
-void	draw_minimap(t_minimap *mini, t_map *map)
+static void	calculate_bounds(t_minimap *mini, t_point *start, t_point *end)
 {
-	draw_background(mini->img, HEX_BLACK);
+	int			half_width;
+	int			half_height;
+	// t_map		*map = &call_cub()->map;
 
-	(void)map;
+	half_width = mini->img->width / (2 * mini->tile_size);
+	half_height = mini->img->height / (2 * mini->tile_size);
 
-	draw_tiles()
+	// start->x = ft_max(0, mini->center.x - half_width);
+	// start->y = ft_max(0, mini->center.y - half_height);
+	// end->x = ft_min(map->width, mini->center.x + half_width + 1);
+	// end->y = ft_min(map->height, mini->center.y + half_height + 1);
 
+	start->x = mini->center.x - half_width;
+	start->y = mini->center.y - half_height;
+	end->x = mini->center.x + half_width + 1;
+	end->y = mini->center.y + half_height + 1;
+}
+
+void	draw_minimap(t_minimap *mini)
+{
+	t_point	start;
+	t_point	end;
+	
+	clear_img(mini->img);
+	if (call_cub()->keys.m)
+	{
+		// draw_background(mini->img, HEX_GRAY);
+		calculate_bounds(mini, &start, &end);
+		draw_tiles(mini, start, end);
+	}
+	
 	// iso_test(mini);
 	// iso_grid(mini);
-
-
-	
 }
+
+/* ************************************************************************** */
+
+/*
+the margin is for when only the radar will be drawn,
+we can still render close to minimap's edges **
+
+*/
+static void	adjust_tile_size(t_minimap *mini, t_map *map, int margin_tiles)
+{
+	int	available_width;
+	int	available_height;
+	int	tile_width;
+	int	tile_height;
+	int	tile_size;
+
+	tile_width = mini->img->width / map->width;
+	tile_height = mini->img->height / map->height;
+	tile_size = ft_min(tile_width, tile_height);
+	
+	if (margin_tiles > 0)
+	{
+		available_width = mini->img->width - (margin_tiles * 2 * tile_size);
+		available_height = mini->img->height - (margin_tiles * 2 * tile_size);
+		tile_width = available_width / map->width;
+		tile_height = available_height / map->height;
+		tile_size = ft_min(tile_width, tile_height);
+	}
+	mini->tile_size = tile_size;
+}
+
+static t_point	find_center(t_minimap *mini, t_map *map)
+{
+	int			half_width;
+	int			half_height;
+	t_point		center;
+
+	half_width = mini->img->width / (2 * mini->tile_size);
+	half_height = mini->img->height / (2 * mini->tile_size);
+
+	(void)map;
+	center.x = half_width;
+	center.y = half_height;
+	return (center);
+}
+
 t_minimap	init_minimap(t_cub *cub)
 {
 	t_minimap	mini;
 	int			width = WIDTH;
 	int			height = HEIGHT;
 
+	ft_memset(&mini, 0, sizeof(t_minimap));
 	mini.img = new_img(cub->mlx, width, height, true);
-	move_img(mini.img, WIDTH - width, HEIGHT - height);
-	mini.tile_size = TILE_SIZE;
+	
+	adjust_tile_size(&mini, &cub->map, 0);
+	mini.center = find_center(&mini, &cub->map);
 	
 	return (mini);
 }

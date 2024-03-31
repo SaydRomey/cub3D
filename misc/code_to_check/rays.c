@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 18:24:05 by cdumais           #+#    #+#             */
-/*   Updated: 2023/12/19 18:58:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/07 13:20:06 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,14 +145,14 @@ void drawRays2D()
 // }
 
 // typedef struct s_ray {
-//     t_point start;
-//     t_point end;
+//     t_fpoint start;
+//     t_fpoint end;
 //     float distance;
 //     int hit_side; // 0 for vertical, 1 for horizontal
 // } t_ray;
 
 // float fix_angle(float angle);
-// float calculate_distance(float angle, t_point start, t_point end);
+// float calculate_distance(float angle, t_fpoint start, t_fpoint end);
 // void check_ray_hit(t_ray *ray, float angle, int map[][mapX], int mapY, float playerX, float playerY);
 // void draw_ray(t_ray *ray /*, Additional MiniLibX parameters for drawing */);
 
@@ -185,7 +185,7 @@ void drawRays2D()
 //     return angle;
 // }
 
-// float calculate_distance(float angle, t_point start, t_point end) {
+// float calculate_distance(float angle, t_fpoint start, t_fpoint end) {
 //     return cos(degToRad(angle)) * (end.x - start.x) - sin(degToRad(angle)) * (end.y - start.y);
 // }
 

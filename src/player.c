@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/31 12:08:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/22 19:17:56 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ t_player	init_player(t_scene *scene)
 	player.speed = PLAYER_SPEED;
 	player.turn_speed = PLAYER_TURN_SPEED;
 	// 
-	// player.size = PLAYER_SIZE;
-	// player.color = 0xFF00FFFF;
+	player.size = PLAYER_SIZE;
+	player.color = 0xFF00FFFF;
 	// 
 	// player.respawn = &player; //need to fix this to create a full copy of player instead..
 	return (player);

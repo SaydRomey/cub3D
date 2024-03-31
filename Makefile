@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
+#    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/03/31 12:15:09 by cdumais          ###   ########.fr        #
+#    Updated: 2024/03/29 12:48:57 by oroy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,9 @@
 # **************************************************************************** #
 AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
-MAP			:= map/bonus/test1.cub
+MAP			:= map/pdf.cub
+
+MAPS_BONUS	:= map/bonus/test.cub map/bonus/test1.cub map/bonus/test2.cub
 
 CFG_DIR		:= .cfg
 IMG_DIR		:= img
@@ -49,7 +51,8 @@ TMP_DIR		:= tmp
 WAV_DIR		:= wav
 
 COMPILE		:= gcc
-C_FLAGS		:= -Wall -Wextra -Werror
+# C_FLAGS		:= -Wall -Wextra -Werror -Ofast -flto
+C_FLAGS		:= -Wall -Wextra -Werror -g
 L_FLAGS		:= 
 HEADERS		:= -I$(INC_DIR)
 
@@ -270,6 +273,9 @@ include $(CFG_DIR)/leaks.mk
 
 run: all
 	./$(NAME) $(MAP)
+
+run_bonus: all
+	./$(NAME) $(MAPS_BONUS)
 
 FORCE_FLAGS	:= \
 -Wno-unused-variable \

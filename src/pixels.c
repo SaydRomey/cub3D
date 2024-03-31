@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pixels.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 00:22:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/18 14:04:06 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	draw_pixel(mlx_image_t *img, int x, int y, int color)
 		{	
 			pixel = &img->pixels[(y * img->width + x) * PIXEL_SIZE];
 			set_pixel(pixel, color);
-		}	
+		}
 }
 
 /* ************************************************************************** */
@@ -44,12 +44,12 @@ int combine_rgba(int r, int g, int b, int a)
 
 int	get_pixel(mlx_image_t *img, int x, int y)
 {
-	unsigned char	*pixel;
+	unsigned char   *pixel;
 
 	if (x > (int)img->width || y > (int)img->height)
 		return ((unsigned char)0xFF000000);
-  pixel = img->pixels + (y * img->width + x) * PIXEL_SIZE;
-  return (combine_rgba(*(pixel), *(pixel + 1), *(pixel + 2), *(pixel + 3)));
+	pixel = img->pixels + (y * img->width + x) * PIXEL_SIZE;
+	return (combine_rgba(*(pixel), *(pixel + 1), *(pixel + 2), *(pixel + 3)));
 }
 
 /* ************************************************************************** */
@@ -156,7 +156,7 @@ t_rgba	int_to_rgba(int color)
 	rgba.r = (color >> 24) & 0xFF;
 	rgba.g = (color >> 16) & 0xFF;
 	rgba.b = (color >> 8) & 0xFF;
-	rgba.a = color && 0xFF;
+	rgba.a = color & 0xFF;
 	return (rgba);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/31 11:35:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/19 14:36:11 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static bool	is_map_line(const char *line)
 for each map square, validates its horizontal neighbouring spaces
 
 ** need to add doors and elevators
+
+** if inside elevator, forget about starting point
 
 */
 static bool	check_contour(const char *line, int i)

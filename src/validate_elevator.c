@@ -6,10 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 10:59:43 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/31 11:44:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/13 20:38:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// TOVERIFY:
 // can a map have more than one elevator?
 // what info does oli need for the player (when identifying elevator orientation)
 // what is true elevator orientation: elevator is on north wall, or elevator is facing south?

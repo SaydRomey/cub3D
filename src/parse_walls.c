@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_walls.c                                    :+:      :+:    :+:   */
+/*   parse_walls.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:54:24 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/04 18:25:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/18 19:33:30 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	parse_wall_texture(char *cubline, t_scene *scene)
 	{
 		if (ft_strncmp(line, wall[id], 3) == SAME)
 		{
+			printf ("ID = %i\n", id);
 			if (call_info()->wall_check[id])
 				set_error("Duplicate wall texture definition");
 			else

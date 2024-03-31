@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/31 12:18:16 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 12:19:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_cub	*init_cub(char *filepath)
 	free(title);
 	// 
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
-	return (cub);	
+	return (cub);
 }
 
 /* **this can be removed once we handle the F, C and I textures (maybe use a t_bonus struct ?)
@@ -42,6 +42,7 @@ void	setup_images(t_cub *cub)
 	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
 	cub->texture[J] = load_png("img/tree_trunk.png", cub->mlx);
 }
+
 // t_vfx	setup_vfx(void)
 // {
 // 	t_vfx	vfx;
@@ -74,6 +75,8 @@ static int	get_scene_total(int argc)
 		return (SCENE_LIMIT);
 }
 
+/*
+*/
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
@@ -115,7 +118,6 @@ int	main(int argc, char **argv)
 	cub->maps = maps;
 	cub->scene_total = total;
 	cub->map = &cub->maps[0];
-	
 	cub->elevator = init_elevator(cub);
 	// cub->assets = init_assets();
 	//
@@ -130,35 +132,3 @@ int	main(int argc, char **argv)
 	// free_split(cub->paths);
 	return (SUCCESS);
 }
-
-/*
-*/
-// int	main(int argc, char **argv)
-// {
-// 	t_scene	scene;
-// 	t_cub	*cub;
-
-// 	// call_info()->print_proof = true; //test
-
-// 	validate_arguments(argc, argv);
-	
-// 	scene = parse_cubfile(argv[1]);
-// 	validate_scene(&scene);
-	
-// 	cub = init_cub(argv[1]);
-// 	cub->map = init_map(&scene);
-// 	cub->player = init_player(&scene);
-// 	cleanup_scene(&scene);
-// 	// 
-// 	validate_map(&cub->map);
-// 	// 
-// 	cub->mini = init_minimap(cub); //test
-// 	// 
-// 	// cub->vfx = setup_vfx(); //tmp
-// 	// 
-// 	setup_images(cub); //tmp
-// 	// 
-// 	cub_loop(cub);
-// 	cleanup(cub);
-// 	return (SUCCESS);
-// }

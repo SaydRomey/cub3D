@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/31 11:43:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/16 21:16:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,24 +187,24 @@ void	test_term_colors(void)
 /*
 test to call in mlx_loop_hook's function
 */
-// void	grayscale_test(t_cub *cub)
-// {
-// 	if (cub->keys.up)
-// 	{
-// 		if (call_info()->grayscale >= 245)
-// 			call_info()->grayscale = 0;
-// 		else
-// 			call_info()->grayscale += 5;
-// 	}
-// 	if (cub->keys.down)
-// 	{
-// 		if (call_info()->grayscale <= 10)
-// 			call_info()->grayscale = 255;
-// 		else
-// 			call_info()->grayscale -= 5;
-// 	}
-// 	if (cub->keys.backspace)
-// 		ft_printf("grayscale: %u\n", call_info()->grayscale);
-// 	fill_img((cub->mini).img, call_info()->grayscale); // tmp test to set grayscale
-// }
+void	grayscale_test(t_cub *cub)
+{
+	if (cub->keys.up)
+	{
+		if (call_info()->grayscale >= 245)
+			call_info()->grayscale = 0;
+		else
+			call_info()->grayscale += 5;
+	}
+	if (cub->keys.down)
+	{
+		if (call_info()->grayscale <= 10)
+			call_info()->grayscale = 255;
+		else
+			call_info()->grayscale -= 5;
+	}
+	if (cub->keys.backspace)
+		ft_printf("grayscale: %u\n", call_info()->grayscale);
+	fill_img((cub->mini).img, call_info()->grayscale); // tmp test to set grayscale
+}
 /* ************************************************************************** */

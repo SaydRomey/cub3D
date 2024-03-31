@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/16 20:05:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/28 15:19:23 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,19 @@ void mlx_mouse_hook(mlx_t* mlx, mlx_mousefunc func, void* param); //called when 
 void mlx_cursor_hook(mlx_t* mlx, mlx_cursorfunc func, void* param); //called when the mouse position changes
 */
 
-void	set_mouse_mode(bool enabled)
+static void	mouse_events(t_cub *cub)
+{
+	int	x;
+	int	y;
+
+	mlx_get_mouse_pos(cub->mlx, &x, &y);
+	if (cub->elevator.buttons->enabled == true
+		&& x >= (int)(WIDTH - cub->elevator.buttons->width) && x < WIDTH
+		&& y >= (int)(HEIGHT - cub->elevator.buttons->height) && y < HEIGHT)
+		check_for_map_change(cub, y);
+}
+
+static void	set_mouse_mode(bool enabled)
 {
 	mlx_t	*mlx;
 
@@ -50,7 +62,7 @@ void	set_mouse_mode(bool enabled)
 		mlx_set_cursor_mode(mlx, MLX_MOUSE_NORMAL);
 }
 
-void	mouse_hook(mouse_key_t btn, action_t a, modifier_key_t m, void *param)
+static void	mouse_hook(mouse_key_t btn, action_t a, modifier_key_t m, void *param)
 {
 	t_cub	*cub;
 
@@ -60,10 +72,12 @@ void	mouse_hook(mouse_key_t btn, action_t a, modifier_key_t m, void *param)
 	cub = (t_cub *)param;
 	if (btn == MLX_MOUSE_BUTTON_RIGHT && a == MLX_PRESS)
 		toggle(&cub->mouse.enabled);
-	set_mouse_mode(&cub->mouse.enabled);	
+	if (btn == MLX_MOUSE_BUTTON_LEFT && a == MLX_PRESS)
+		mouse_events(cub);
+	set_mouse_mode(cub->mouse.enabled);
 }
 
-void	cursor_hook(double xpos, double ypos, void *param)
+static void	cursor_hook(double xpos, double ypos, void *param)
 {
 	t_cub	*cub;
 	int		divider;
@@ -80,19 +94,31 @@ void	cursor_hook(double xpos, double ypos, void *param)
 	if (rotate_x > 0)
 		cub->mouse.right = ON;
 	cub->mouse.rotate_x = ft_fabs(rotate_x / (float)divider);
-	set_mouse_mode(&cub->mouse.enabled);
+	set_mouse_mode(cub->mouse.enabled);
 }
 
 void	set_mouse(t_cub *cub)
 {
 	cub->mouse.enabled = ON; //if BONUS?
-	set_mouse_mode(&cub->mouse.enabled);
+	set_mouse_mode(cub->mouse.enabled);
 	mlx_cursor_hook(cub->mlx, &cursor_hook, cub);
 	mlx_mouse_hook(cub->mlx, &mouse_hook, cub);
 }
 
 /* ************************************************************************** */
 /* ************************************************************************** */
+
+// static void	mouse_events(t_cub *cub)
+// {
+// 	int	x;
+// 	int	y;
+
+// 	mlx_get_mouse_pos(cub->mlx, &x, &y);
+// 	if (cub->elevator.buttons->enabled == true
+// 		&& x >= (int)(WIDTH - cub->elevator.buttons->width) && x < WIDTH
+// 		&& y >= (int)(HEIGHT - cub->elevator.buttons->height) && y < HEIGHT)
+// 		check_for_map_change(cub, y);
+// }
 
 // void	mouse_hook(mouse_key_t btn, action_t a, modifier_key_t m, void* param)
 // {
@@ -109,6 +135,8 @@ void	set_mouse(t_cub *cub)
 // 	}
 // 	else
 // 		mlx_set_cursor_mode(cub->mlx, MLX_MOUSE_NORMAL);
+// 	if (btn == MLX_MOUSE_BUTTON_LEFT && a == MLX_PRESS)
+// 		mouse_events(cub);
 // }
 
 // void	cursor_hook(double xpos, double ypos, void *param)

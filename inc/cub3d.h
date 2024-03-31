@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/31 12:11:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 12:20:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,10 @@
 # define PLAYER_SPEED		0.1
 # define PLAYER_TURN_SPEED	0.1
 
-// # define TEX_WIDTH			64
-// # define TEX_HEIGHT			64
-// # define TEX_WIDTH			256
-// # define TEX_HEIGHT			256
+# define MAP_HEIGHT			10
+# define MAP_WIDTH			10
 
-# define MAP_HEIGHT	10 //is this still needed ?
-# define MAP_WIDTH	10
-
-# define CLOSE				0 //if this is for elevator, maybe use a bool in the elevator struct ?
+# define CLOSE				0
 # define OPEN				1
 
 # define DOOR_DISTANCE		1
@@ -84,11 +79,10 @@
 # define COLOR_TYPE_LEN 	2
 # define RGB_LEN			3
 
-# define SCENE_LIMIT		5 //chek if this is necessary
+# define SCENE_LIMIT		5
 
 // # define MAP_CHARS "01NSEW"
 # define MAP_CHARS "0123NSEW"
-
 
 typedef struct s_fpoint
 {
@@ -124,7 +118,7 @@ typedef enum e_map_elem
 	ELEVATOR = 3,
 }	t_map_elem;
 
-# define ELEVATOR 3 //this is not needed, 'ELEVATOR' is defined as '3' in the 'e_map_elem'
+# define ELEVATOR 3
 
 // do we add them in parsing?
 // we could have default textures, overridable by definition in .cub file ?
@@ -224,7 +218,7 @@ typedef struct s_info
 
 	// for testing
 	bool	print_proof; //for proof() and vaproof()
-	// t_u32	grayscale; //tmp test
+	t_u32	grayscale; //tmp test
 }			t_info;
 
 t_info	*call_info(void);
@@ -232,7 +226,7 @@ void	free_info(void);
 bool    there_is_a_problem(void);
 /* ************************************************************************** */
 
-typedef struct s_line //maybe use more specific word, 'line' is a little vague ?
+typedef struct s_line
 {
 	int		height;
 	int		start;
@@ -317,14 +311,34 @@ typedef struct s_player
 	// 
 	bool			speedup;
 	// 
-	// int				size; //in minimap
-	// int				color; //in minimap
-	// struct s_player	*respawn;
+	int				size; //in minimap
+	int				color; //in minimap
+	struct s_player	*respawn;
 }					t_player;
 
 /* ************************************************************************** */
 
 # define TILE_SIZE 42
+
+// typedef struct s_options
+// {
+// 	bool	dynamic_tile_size; //1
+// 	bool	round; //2
+// 	bool	rectangular; //!2
+// 	bool	visible; //m
+// }			t_options;
+
+// typedef struct s_minimap
+// {
+// 	mlx_image_t	*img;
+// 	mlx_image_t	*round_img;
+// 	// 
+// 	int			tile_size;
+// 	int			radius;
+// 	t_point		center;
+// 	// 
+// 	t_options	options;
+// }				t_minimap;
 
 typedef struct s_minimap
 {
@@ -332,9 +346,7 @@ typedef struct s_minimap
 	
 	int			tile_size;
 	t_point		center;
-	int			half_width;
-	int			half_height;
-	
+
 }				t_minimap;
 
 typedef struct s_map
@@ -351,8 +363,6 @@ typedef struct s_map
 typedef struct s_scene
 {
 	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
-	// floor_ceiling_texture_paths[]
-	
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
 	char		spawn_orientation;
@@ -417,25 +427,20 @@ typedef struct s_cub
 	// 
 	mlx_image_t	*texture[6]; //change to have this in t_map
 	int			scene_total;
-	// 
+	//
+	t_asset		*assets;
+	t_elevator	elevator;
 	t_map		*map;
-	t_map		*maps; //
-	
+	t_map		*maps;
 	t_minimap	mini;
 	t_player	player;
 	t_raycast	raycast;
 	t_keys		keys;
 	t_mouse		mouse;
 	t_vfx		vfx;
-	
-	t_asset		*assets;
-	t_elevator	elevator;
-
-	
-}				t_cub;
+}   			t_cub;
 
 /* ************************************************************************** */
-
 // assets.c
 t_asset	*init_assets(void);
 
@@ -491,6 +496,7 @@ int		shadow_effect(int color, float raw_dist, float min, float max);
 int		apply_shadow(int color, float shadow_factor); //to test
 int		apply_bright(int color, float bright_factor); //to test
 
+
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
@@ -514,13 +520,9 @@ float	ft_lerp(float a, float b, float t);
 // minimap.c
 t_minimap	init_minimap(t_cub *cub);
 void		draw_minimap(t_minimap *mini);
-// 
-void		iso_test(t_minimap *mini);
-void		iso_grid(t_minimap *mini);
 
 // mouse.c
 void	set_mouse(t_cub *cub);
-void	cursor_hook(double xpos, double ypos, void *param);
 
 // parsing_floor_ceiling.c
 void	parse_floor_ceiling(char *cubline, t_scene *scene);
@@ -555,7 +557,6 @@ void	update_player(t_cub *cub);
 // raycast.c
 int		check_hit(int map_y, int map_x);
 t_point	update_texture_position(t_texture tex, t_fpoint pos);
-
 // void	draw_assets(t_cub *cub, float z_buffer[NUMSPRITES]);
 void	draw_assets(t_cub *cub, float z_buffer[WIDTH]);
 

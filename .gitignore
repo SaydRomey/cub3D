@@ -25,3 +25,6 @@
 # Executables
 cub3D
 a.out
+
+# MLX42
+lib/MLX42/build/

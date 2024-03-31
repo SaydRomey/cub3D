@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/19 00:49:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 12:11:34 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,15 @@
 # define PLAYER_SPEED		0.1
 # define PLAYER_TURN_SPEED	0.1
 
-# define TEX_WIDTH			64
-# define TEX_HEIGHT			64
+// # define TEX_WIDTH			64
+// # define TEX_HEIGHT			64
 // # define TEX_WIDTH			256
 // # define TEX_HEIGHT			256
 
-# define MAP_HEIGHT	10
+# define MAP_HEIGHT	10 //is this still needed ?
 # define MAP_WIDTH	10
 
-# define CLOSE				0
+# define CLOSE				0 //if this is for elevator, maybe use a bool in the elevator struct ?
 # define OPEN				1
 
 # define DOOR_DISTANCE		1
@@ -84,8 +84,10 @@
 # define COLOR_TYPE_LEN 	2
 # define RGB_LEN			3
 
-# define MAP_CHARS "01NSEW"
-// # define MAP_CHARS "0123NSEW"
+# define SCENE_LIMIT		5 //chek if this is necessary
+
+// # define MAP_CHARS "01NSEW"
+# define MAP_CHARS "0123NSEW"
 
 
 typedef struct s_fpoint
@@ -122,11 +124,14 @@ typedef enum e_map_elem
 	ELEVATOR = 3,
 }	t_map_elem;
 
+# define ELEVATOR 3 //this is not needed, 'ELEVATOR' is defined as '3' in the 'e_map_elem'
+
 // do we add them in parsing?
 // we could have default textures, overridable by definition in .cub file ?
-# define F	4
-# define C	5
-# define I	6
+# define F	0
+# define C	1
+# define I	2
+# define J	3
 
 enum wall_id
 {
@@ -151,6 +156,59 @@ enum rgb_id
 
 /* ************************************************************************** */
 
+# define FRAME_SPEED	100
+# define GO_LEFT		1
+# define GO_RIGHT		0
+
+typedef struct s_animation
+{
+	mlx_image_t	**frames;
+	double		accumulator;
+	int			frame_speed;
+	int			current_frame;
+	int			last_frame;
+}				t_animation;
+
+typedef struct s_slice
+{
+	int			total;
+	int			width;
+	int			height;
+	t_point		position;
+}				t_slice;
+
+/* ************************************************************************** */
+
+# define ELEVATOR_TEX_LEN	5
+
+enum elevator_id
+{
+	E_WALL,
+	E_FLOOR,
+	E_CEILING,
+	E_BTN_OFF,
+	E_BTN_ON
+};
+
+typedef struct s_elevator
+{
+	int			id;
+	bool		door;
+	bool		door_open;
+	bool		map_change;
+	bool		valid;
+	int			orientation;
+	// t_point		orientation_vector;
+	t_point		position;
+	t_point		buttons_size;
+	//
+	t_animation	door_animation;
+	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
+	mlx_image_t	*buttons;
+}				t_elevator;
+
+/* ************************************************************************** */
+
 /*
 used for checklist and errors
 */
@@ -166,7 +224,7 @@ typedef struct s_info
 
 	// for testing
 	bool	print_proof; //for proof() and vaproof()
-	t_u32	grayscale; //tmp test
+	// t_u32	grayscale; //tmp test
 }			t_info;
 
 t_info	*call_info(void);
@@ -174,26 +232,32 @@ void	free_info(void);
 bool    there_is_a_problem(void);
 /* ************************************************************************** */
 
-typedef struct s_line
+typedef struct s_line //maybe use more specific word, 'line' is a little vague ?
 {
 	int		height;
 	int		start;
 	int		end;
 }			t_line;
 
-typedef struct s_raycast
+typedef struct s_render
 {
 	float		wall_perp_dist;
 	float		wall_hit_pos;
-	bool		door;
 	bool		side;
+}				t_render;
+
+typedef struct s_raycast
+{
 	t_point		step;
 	t_point		ray_pos;
+	t_point		ray_pos_door;
 	t_fpoint	grid_dist;
 	t_fpoint	length;
 	t_fpoint	ray_dir;
 	t_fpoint	ray_dir_min;
 	t_fpoint	ray_dir_max;
+	t_render	ray_door;
+	t_render	ray;
 }				t_raycast;
 
 typedef struct s_texture
@@ -202,6 +266,8 @@ typedef struct s_texture
 	t_point		pixel;
 	float		pos_y;
 	float		step_y;
+	int			width;
+	int			height;
 }				t_texture;
 
 typedef struct s_mouse
@@ -251,34 +317,14 @@ typedef struct s_player
 	// 
 	bool			speedup;
 	// 
-	int				size; //in minimap
-	int				color; //in minimap
-	struct s_player	*respawn;
+	// int				size; //in minimap
+	// int				color; //in minimap
+	// struct s_player	*respawn;
 }					t_player;
 
 /* ************************************************************************** */
 
 # define TILE_SIZE 42
-
-// typedef struct s_options
-// {
-// 	bool	dynamic_tile_size; //1
-// 	bool	round; //2
-// 	bool	rectangular; //!2
-// 	bool	visible; //m
-// }			t_options;
-
-// typedef struct s_minimap
-// {
-// 	mlx_image_t	*img;
-// 	mlx_image_t	*round_img;
-// 	// 
-// 	int			tile_size;
-// 	int			radius;
-// 	t_point		center;
-// 	// 
-// 	t_options	options;
-// }				t_minimap;
 
 typedef struct s_minimap
 {
@@ -286,7 +332,9 @@ typedef struct s_minimap
 	
 	int			tile_size;
 	t_point		center;
-
+	int			half_width;
+	int			half_height;
+	
 }				t_minimap;
 
 typedef struct s_map
@@ -303,11 +351,23 @@ typedef struct s_map
 typedef struct s_scene
 {
 	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
+	// floor_ceiling_texture_paths[]
+	
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
 	char		spawn_orientation;
 	t_fpoint	starting_position;
 }				t_scene;
+
+/* ************************************************************************** */
+
+# define NUMSPRITES 2
+
+typedef struct s_asset
+{
+	float		distance;
+	t_fpoint	position;
+}				t_asset;
 
 /* ************************************************************************** */
 typedef struct s_shadow
@@ -355,18 +415,34 @@ typedef struct s_cub
 	mlx_t       *mlx;
 	mlx_image_t *img;
 	// 
-	mlx_image_t	*texture[7]; //change to have this in t_map
+	mlx_image_t	*texture[6]; //change to have this in t_map
+	int			scene_total;
 	// 
-	t_map		map;
+	t_map		*map;
+	t_map		*maps; //
+	
 	t_minimap	mini;
 	t_player	player;
 	t_raycast	raycast;
 	t_keys		keys;
 	t_mouse		mouse;
 	t_vfx		vfx;
-}   			t_cub;
+	
+	t_asset		*assets;
+	t_elevator	elevator;
+
+	
+}				t_cub;
 
 /* ************************************************************************** */
+
+// assets.c
+t_asset	*init_assets(void);
+
+// animation.c
+t_animation	set_animation(mlx_image_t *img);
+void		update_animation(t_animation *a, bool direction);
+
 // call.c
 t_cub	*call_cub(void);
 void	call_clean(void);
@@ -379,6 +455,9 @@ void	cleanup_scene(t_scene *scene);
 void	cleanup_map(t_map *map);
 void	cleanup(t_cub *cub);
 
+// door.c
+void	update_door_texture(t_cub *cub);
+
 // draw.c
 void	draw_line(mlx_image_t *img, t_fpoint start, t_fpoint end, int color);
 void	draw_rectangle(mlx_image_t *img, t_fpoint origin, t_fpoint end, int color);
@@ -387,6 +466,15 @@ void	draw_floor(mlx_image_t *img, int color);
 void	draw_background(mlx_image_t *img, int color);
 void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
 void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color);
+
+// elevator.c
+t_elevator	init_elevator(t_cub *cub);
+void		draw_buttons(t_elevator *elevator, int floor_number);
+void		elevator_events(t_cub *cub);
+void		parse_elevator(t_map *map, t_elevator *elevator);
+void		change_map(t_cub *cub);
+void		check_for_map_change(t_cub *cub, int y);
+void		update_elevator_struct(t_cub *cub, t_elevator elevator);
 
 // error.c
 void	set_error(char *str);
@@ -402,7 +490,6 @@ int		fog_effect2(int color, float distance); //to test
 int		shadow_effect(int color, float raw_dist, float min, float max);
 int		apply_shadow(int color, float shadow_factor); //to test
 int		apply_bright(int color, float bright_factor); //to test
-
 
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
@@ -467,10 +554,21 @@ void	update_player(t_cub *cub);
 
 // raycast.c
 int		check_hit(int map_y, int map_x);
+t_point	update_texture_position(t_texture tex, t_fpoint pos);
+
+// void	draw_assets(t_cub *cub, float z_buffer[NUMSPRITES]);
+void	draw_assets(t_cub *cub, float z_buffer[WIDTH]);
+
 void	draw_ceiling_floor(t_cub *cub, int y);
-void	draw_wall_stripe(t_cub *cub, int x);
-void	execute_dda_algo(t_player *p, t_raycast *r);
+void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x);
+void	execute_dda_algo(t_cub *cub, t_raycast *r);
 void	raycast(t_cub *cub);
+
+// scene.c
+void	retrieve_scene(t_cub *cub, char *filepath);
+
+// segworld.c
+void	call_segworld(t_cub *cub, t_elevator *e, t_fpoint pos, int ori);
 
 // test.c
 void	proof(char *str);

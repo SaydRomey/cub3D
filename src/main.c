@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 22:53:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 12:18:16 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ t_cub	*init_cub(char *filepath)
 */
 void	setup_images(t_cub *cub)
 {
-	cub->texture[F] = load_png("img/wood.png", cub->mlx);
-	cub->texture[C] = load_png("img/wood.png", cub->mlx);
+	cub->texture[F] = load_png("img/checker.png", cub->mlx);
+	cub->texture[C] = load_png("img/light.png", cub->mlx);
 	// cub->texture[C] = load_png("img/pikachu.png", cub->mlx);
 	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
+	cub->texture[J] = load_png("img/tree_trunk.png", cub->mlx);
 }
-
 // t_vfx	setup_vfx(void)
 // {
 // 	t_vfx	vfx;
@@ -66,27 +66,59 @@ void	cub_loop(t_cub *cub)
 	mlx_loop(cub->mlx);
 }
 
-/*
-*/
+static int	get_scene_total(int argc)
+{
+	if (argc - 1 < SCENE_LIMIT)
+		return (argc - 1);
+	else
+		return (SCENE_LIMIT);
+}
+
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
-	t_cub	*cub;
+	t_map	*maps;
+	t_cub	*cub = NULL;
+	int		total;
+	int		i;
 
 	// call_info()->print_proof = true; //test
 
-	validate_arguments(argc, argv);
+	// validate_arguments(argc, argv);
 	
-	scene = parse_cubfile(argv[1]);
-	validate_scene(&scene);
+	i = 1;
+	total = get_scene_total(argc);
+	maps = ft_calloc(total, sizeof (t_map));
+	if (!maps)
+		printf ("Free and Exit\n");
+	while (i <= total)
+	{
+		// 
+		call_info()->found_direction = false;
+		ft_memset(call_info()->wall_check, 0, sizeof (bool) * WALL_TEXTURE_LEN);
+		ft_memset(call_info()->color_check, 0, sizeof (bool) * COLOR_TYPE_LEN);
+		//
+		scene = parse_cubfile(argv[i]);
+		validate_scene(&scene);
+		//
+		if (i == 1)
+		{
+			cub = init_cub(argv[1]);
+			cub->player = init_player(&scene);
+		}
+		maps[i - 1] = init_map(&scene);
+		cleanup_scene(&scene);
+		//
+		validate_map(&maps[i - 1]);
+		i++;
+	}
+	cub->maps = maps;
+	cub->scene_total = total;
+	cub->map = &cub->maps[0];
 	
-	cub = init_cub(argv[1]);
-	cub->map = init_map(&scene);
-	cub->player = init_player(&scene);
-	cleanup_scene(&scene);
-	// 
-	validate_map(&cub->map);
-	// 
+	cub->elevator = init_elevator(cub);
+	// cub->assets = init_assets();
+	//
 	cub->mini = init_minimap(cub); //test
 	// 
 	// cub->vfx = setup_vfx(); //tmp
@@ -95,5 +127,38 @@ int	main(int argc, char **argv)
 	// 
 	cub_loop(cub);
 	cleanup(cub);
+	// free_split(cub->paths);
 	return (SUCCESS);
 }
+
+/*
+*/
+// int	main(int argc, char **argv)
+// {
+// 	t_scene	scene;
+// 	t_cub	*cub;
+
+// 	// call_info()->print_proof = true; //test
+
+// 	validate_arguments(argc, argv);
+	
+// 	scene = parse_cubfile(argv[1]);
+// 	validate_scene(&scene);
+	
+// 	cub = init_cub(argv[1]);
+// 	cub->map = init_map(&scene);
+// 	cub->player = init_player(&scene);
+// 	cleanup_scene(&scene);
+// 	// 
+// 	validate_map(&cub->map);
+// 	// 
+// 	cub->mini = init_minimap(cub); //test
+// 	// 
+// 	// cub->vfx = setup_vfx(); //tmp
+// 	// 
+// 	setup_images(cub); //tmp
+// 	// 
+// 	cub_loop(cub);
+// 	cleanup(cub);
+// 	return (SUCCESS);
+// }

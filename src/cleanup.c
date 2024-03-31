@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 04:49:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 11:54:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,18 @@ free everything from here
 */
 void	cleanup(t_cub *cub)
 {
+	int	idx;
 	// our allocations:
-	cleanup_map(&cub->map);
+	idx = 0;
+	while (idx < cub->scene_total)
+	{
+		cleanup_map(&cub->maps[idx]);
+		idx++;
+	}
 	// cleanup_minimap(&cub->mini);
 	
 	int	i = 0;
-	while (i < 7)
+	while (i < 6)
 	{
 		if (cub->texture[i])
 		{

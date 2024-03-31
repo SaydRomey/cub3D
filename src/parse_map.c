@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 16:18:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 11:35:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ static bool	check_contour(const char *line, int i)
 	next = line[i + 1];
 	if (current == '0' || current == ' ')
 	{
-		if ((prev == '1' || prev == current || ft_strchr("NSEW", prev)) && 
-			(next == '1' || next == current || ft_strchr("NSEW", next)))
+		if ((prev == '1' || prev == current || ft_strchr("3NSEW", prev)) && 
+			(next == '1' || next == current || ft_strchr("3NSEW", next)))
 			return (true);
 		else
 			return (false);

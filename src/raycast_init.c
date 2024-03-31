@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/03/16 00:46:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 11:40:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,29 +57,37 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
 	get_initial_offset(p, r);
 }
 
-void	raycast(t_cub *cub) //should we limit calls to this to only when something changed ? (player pos, options, etc)
+void	raycast(t_cub *cub)
 {
-	int	x;
-	int	y;
+	t_raycast	*r;
+	// float		z_buffer[WIDTH];
+	int			x;
+	int			y;
 
-	clear_img(cub->img);
-	if (cub->vfx.textures_enabled == false)
-	{
-		draw_ceiling(cub->img, cub->map.ceiling_color);
-		draw_floor(cub->img, cub->map.floor_color);
-	}
+	// if (cub->vfx.textures_enabled == false)
+	// {
+	// 	draw_ceiling(cub->img, cub->map->ceiling_color);
+	// 	draw_floor(cub->img, cub->map->floor_color);
+	// }
+	x = 0;
 	y = HEIGHT / 2;
+	r = &cub->raycast;
+	clear_img(cub->img);
 	while (y < HEIGHT)
 	{
 		draw_ceiling_floor(cub, y);
 		y++;
 	}
-	x = 0;
 	while (x < WIDTH)
 	{
-		init_raycast_data(&cub->player, &cub->raycast, x);
-		execute_dda_algo(&cub->player, &cub->raycast);
-		draw_wall_stripe(cub, x);
+		cub->elevator.door_open = false;
+		init_raycast_data(&cub->player, r, x);
+		execute_dda_algo(cub, &cub->raycast);
+		draw_wall_stripe(cub, r->ray_pos, &r->ray, x);
+		if (cub->elevator.door_open)
+			draw_wall_stripe(cub, r->ray_pos_door, &r->ray_door, x);
+		// z_buffer[x] = cub->raycast.ray.wall_perp_dist;
 		x++;
 	}
+	// draw_assets(cub, z_buffer);
 }

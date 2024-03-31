@@ -6,9 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/19 00:51:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 12:08:03 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "cub3d.h"
 
 #include "cub3d.h"
 
@@ -17,7 +19,7 @@ static int	tile_color(int y, int x)
 	int			value;
 	t_fpoint	position;
 
-	value = call_cub()->map.map_array[y][x];
+	value = call_cub()->map->map_array[y][x];
 	position = call_cub()->player.position;
 
 	if (x == (int)position.x && y == (int)position.y)
@@ -62,7 +64,7 @@ static void	draw_tiles(t_minimap *mini, t_point start, t_point end)
 	t_point	tile;
 	t_point	size;
 
-	map = &call_cub()->map;
+	map = call_cub()->map;
 	size.x = mini->tile_size - 1;
 	size.y = mini->tile_size - 1;
 	y = start.y;
@@ -172,8 +174,8 @@ t_minimap	init_minimap(t_cub *cub)
 	ft_memset(&mini, 0, sizeof(t_minimap));
 	mini.img = new_img(cub->mlx, width, height, true);
 	
-	adjust_tile_size(&mini, &cub->map, 0);
-	mini.center = find_center(&mini, &cub->map);
+	adjust_tile_size(&mini, cub->map, 0);
+	mini.center = find_center(&mini, cub->map);
 	
 	return (mini);
 }

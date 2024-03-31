@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/19 00:50:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 11:21:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	set_keys(int key, t_keys *keys, bool state)
 
 void	keyhooks(mlx_key_data_t data, void *param)
 {
-	t_cub		*cub;
+	t_cub	*cub;
 
 	cub = (t_cub *)param;
 	if (data.key == ESC && data.action == PRESS)
@@ -97,7 +97,7 @@ void	keyhooks(mlx_key_data_t data, void *param)
 		cleanup(cub);
 		exit(SUCCESS);
 	}
-	set_keys(data.key, &cub->keys, data.action);	
+	set_keys(data.key, &cub->keys, data.action);
 }
 
 /*
@@ -108,8 +108,13 @@ void	update(void *ptr)
 	t_cub	*cub;
 
 	cub = (t_cub *)ptr;
+
+	elevator_events(cub);
+	
 	// update_vfx(&cub->vfx);
 	raycast(cub);
+
+	// update player by checking the keys pressed
 	update_player(cub);
 	
 	draw_minimap(&cub->mini);

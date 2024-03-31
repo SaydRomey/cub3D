@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/14 19:39:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 12:08:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,14 @@ t_player	init_player(t_scene *scene)
 	player.speed = PLAYER_SPEED;
 	player.turn_speed = PLAYER_TURN_SPEED;
 	// 
-	player.size = PLAYER_SIZE;
-	player.color = 0xFF00FFFF;
+	// player.size = PLAYER_SIZE;
+	// player.color = 0xFF00FFFF;
 	// 
 	// player.respawn = &player; //need to fix this to create a full copy of player instead..
 	return (player);
 }
 
-/*
-use t_map instead? **
-
-*/
-static float	get_move_value(int x, int y, float rtn_value)
-{
-	if (!check_hit(x, y))
-		return (rtn_value);
-	return (0);
-}
-
-static t_fpoint	get_velocity(t_cub *cub) //change to t_player?
+static t_fpoint	get_velocity(t_cub *cub)
 {
 	t_fpoint	velocity;
 
@@ -67,32 +56,50 @@ static t_fpoint	get_velocity(t_cub *cub) //change to t_player?
 	return (velocity);
 }
 
-void	update_player_position(t_cub *cub) //tmp cannot move if leftcontrol is pressed
+static float	get_move_value(t_cub *cub, int x, int y, float rtn_value)
 {
-	t_fpoint	velocity;
+	int	tile;
+
+	tile = check_hit(x, y);
+	if (tile == 3 && cub->elevator.door == CLOSE
+		&& !((int) cub->player.position.x == cub->elevator.position.x
+		&& (int) cub->player.position.y == cub->elevator.position.y))
+		return (0);
+	if (tile == 0 && cub->elevator.door == CLOSE
+		&& (int) cub->player.position.x == cub->elevator.position.x
+		&& (int) cub->player.position.y == cub->elevator.position.y)
+		return (0);
+	if (tile == 1)
+		return (0);
+	return (rtn_value);
+}
+
+void	update_player_position(t_cub *cub)
+{
+	t_fpoint	speed;
 	t_fpoint	*pos;
 
 	pos = &cub->player.position;
-	velocity = get_velocity(cub);
-	if (cub->keys.w || (cub->keys.up && !cub->keys.leftcontrol))
+	speed = get_velocity(cub);
+	if (cub->keys.up || cub->keys.w)
 	{
-		pos->x += get_move_value(pos->x + velocity.x, pos->y, velocity.x);
-		pos->y += get_move_value(pos->x, pos->y + velocity.y, velocity.y);
+		pos->x += get_move_value(cub, pos->x + speed.x, pos->y, speed.x);
+		pos->y += get_move_value(cub, pos->x, pos->y + speed.y, speed.y);
 	}
 	if (cub->keys.a)
 	{
-		pos->x += get_move_value(pos->x + velocity.y, pos->y, velocity.y);
-		pos->y -= get_move_value(pos->x, pos->y - velocity.x, velocity.x);
+		pos->x += get_move_value(cub, pos->x + speed.y, pos->y, speed.y);
+		pos->y -= get_move_value(cub, pos->x, pos->y - speed.x, speed.x);
 	}
-	if (cub->keys.s || (cub->keys.down && !cub->keys.leftcontrol))
+	if (cub->keys.down || cub->keys.s)
 	{
-		pos->x -= get_move_value(pos->x - velocity.x, pos->y, velocity.x);
-		pos->y -= get_move_value(pos->x, pos->y - velocity.y, velocity.y);
+		pos->x -= get_move_value(cub, pos->x - speed.x, pos->y, speed.x);
+		pos->y -= get_move_value(cub, pos->x, pos->y - speed.y, speed.y);
 	}
 	if (cub->keys.d)
 	{
-		pos->x -= get_move_value(pos->x - velocity.y, pos->y, velocity.y);
-		pos->y += get_move_value(pos->x, pos->y + velocity.x, velocity.x);
+		pos->x -= get_move_value(cub, pos->x - speed.y, pos->y, speed.y);
+		pos->y += get_move_value(cub, pos->x, pos->y + speed.x, speed.x);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:13:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 20:14:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/03/31 12:00:32 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ t_cub	*call_cub(void)
 
 int	**call_array(void)
 {
-	return (call_cub()->map.map_array);
+	return (call_cub()->map->map_array);
 }
 
 int	call_width(void)
 {
-	return (call_cub()->map.width);
+	return (call_cub()->map->width);
 }
 
 int	call_height(void)
 {
-	return (call_cub()->map.height);
+	return (call_cub()->map->height);
 }

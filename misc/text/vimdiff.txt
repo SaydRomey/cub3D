@@ -1,0 +1,70 @@
+
+Git Fetch vs. Git Pull
+git fetch: This command downloads commits, files, and refs from a remote repository into your local repo. Fetching is great for getting a fresh view on all the things that happened in a remote without automatically merging those changes into your own branches. After fetching, you can compare your branch to the remote's to see if any changes are available.
+
+git pull: Essentially, a git pull command is a combination of git fetch followed by git merge. When you use git pull, Git will fetch the remote's changes to the current branch and immediately attempt to merge them into your local copy of that branch. It's a way to quickly synchronize your local repository with the remote repository.
+
+Use git fetch when you want to see the changes before integrating them into your local branch. Use git pull when you trust the changes and want to merge them immediately.
+
+Terminal Tools for Managing Merge Conflicts
+When dealing with merge conflicts, Git doesn't automatically include a graphical tool for managing them, but it allows the use of external merge tools. Some popular terminal-based and graphical tools include:
+
+Vimdiff: A terminal-based tool that shows differences between files side by side. It allows you to navigate through conflicts and choose which version to keep.
+
+Meld: A graphical tool that provides a clear, visual comparison of differences and allows for easy merging of files.
+
+KDiff3: Another graphical merge tool that shows the differences and helps you to merge files manually.
+
+To use one of these tools with Git, you can set it as your default merge tool by configuring Git. For example, to set Meld as your merge tool, you would use:
+
+	git config --global merge.tool meld
+
+Then, when you encounter a merge conflict, you can launch the tool by running:
+
+	git mergetool
+
+This command opens the conflicted files in the specified merge tool, allowing you to resolve conflicts visually.
+
+Each tool has its own strengths and use cases, with terminal-based tools like Vimdiff being favored for quick edits and lightweight use, while graphical tools like Meld or KDiff3 offer more detailed visual comparisons, especially useful for complex conflicts.
+
+Vim includes Vimdiff as part of its offering, so there's no need for a separate installation process. Vimdiff is a mode of Vim that allows you to compare and merge files visually. Here's how to configure Git to use Vimdiff as its merge and diff tool, and a brief guide on using it:
+
+Configure Git to Use Vimdiff
+Set Vimdiff as Your Default Merge and Diff Tool
+
+Open a terminal and run the following commands to configure Git:
+
+	git config --global merge.tool vimdiff
+	git config --global mergetool.vimdiff.path vim
+	git config --global diff.tool vimdiff
+	git config --global difftool.vimdiff.path vim
+
+These commands set Vimdiff as the default tool for both merging and diffing.
+
+Using Vimdiff with Git
+
+To start a merge and resolve conflicts using Vimdiff, you can run:
+
+	git mergetool
+
+To compare changes between files or commits, you can use:
+
+	git difftool
+
+Basic Vimdiff Commands
+Here are some basic commands to navigate and use Vimdiff:
+
+Navigating Between Windows: Vimdiff splits your terminal window into panes. You can move between these panes by pressing Ctrl + w followed by a navigation key (h, j, k, or l).
+
+Scrolling: Scroll both panes simultaneously with ]c (next difference) and [c (previous difference).
+
+Copying Changes: To copy changes from one pane to another, you can use do (get changes from the other window) or dp (put changes to the other window).
+
+Saving and Exiting: After resolving conflicts, save your changes in Vim with :w and exit with :qa. This saves the merged files and exits Vimdiff.
+
+Canceling the Merge: If you wish to abort the merge, exit without saving by typing :qa!.
+
+Vim and Vimdiff can be highly customized through your ~/.vimrc file, and there are many plugins available to enhance the experience. If you're new to Vim, it might take some time to get used to the commands and modes, but it becomes very efficient once you're accustomed to it.
+
+
+

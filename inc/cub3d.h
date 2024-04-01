@@ -6,15 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/31 12:20:29 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/01 00:58:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // change all colors to unsigned ?
-
-// when fixing libft, add %f to ft_printf..
-
-// TODO: add the build folder of mlx to git ignore
 
 #ifndef CUB3D_H
 # define CUB3D_H
@@ -218,12 +214,13 @@ typedef struct s_info
 
 	// for testing
 	bool	print_proof; //for proof() and vaproof()
-	t_u32	grayscale; //tmp test
 }			t_info;
 
 t_info	*call_info(void);
 void	free_info(void);
 bool    there_is_a_problem(void);
+// reset_info (for next map...)
+
 /* ************************************************************************** */
 
 typedef struct s_line
@@ -318,59 +315,6 @@ typedef struct s_player
 
 /* ************************************************************************** */
 
-# define TILE_SIZE 42
-
-// typedef struct s_options
-// {
-// 	bool	dynamic_tile_size; //1
-// 	bool	round; //2
-// 	bool	rectangular; //!2
-// 	bool	visible; //m
-// }			t_options;
-
-// typedef struct s_minimap
-// {
-// 	mlx_image_t	*img;
-// 	mlx_image_t	*round_img;
-// 	// 
-// 	int			tile_size;
-// 	int			radius;
-// 	t_point		center;
-// 	// 
-// 	t_options	options;
-// }				t_minimap;
-
-typedef struct s_minimap
-{
-	mlx_image_t	*img;
-	
-	int			tile_size;
-	t_point		center;
-
-}				t_minimap;
-
-typedef struct s_map
-{
-	int			height;
-	int			width;
-	int			**map_array; //2d array for the map
-	// 
-	int			floor_color;
-	int			ceiling_color;
-	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
-}		t_map;
-
-typedef struct s_scene
-{
-	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
-	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
-	t_list		*map_list;
-	char		spawn_orientation;
-	t_fpoint	starting_position;
-}				t_scene;
-
-/* ************************************************************************** */
-
 # define NUMSPRITES 2
 
 typedef struct s_asset
@@ -419,6 +363,45 @@ typedef struct s_vfx
 	int		floor_fog_color;
 	
 }			t_vfx;
+
+/* ************************************************************************** */
+
+# define TILE_SIZE 42
+
+typedef struct s_minimap
+{
+	mlx_image_t	*img;
+	
+	int			tile_size;
+	t_point		center;
+	int			half_width;
+	int			half_height;
+
+}				t_minimap;
+
+typedef struct s_map
+{
+	int			height;
+	int			width;
+	int			**map_array; //2d array for the map
+	// 
+	int			floor_color;
+	int			ceiling_color;
+	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
+}		t_map;
+
+typedef struct s_scene
+{
+	// add the checks here instead?
+	
+	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
+	// add floor ceiling texture paths
+	
+	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
+	t_list		*map_list;
+	char		spawn_orientation;
+	t_fpoint	starting_position;
+}				t_scene;
 
 typedef struct s_cub
 {

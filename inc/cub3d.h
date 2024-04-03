@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/01 00:58:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 11:55:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include "MLX42.h"
 # include "libft.h"
 # include <math.h>
+
+# ifndef BONUS
+#  define BONUS 0
+# endif
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -219,7 +223,7 @@ typedef struct s_info
 t_info	*call_info(void);
 void	free_info(void);
 bool    there_is_a_problem(void);
-// reset_info (for next map...)
+void	reset_info(void);
 
 /* ************************************************************************** */
 
@@ -403,25 +407,53 @@ typedef struct s_scene
 	t_fpoint	starting_position;
 }				t_scene;
 
+typedef struct s_level
+{
+	int			index; //to navigate to 'lvl->index + 1' for next floor..
+	
+	t_map		map;
+	
+	// t_minimap	mini;
+	
+}			t_level;
+
 typedef struct s_cub
 {
 	mlx_t       *mlx;
 	mlx_image_t *img;
-	// 
-	mlx_image_t	*texture[6]; //change to have this in t_map
-	int			scene_total;
-	//
-	t_asset		*assets;
-	t_elevator	elevator;
-	t_map		*map;
-	t_map		*maps;
-	t_minimap	mini;
+
+	t_list		*levels;
+	int			current_level;
+
 	t_player	player;
+	
 	t_raycast	raycast;
+	
 	t_keys		keys;
 	t_mouse		mouse;
+	
 	t_vfx		vfx;
 }   			t_cub;
+
+// typedef struct s_cub
+// {
+// 	mlx_t       *mlx;
+// 	mlx_image_t *img;
+// 	// 
+// 	mlx_image_t	*texture[6]; //change to have this in t_map //make it so they are default or parsed
+// 	int			scene_total;
+// 	//
+// 	t_asset		*assets;
+// 	t_elevator	elevator;
+// 	t_map		*map;
+// 	t_map		*maps;
+// 	t_minimap	mini;
+// 	t_player	player;
+// 	t_raycast	raycast;
+// 	t_keys		keys;
+// 	t_mouse		mouse;
+// 	t_vfx		vfx;
+// }   			t_cub;
 
 /* ************************************************************************** */
 // assets.c
@@ -466,9 +498,10 @@ void		update_elevator_struct(t_cub *cub, t_elevator elevator);
 
 // error.c
 void	set_error(char *str);
-void	set_error_arg(char *str, char *arg);
+void	set_error_arg(char *str, char *arg); //broken ?
 char	*get_error(void);
 void    error(void);
+void	error_arg(char *arg); //tmp
 void	parsing_error(char *line, int fd, t_scene *scene);
 void	error_mlx(void);
 
@@ -479,10 +512,13 @@ int		shadow_effect(int color, float raw_dist, float min, float max);
 int		apply_shadow(int color, float shadow_factor); //to test
 int		apply_bright(int color, float bright_factor); //to test
 
-
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
+
+// level.c
+void	add_new_level(t_list **levels, t_map map);
+void	delete_level(void *level);
 
 // map.c
 t_map	init_map(t_scene *scene);

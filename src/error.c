@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/08 21:56:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 11:47:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,20 @@ void	set_error(char *str)
 	info->problem = true;
 }
 
-void	set_error_arg(char *str, char *arg)
+void	set_error_arg(char *str, char *arg) //fix this later.. i am loosing too much time on this..
 {
 	char	*full_error;
 
 	full_error = ft_strjoin_with(str, ": ", arg);
 	// full_error = ft_strjoin(str, arg);
-	if (full_error)
-	{
-		set_error(full_error);
-		free(full_error);	
-	}
+	// if (full_error)
+	// {
+	// 	// ft_printf("->  %s  <-\n", full_error);
+	// 	set_error(full_error);
+	// 	free(full_error);	
+	// }
+	set_error(full_error);
+	// free(full_error); //this works but surely causes a leak...
 }
 
 char	*get_error(void)
@@ -59,14 +62,24 @@ void	error(void)
 	exit(FAILURE);
 }
 
-void	parsing_error(char *line, int fd, t_scene *scene)
+// tmp until i fix set_error_arg() **!!
+void	error_arg(char *arg)
 {
-	if (line)
-		free(line);
-	close(fd);
-	cleanup_scene(scene);
-	error();
+	ft_putstr_fd("Error\n", STDERR);
+	ft_fprintf(STDERR, "%s%s: %s%s\n", RED, get_error(), arg, RESET);
+	free_info();
+	exit(FAILURE);
 }
+
+
+// void	parsing_error(char *line, int fd, t_scene *scene)
+// {
+// 	if (line)
+// 		free(line);
+// 	close(fd);
+// 	cleanup_scene(scene);
+// 	error();
+// }
 
 void	error_mlx(void)
 {

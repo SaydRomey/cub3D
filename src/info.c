@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   info.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 11:01:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/18 19:31:37 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/03 11:55:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,18 @@ void	free_info(void)
 bool	there_is_a_problem(void)
 {
 	return (call_info()->problem);
+}
+
+void	reset_info(void)
+{	
+	t_info	*info;
+	bool	print_proof_backup;
+
+	info = call_info();
+	print_proof_backup = info->print_proof;
+	
+	ft_bzero(info, sizeof(*info));
+	
+	info->print_proof = print_proof_backup;
+	proof("reset info");
 }

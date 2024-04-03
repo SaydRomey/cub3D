@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/01 01:24:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 11:55:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_cub	*init_cub(char *filepath)
 		error_mlx();
 	
 	title = ft_strjoin("cub3D - ", filepath);
-	mlx_set_window_title(cub->mlx, title); //should we rechange it for other levels ?
+	mlx_set_window_title(cub->mlx, title); //should we rechange it for other levels ? (keep the path in t_level)
 	free(title);
 	
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
@@ -34,25 +34,87 @@ t_cub	*init_cub(char *filepath)
 /* **this can be removed once we handle the F, C and I textures (maybe use a t_bonus struct ?)
 
 */
-void	setup_images(t_cub *cub)
-{
-	cub->texture[F] = load_png("img/checker.png", cub->mlx);
-	cub->texture[C] = load_png("img/light.png", cub->mlx);
-	// cub->texture[C] = load_png("img/pikachu.png", cub->mlx);
-	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
-	cub->texture[J] = load_png("img/tree_trunk.png", cub->mlx);
-}
+// void	setup_images(t_cub *cub)
+// {
+// 	cub->texture[F] = load_png("img/checker.png", cub->mlx);
+// 	cub->texture[C] = load_png("img/light.png", cub->mlx);
+// 	// cub->texture[C] = load_png("img/pikachu.png", cub->mlx);
+// 	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
+// 	cub->texture[J] = load_png("img/tree_trunk.png", cub->mlx);
+// }
 
 /*
 hooks and loops
 */
 void	cub_loop(t_cub *cub)
 {
-	set_mouse(cub);
-	mlx_key_hook(cub->mlx, &keyhooks, cub);
-	mlx_loop_hook(cub->mlx, update, cub);
+	// set_mouse(cub);
+	// mlx_key_hook(cub->mlx, &keyhooks, cub);
+	// mlx_loop_hook(cub->mlx, update, cub);
 	mlx_loop(cub->mlx);
 }
+
+/*
+*/
+int	main(int argc, char **argv)
+{
+	t_cub	*cub;
+	// t_scene	scene;
+	
+	// t_list	*levels = NULL;
+	// t_map	*maps;
+	int		i;
+
+	call_info()->print_proof = true; //for debug messages in terminal
+
+	// (void)argc;
+	// (void)argv;
+	
+	validate_arguments(argc, argv);
+
+	cub = init_cub(argv[1]);
+
+	i = 1;
+	while (i < argc)
+	{
+		reset_info();
+		// reset the checklist for new cubfile parsing
+		// scene = parse_cubfile(argv[i]);
+	// 	validate_scene(&scene);
+	// 	map = init_map(&scene);
+	// 	if (i == 1)
+	// 	{
+	// 		cub->player = init_player(&scene);
+	// 	}
+	// 	cleanup_scene(&scene);
+	// 	validate_map(&map);
+	// 	add_new_level(&levels, map);
+		i++;
+	}
+	if (cub->levels)
+	{
+		// cub->levels = levels;
+		
+		// cub->current_level = ft_lstget(levels, 0);
+		
+		// cub->elevator = init_elevator(cub);
+		
+		// other setup ? like setup image or something else if needed
+		cub_loop(cub);
+	}
+	// ft_lstclear(&cub->levels, delete_level);
+
+	cleanup(cub);
+	free_info();
+
+	
+
+
+
+	
+	return (SUCCESS);	
+}
+
 
 /* ************************************************************************** */
 /* ************************************************************************** */
@@ -119,99 +181,6 @@ void	cub_loop(t_cub *cub)
 // 	// free_split(cub->paths);
 // 	return (SUCCESS);
 // }
-
-/* ************************************************************************** */
-/* ************************************************************************** */
-typedef struct s_level
-{
-	t_map		map;
-	// t_minimap	mini;
-	// other relevant info like level index (to navigate to 'lvl->index + 1' for next floor..)
-	
-}			t_level;
-
-void	add_new_level(t_list **levels, t_map map)
-{
-	t_level	*new_level;
-	t_list	*node;
-
-	new_level = (t_level *)malloc(sizeof(t_level));
-	if (!new_level)
-		return ; //malloc error
-	
-	new_level->map = map;
-	// add other parameters later..
-	
-	node = ft_lstnew(new_level);
-	if (!node)
-	{
-		free(new_level);
-		return ; //malloc error
-	}
-	ft_lstadd_back(levels, new_node);
-}
-
-void	del_level(void *level)
-{
-	t_level	*lvl;
-	
-	lvl = (t_level *)level;
-	// specific cleanup here... (scene, map, etc)
-	free(lvl);
-}
-
-int	main(int argc, char **argv)
-{
-	t_cub	*cub;
-	t_list	*levels = NULL;
-	t_scene	scene;
-	t_map	*maps;
-	int		i;
-
-	// call_info()->print_proof = true;
-
-	validate_arguments(argc, argv);
-	cub = init_cub(argv[1]);
-	cub->player = init_player()
-	i = 1;
-	while (i < argc)
-	{
-		// reset the checklist for new cubfile parsing
-		scene = parse_cubfile(argv[i]);
-		validate_scene(&scene);
-		map = init_map(&scene);
-		if (i == 1)
-		{
-			cub->player = init_player(&scene);
-		}
-		cleanup_scene(&scene);
-		validate_map(&map);
-		add_new_level(&levels, map);
-		i++;
-	}
-	if (levels)
-	{
-		cub->levels = levels;
-		
-		// cub->current_level = ft_lstget(levels, 0);
-		
-		cub->elevator = init_elevator(cub);
-		
-		// other setup ? like setup image or something else if needed
-		cub_loop(cub);
-	}
-	ft_lstclear(&levels, del_level);
-	cleanup(cub);
-	return (SUCCESS);	
-}
-
-// we could then use
-t_list	*ft_lstget(t_list *lst, int index);
-// to navigate to the desired level..
-
-// also maybe add a check that if we have an elevator but only one level,
-// we introduce segworld :D
-
 
 
 /* ************************************************************************** */

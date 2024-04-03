@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
+#    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/03/29 12:48:57 by oroy             ###   ########.fr        #
+#    Updated: 2024/04/03 09:57:16 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,14 +32,15 @@
 
 # https://www.gnu.org/software/make/manual/make.html#Conditionals
 
+# !** make a simple version of this makefile..
+
 # **************************************************************************** #
 # --------------------------------- VARIABLES -------------------------------- #
 # **************************************************************************** #
 AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
 MAP			:= map/pdf.cub
-
-MAPS_BONUS	:= map/bonus/test.cub map/bonus/test1.cub map/bonus/test2.cub
+MAPS_BONUS	:= map/bonus/test.cub map/bonus/test1.cub map/bonus/test2.cub # use override command later for this
 
 CFG_DIR		:= .cfg
 IMG_DIR		:= img
@@ -121,10 +122,6 @@ OBJS	:=	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # **************************************************************************** #
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
-# TODO: create a hidden file for mandatory or bonus version ?
-# Maybe define a macro BONUS and check if it exists in the .c files ?
-# TOCHECK: or do we only have one version with bonuses? (check with oli)
-# 
 all: $(INIT) $(NAME)
 
 $(NAME): $(MLX42) $(LIBFT) $(OBJS) $(INCS)
@@ -170,11 +167,27 @@ fclean: clean
 		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
 		$(YELLOW)No executable to remove$(RESET)"; \
 	fi
+	@$(REMOVE) $(BONUS_CHECK)
 
 re: fclean all
 
-bonus:
-	@echo "feature not yet implemented..."
+# **************************************************************************** #
+BONUS_CHECK	:= ./.bonus
+
+# bonus:
+# 	$(info Using C_FLAGS: $(C_FLAGS))
+bonus: C_FLAGS += -DBONUS=1
+bonus: re
+bonus: $(BONUS_CHECK)
+# print a different title..
+
+$(BONUS_CHECK):
+	@if [ ! -f $(BONUS_CHECK) ]; then \
+		echo "Switching to bonus build..."; \
+		touch $(BONUS_CHECK); \
+	else \
+		echo "Bonus build is up to date."; \
+	fi
 
 .PHONY: all clean fclean re bonus
 # **************************************************************************** #
@@ -271,10 +284,14 @@ pdf: | $(TMP_DIR)
 # **************************************************************************** #
 include $(CFG_DIR)/leaks.mk
 
-run: all
-	./$(NAME) $(MAP)
+# run: all
+# 	./$(NAME) $(MAP)
 
-run_bonus: all
+run: all
+	$(eval ARG := $(if $(wildcard $(BONUS_CHECK)),$(MAPS_BONUS),$(MAP)))
+	./$(NAME) $(ARG)
+
+run_bonus:
 	./$(NAME) $(MAPS_BONUS)
 
 FORCE_FLAGS	:= \
@@ -411,6 +428,21 @@ or   'make man' for more options
 
 endef
 export TITLE
+
+define TITLE_BONUS
+[$(BOLD)$(PURPLE)$@$(RESET)]\t\t$(GREEN)ready$(RESET)
+$(ORANGE)
+***************
+* PLACEHOLDER *
+**** BONUS ****
+***************
+$(RESET)
+
+type 'make run' to execute
+or   'make man' for more options
+
+endef
+export TITLE_BONUS
 
 USER		:=$(shell whoami)
 TIME		:=$(shell date "+%H:%M:%S")

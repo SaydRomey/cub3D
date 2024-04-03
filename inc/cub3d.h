@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 11:55:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 16:59:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ typedef struct s_info
 
 	// for testing
 	bool	print_proof; //for proof() and vaproof()
+	char	*test_msg; //to test reset_info() later...
 }			t_info;
 
 t_info	*call_info(void);
@@ -388,16 +389,19 @@ typedef struct s_map
 	int			height;
 	int			width;
 	int			**map_array; //2d array for the map
-	// 
+	 
 	int			floor_color;
 	int			ceiling_color;
+	
 	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
+	// mlx_image_t	*floor_ceiling_img[2]; //check if we put all in one img array ?
+
+	char		spawn_orientation;
+	t_fpoint	starting_position;
 }		t_map;
 
 typedef struct s_scene
-{
-	// add the checks here instead?
-	
+{	
 	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
 	// add floor ceiling texture paths
 	
@@ -412,6 +416,7 @@ typedef struct s_level
 	int			index; //to navigate to 'lvl->index + 1' for next floor..
 	
 	t_map		map;
+
 	
 	// t_minimap	mini;
 	
@@ -423,7 +428,7 @@ typedef struct s_cub
 	mlx_image_t *img;
 
 	t_list		*levels;
-	int			current_level;
+	int			current_level; //gets init to 0 with init_cub()
 
 	t_player	player;
 	
@@ -519,6 +524,8 @@ void	update(void *ptr);
 // level.c
 void	add_new_level(t_list **levels, t_map map);
 void	delete_level(void *level);
+t_map	*get_map(t_list *levels, int index);
+t_map	*get_map2(t_list *levels, int index);
 
 // map.c
 t_map	init_map(t_scene *scene);
@@ -526,6 +533,7 @@ void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
 bool	is_wall_line(char *line);
 void	free_map(int **map, int height);
+int 	**allocate_grid(int height, int width);
 int		**get_2d_map(t_list *map_list, int height, int width);
 
 // math_utils.c

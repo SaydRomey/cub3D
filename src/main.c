@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 11:55:48 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 17:01:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,59 +59,62 @@ void	cub_loop(t_cub *cub)
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
-	// t_scene	scene;
+	t_scene	scene;
+	t_map	map;
 	
-	// t_list	*levels = NULL;
-	// t_map	*maps;
 	int		i;
 
-	call_info()->print_proof = true; //for debug messages in terminal
-
-	// (void)argc;
-	// (void)argv;
-	
+	call_info()->print_proof = true; //comment to disable debug messages in terminal
+		
 	validate_arguments(argc, argv);
-
 	cub = init_cub(argv[1]);
-
 	i = 1;
 	while (i < argc)
 	{
+		vaproof("----- iteration %d -----", i);
+		
 		reset_info();
-		// reset the checklist for new cubfile parsing
-		// scene = parse_cubfile(argv[i]);
-	// 	validate_scene(&scene);
-	// 	map = init_map(&scene);
-	// 	if (i == 1)
-	// 	{
-	// 		cub->player = init_player(&scene);
-	// 	}
-	// 	cleanup_scene(&scene);
-	// 	validate_map(&map);
-	// 	add_new_level(&levels, map);
+		scene = parse_cubfile(argv[i]);
+		
+		// test_scene(scene);
+		validate_scene(&scene);
+		
+		map = init_map(&scene);
+				
+		if (i == 1)
+			cub->player = init_player(&scene);
+	
+		cleanup_scene(&scene);
+
+		// test_map(map);
+		// validate_map(&map); //will need to adapt this
+	
+		add_new_level(&cub->levels, map);
+
+		cleanup_map(&map);
 		i++;
 	}
+	proof("----- end of loop -----");
+	
 	if (cub->levels)
 	{
-		// cub->levels = levels;
-		
-		// cub->current_level = ft_lstget(levels, 0);
-		
+		proof("in level loop");
+
+		t_map	*map_ptr = get_map(cub->levels, 0);
+		test_map(*map_ptr);
+
+		map_ptr = get_map(cub->levels, 1);
+		test_map(*map_ptr);
+
+				
 		// cub->elevator = init_elevator(cub);
 		
 		// other setup ? like setup image or something else if needed
 		cub_loop(cub);
 	}
-	// ft_lstclear(&cub->levels, delete_level);
-
+	
 	cleanup(cub);
 	free_info();
-
-	
-
-
-
-	
 	return (SUCCESS);	
 }
 

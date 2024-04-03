@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 11:47:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 12:18:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	set_error_arg(char *str, char *arg) //fix this later.. i am loosing too muc
 	// }
 	set_error(full_error);
 	// free(full_error); //this works but surely causes a leak...
+
+	// ** maybe if we add an 'allocated_error_msg' in t_info, then check that one to avoid segfault when freeing normal error_msg..
 }
 
 char	*get_error(void)
@@ -71,15 +73,14 @@ void	error_arg(char *arg)
 	exit(FAILURE);
 }
 
-
-// void	parsing_error(char *line, int fd, t_scene *scene)
-// {
-// 	if (line)
-// 		free(line);
-// 	close(fd);
-// 	cleanup_scene(scene);
-// 	error();
-// }
+void	parsing_error(char *line, int fd, t_scene *scene)
+{
+	if (line)
+		free(line);
+	close(fd);
+	cleanup_scene(scene);
+	error(); //_arg(line);
+}
 
 void	error_mlx(void)
 {

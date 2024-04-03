@@ -6,29 +6,13 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/13 22:56:06 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 16:58:50 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	free_map(int **map, int height)
-{
-	int	i;
-
-	if (!map)
-		return;
-	i = 0;
-	while (i < height)
-	{
-		if (map[i])
-			free(map[i]);
-		i++;
-	}
-	free(map);
-}
-
-static int **allocate_grid(int height, int width)
+int **allocate_grid(int height, int width)
 {
 	int	**grid;
 	int	i;

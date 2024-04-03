@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/01 00:04:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 17:04:06 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	vaproof(char *str, ...)
 
 void	test_scene(t_scene scene)
 {
-	ft_printf("\nTesting scene\n");
+	ft_strainbow("\n----- Testing scene -----", 1);
 	// 
 	proof("Texture paths");
 	ft_printf("North: %s\n", scene.wall_textures[NO]);
@@ -56,13 +56,13 @@ void	test_scene(t_scene scene)
 	ft_printf("RED:   %s\n", scene.colors[FLOOR][R]);
 	ft_printf("GREEN: %s\n", scene.colors[FLOOR][G]);
 	ft_printf("BLUE:  %s\n", scene.colors[FLOOR][B]);
-	ft_printf("Hexa value: %X\n", get_color(&scene, FLOOR));
+	ft_printf("Hexa:  %X\n", get_color(&scene, FLOOR));
 	// 
 	proof("Ceiling colors");
 	ft_printf("RED:   %s\n", scene.colors[CEILING][R]);
 	ft_printf("GREEN: %s\n", scene.colors[CEILING][G]);
 	ft_printf("BLUE:  %s\n", scene.colors[CEILING][B]);
-	ft_printf("Hexa value: %X\n", get_color(&scene, CEILING));
+	ft_printf("Hexa:  %X\n", get_color(&scene, CEILING));
 	// 
 	proof("Map section");
 	t_list	*tmp = scene.map_list;
@@ -71,12 +71,13 @@ void	test_scene(t_scene scene)
 		ft_printf("%s$\n", (char *)tmp->content);
 		tmp = tmp->next;
 	}
-	ft_printf("longest line length -> %d\n", get_map_width(scene.map_list));
-	ft_printf("number of nodes -> %d\n", ft_lstsize(scene.map_list));
-	ft_printf("Starting orientation -> %c\n", scene.spawn_orientation);
+	ft_printf("\n");
+	ft_printf("longest line length   -> %d\n", get_map_width(scene.map_list));
+	ft_printf("number of nodes       -> %d\n", ft_lstsize(scene.map_list));
+	ft_printf("Starting orientation  -> %c\n", scene.spawn_orientation);
 	// 
-	ft_printf("Starting player position -> x%d, y%d\n", \
-	scene.starting_position.x, scene.starting_position.y); //?missing
+	printf("Starting position     -> x[%d], y[%d]\n", \
+	(int)scene.starting_position.x, (int)scene.starting_position.y);
 }
 
 /* ************************************************************************** */
@@ -140,7 +141,7 @@ void	print_2d_array(int **array, int height, int width)
 
 void	test_map(t_map map)
 {
-	ft_printf("\nTesting map\n");
+	ft_strainbow("\n----- Testing map -----", 1);
 	// 
 	proof("Dimensions");
 	ft_printf("map height: %d\n", map.height);

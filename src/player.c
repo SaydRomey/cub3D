@@ -1,51 +1,54 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   player.c                                           :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-// /*   Updated: 2024/03/22 19:17:56 by oroy             ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   player.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
+/*   Updated: 2024/04/03 14:14:49 by cdumais          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #include "cub3d.h"
+#include "cub3d.h"
 
-// static int	spawning_orientation(char direction)
-// {
-// 	if (direction == 'N')
-// 		return (90);
-// 	if (direction == 'S')
-// 		return (270);
-// 	if (direction == 'E')
-// 		return (0);
-// 	if (direction == 'W')
-// 		return (180);
-// 	return (-1);
-// }
+static int	spawning_orientation(char direction)
+{
+	if (direction == 'N')
+		return (90);
+	if (direction == 'S')
+		return (270);
+	if (direction == 'E')
+		return (0);
+	if (direction == 'W')
+		return (180);
+	return (-1);
+}
 
-// t_player	init_player(t_scene *scene)
-// {
-// 	t_player	player;
+t_player	init_player(t_scene *scene)
+{
+	t_player	player;
 	
-// 	player.position.x = scene->starting_position.x + 0.5;
-// 	player.position.y = scene->starting_position.y + 0.5;
-// 	player.angle = spawning_orientation(scene->spawn_orientation);
-// 	player.fov = PLAYER_FOV;
-// 	player.delta.x = cos(degree_to_radian(player.angle));
-// 	player.delta.y = -sin(degree_to_radian(player.angle));
-// 	player.cam_plane.x = -player.delta.y * player.fov;
-// 	player.cam_plane.y = player.delta.x * player.fov;
-// 	player.speed = PLAYER_SPEED;
-// 	player.turn_speed = PLAYER_TURN_SPEED;
-// 	// 
-// 	player.size = PLAYER_SIZE;
-// 	player.color = 0xFF00FFFF;
-// 	// 
-// 	// player.respawn = &player; //need to fix this to create a full copy of player instead..
-// 	return (player);
-// }
+	player.position.x = scene->starting_position.x + 0.5;
+	player.position.y = scene->starting_position.y + 0.5;
+	player.angle = spawning_orientation(scene->spawn_orientation);
+	player.fov = PLAYER_FOV;
+	player.delta.x = cos(degree_to_radian(player.angle));
+	player.delta.y = -sin(degree_to_radian(player.angle));
+	player.cam_plane.x = -player.delta.y * player.fov;
+	player.cam_plane.y = player.delta.x * player.fov;
+	player.speed = PLAYER_SPEED;
+	player.turn_speed = PLAYER_TURN_SPEED;
+	// 
+	player.size = PLAYER_SIZE;
+	player.color = 0xFF00FFFF;
+	// 
+	// player.respawn = &player; //need to fix this to create a full copy of player instead..
+	
+	proof("***** player init *****");
+	
+	return (player);
+}
 
 // static t_fpoint	get_velocity(t_cub *cub)
 // {

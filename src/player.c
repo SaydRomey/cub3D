@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 14:14:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 21:30:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ static int	spawning_orientation(char direction)
 	return (-1);
 }
 
-t_player	init_player(t_scene *scene)
+t_player	init_player(t_map *map)
 {
 	t_player	player;
 	
-	player.position.x = scene->starting_position.x + 0.5;
-	player.position.y = scene->starting_position.y + 0.5;
-	player.angle = spawning_orientation(scene->spawn_orientation);
+	player.position.x = map->starting_position.x + 0.5;
+	player.position.y = map->starting_position.y + 0.5;
+	player.angle = spawning_orientation(map->spawn_orientation);
 	player.fov = PLAYER_FOV;
 	player.delta.x = cos(degree_to_radian(player.angle));
 	player.delta.y = -sin(degree_to_radian(player.angle));
@@ -43,11 +43,8 @@ t_player	init_player(t_scene *scene)
 	player.size = PLAYER_SIZE;
 	player.color = 0xFF00FFFF;
 	// 
-	// player.respawn = &player; //need to fix this to create a full copy of player instead..
-	
 	proof("***** player init *****");
-	
-	return (player);
+	return (player);	
 }
 
 // static t_fpoint	get_velocity(t_cub *cub)

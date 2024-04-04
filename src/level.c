@@ -6,38 +6,63 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 16:57:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 21:40:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_map	deep_copy_map(t_map original)
-{
-	t_map	copy;
-	int		i;
+// t_map	deep_copy_map(t_map original)
+// {
+// 	t_map	copy;
+// 	int		i;
 
-	copy = original; //this copies the simple fields like height, width, etc.
+// 	copy = original; //this copies the simple fields like height, width, etc.
 	
-	// deep copy of map_array
-	if (original.map_array != NULL)
-	{
-		copy.map_array = allocate_grid(original.height, original.width);
-		if (copy.map_array != NULL)
-		{
-			i = 0;
-			while (i < original.height)
-			{
-				ft_memcpy(copy.map_array[i], original.map_array[i], original.width * sizeof(int));
-				i++;
-			}
-		}
-		// might need to deep copy the textures also ?
-	}
-	return (copy);
-}
+// 	// deep copy of map_array
+// 	if (original.map_array != NULL)
+// 	{
+// 		copy.map_array = allocate_grid(original.height, original.width);
+// 		if (copy.map_array != NULL)
+// 		{
+// 			i = 0;
+// 			while (i < original.height)
+// 			{
+// 				ft_memcpy(copy.map_array[i], original.map_array[i], original.width * sizeof(int));
+// 				i++;
+// 			}
+// 		}
+// 		// might need to deep copy the textures also ?
+// 	}
+// 	return (copy);
+// }
 
-void	add_new_level(t_list **levels, t_map map)
+// void	add_new_level(t_list **levels, t_map map, char *filepath)
+// {
+// 	t_level	*new_level;
+// 	t_list	*node;
+
+// 	new_level = (t_level *)malloc(sizeof(t_level));
+// 	if (!new_level)
+// 		return ; //malloc error
+	
+// 	new_level->index = ft_lstsize(*levels);
+// 	new_level->map = deep_copy_map(map);
+// 	new_level->filepath = filepath;
+	
+// 	// add other parameters later..
+	
+// 	node = ft_lstnew(new_level);
+// 	if (!node)
+// 	{
+// 		free(new_level);
+// 		// should also clean up the deep copy of map_array...
+// 		return ; //malloc error
+// 	}
+// 	ft_lstadd_back(levels, node);
+// }
+
+void	add_new_level(t_list **levels, t_scene scene, char *filepath) //will split this in subfunctions later
 {
 	t_level	*new_level;
 	t_list	*node;
@@ -46,16 +71,19 @@ void	add_new_level(t_list **levels, t_map map)
 	if (!new_level)
 		return ; //malloc error
 	
+	new_level->filepath = filepath;
 	new_level->index = ft_lstsize(*levels);
-	new_level->map = deep_copy_map(map);
+	new_level->map = init_map(&scene);
+	validate_map(&new_level->map);
 	
+	new_level->minimap = init_minimap(&new_level->map);
+
 	// add other parameters later..
 	
 	node = ft_lstnew(new_level);
 	if (!node)
 	{
-		free(new_level);
-		// should also clean up the deep copy of map_array...
+		delete_level(new_level);
 		return ; //malloc error
 	}
 	ft_lstadd_back(levels, node);
@@ -92,6 +120,25 @@ t_list	*ft_lstget(t_list *lst, int index) //this will go in libft
 		i++;
 	}
 	return (tmp);
+}
+
+t_level	*get_level(t_list *levels, int index)
+{
+	t_list	*node;
+	t_level	*lvl;
+
+	node = ft_lstget(levels, index);
+	if (node == NULL)
+	{
+		// handle index out of bounds
+		return (NULL);
+	}
+	lvl = (t_level *)node->content;
+	if (!lvl)
+	{
+		return (NULL);
+	}
+	return (lvl);
 }
 
 t_map	*get_map(t_list *levels, int index)

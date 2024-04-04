@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 14:12:03 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 21:04:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,9 +193,9 @@ void	validate_map(t_map *map)
 	// valid elevator
 	// valid doors
 	// 
-	if (there_is_a_problem())
-	{
-		cleanup_map(map);
-		error();
-	}
+	// if (there_is_a_problem())
+	// {
+	// 	cleanup_map(map);
+	// 	error();
+	// }
 }

@@ -1,16 +1,16 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   minimap.c                                          :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-// /*   Updated: 2024/03/29 12:38:34 by oroy             ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minimap.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
+/*   Updated: 2024/04/03 21:38:38 by cdumais          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #include "cub3d.h"
+#include "cub3d.h"
 
 // static int	tile_color(int y, int x)
 // {
@@ -118,62 +118,63 @@
 // 	// iso_grid(mini);
 // }
 
-// /* ************************************************************************** */
+/* ************************************************************************** */
 
-// /*
-// the margin is for when only the radar will be drawn,
-// we can still render close to minimap's edges **
+/*
+the margin is for when only the radar will be drawn,
+we can still render close to minimap's edges **
 
-// */
-// static void	adjust_tile_size(t_minimap *mini, t_map *map, int margin_tiles)
-// {
-// 	int	available_width;
-// 	int	available_height;
-// 	int	tile_width;
-// 	int	tile_height;
-// 	int	tile_size;
+*/
+static void	adjust_tile_size(t_minimap *mini, t_map *map, int margin_tiles)
+{
+	int	available_width;
+	int	available_height;
+	int	tile_width;
+	int	tile_height;
+	int	tile_size;
 
-// 	tile_width = mini->img->width / map->width;
-// 	tile_height = mini->img->height / map->height;
-// 	tile_size = ft_min(tile_width, tile_height);
+	tile_width = mini->img->width / map->width;
+	tile_height = mini->img->height / map->height;
+	tile_size = ft_min(tile_width, tile_height);
 	
-// 	if (margin_tiles > 0)
-// 	{
-// 		available_width = mini->img->width - (margin_tiles * 2 * tile_size);
-// 		available_height = mini->img->height - (margin_tiles * 2 * tile_size);
-// 		tile_width = available_width / map->width;
-// 		tile_height = available_height / map->height;
-// 		tile_size = ft_min(tile_width, tile_height);
-// 	}
-// 	mini->tile_size = tile_size;
-// }
+	if (margin_tiles > 0)
+	{
+		available_width = mini->img->width - (margin_tiles * 2 * tile_size);
+		available_height = mini->img->height - (margin_tiles * 2 * tile_size);
+		tile_width = available_width / map->width;
+		tile_height = available_height / map->height;
+		tile_size = ft_min(tile_width, tile_height);
+	}
+	mini->tile_size = tile_size;
+}
 
-// static t_point	find_center(t_minimap *mini, t_map *map)
-// {
-// 	int			half_width;
-// 	int			half_height;
-// 	t_point		center;
+static t_point	find_center(t_minimap *mini, t_map *map)
+{
+	int			half_width;
+	int			half_height;
+	t_point		center;
 
-// 	half_width = mini->img->width / (2 * mini->tile_size);
-// 	half_height = mini->img->height / (2 * mini->tile_size);
+	half_width = mini->img->width / (2 * mini->tile_size);
+	half_height = mini->img->height / (2 * mini->tile_size);
 
-// 	(void)map;
-// 	center.x = half_width;
-// 	center.y = half_height;
-// 	return (center);
-// }
+	(void)map;
+	center.x = half_width;
+	center.y = half_height;
+	return (center);
+}
 
-// t_minimap	init_minimap(t_cub *cub)
-// {
-// 	t_minimap	mini;
-// 	int			width = WIDTH;
-// 	int			height = HEIGHT;
+t_minimap	init_minimap(t_map *map)
+{
+	t_minimap	mini;
+	int			width = WIDTH;
+	int			height = HEIGHT;
+	int			margin = 0;
 
-// 	ft_memset(&mini, 0, sizeof(t_minimap));
-// 	mini.img = new_img(cub->mlx, width, height, true);
+	ft_memset(&mini, 0, sizeof(t_minimap));
+	mini.img = new_img(call_cub()->mlx, width, height, true);
 	
-// 	adjust_tile_size(&mini, cub->map, 0);
-// 	mini.center = find_center(&mini, cub->map);
+	adjust_tile_size(&mini, map, margin);
+	mini.center = find_center(&mini, map);
 	
-// 	return (mini);
-// }
+	return (mini);
+}

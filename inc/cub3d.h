@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 16:59:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 21:39:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,6 +371,17 @@ typedef struct s_vfx
 
 /* ************************************************************************** */
 
+typedef struct s_scene
+{	
+	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
+	// add floor ceiling texture paths
+	
+	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
+	t_list		*map_list;
+	char		spawn_orientation;
+	t_fpoint	starting_position;
+}				t_scene;
+
 # define TILE_SIZE 42
 
 typedef struct s_minimap
@@ -400,25 +411,13 @@ typedef struct s_map
 	t_fpoint	starting_position;
 }		t_map;
 
-typedef struct s_scene
-{	
-	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
-	// add floor ceiling texture paths
-	
-	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
-	t_list		*map_list;
-	char		spawn_orientation;
-	t_fpoint	starting_position;
-}				t_scene;
-
 typedef struct s_level
 {
+	char		*filepath;
 	int			index; //to navigate to 'lvl->index + 1' for next floor..
 	
 	t_map		map;
-
-	
-	// t_minimap	mini;
+	t_minimap	minimap;
 	
 }			t_level;
 
@@ -522,10 +521,13 @@ void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
 
 // level.c
-void	add_new_level(t_list **levels, t_map map);
+// void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main
+void	add_new_level(t_list **levels, t_scene scene, char *filepath);
+
+
 void	delete_level(void *level);
+t_level	*get_level(t_list *levels, int index);
 t_map	*get_map(t_list *levels, int index);
-t_map	*get_map2(t_list *levels, int index);
 
 // map.c
 t_map	init_map(t_scene *scene);
@@ -545,7 +547,7 @@ float	ft_fclamp(float value, float min, float max);
 float	ft_lerp(float a, float b, float t);
 
 // minimap.c
-t_minimap	init_minimap(t_cub *cub);
+t_minimap	init_minimap(t_map *map);
 void		draw_minimap(t_minimap *mini);
 
 // mouse.c
@@ -576,7 +578,8 @@ int		get_blue(int color);
 int		get_alpha(int color);
 
 // player.c
-t_player	init_player(t_scene *scene);
+// t_player	init_player(t_scene *scene);
+t_player	init_player(t_map *map);
 // void	update_player_position(t_cub *cub);
 // void	update_player_direction(t_cub *cub);
 void	update_player(t_cub *cub);

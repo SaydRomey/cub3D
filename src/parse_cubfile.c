@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 12:53:16 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 21:16:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_scene	parse_cubfile(char *filepath)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (there_is_a_problem()) // || line_is_irrelevant(line)
+		if (there_is_a_problem())
 			parsing_error(line, fd, &scene);
 		parse_wall_texture(line, &scene);
 		parse_floor_ceiling(line, &scene);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 17:01:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/03 21:32:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ hooks and loops
 void	cub_loop(t_cub *cub)
 {
 	// set_mouse(cub);
-	// mlx_key_hook(cub->mlx, &keyhooks, cub);
-	// mlx_loop_hook(cub->mlx, update, cub);
+	mlx_key_hook(cub->mlx, &keyhooks, cub);
+	mlx_loop_hook(cub->mlx, update, cub);
 	mlx_loop(cub->mlx);
 }
 
@@ -60,8 +60,6 @@ int	main(int argc, char **argv)
 {
 	t_cub	*cub;
 	t_scene	scene;
-	t_map	map;
-	
 	int		i;
 
 	call_info()->print_proof = true; //comment to disable debug messages in terminal
@@ -71,48 +69,24 @@ int	main(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		vaproof("----- iteration %d -----", i);
-		
+		// if (there_is_a_problem())
+			// error();
 		reset_info();
 		scene = parse_cubfile(argv[i]);
-		
-		// test_scene(scene);
 		validate_scene(&scene);
-		
-		map = init_map(&scene);
-				
-		if (i == 1)
-			cub->player = init_player(&scene);
-	
+		add_new_level(&cub->levels, scene, argv[i]);
 		cleanup_scene(&scene);
-
-		// test_map(map);
-		// validate_map(&map); //will need to adapt this
-	
-		add_new_level(&cub->levels, map);
-
-		cleanup_map(&map);
 		i++;
 	}
-	proof("----- end of loop -----");
-	
 	if (cub->levels)
 	{
-		proof("in level loop");
-
-		t_map	*map_ptr = get_map(cub->levels, 0);
-		test_map(*map_ptr);
-
-		map_ptr = get_map(cub->levels, 1);
-		test_map(*map_ptr);
-
-				
-		// cub->elevator = init_elevator(cub);
+		// t_map	*map_ptr = get_map(cub->levels, 0);
+		// test_map(*map_ptr);
 		
-		// other setup ? like setup image or something else if needed
+		cub->player = init_player(get_map(cub->levels, cub->current_level));
+		
 		cub_loop(cub);
 	}
-	
 	cleanup(cub);
 	free_info();
 	return (SUCCESS);	

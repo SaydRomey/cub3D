@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 12:18:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 17:43:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,23 @@ void	set_error(char *str)
 	t_info	*info;
 
 	info = call_info();
-	info->error_msg = str;
+	if (info->error_msg != NULL)
+	{
+		free(info->error_msg);
+		info->error_msg = NULL;
+	}
+	info->error_msg = ft_strdup(str);
 	info->problem = true;
 }
+
+// void	set_error(char *str)
+// {
+// 	t_info	*info;
+
+// 	info = call_info();
+// 	info->error_msg = str;
+// 	info->problem = true;
+// }
 
 void	set_error_arg(char *str, char *arg) //fix this later.. i am loosing too much time on this..
 {
@@ -29,14 +43,10 @@ void	set_error_arg(char *str, char *arg) //fix this later.. i am loosing too muc
 	// full_error = ft_strjoin(str, arg);
 	// if (full_error)
 	// {
-	// 	// ft_printf("->  %s  <-\n", full_error);
 	// 	set_error(full_error);
 	// 	free(full_error);	
 	// }
 	set_error(full_error);
-	// free(full_error); //this works but surely causes a leak...
-
-	// ** maybe if we add an 'allocated_error_msg' in t_info, then check that one to avoid segfault when freeing normal error_msg..
 }
 
 char	*get_error(void)
@@ -44,9 +54,8 @@ char	*get_error(void)
 	t_info	*info;
 
 	info = call_info();
-	if (!info->error_msg) //|| !info->problem)
+	if (!info->error_msg)
 		return ("[error message not set]");
-
 	return (info->error_msg);
 }
 
@@ -79,17 +88,15 @@ void	parsing_error(char *line, int fd, t_scene *scene)
 		free(line);
 	close(fd);
 	cleanup_scene(scene);
-	error(); //_arg(line);
+	error();
 }
 
 void	error_mlx(void)
 {
 	// ft_putstr_fd((char *)mlx_strerror(mlx_errno), STDERR);
 	set_error((char *)mlx_strerror(mlx_errno));
-	// 
-	// add conditional freeing of mlx ressources ?
-	// 
-	error();
+
+	error(); //make sure this will free other mlx allocated ressources
 }
 
 

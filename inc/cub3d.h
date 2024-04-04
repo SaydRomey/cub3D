@@ -6,11 +6,9 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 21:39:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 19:33:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// change all colors to unsigned ?
 
 #ifndef CUB3D_H
 # define CUB3D_H
@@ -22,6 +20,8 @@
 # ifndef BONUS
 #  define BONUS 0
 # endif
+
+# define PRINT_PROOF 1 //put at '0' to silence the debug messages
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -79,9 +79,6 @@
 # define COLOR_TYPE_LEN 	2
 # define RGB_LEN			3
 
-# define SCENE_LIMIT		5
-
-// # define MAP_CHARS "01NSEW"
 # define MAP_CHARS "0123NSEW"
 
 typedef struct s_fpoint
@@ -120,8 +117,7 @@ typedef enum e_map_elem
 
 # define ELEVATOR 3
 
-// do we add them in parsing?
-// we could have default textures, overridable by definition in .cub file ?
+// remove when we can parse them, and implement default texture paths..
 # define F	0
 # define C	1
 # define I	2
@@ -216,9 +212,10 @@ typedef struct s_info
 	bool	color_check[COLOR_TYPE_LEN];
 	bool	found_direction;
 
-	// for testing
-	bool	print_proof; //for proof() and vaproof()
-	char	*test_msg; //to test reset_info() later...
+	// bonus and extra parsing
+	bool	color_check_bonus[COLOR_TYPE_LEN]; //for floor and ceiling textures
+	bool	elevator; //? (need to check how it is currently parsed...)
+
 }			t_info;
 
 t_info	*call_info(void);
@@ -226,6 +223,18 @@ void	free_info(void);
 bool    there_is_a_problem(void);
 void	reset_info(void);
 
+/* ************************************************************************** */
+/* ************************************************************************** */
+
+# define NUMSPRITES 2
+
+typedef struct s_asset
+{
+	float		distance;
+	t_fpoint	position;
+}				t_asset;
+
+/* ************************************************************************** */
 /* ************************************************************************** */
 
 typedef struct s_line
@@ -266,9 +275,12 @@ typedef struct s_texture
 	int			height;
 }				t_texture;
 
+/* ************************************************************************** */
+/* ************************************************************************** */
+
 typedef struct s_mouse
 {
-	bool	enabled; //state
+	bool	enabled;
 
 	bool	left;
 	bool	right;
@@ -286,10 +298,12 @@ typedef struct s_keys
 	bool	left;
 	bool	down;
 	bool	right;
-	bool	spacebar; //to open elevators
-	bool	backspace; //to reset player position
+	
+	bool	spacebar;
+	bool	backspace; //to reset player position //might be too complex..
 	bool	leftshift; //to speedup
 	bool	leftcontrol;
+	
 	bool	m; //minimap toggle
 	bool	p; //player icon style
 	bool	one;
@@ -315,18 +329,9 @@ typedef struct s_player
 	// 
 	int				size; //in minimap
 	int				color; //in minimap
-	struct s_player	*respawn;
+	
 }					t_player;
 
-/* ************************************************************************** */
-
-# define NUMSPRITES 2
-
-typedef struct s_asset
-{
-	float		distance;
-	t_fpoint	position;
-}				t_asset;
 
 /* ************************************************************************** */
 typedef struct s_shadow
@@ -371,6 +376,9 @@ typedef struct s_vfx
 
 /* ************************************************************************** */
 
+/*
+used to parse the cubfiles and organize text data
+*/
 typedef struct s_scene
 {	
 	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
@@ -381,8 +389,6 @@ typedef struct s_scene
 	char		spawn_orientation;
 	t_fpoint	starting_position;
 }				t_scene;
-
-# define TILE_SIZE 42
 
 typedef struct s_minimap
 {
@@ -417,7 +423,8 @@ typedef struct s_level
 	int			index; //to navigate to 'lvl->index + 1' for next floor..
 	
 	t_map		map;
-	t_minimap	minimap;
+
+
 	
 }			t_level;
 
@@ -430,8 +437,11 @@ typedef struct s_cub
 	int			current_level; //gets init to 0 with init_cub()
 
 	t_player	player;
+	t_minimap	mini;
 	
 	t_raycast	raycast;
+	// t_asset		*assets;
+	// t_elevator	elevator;
 	
 	t_keys		keys;
 	t_mouse		mouse;
@@ -521,8 +531,8 @@ void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
 
 // level.c
-// void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main
-void	add_new_level(t_list **levels, t_scene scene, char *filepath);
+void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main
+// void	add_new_level(t_list **levels, t_scene scene, char *filepath); //this one creates its own t_map (tricky for error handling...)
 
 
 void	delete_level(void *level);
@@ -534,7 +544,7 @@ t_map	init_map(t_scene *scene);
 void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
 bool	is_wall_line(char *line);
-void	free_map(int **map, int height);
+void	free_map_array(int **map_array, int height);
 int 	**allocate_grid(int height, int width);
 int		**get_2d_map(t_list *map_list, int height, int width);
 
@@ -548,7 +558,7 @@ float	ft_lerp(float a, float b, float t);
 
 // minimap.c
 t_minimap	init_minimap(t_map *map);
-void		draw_minimap(t_minimap *mini);
+void		draw_minimap(t_minimap *mini, t_map *map);
 
 // mouse.c
 void	set_mouse(t_cub *cub);
@@ -603,6 +613,7 @@ void	call_segworld(t_cub *cub, t_elevator *e, t_fpoint pos, int ori);
 
 // test.c
 void	proof(char *str);
+void	cproof(char *str, char *color);
 void	vaproof(char *str, ...);
 void	test_scene(t_scene scene);
 void    test_map(t_map map);
@@ -614,6 +625,7 @@ void	print_2d_array(int **array, int height, int width);
 // utils.c
 mlx_image_t *load_png(char *filepath, mlx_t *mlx);
 mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
+void		change_window_title(char *filepath);
 void		extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx);
 void		cleanup_wall_textures(t_map *map);
 // 

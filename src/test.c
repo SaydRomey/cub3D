@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 19:34:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 17:39:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,17 @@ void	proof(char *str)
 {
 	char	*color = ORANGE;
 
-	if (call_info()->print_proof)
+	if (PRINT_PROOF)
+	{
+		ft_printf("\n%s*->%s", color, RESET);
+		ft_printf("%s", str);
+		ft_printf("%s<-*%s\n", color, RESET);
+	}
+}
+
+void	cproof(char *str, char *color)
+{
+	if (PRINT_PROOF)
 	{
 		ft_printf("\n%s*->%s", color, RESET);
 		ft_printf("%s", str);
@@ -30,7 +40,7 @@ void	vaproof(char *str, ...)
 	va_list	args;
 
 	va_start(args, str);
-	if (call_info()->print_proof)
+	if (PRINT_PROOF)
 	{
 		ft_printf("\n%s*->%s", color, RESET);
 		ft_vprintf(str, args);

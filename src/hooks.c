@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 21:15:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 19:38:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,10 @@ void	update(void *ptr)
 	// update player by checking the keys pressed
 	// update_player(cub);
 	
-	// draw_minimap(&cub->mini);
 
-	if (cub)
-		proof("update");
+	// minimap
+	cub->mini.img->instances->enabled = cub->keys.m;
+
 }
 /* ************************************************************************** */
 /* ************************************************************************** */

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 21:30:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 18:37:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_player	init_player(t_map *map)
 	player.size = PLAYER_SIZE;
 	player.color = 0xFF00FFFF;
 	// 
-	proof("***** player init *****");
+	cproof("***** player init *****", MAGENTA);
 	return (player);	
 }
 

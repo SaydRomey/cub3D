@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 15:49:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 18:10:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	cleanup_scene(t_scene *scene)
 
 void	cleanup_map(t_map *map)
 {
-	free_map(map->map_array, map->height);
+	free_map_array(map->map_array, map->height);
 	cleanup_wall_textures(map);
 	proof("t_map cleaned up");
 }

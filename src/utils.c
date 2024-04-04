@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 16:10:59 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 18:51:57 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,15 @@ mlx_image_t *load_png(char *filepath, mlx_t *mlx)
 	return (img);
 }
 
+void	change_window_title(char *filepath)
+{
+	char	*title;
+
+	title = ft_strjoin("cub3D - ", filepath);
+	mlx_set_window_title(call_cub()->mlx, title);
+	free(title);
+}
+
 void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 {
 	int	i;
@@ -57,7 +66,7 @@ void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 			// if (map->wall_textures_img[i]->width % 2 == 0 && ..)
 		}
 		else
-			map->wall_textures_img[i] = NULL;
+			map->wall_textures_img[i] = NULL; //use this here to check if bonus texture paths were parsed?
 		i++;
 	}
 }

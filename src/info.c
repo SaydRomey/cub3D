@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 11:01:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 11:55:29 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 17:41:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ void	free_info(void)
 	t_info	*info;
 	
 	info = call_info();
+	if (info->error_msg)
+	{
+		free(info->error_msg);
+	}
 	free(info);
 }
 
@@ -41,13 +45,13 @@ bool	there_is_a_problem(void)
 void	reset_info(void)
 {	
 	t_info	*info;
-	bool	print_proof_backup;
 
 	info = call_info();
-	print_proof_backup = info->print_proof;
+	// ft_bzero(info, sizeof(*info));
 	
-	ft_bzero(info, sizeof(*info));
+	ft_bzero(info->wall_check, sizeof(bool) * WALL_TEXTURE_LEN);
+	ft_bzero(info->color_check, sizeof(bool) * COLOR_TYPE_LEN);
+	info->found_direction = false;
 	
-	info->print_proof = print_proof_backup;
 	proof("reset info");
 }

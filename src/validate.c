@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 21:04:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 18:04:07 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@ static bool	valid_extension(char *filename)
 	char	*extension;
 
 	extension = ft_strrchr(filename, '.');
-	
-	// if (!extension)
-	// 	return (set_error("Missing extension"), false);
-	// else if (ft_strncmp(extension, ".cub", 5) != SAME)
-	// 	return (set_error("Invalid file extension"), false);
-	// return (true);
-
 	if (!extension)
 		set_error("Missing extension");
 	else if (ft_strncmp(extension, ".cub", 5) != SAME)
@@ -187,8 +180,11 @@ static bool	columns_are_valid(int **map_array, int width, int height)
 
 void	validate_map(t_map *map)
 {
+	if (there_is_a_problem()) //if an error occured in init_map
+		return ;
 	if (!columns_are_valid(map->map_array, map->width, map->height))
 		set_error("Invalid array column");
+	
 	// 
 	// valid elevator
 	// valid doors

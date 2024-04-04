@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 16:58:50 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 18:53:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int **allocate_grid(int height, int width)
 	return (grid);
 }
 
-static int	char_to_int(char c) //change this later to use macros/enum and add door
+static int	char_to_int(char c)
 {
 	if (c == ' ')
 		return (-1); //SPACE
@@ -90,4 +90,20 @@ int		**get_2d_map(t_list *map_list, int height, int width)
 		row++;
 	}
 	return (map_array);
+}
+
+void	free_map_array(int **map_array, int height)
+{
+	int	i;
+
+	if (!map_array)
+		return;
+	i = 0;
+	while (i < height)
+	{
+		if (map_array[i])
+			free(map_array[i]);
+		i++;
+	}
+	free(map_array);
 }

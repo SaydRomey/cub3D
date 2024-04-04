@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 21:32:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 19:36:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_cub	*init_cub(char *filepath)
 		error_mlx();
 	
 	title = ft_strjoin("cub3D - ", filepath);
-	mlx_set_window_title(cub->mlx, title); //should we rechange it for other levels ? (keep the path in t_level)
+	mlx_set_window_title(cub->mlx, title);
 	free(title);
 	
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
@@ -48,42 +48,52 @@ hooks and loops
 */
 void	cub_loop(t_cub *cub)
 {
-	// set_mouse(cub);
+	set_mouse(cub);
 	mlx_key_hook(cub->mlx, &keyhooks, cub);
 	mlx_loop_hook(cub->mlx, update, cub);
 	mlx_loop(cub->mlx);
 }
 
-/*
-*/
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
 	t_scene	scene;
+	t_map	map;
 	int		i;
-
-	call_info()->print_proof = true; //comment to disable debug messages in terminal
 		
 	validate_arguments(argc, argv);
 	cub = init_cub(argv[1]);
 	i = 1;
 	while (i < argc)
 	{
-		// if (there_is_a_problem())
-			// error();
-		reset_info();
-		scene = parse_cubfile(argv[i]);
+		if (there_is_a_problem())
+			error();
+		
+		reset_info(); //resets the checklist
+		
+		scene = parse_cubfile(argv[i]); //parses the info from a cubfile
 		validate_scene(&scene);
-		add_new_level(&cub->levels, scene, argv[i]);
+
+		map = init_map(&scene); //converts the scene into usable data
+		validate_map(&map);
+		
+		if (!there_is_a_problem())
+			add_new_level(&cub->levels, map, argv[i]); //copies the t_map, and creates a t_lvl node
+
 		cleanup_scene(&scene);
+		cleanup_map(&map);
 		i++;
 	}
 	if (cub->levels)
 	{
-		// t_map	*map_ptr = get_map(cub->levels, 0);
-		// test_map(*map_ptr);
+		t_map	*map_ptr = get_map(cub->levels, 0);
+		// if (map_ptr)
+			// test_map(*map_ptr); //displays info about a specific map
 		
 		cub->player = init_player(get_map(cub->levels, cub->current_level));
+		
+		cub->mini = init_minimap(map_ptr);
+		draw_minimap(&cub->mini, map_ptr);
 		
 		cub_loop(cub);
 	}
@@ -178,38 +188,12 @@ int	main(int argc, char **argv)
 // 	cub->player = init_player(&scene);
 // 	cleanup_scene(&scene);
 
+// 	validate_map(&cub->map);
+
+// 	cub->minimap = init_minimap(cub); //wip
+
 // 	setup_images(cub);
 // 	cub_loop(cub);
-	
 // 	cleanup(cub);
 // 	return (SUCCESS);
 // }
-
-// int	main_bonus(int argc, char **argv)
-// {
-// 	t_scene	scene;
-// 	t_cub	*cub;
-
-// 	validate_arguments_bonus(argc, argv); //if any two maps can be entered
-	
-// 	scene = parse_cubfile(argv[1]);
-// 	validate_scene(&scene);
-	
-// 	cub = init_cub(argv[1]);
-// 	cub->map = init_map(&scene);
-// 	cub->player = init_player(&scene);
-// 	cleanup_scene(&scene);
-	
-// 	scene = parse_cubfile(argv[2]);
-// 	validate_scene(&scene);
-// 	cub->next_map = init_map(&scene);
-// 	cub->next_player = init_player(&scene);
-// 	cleanup_scene(&scene);
-	
-// 	setup_images(cub);
-// 	cub_loop(cub);
-	
-// 	cleanup(cub);
-// 	return (SUCCESS);
-// }
-

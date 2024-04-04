@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 15:30:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 18:53:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_map	init_map(t_scene *scene)
 	map.height = ft_lstsize(scene->map_list);
 	map.width = get_map_width(scene->map_list);
 	map.map_array = get_2d_map(scene->map_list, map.height, map.width);
+	if (!map.map_array)
+		set_error("malloc error in init_map");
 
 	map.floor_color = get_color(scene, FLOOR);
 	map.ceiling_color = get_color(scene, CEILING);
@@ -33,20 +35,3 @@ t_map	init_map(t_scene *scene)
 
 	return (map);
 }
-
-void	free_map(int **map, int height)
-{
-	int	i;
-
-	if (!map)
-		return;
-	i = 0;
-	while (i < height)
-	{
-		if (map[i])
-			free(map[i]);
-		i++;
-	}
-	free(map);
-}
-

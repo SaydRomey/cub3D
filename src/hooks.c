@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 19:38:02 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:09:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,25 @@ void	keyhooks(mlx_key_data_t data, void *param)
 	set_keys(data.key, &cub->keys, data.action);
 }
 
+/* ************************************************************************** */
+/* ************************************************************************** */
+
+void	tmp_change_lvl_hook(t_cub *cub)
+{
+	if (cub->keys.one)
+		change_level(0);
+	else
+		change_level(1);
+}
+
+
 /*
 to be called in mlx_loop_hook()
 */
 void	update(void *ptr)
 {
 	t_cub	*cub;
+	t_level	*lvl;
 
 	cub = (t_cub *)ptr;
 
@@ -116,10 +129,16 @@ void	update(void *ptr)
 
 	// update player by checking the keys pressed
 	// update_player(cub);
+
+	// level change (just an idea, will check with more stuff later)
 	
+	// if (level chosen != cub->current_level)
+		// change_level(level chosen);
+	tmp_change_lvl_hook(cub);
 
 	// minimap
-	cub->mini.img->instances->enabled = cub->keys.m;
+	lvl = get_level(cub->levels, cub->current_level);
+	lvl->mini.img->instances->enabled = cub->keys.m;
 
 }
 /* ************************************************************************** */

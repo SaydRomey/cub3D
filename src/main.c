@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 19:36:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 20:48:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 t_cub	*init_cub(char *filepath)
 {
 	t_cub	*cub;
-	char	*title;
+	// char	*title;
+	(void)filepath;
 
 	cub = call_cub();
 	
@@ -23,9 +24,9 @@ t_cub	*init_cub(char *filepath)
 	if (!cub->mlx)
 		error_mlx();
 	
-	title = ft_strjoin("cub3D - ", filepath);
-	mlx_set_window_title(cub->mlx, title);
-	free(title);
+	// title = ft_strjoin("cub3D - ", filepath);
+	// mlx_set_window_title(cub->mlx, title);
+	// free(title);
 	
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 	return (cub);
@@ -78,7 +79,7 @@ int	main(int argc, char **argv)
 		validate_map(&map);
 		
 		if (!there_is_a_problem())
-			add_new_level(&cub->levels, map, argv[i]); //copies the t_map, and creates a t_lvl node
+			add_new_level(&cub->levels, map, argv[i]); //copies the t_map, inits the t_minimap, and creates a t_lvl node
 
 		cleanup_scene(&scene);
 		cleanup_map(&map);
@@ -86,14 +87,24 @@ int	main(int argc, char **argv)
 	}
 	if (cub->levels)
 	{
-		t_map	*map_ptr = get_map(cub->levels, 0);
+		// t_map	*map_ptr = get_map(cub->levels, 0);
 		// if (map_ptr)
 			// test_map(*map_ptr); //displays info about a specific map
 		
-		cub->player = init_player(get_map(cub->levels, cub->current_level));
 		
-		cub->mini = init_minimap(map_ptr);
-		draw_minimap(&cub->mini, map_ptr);
+		// (this is the setup of the first level, will implement a 'change_level' function..)
+		cub->player = init_player(get_map(cub->levels, cub->current_level));
+		// cub->...
+		
+		int		current_level = cub->current_level;
+		t_level	*lvl_ptr;
+				
+		lvl_ptr = get_level(cub->levels, current_level);
+		if (lvl_ptr)
+		{
+			change_window_title(lvl_ptr->filepath);
+			draw_minimap(&lvl_ptr->mini, &lvl_ptr->map);
+		}
 		
 		cub_loop(cub);
 	}

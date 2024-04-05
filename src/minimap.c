@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 19:28:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 20:32:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ static void	draw_tiles(t_minimap *mini, t_map *map, t_point start, t_point end)
 		x = start.x;
 		while (x < end.x)
 		{
-			tile.x = (x - start.x) * mini->tile_size;
-			tile.y = (y - start.y) * mini->tile_size;
+			tile.x = ((x - start.x) * mini->tile_size) + mini->offset.x;
+			tile.y = ((y - start.y) * mini->tile_size) + mini->offset.y;
 			if (x >= 0 && x < map->width && y >= 0 && y < map->height)
 				draw_tile(mini->img, tile, size, tile_color(map, y, x));
 			x++;
@@ -82,55 +82,28 @@ static void	draw_tiles(t_minimap *mini, t_map *map, t_point start, t_point end)
 	}
 }
 
-void	draw_minimap(t_minimap *mini, t_map *map)
+static void	calculate_bounds(t_minimap *mini, t_map *map, t_point *start, t_point *end)
 {
-	// this is to test a fullscreen minimap
+	int		half_width;
+	int		half_height;
 	
-	t_point	start = {0, 0};
-	t_point	end = {mini->img->width, mini->img->height};
-	
-	draw_tiles(mini, map, start, end);
+	half_width = mini->img->width / (2 * mini->tile_size);
+	half_height = mini->img->height / (2 * mini->tile_size);
+
+	start->x = ft_max(0, mini->center.x - half_width);
+	start->y = ft_max(0, mini->center.y - half_height);
+	end->x = ft_min(map->width, mini->center.x + half_width + 1);
+	end->y = ft_min(map->height, mini->center.y + half_height + 1);
 }
 
-
-// static void	calculate_bounds(t_minimap *mini, t_point *start, t_point *end)
-// {
-// 	t_point	center;
-// 	int		half_width;
-// 	int		half_height;
-// 	// t_map		*map = &call_cub()->map;
-
-// 	half_width = mini->img->width / (2 * mini->tile_size);
-// 	half_height = mini->img->height / (2 * mini->tile_size);
-
-// 	// start->x = ft_max(0, mini->center.x - half_width);
-// 	// start->y = ft_max(0, mini->center.y - half_height);
-// 	// end->x = ft_min(map->width, mini->center.x + half_width + 1);
-// 	// end->y = ft_min(map->height, mini->center.y + half_height + 1);
-
-// 	start->x = mini->center.x - half_width;
-// 	start->y = mini->center.y - half_height;
-// 	end->x = mini->center.x + half_width + 1;
-// 	end->y = mini->center.y + half_height + 1;
-// }
-
-// void	draw_minimap(t_minimap *mini)
-// {
-// 	t_point	start;
-// 	t_point	end;
+void	draw_minimap(t_minimap *mini, t_map *map)
+{
+	t_point	start;
+	t_point	end;
 	
-// 	clear_img(mini->img);
-// 	if (call_cub()->keys.m)
-// 	{
-// 		// draw_background(mini->img, HEX_GRAY);
-// 		calculate_bounds(mini, &start, &end);
-// 		draw_tiles(mini, start, end);
-// 	}
-	
-// 	// iso_test(mini);
-// 	// iso_grid(mini);
-// }
-
+	calculate_bounds(mini, map, &start, &end);
+	draw_tiles(mini, map, start, end);
+}
 
 /* ************************************************************************** */
 
@@ -173,18 +146,33 @@ static t_point	find_center(t_minimap *mini)
 	return (center);
 }
 
+static t_point	find_offset(t_minimap *mini, t_map *map)
+{
+	int		total_minimap_width;
+	int		total_minimap_height;
+	t_point	offset;
+
+	total_minimap_width = mini->tile_size * map->width;
+	total_minimap_height = mini->tile_size * map->height;
+	offset.x = (WIDTH - total_minimap_width) / 2;
+	offset.y = (HEIGHT - total_minimap_height) / 2;
+
+	return (offset);
+}
+
 t_minimap	init_minimap(t_map *map)
 {
 	t_minimap	mini;
 	int			width = WIDTH;
 	int			height = HEIGHT;
-	int			margin = 0;
+	int			margin = 2;
 
 	ft_memset(&mini, 0, sizeof(t_minimap));
 	mini.img = new_img(call_cub()->mlx, width, height, true);
 	
 	adjust_tile_size(&mini, map, margin);
 	mini.center = find_center(&mini);
+	mini.offset = find_offset(&mini, map);
 	
 	return (mini);
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 18:43:40 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:12:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,30 @@ update cub.current_level
 
 redraw the minimap
 
-
 */
+void	change_level(int next_lvl_index) //test with the minimap and window title only
+{
+	t_cub	*cub = call_cub();;
+	t_level	*lvl;
+	t_level	*next_lvl;
+
+	if (cub->current_level == next_lvl_index)
+		return;
+	
+	// close current level stuff...
+	lvl = get_level(cub->levels, cub->current_level);
+	lvl->mini.img->instances->enabled = false;
+	// other rendering...
+	
+	// setup next level
+	next_lvl = get_level(cub->levels, next_lvl_index);
+	if (next_lvl)
+	{
+		change_window_title(next_lvl->filepath);
+		draw_minimap(&next_lvl->mini, &next_lvl->map);
+		cub->current_level = next_lvl_index;
+	}
+}
 
 t_map	deep_copy_map(t_map original)
 {
@@ -59,6 +81,7 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 	new_level->filepath = filepath;
 	new_level->index = ft_lstsize(*levels);
 	new_level->map = deep_copy_map(map);
+	new_level->mini = init_minimap(&map);
 	
 	node = ft_lstnew(new_level);
 	if (!node)
@@ -69,29 +92,6 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 	ft_lstadd_back(levels, node);
 }
 
-// void	add_new_level(t_list **levels, t_scene scene, char *filepath)
-// {
-// 	t_level	*new_level;
-// 	t_list	*node;
-
-// 	new_level = (t_level *)malloc(sizeof(t_level));
-// 	if (!new_level)
-// 		return ; //malloc error
-	
-// 	new_level->filepath = filepath; //for changing the title later
-// 	new_level->index = ft_lstsize(*levels);
-// 	new_level->map = init_map(&scene);
-// 	validate_map(&new_level->map);
-		
-// 	node = ft_lstnew(new_level);
-// 	if (!node)
-// 	{
-// 		delete_level(new_level);
-// 		return ; //malloc error
-// 	}
-// 	ft_lstadd_back(levels, node);
-// }
-
 void	delete_level(void *level)
 {
 	t_level	*lvl;
@@ -99,7 +99,9 @@ void	delete_level(void *level)
 	lvl = (t_level *)level;
 	if (lvl)
 	{
-		cleanup_map(&lvl->map); //and further specific cleaning if needed
+		cleanup_map(&lvl->map);
+		mlx_delete_image(call_cub()->mlx, lvl->mini.img);
+		
 		free(lvl);
 		proof("deleted a level");
 	}
@@ -130,6 +132,7 @@ t_level	*get_level(t_list *levels, int index)
 	t_list	*node;
 	t_level	*lvl;
 
+	// node = ft_lstget(call_cub()->levels, index); //test with this instead ..?
 	node = ft_lstget(levels, index);
 	if (node == NULL)
 	{

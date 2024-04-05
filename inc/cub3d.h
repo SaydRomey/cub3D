@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 19:33:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:10:09 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,6 +398,8 @@ typedef struct s_minimap
 	t_point		center;
 	int			half_width;
 	int			half_height;
+	
+	t_point		offset;
 
 }				t_minimap;
 
@@ -423,6 +425,7 @@ typedef struct s_level
 	int			index; //to navigate to 'lvl->index + 1' for next floor..
 	
 	t_map		map;
+	t_minimap	mini;
 
 
 	
@@ -531,6 +534,8 @@ void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
 
 // level.c
+void	change_level(int next_lvl_index);
+
 void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main
 // void	add_new_level(t_list **levels, t_scene scene, char *filepath); //this one creates its own t_map (tricky for error handling...)
 

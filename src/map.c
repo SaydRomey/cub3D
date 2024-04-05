@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 18:53:02 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:30:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ t_map	init_map(t_scene *scene)
 	map.ceiling_color = get_color(scene, CEILING);
 
 	extract_wall_textures(scene, &map, call_cub()->mlx);
-
+	extract_floor_ceiling_textures(scene, &map, call_cub()->mlx);
+	
 	map.spawn_orientation = scene->spawn_orientation;
 	map.starting_position = scene->starting_position;
 

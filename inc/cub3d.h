@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 21:10:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:50:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #  define BONUS 0
 # endif
 
-# define PRINT_PROOF 1 //put at '0' to silence the debug messages
+# define PRINT_PROOF 0 //put at '0' to silence the debug messages
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -382,7 +382,7 @@ used to parse the cubfiles and organize text data
 typedef struct s_scene
 {	
 	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
-	// add floor ceiling texture paths
+	char		*floor_ceiling_textures[2];
 	
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
@@ -413,7 +413,7 @@ typedef struct s_map
 	int			ceiling_color;
 	
 	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
-	// mlx_image_t	*floor_ceiling_img[2]; //check if we put all in one img array ?
+	mlx_image_t	*floor_ceiling_img[2]; //check if we put all in one img array ?
 
 	char		spawn_orientation;
 	t_fpoint	starting_position;
@@ -427,14 +427,13 @@ typedef struct s_level
 	t_map		map;
 	t_minimap	mini;
 
-
-	
 }			t_level;
 
 typedef struct s_cub
 {
 	mlx_t       *mlx;
 	mlx_image_t *img;
+	char		*floor_ceiling_default[2];
 
 	t_list		*levels;
 	int			current_level; //gets init to 0 with init_cub()
@@ -569,6 +568,7 @@ void		draw_minimap(t_minimap *mini, t_map *map);
 void	set_mouse(t_cub *cub);
 
 // parsing_floor_ceiling.c
+void	parse_floor_ceiling_texture(char *cubline, t_scene *scene);
 void	parse_floor_ceiling(char *cubline, t_scene *scene);
 
 // parsing_map.c
@@ -632,7 +632,9 @@ mlx_image_t *load_png(char *filepath, mlx_t *mlx);
 mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
 void		change_window_title(char *filepath);
 void		extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx);
+void		extract_floor_ceiling_textures(t_scene *scene, t_map *map, mlx_t *mlx);
 void		cleanup_wall_textures(t_map *map);
+void		cleanup_floor_ceiling_textures(t_map *map);
 // 
 void	toggle(bool *choice);
 void	clear_img(mlx_image_t *img);

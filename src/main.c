@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 20:48:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:54:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,12 @@ t_cub	*init_cub(char *filepath)
 	// free(title);
 	
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
+
+	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
+	cub->floor_ceiling_default[CEILING] = "img/light.png";
+
 	return (cub);
 }
-
-/* **this can be removed once we handle the F, C and I textures (maybe use a t_bonus struct ?)
-
-*/
-// void	setup_images(t_cub *cub)
-// {
-// 	cub->texture[F] = load_png("img/checker.png", cub->mlx);
-// 	cub->texture[C] = load_png("img/light.png", cub->mlx);
-// 	// cub->texture[C] = load_png("img/pikachu.png", cub->mlx);
-// 	cub->texture[I] = load_png("img/pokeball.png", cub->mlx);
-// 	cub->texture[J] = load_png("img/tree_trunk.png", cub->mlx);
-// }
 
 /*
 hooks and loops
@@ -81,6 +73,10 @@ int	main(int argc, char **argv)
 		if (!there_is_a_problem())
 			add_new_level(&cub->levels, map, argv[i]); //copies the t_map, inits the t_minimap, and creates a t_lvl node
 
+		// test for floor ceiling texture parsing
+		ft_printf("arg %d FLOOR->   %s\n", i, scene.floor_ceiling_textures[FLOOR]);
+		ft_printf("arg %d CEILING-> %s\n", i, scene.floor_ceiling_textures[CEILING]);
+				
 		cleanup_scene(&scene);
 		cleanup_map(&map);
 		i++;
@@ -96,15 +92,15 @@ int	main(int argc, char **argv)
 		cub->player = init_player(get_map(cub->levels, cub->current_level));
 		// cub->...
 		
-		int		current_level = cub->current_level;
-		t_level	*lvl_ptr;
+		// int		current_level = cub->current_level;
+		// t_level	*lvl_ptr;
 				
-		lvl_ptr = get_level(cub->levels, current_level);
-		if (lvl_ptr)
-		{
-			change_window_title(lvl_ptr->filepath);
-			draw_minimap(&lvl_ptr->mini, &lvl_ptr->map);
-		}
+		// lvl_ptr = get_level(cub->levels, current_level);
+		// if (lvl_ptr)
+		// {
+		// 	change_window_title(lvl_ptr->filepath);
+		// 	draw_minimap(&lvl_ptr->mini, &lvl_ptr->map);
+		// }
 		
 		cub_loop(cub);
 	}

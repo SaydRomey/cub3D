@@ -3,6 +3,8 @@ SO ./img/window.png
 WE ./img/brick_wall.png
 EA ./img/lockers.png
 
+CE ./img/window.png
+
 F 142,136,73
 C 109,192,195
 

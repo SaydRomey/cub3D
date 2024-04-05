@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 18:51:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:43:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,21 @@ void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 	}
 }
 
+void	extract_floor_ceiling_textures(t_scene *scene, t_map *map, mlx_t *mlx)
+{
+	int	i;
+
+	i = 0;
+	while (i < COLOR_TYPE_LEN)
+	{
+		if (scene->floor_ceiling_textures[i])
+			map->floor_ceiling_img[i] = load_png(scene->floor_ceiling_textures[i], mlx);
+		else
+			map->floor_ceiling_img[i] = load_png(call_cub()->floor_ceiling_default[i], mlx);
+		i++;
+	}
+}
+
 void	cleanup_wall_textures(t_map *map)
 {
 	int	i;
@@ -86,6 +101,26 @@ void	cleanup_wall_textures(t_map *map)
 		i++;
 	}
 }
+
+void	cleanup_floor_ceiling_textures(t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (i < COLOR_TYPE_LEN)
+	{
+		if (map->floor_ceiling_img[i])
+		{
+			mlx_delete_image(call_cub()->mlx, map->floor_ceiling_img[i]);
+			if (i == FLOOR)
+				vaproof("Deleted floor texture image %d", i);
+			else if (i == CEILING)
+				vaproof("Deleted ceiling texture image %d", i);
+		}
+		i++;
+	}
+}
+
 
 /* ************************************************************************** */
 

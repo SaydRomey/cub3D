@@ -3,6 +3,8 @@ SO ./img/south.png
 WE ./img/west.png
 EA ./img/east.png
 
+CE ./img/west.png
+
 F 142,136,73
 C 109,192,195
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 11:01:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 17:41:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:39:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	reset_info(void)
 	
 	ft_bzero(info->wall_check, sizeof(bool) * WALL_TEXTURE_LEN);
 	ft_bzero(info->color_check, sizeof(bool) * COLOR_TYPE_LEN);
+	ft_bzero(info->color_check_bonus, sizeof(bool) * COLOR_TYPE_LEN);
 	info->found_direction = false;
 	
 	proof("reset info");

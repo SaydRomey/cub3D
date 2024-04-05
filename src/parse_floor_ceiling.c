@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 12:39:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:25:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,34 @@ static void	split_rgb(int id, char *line, t_scene *scene)
 	call_info()->color_check[id] = true;
 }
 
-// void	parse_floor_ceiling_texture(char *line, t_scene *scene);
-// {
-// 	if (BONUS)
-// 	{
-		
-// 	}
-// }
+void	parse_floor_ceiling_texture(char *cubline, t_scene *scene)
+{
+	char	*colors[2];
+	char	*line;
+	int		id;
+	
+	// if (BONUS)
+	colors[0] = "FL ";
+	colors[1] = "CE ";
+	line = ft_strtrim(cubline, " \t\n");
+	id = 0;
+	while (id < COLOR_TYPE_LEN)
+	{
+		if (ft_strncmp(line, colors[id], 3) == SAME)
+		{
+			if (call_info()->color_check_bonus[id])
+				set_error("Duplicate floor/ceiling texture path");
+			else
+			{
+				scene->floor_ceiling_textures[id] = ft_strdup(line + 3);
+				call_info()->color_check_bonus[id] = true;
+			}
+		}
+		id++;
+	}
+	free(line);
+	return;
+}
 
 void	parse_floor_ceiling(char *cubline, t_scene *scene)
 {
@@ -84,7 +105,7 @@ void	parse_floor_ceiling(char *cubline, t_scene *scene)
 		}
 		id++;
 	}
-	// parse_floor_ceiling_texture(line, scene);
+	parse_floor_ceiling_texture(line, scene);
 	free(line);
 	return;
 }

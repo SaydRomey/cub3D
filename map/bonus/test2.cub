@@ -3,6 +3,9 @@ SO ./img/forest.png
 WE ./img/forest.png
 EA ./img/forest.png
 
+FL ./img/tree_trunk.png
+CE ./img/pokeball.png
+
 F 142,136,73
 C 109,192,195
 

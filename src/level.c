@@ -6,21 +6,12 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 21:12:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/04 21:55:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/*
-when changing level !!
-
-update the window title
-update cub.current_level
-
-redraw the minimap
-
-*/
 void	change_level(int next_lvl_index) //test with the minimap and window title only
 {
 	t_cub	*cub = call_cub();;
@@ -32,7 +23,7 @@ void	change_level(int next_lvl_index) //test with the minimap and window title o
 	
 	// close current level stuff...
 	lvl = get_level(cub->levels, cub->current_level);
-	lvl->mini.img->instances->enabled = false;
+	lvl->mini.img->instances->enabled = false; //test if this is needed
 	// other rendering...
 	
 	// setup next level

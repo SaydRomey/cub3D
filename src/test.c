@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 17:39:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 13:47:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,10 @@ static void fancy_print(int value)
 		color_print("[]", GREEN);
 	if (value == 1)
 		color_print("██", ORANGE);
+	if (value == 2)
+		color_print("██", YELLOW);
+	if (value == 3)
+		color_print("██", BLUE);
 	if (value == -1)
 		color_print("[]", GRAY);
 	if (value == -2)
@@ -155,7 +159,7 @@ void	test_map(t_map map)
 	// 
 	proof("Dimensions");
 	ft_printf("map height: %d\n", map.height);
-	ft_printf("map width: %d\n", map.width);
+	ft_printf("map width:  %d\n", map.width);
 	// 
 	proof("Raw values");
 	print_raw_array(map.map_array, map.height, map.width);
@@ -167,8 +171,27 @@ void	test_map(t_map map)
 	ft_printf("Ceiling: %X\n", map.ceiling_color);
 	// 
 	// test for the images?
-	// test for position and orientation ?
+
+	proof("Spawn");
+	ft_printf("orientation: %c\n", map.spawn_orientation);
+	printf("position:    X[%f], Y[%f]\n", map.starting_position.x, map.starting_position.y);
 }
+/* ************************************************************************** */
+
+void	test_player(t_player player)
+{
+	ft_strainbow("\n----- Testing player -----", 1);
+	// 
+	printf("position:  x%f, y%f\n", player.position.x, player.position.y);
+	printf("angle:      %f\n", player.angle);
+	printf("fov:        %f\n", player.fov);
+	printf("delta:      x%f, y%f\n", player.delta.x, player.delta.y);
+	printf("cam_plane:  x%f, y%f\n", player.cam_plane.x, player.cam_plane.y);
+	printf("speed:      %f\n", player.speed);
+	printf("turn speed: %f\n", player.turn_speed);
+}
+
+
 /* ************************************************************************** */
 
 void	test_term_colors(void)

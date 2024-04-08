@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 21:50:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 13:40:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@
 #  define BONUS 0
 # endif
 
-# define PRINT_PROOF 0 //put at '0' to silence the debug messages
+# define GAME_TITLE "cub3D"
+
+// # define PRINT_PROOF 0 //put at '0' to silence the debug messages
+# define PRINT_PROOF 1 //put at '1' to show the debug messages
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -146,6 +149,48 @@ enum rgb_id
 
 /* ************************************************************************** */
 
+typedef struct s_shadow
+{
+	bool	enabled;
+	float	density;
+	float	max;
+
+	// bool	flashlight; maybe a class itself, with enabled(on/off), range, light color, battery level?
+}			t_shadow;
+
+typedef struct s_fog
+{
+	bool	enabled;
+	int		color;
+	float	density;
+	float	max;
+}			t_fog;
+
+typedef struct s_vfx
+{
+	bool	textures_enabled; //add a separate flag for floor/celing ?
+	
+	
+	t_shadow	shadow;
+	
+	bool	shadow_enabled;
+	float	shadow_intensity; //?
+	float	shadow_min; //?
+	float	shadow_max; //?
+	
+	
+	t_fog	fog;
+	
+	bool	fog_enabled; //fog effect on walls, floor and ceiling **(if no textures, adapt draw_floor and draw_ceiling)
+	int		fog_color;
+	bool	floor_fog_enabled; //fog effect on floor and a portion of walls *(can exist without 'fog_enabled also)
+	float	floor_fog_level; //defines how high on the wall the floor fog goes [0.0f is none, 1.0f is all the way up]
+	int		floor_fog_color;
+	
+}			t_vfx;
+
+/* ************************************************************************** */
+
 # define FRAME_SPEED	100
 # define GO_LEFT		1
 # define GO_RIGHT		0
@@ -167,38 +212,6 @@ typedef struct s_slice
 	t_point		position;
 }				t_slice;
 
-/* ************************************************************************** */
-
-# define ELEVATOR_TEX_LEN	5
-
-enum elevator_id
-{
-	E_WALL,
-	E_FLOOR,
-	E_CEILING,
-	E_BTN_OFF,
-	E_BTN_ON
-};
-
-typedef struct s_elevator
-{
-	int			id;
-	bool		door;
-	bool		door_open;
-	bool		map_change;
-	bool		valid;
-	int			orientation;
-	// t_point		orientation_vector;
-	t_point		position;
-	t_point		buttons_size;
-	//
-	t_animation	door_animation;
-	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
-	mlx_image_t	*buttons;
-}				t_elevator;
-
-/* ************************************************************************** */
-
 /*
 used for checklist and errors
 */
@@ -214,7 +227,8 @@ typedef struct s_info
 
 	// bonus and extra parsing
 	bool	color_check_bonus[COLOR_TYPE_LEN]; //for floor and ceiling textures
-	bool	elevator; //? (need to check how it is currently parsed...)
+	
+	bool	found_elevator; //? (need to check how it is currently parsed...)
 
 }			t_info;
 
@@ -313,15 +327,45 @@ typedef struct s_keys
 
 /* ************************************************************************** */
 
+# define ELEVATOR_TEX_LEN	5
+
+enum elevator_id
+{
+	E_WALL,
+	E_FLOOR,
+	E_CEILING,
+	E_BTN_OFF,
+	E_BTN_ON
+};
+
+typedef struct s_elevator
+{
+	int			id;
+	bool		door;
+	bool		door_open;
+	bool		map_change;
+	bool		valid;
+	int			orientation;
+	// t_point		orientation_vector;
+	t_point		position;
+	t_point		buttons_size;
+	//
+	t_animation	door_animation;
+	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
+	mlx_image_t	*buttons;
+}				t_elevator;
+
+/* ************************************************************************** */
+/* ************************************************************************** */
+
 typedef struct s_player
 {
 	t_fpoint		position;
-	char			spawn_orientation;
-	// 
-	t_fpoint		delta;
-	t_fpoint		cam_plane;
 	float			angle;
 	float			fov;
+	
+	t_fpoint		delta;
+	t_fpoint		cam_plane;
 	float			speed;
 	float			turn_speed;
 	// 
@@ -332,48 +376,6 @@ typedef struct s_player
 	
 }					t_player;
 
-
-/* ************************************************************************** */
-typedef struct s_shadow
-{
-	bool	enabled;
-	float	density;
-	float	max;
-
-	// bool	flashlight; maybe a class itself, with enabled(on/off), range, light color, battery level?
-}			t_shadow;
-
-typedef struct s_fog
-{
-	bool	enabled;
-	int		color;
-	float	density;
-	float	max;
-}			t_fog;
-
-typedef struct s_vfx
-{
-	bool	textures_enabled; //add a separate flag for floor/celing ?
-	
-	
-	t_shadow	shadow;
-	
-	bool	shadow_enabled;
-	float	shadow_intensity; //?
-	float	shadow_min; //?
-	float	shadow_max; //?
-	
-	
-	t_fog	fog;
-	
-	bool	fog_enabled; //fog effect on walls, floor and ceiling **(if no textures, adapt draw_floor and draw_ceiling)
-	int		fog_color;
-	bool	floor_fog_enabled; //fog effect on floor and a portion of walls *(can exist without 'fog_enabled also)
-	float	floor_fog_level; //defines how high on the wall the floor fog goes [0.0f is none, 1.0f is all the way up]
-	int		floor_fog_color;
-	
-}			t_vfx;
-
 /* ************************************************************************** */
 
 /*
@@ -382,7 +384,7 @@ used to parse the cubfiles and organize text data
 typedef struct s_scene
 {	
 	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
-	char		*floor_ceiling_textures[2];
+	char		*floor_ceiling_textures[COLOR_TYPE_LEN];
 	
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
@@ -413,7 +415,7 @@ typedef struct s_map
 	int			ceiling_color;
 	
 	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
-	mlx_image_t	*floor_ceiling_img[2]; //check if we put all in one img array ?
+	mlx_image_t	*floor_ceiling_img[COLOR_TYPE_LEN]; //check if we put all in one img array ?
 
 	char		spawn_orientation;
 	t_fpoint	starting_position;
@@ -422,10 +424,12 @@ typedef struct s_map
 typedef struct s_level
 {
 	char		*filepath;
-	int			index; //to navigate to 'lvl->index + 1' for next floor..
+	int			index;
 	
 	t_map		map;
 	t_minimap	mini;
+
+	// t_elevator	elevator;
 
 }			t_level;
 
@@ -437,39 +441,19 @@ typedef struct s_cub
 
 	t_list		*levels;
 	int			current_level; //gets init to 0 with init_cub()
+	// int			chosen_level; //?maybe, to check if a level change request was triggered by an elevator event ?
 
 	t_player	player;
 	t_minimap	mini;
 	
 	t_raycast	raycast;
-	// t_asset		*assets;
-	// t_elevator	elevator;
+	// t_elevator	elevator; //should there be one of these per level, or does it transcend ?
 	
 	t_keys		keys;
 	t_mouse		mouse;
 	
 	t_vfx		vfx;
 }   			t_cub;
-
-// typedef struct s_cub
-// {
-// 	mlx_t       *mlx;
-// 	mlx_image_t *img;
-// 	// 
-// 	mlx_image_t	*texture[6]; //change to have this in t_map //make it so they are default or parsed
-// 	int			scene_total;
-// 	//
-// 	t_asset		*assets;
-// 	t_elevator	elevator;
-// 	t_map		*map;
-// 	t_map		*maps;
-// 	t_minimap	mini;
-// 	t_player	player;
-// 	t_raycast	raycast;
-// 	t_keys		keys;
-// 	t_mouse		mouse;
-// 	t_vfx		vfx;
-// }   			t_cub;
 
 /* ************************************************************************** */
 // assets.c
@@ -533,15 +517,13 @@ void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
 
 // level.c
-void	change_level(int next_lvl_index);
+void	change_level(int index);
 
 void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main
-// void	add_new_level(t_list **levels, t_scene scene, char *filepath); //this one creates its own t_map (tricky for error handling...)
-
-
 void	delete_level(void *level);
-t_level	*get_level(t_list *levels, int index);
-t_map	*get_map(t_list *levels, int index);
+
+t_level	*get_level(int index);
+t_map	*get_map(int index);
 
 // map.c
 t_map	init_map(t_scene *scene);
@@ -622,6 +604,8 @@ void	cproof(char *str, char *color);
 void	vaproof(char *str, ...);
 void	test_scene(t_scene scene);
 void    test_map(t_map map);
+void	test_player(t_player player);
+
 void	test_term_colors(void);
 void	grayscale_test(t_cub *cub);
 

@@ -6,12 +6,17 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 20:32:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 13:07:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+
+
+// implement the player pos tile drawing, since minimap is not drawn in each frame now..
+
+/* ************************************************************************** */
 static int	tile_color(t_map *map, int y, int x)
 {
 	int			value;
@@ -96,6 +101,11 @@ static void	calculate_bounds(t_minimap *mini, t_map *map, t_point *start, t_poin
 	end->y = ft_min(map->height, mini->center.y + half_height + 1);
 }
 
+/*
+draws a full size minimap once,
+** will serve as a reference for radar minimap
+
+*/
 void	draw_minimap(t_minimap *mini, t_map *map)
 {
 	t_point	start;
@@ -165,7 +175,7 @@ t_minimap	init_minimap(t_map *map)
 	t_minimap	mini;
 	int			width = WIDTH;
 	int			height = HEIGHT;
-	int			margin = 2;
+	int			margin = 2; //this can be changed, (will make tests for window limits with radar later..)
 
 	ft_memset(&mini, 0, sizeof(t_minimap));
 	mini.img = new_img(call_cub()->mlx, width, height, true);

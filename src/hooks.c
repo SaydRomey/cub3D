@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 21:09:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 14:49:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,20 +125,19 @@ void	update(void *ptr)
 	// elevator_events(cub);
 	
 	// update_vfx(&cub->vfx);
-	// raycast(cub);
 
-	// update player by checking the keys pressed
-	// update_player(cub);
+	raycast(cub);
+	update_player(cub);
 
-	// level change (just an idea, will check with more stuff later)
+	//// level change
 	
 	// if (level chosen != cub->current_level)
 		// change_level(level chosen);
 	tmp_change_lvl_hook(cub);
 
 	// minimap
-	lvl = get_level(cub->levels, cub->current_level);
-	lvl->mini.img->instances->enabled = cub->keys.m;
+	lvl = get_level(cub->current_level);
+	lvl->mini.img->instances->enabled = cub->keys.m; //maybe pair it with a bool in t_lvl instead ?
 
 }
 /* ************************************************************************** */

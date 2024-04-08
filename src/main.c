@@ -6,28 +6,22 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 21:54:36 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 13:48:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_cub	*init_cub(char *filepath)
+t_cub	*init_cub(char *title)
 {
 	t_cub	*cub;
-	// char	*title;
-	(void)filepath;
 
 	cub = call_cub();
 	
-	cub->mlx = mlx_init(WIDTH, HEIGHT, "cub3D", FALSE);
+	cub->mlx = mlx_init(WIDTH, HEIGHT, title, FALSE);
 	if (!cub->mlx)
 		error_mlx();
-	
-	// title = ft_strjoin("cub3D - ", filepath);
-	// mlx_set_window_title(cub->mlx, title);
-	// free(title);
-	
+		
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 
 	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
@@ -36,26 +30,12 @@ t_cub	*init_cub(char *filepath)
 	return (cub);
 }
 
-/*
-hooks and loops
-*/
-void	cub_loop(t_cub *cub)
+void	parse_and_extract(t_cub *cub, int argc, char **argv)
 {
-	set_mouse(cub);
-	mlx_key_hook(cub->mlx, &keyhooks, cub);
-	mlx_loop_hook(cub->mlx, update, cub);
-	mlx_loop(cub->mlx);
-}
-
-int	main(int argc, char **argv)
-{
-	t_cub	*cub;
 	t_scene	scene;
 	t_map	map;
 	int		i;
-		
-	validate_arguments(argc, argv);
-	cub = init_cub(argv[1]);
+
 	i = 1;
 	while (i < argc)
 	{
@@ -72,35 +52,42 @@ int	main(int argc, char **argv)
 		
 		if (!there_is_a_problem())
 			add_new_level(&cub->levels, map, argv[i]); //copies the t_map, inits the t_minimap, and creates a t_lvl node
-
-		// test for floor ceiling texture parsing
-		ft_printf("arg %d FLOOR->   %s\n", i, scene.floor_ceiling_textures[FLOOR]);
-		ft_printf("arg %d CEILING-> %s\n", i, scene.floor_ceiling_textures[CEILING]);
 				
 		cleanup_scene(&scene);
 		cleanup_map(&map);
 		i++;
 	}
+}
+
+/*
+hooks and loops
+*/
+void	cub_loop(t_cub *cub)
+{
+	set_mouse(cub);
+	mlx_key_hook(cub->mlx, &keyhooks, cub);
+	mlx_loop_hook(cub->mlx, update, cub);
+	mlx_loop(cub->mlx);
+}
+
+int	main(int argc, char **argv)
+{
+	t_cub	*cub;
+		
+	validate_arguments(argc, argv);
+	cub = init_cub(GAME_TITLE);
+	
+	parse_and_extract(cub, argc, argv);
+	
 	if (cub->levels)
 	{
-		// t_map	*map_ptr = get_map(cub->levels, 0);
+		// t_map	*map_ptr = get_map(cub->current_level);
 		// if (map_ptr)
-			// test_map(*map_ptr); //displays info about a specific map
+		// 	test_map(*map_ptr); //tmp, displays info about a specific map
 		
 		
-		// (this is the setup of the first level, will implement a 'change_level' function..)
-		cub->player = init_player(get_map(cub->levels, cub->current_level));
+		cub->player = init_player(get_map(cub->current_level));
 		// cub->...
-		
-		// int		current_level = cub->current_level;
-		// t_level	*lvl_ptr;
-				
-		// lvl_ptr = get_level(cub->levels, current_level);
-		// if (lvl_ptr)
-		// {
-		// 	change_window_title(lvl_ptr->filepath);
-		// 	draw_minimap(&lvl_ptr->mini, &lvl_ptr->map);
-		// }
 		
 		cub_loop(cub);
 	}

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/04/03 09:57:16 by cdumais          ###   ########.fr        #
+#    Updated: 2024/04/08 14:45:27 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@
 # **************************************************************************** #
 AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
-MAP			:= map/pdf.cub
+MAP			:= map/test.cub
 MAPS_BONUS	:= map/bonus/test.cub map/bonus/test1.cub map/bonus/test2.cub # use override command later for this
 
 CFG_DIR		:= .cfg

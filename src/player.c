@@ -6,13 +6,13 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 18:37:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 14:57:19 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	spawning_orientation(char direction)
+static int	spawning_orientation(char direction) //maybe put this in utils as 'cardinal_to_radian()' ? (since used in oli's code as well..)
 {
 	if (direction == 'N')
 		return (90);
@@ -47,121 +47,126 @@ t_player	init_player(t_map *map)
 	return (player);	
 }
 
-// static t_fpoint	get_velocity(t_cub *cub)
+// t_player	warp_player(t_elevator *elevator)
 // {
-// 	t_fpoint	velocity;
-
-// 	velocity.x = cub->player.delta.x * cub->player.speed;
-// 	velocity.y = cub->player.delta.y * cub->player.speed;
-// 	return (velocity);
+	// ??
 // }
 
-// static float	get_move_value(t_cub *cub, int x, int y, float rtn_value)
-// {
-// 	int	tile;
+static t_fpoint	get_velocity(t_cub *cub)
+{
+	t_fpoint	velocity;
 
-// 	tile = check_hit(x, y);
-// 	if (tile == 3 && cub->elevator.door == CLOSE
-// 		&& !((int) cub->player.position.x == cub->elevator.position.x
-// 		&& (int) cub->player.position.y == cub->elevator.position.y))
-// 		return (0);
-// 	if (tile == 0 && cub->elevator.door == CLOSE
-// 		&& (int) cub->player.position.x == cub->elevator.position.x
-// 		&& (int) cub->player.position.y == cub->elevator.position.y)
-// 		return (0);
-// 	if (tile == 1)
-// 		return (0);
-// 	return (rtn_value);
-// }
+	velocity.x = cub->player.delta.x * cub->player.speed;
+	velocity.y = cub->player.delta.y * cub->player.speed;
+	return (velocity);
+}
 
-// void	update_player_position(t_cub *cub)
-// {
-// 	t_fpoint	speed;
-// 	t_fpoint	*pos;
+static float	get_move_value(t_cub *cub, int x, int y, float rtn_value)
+{
+	int	tile;
+	
+	(void)cub; //tmp
 
-// 	pos = &cub->player.position;
-// 	speed = get_velocity(cub);
-// 	if (cub->keys.up || cub->keys.w)
-// 	{
-// 		pos->x += get_move_value(cub, pos->x + speed.x, pos->y, speed.x);
-// 		pos->y += get_move_value(cub, pos->x, pos->y + speed.y, speed.y);
-// 	}
-// 	if (cub->keys.a)
-// 	{
-// 		pos->x += get_move_value(cub, pos->x + speed.y, pos->y, speed.y);
-// 		pos->y -= get_move_value(cub, pos->x, pos->y - speed.x, speed.x);
-// 	}
-// 	if (cub->keys.down || cub->keys.s)
-// 	{
-// 		pos->x -= get_move_value(cub, pos->x - speed.x, pos->y, speed.x);
-// 		pos->y -= get_move_value(cub, pos->x, pos->y - speed.y, speed.y);
-// 	}
-// 	if (cub->keys.d)
-// 	{
-// 		pos->x -= get_move_value(cub, pos->x - speed.y, pos->y, speed.y);
-// 		pos->y += get_move_value(cub, pos->x, pos->y + speed.x, speed.x);
-// 	}
-// }
+	tile = check_hit(x, y);
+	// if (tile == 3 && cub->elevator.door == CLOSE
+	// 	&& !((int) cub->player.position.x == cub->elevator.position.x
+	// 	&& (int) cub->player.position.y == cub->elevator.position.y))
+	// 	return (0);
+	// if (tile == 0 && cub->elevator.door == CLOSE
+	// 	&& (int) cub->player.position.x == cub->elevator.position.x
+	// 	&& (int) cub->player.position.y == cub->elevator.position.y)
+	// 	return (0);
+	if (tile == 1)
+		return (0);
+	return (rtn_value);
+}
 
-// static void	apply_rotation_matrix(t_fpoint *src, float turn_speed)
-// {
-// 	t_fpoint	tmp;
+void	update_player_position(t_cub *cub)
+{
+	t_fpoint	speed;
+	t_fpoint	*pos;
 
-// 	tmp.x = src->x;
-// 	tmp.y = src->y;
-// 	src->x = tmp.x * cos(turn_speed) - tmp.y * sin(turn_speed);
-// 	src->y = tmp.x * sin(turn_speed) + tmp.y * cos(turn_speed);
-// }
+	pos = &cub->player.position;
+	speed = get_velocity(cub);
+	if (cub->keys.up || cub->keys.w)
+	{
+		pos->x += get_move_value(cub, pos->x + speed.x, pos->y, speed.x);
+		pos->y += get_move_value(cub, pos->x, pos->y + speed.y, speed.y);
+	}
+	if (cub->keys.a)
+	{
+		pos->x += get_move_value(cub, pos->x + speed.y, pos->y, speed.y);
+		pos->y -= get_move_value(cub, pos->x, pos->y - speed.x, speed.x);
+	}
+	if (cub->keys.down || cub->keys.s)
+	{
+		pos->x -= get_move_value(cub, pos->x - speed.x, pos->y, speed.x);
+		pos->y -= get_move_value(cub, pos->x, pos->y - speed.y, speed.y);
+	}
+	if (cub->keys.d)
+	{
+		pos->x -= get_move_value(cub, pos->x - speed.y, pos->y, speed.y);
+		pos->y += get_move_value(cub, pos->x, pos->y + speed.x, speed.x);
+	}
+}
 
-// void	update_player_direction(t_cub *cub)
-// {
-// 	t_player	*player;
+static void	apply_rotation_matrix(t_fpoint *src, float turn_speed)
+{
+	t_fpoint	tmp;
 
-// 	player = &cub->player;
-// 	if (cub->keys.right && !cub->keys.leftcontrol)
-// 	{
-// 		apply_rotation_matrix(&player->delta, player->turn_speed);
-// 		apply_rotation_matrix(&player->cam_plane, player->turn_speed);
-// 	}
-// 	if (cub->keys.left && !cub->keys.leftcontrol)
-// 	{
-// 		apply_rotation_matrix(&player->delta, -player->turn_speed);
-// 		apply_rotation_matrix(&player->cam_plane, -player->turn_speed);
-// 	}
-// 	if (cub->mouse.right)
-// 	{
-// 		apply_rotation_matrix(&player->delta, cub->mouse.rotate_x);
-// 		apply_rotation_matrix(&player->cam_plane, cub->mouse.rotate_x);
-// 		cub->mouse.right = OFF;
-// 	}
-// 	if (cub->mouse.left)
-// 	{
-// 		apply_rotation_matrix(&player->delta, -cub->mouse.rotate_x);
-// 		apply_rotation_matrix(&player->cam_plane, -cub->mouse.rotate_x);
-// 		cub->mouse.left = OFF;
-// 	}
-// }
+	tmp.x = src->x;
+	tmp.y = src->y;
+	src->x = tmp.x * cos(turn_speed) - tmp.y * sin(turn_speed);
+	src->y = tmp.x * sin(turn_speed) + tmp.y * cos(turn_speed);
+}
 
-// static void	update_player_stats(t_player *player, t_keys *keys)
-// {
-// 	player->speedup = keys->leftshift;
+void	update_player_direction(t_cub *cub)
+{
+	t_player	*player;
 
-// 	if (player->speedup)
-// 		player->speed = PLAYER_SPEED * 2;
-// 	else
-// 		player->speed = PLAYER_SPEED;
-// }
+	player = &cub->player;
+	if (cub->keys.right)
+	{
+		apply_rotation_matrix(&player->delta, player->turn_speed);
+		apply_rotation_matrix(&player->cam_plane, player->turn_speed);
+	}
+	if (cub->keys.left)
+	{
+		apply_rotation_matrix(&player->delta, -player->turn_speed);
+		apply_rotation_matrix(&player->cam_plane, -player->turn_speed);
+	}
+	if (cub->mouse.right)
+	{
+		apply_rotation_matrix(&player->delta, cub->mouse.rotate_x);
+		apply_rotation_matrix(&player->cam_plane, cub->mouse.rotate_x);
+		cub->mouse.right = OFF;
+	}
+	if (cub->mouse.left)
+	{
+		apply_rotation_matrix(&player->delta, -cub->mouse.rotate_x);
+		apply_rotation_matrix(&player->cam_plane, -cub->mouse.rotate_x);
+		cub->mouse.left = OFF;
+	}
+}
 
-// void	update_player(t_cub *cub)
-// {
-// 	t_player	*player;
+static void	update_player_stats(t_player *player, t_keys *keys)
+{
+	player->speedup = keys->leftshift;
 
-// 	player = &cub->player;
-// 	// if (cub->keys.backspace)
-// 	// 	*player = *player->respawn; //needs a fixing
-// 	// 
-// 	update_player_stats(player, &cub->keys); //test, might use this for inventory ?
-// 	// 
-// 	update_player_position(cub);
-// 	update_player_direction(cub);
-// }
+	if (player->speedup)
+		player->speed = PLAYER_SPEED * 2;
+	else
+		player->speed = PLAYER_SPEED;
+}
+
+void	update_player(t_cub *cub)
+{
+	t_player	*player;
+
+	player = &cub->player;
+	
+	update_player_stats(player, &cub->keys); //test, might use this for inventory ?
+	
+	update_player_position(cub);
+	update_player_direction(cub);
+}

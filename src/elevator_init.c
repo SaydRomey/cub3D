@@ -3,10 +3,10 @@
 // /*                                                        :::      ::::::::   */
 // /*   elevator_init.c                                    :+:      :+:    :+:   */
 // /*                                                    +:+ +:+         +:+     */
-// /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+// /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 // /*                                                +#+#+#+#+#+   +#+           */
 // /*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
-// /*   Updated: 2024/03/29 16:32:47 by oroy             ###   ########.fr       */
+// /*   Updated: 2024/04/08 12:19:28 by cdumais          ###   ########.fr       */
 // /*                                                                            */
 // /* ************************************************************************** */
 
@@ -96,3 +96,10 @@
 // 	set_buttons(cub, &elevator);
 // 	return (elevator);
 // }
+
+// /*
+// if some levels do not have an elevator but at least the level[0] does..
+// this could send the player in segworld
+
+
+// */

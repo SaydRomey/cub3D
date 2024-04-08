@@ -6,26 +6,28 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 16:51:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 10:40:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-what is the 'kra' directory in root ?
+TODO:
+
+connect rest of code.. next is raycast..
+
+update libft with math and linked list functions, (eventually clean it before evaluation..)
 
 
 
-TODO
 
-organize multiple map logic
 
-add floor and ceiling optionnal texture paths in map parsing (CE ./path and FL ./path)
+TODO maybe:
 
-handle tutorial (mouse for clicking on elevator buttons)
+create tutorial or instruction menu ? (mouse for clicking on elevator buttons)
 
 full ui ?
 
-where does 'segworld' fit in all this?
+where does 'segworld' fit in all this? *! (if we have an elevator but only one level in argv maybe)
 
 // change all colors to unsigned ?
 

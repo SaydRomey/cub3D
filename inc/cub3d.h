@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 13:40:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 15:48:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,7 +395,7 @@ typedef struct s_scene
 typedef struct s_minimap
 {
 	mlx_image_t	*img;
-	
+		
 	int			tile_size;
 	t_point		center;
 	int			half_width;
@@ -430,6 +430,9 @@ typedef struct s_level
 	t_minimap	mini;
 
 	// t_elevator	elevator;
+	int			e_orientation;
+	t_point		e_position;
+	
 
 }			t_level;
 
@@ -447,7 +450,7 @@ typedef struct s_cub
 	t_minimap	mini;
 	
 	t_raycast	raycast;
-	// t_elevator	elevator; //should there be one of these per level, or does it transcend ?
+	t_elevator	elevator; //should there be one of these per level, or does it transcend ?
 	
 	t_keys		keys;
 	t_mouse		mouse;

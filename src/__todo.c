@@ -6,14 +6,14 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 10:40:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 15:23:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
 
-connect rest of code.. next is raycast..
+connect rest of code.. next is elevator..
 
 update libft with math and linked list functions, (eventually clean it before evaluation..)
 

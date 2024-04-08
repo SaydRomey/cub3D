@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 14:55:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 15:17:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ TODO:
 a 'next_lvl() prev_lvl()' that block at 0 and ft_lstsize - 1 ?
 
 set the t_player's position and orientation when changing levels *!!
-
-
 */
 
 void	change_level(int index) //test with the minimap and window title only

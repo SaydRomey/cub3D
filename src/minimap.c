@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 13:07:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 15:48:43 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ t_minimap	init_minimap(t_map *map)
 
 	ft_memset(&mini, 0, sizeof(t_minimap));
 	mini.img = new_img(call_cub()->mlx, width, height, true);
-	
+		
 	adjust_tile_size(&mini, map, margin);
 	mini.center = find_center(&mini);
 	mini.offset = find_offset(&mini, map);

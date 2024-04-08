@@ -1,9 +1,9 @@
-NO ./img/north.png
-SO ./img/south.png
-WE ./img/west.png
-EA ./img/east.png
+NO ./img/paint_wall.png
+SO ./img/window.png
+WE ./img/brick_wall.png
+EA ./img/lockers.png
 
-CE ./img/west.png
+FL ./img/south.png
 
 F 142,136,73
 C 109,192,195

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 14:57:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 15:48:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,4 +169,5 @@ void	update_player(t_cub *cub)
 	
 	update_player_position(cub);
 	update_player_direction(cub);
+
 }

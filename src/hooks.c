@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 14:49:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/08 15:48:23 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,10 @@ void	keyhooks(mlx_key_data_t data, void *param)
 void	tmp_change_lvl_hook(t_cub *cub)
 {
 	if (cub->keys.one)
-		change_level(0);
-	else
 		change_level(1);
+	else
+		change_level(0);
 }
-
 
 /*
 to be called in mlx_loop_hook()
@@ -138,7 +137,7 @@ void	update(void *ptr)
 	// minimap
 	lvl = get_level(cub->current_level);
 	lvl->mini.img->instances->enabled = cub->keys.m; //maybe pair it with a bool in t_lvl instead ?
-
+	
 }
 /* ************************************************************************** */
 /* ************************************************************************** */

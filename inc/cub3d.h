@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:24:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 17:02:07 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,8 @@ typedef struct s_slice
 	t_point		position;
 }				t_slice;
 
+/* ************************************************************************** */
+
 /*
 used for checklist and errors
 */
@@ -231,7 +233,6 @@ typedef struct s_info
 
 	// bonus and extra parsing
 	bool	color_check_bonus[COLOR_TYPE_LEN]; //for floor and ceiling textures
-	
 	bool	found_elevator; //? (need to check how it is currently parsed...)
 
 }			t_info;
@@ -530,6 +531,7 @@ bool    there_is_a_problem(void);
 void	reset_info(void);
 
 // level.c
+void	init_first_level(t_cub *cub);
 void	change_level(int index);
 
 void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main

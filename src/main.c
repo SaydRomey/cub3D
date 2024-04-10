@@ -6,11 +6,19 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 15:10:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 17:00:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	setup_default_texture_paths(t_cub *cub)
+{
+	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
+	cub->floor_ceiling_default[CEILING] = "img/light.png";
+	
+	// elevator / UI paths here.. ?
+}
 
 t_cub	*init_cub(char *title)
 {
@@ -24,10 +32,7 @@ t_cub	*init_cub(char *title)
 		
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 
-	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
-	cub->floor_ceiling_default[CEILING] = "img/light.png";
-
-	// cub->elevator_textures/buttons ... ?
+	setup_default_texture_paths(cub);
 
 	return (cub);
 }
@@ -62,14 +67,23 @@ void	parse_and_extract(t_cub *cub, int argc, char **argv)
 }
 
 /*
-hooks and loops
+update info and render visuals
 */
 void	cub_loop(t_cub *cub)
 {
-	set_mouse(cub);
-	mlx_key_hook(cub->mlx, &keyhooks, cub);
 	mlx_loop_hook(cub->mlx, update, cub);
 	mlx_loop(cub->mlx);
+}
+
+/*
+sets the keys and mouse hooks,
+maybe setup the effects of pressing keys here .. ?
+(stuff like lvl->mini.img->instances->enabled = cub->keys.m)
+*/
+void	setup_control_hooks(t_cub *cub)
+{
+	set_mouse(cub);
+	mlx_key_hook(cub->mlx, &keyhooks, cub);
 }
 
 int	main(int argc, char **argv)
@@ -83,16 +97,11 @@ int	main(int argc, char **argv)
 	
 	if (cub->levels)
 	{
-		// t_map	*map_ptr = get_map(cub->current_level);
-		// if (map_ptr)
-		// 	test_map(*map_ptr); //tmp, displays info about a specific map
-		
-		t_level	*lvl = get_level(cub->current_level);
-		
-		change_window_title(lvl->filepath);
-		draw_minimap(&lvl->mini, &lvl->map);
 		cub->player = init_player(get_map(cub->current_level));
+		// cub->...
 		
+		init_first_level(cub);
+		setup_control_hooks(cub);
 		cub_loop(cub);
 	}
 	cleanup(cub);

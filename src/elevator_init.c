@@ -96,10 +96,3 @@
 // 	set_buttons(cub, &elevator);
 // 	return (elevator);
 // }
-
-// /*
-// if some levels do not have an elevator but at least the level[0] does..
-// this could send the player in segworld
-
-
-// */

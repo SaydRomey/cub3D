@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:21:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:52:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 
 /*
 TODO:
-a 'next_lvl() prev_lvl()' that block at 0 and ft_lstsize - 1 ?
-
-set the t_player's position and orientation when changing levels *!!
+a 'next_lvl() prev_lvl()' that block at 0 and ft_lstsize - 1 ? (maybe use ft_wrap)
 */
 
-// void	init_first_level();
+void	init_first_level(t_cub *cub)
+{
+	t_level	*lvl;
+
+	lvl = get_level(cub->current_level);
+	change_window_title(lvl->filepath);
+	draw_minimap(&lvl->mini, &lvl->map);
+}
 
 void	change_level(int index) //test with the minimap and window title only
 {
@@ -44,7 +49,7 @@ void	change_level(int index) //test with the minimap and window title only
 		cub->current_level = index;
 
 		// player adjustment (change to fit elevator logic instead later...)
-		cub->player = init_player(&next_lvl->map); //test
+		cub->player = init_player(&next_lvl->map); //tmp, but maybe use similar logic
 	}
 	return;
 }
@@ -162,3 +167,10 @@ t_map	*get_map(int index)
 		return (NULL);
 	return (&(lvl->map));
 }
+
+/*
+	t_map	*map_ptr = get_map(cub->current_level);
+	if (map_ptr)
+		test_map(*map_ptr); //tmp, displays info about a specific map
+*/
+		

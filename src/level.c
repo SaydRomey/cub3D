@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 15:17:48 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 13:49:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,25 +145,6 @@ void	delete_level(void *level)
 }
 
 /* ************************************************************************** */
-/* ************************************************************************** */
-
-t_list	*ft_lstget(t_list *lst, int index) //this will go in libft
-{
-	t_list	*tmp;
-	int		i;
-
-	tmp = lst;
-	i = 0;
-	if (index < 0)
-		return (NULL);
-	while (tmp != NULL && i < index)
-	{
-		tmp = tmp->next;
-		i++;
-	}
-	return (tmp);
-}
-
 /* ************************************************************************** */
 
 t_level *get_level(int index)

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 15:48:48 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 13:49:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -541,8 +541,6 @@ int		**get_2d_map(t_list *map_list, int height, int width);
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
 bool	is_in_circle(t_point point, t_point center, int radius);
-int		ft_clamp(int value, int min, int max);
-float	ft_fclamp(float value, float min, float max);
 float	ft_lerp(float a, float b, float t);
 
 // minimap.c
@@ -610,7 +608,6 @@ void    test_map(t_map map);
 void	test_player(t_player player);
 
 void	test_term_colors(void);
-void	grayscale_test(t_cub *cub);
 
 void	print_2d_array(int **array, int height, int width);
 

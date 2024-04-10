@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 17:16:06 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 13:49:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,6 @@ float	degree_to_radian(int degree)
 {
 	return (degree * PI / 180.0);
 }
-
-// int	ft_wrap(int value, int min, int max)
-// {
-// 	int	range;
-
-// 	range = max - min + 1;
-// 	if (value > max)
-// 		return (min + (value - min) % range);
-// 	else if (value < min)
-// 		return (max - (min - value -1) % range);
-// 	else
-// 		return (value);
-// }
 
 // int	fix_angle(int angle)
 // {
@@ -59,37 +46,6 @@ bool	is_in_circle(t_point point, t_point center, int radius)
 
 /* ************************************************************************** */
 // to put in libft ?
-
-float	ft_fmax(float this, float that)
-{
-	if (this > that)
-		return (this);
-	else
-		return (that);
-}
-
-float	ft_fmin(float this, float that)
-{
-	if (this < that)
-		return (this);
-	else
-		return (that);
-}
-
-int	ft_clamp(int value, int min, int max)
-{
-	return (ft_max(ft_min(value, max), min));
-}
-
-float	ft_fclamp(float value, float min, float max)
-{
-	// if (value < min)
-	// 	return (min);
-	// if (value > max)
-	// 	return (max);
-	// return (value);
-	return (ft_fmax(ft_fmin(value, max), min));
-}
 
 float	ft_percentage(float value, float total)
 {

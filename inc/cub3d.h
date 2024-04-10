@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 13:49:47 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:24:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@
 
 # define GAME_TITLE "cub3D"
 
-// # define PRINT_PROOF 0 //put at '0' to silence the debug messages
-# define PRINT_PROOF 1 //put at '1' to show the debug messages
+/* tmp to display debug messages
+*/
+// # define PRINT_PROOF		0
+# define PRINT_PROOF		1
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -58,6 +60,8 @@
 // 
 # define HEX_GROUND			0x8E8849FF
 # define HEX_SKY			0x6DC0C3FF
+// define other default colors (minimap)
+
 /* ************************************************************************** */
 
 /* player
@@ -232,11 +236,6 @@ typedef struct s_info
 
 }			t_info;
 
-t_info	*call_info(void);
-void	free_info(void);
-bool    there_is_a_problem(void);
-void	reset_info(void);
-
 /* ************************************************************************** */
 /* ************************************************************************** */
 
@@ -385,7 +384,6 @@ typedef struct s_scene
 {	
 	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
 	char		*floor_ceiling_textures[COLOR_TYPE_LEN];
-	
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
 	char		spawn_orientation;
@@ -409,13 +407,13 @@ typedef struct s_map
 {
 	int			height;
 	int			width;
-	int			**map_array; //2d array for the map
+	int			**map_array;
 	 
 	int			floor_color;
 	int			ceiling_color;
 	
 	mlx_image_t	*wall_textures_img[WALL_TEXTURE_LEN];
-	mlx_image_t	*floor_ceiling_img[COLOR_TYPE_LEN]; //check if we put all in one img array ?
+	mlx_image_t	*floor_ceiling_img[COLOR_TYPE_LEN];
 
 	char		spawn_orientation;
 	t_fpoint	starting_position;
@@ -432,9 +430,9 @@ typedef struct s_level
 	// t_elevator	elevator;
 	int			e_orientation;
 	t_point		e_position;
-	
 
 }			t_level;
+
 
 typedef struct s_cub
 {
@@ -459,8 +457,6 @@ typedef struct s_cub
 }   			t_cub;
 
 /* ************************************************************************** */
-// assets.c
-t_asset	*init_assets(void);
 
 // animation.c
 t_animation	set_animation(mlx_image_t *img);
@@ -468,27 +464,23 @@ void		update_animation(t_animation *a, bool direction);
 
 // call.c
 t_cub	*call_cub(void);
-void	call_clean(void);
-int		**call_array(void);
-int		call_width(void);
-int		call_height(void);
+void	call_clean(void); //tmp
 
 // cleanup.c
 void	cleanup_scene(t_scene *scene);
+void	free_map_array(int **map_array, int height); //put a generic version of this in libft..
 void	cleanup_map(t_map *map);
 void	cleanup(t_cub *cub);
-
-// door.c
-void	update_door_texture(t_cub *cub);
 
 // draw.c
 void	draw_line(mlx_image_t *img, t_fpoint start, t_fpoint end, int color);
 void	draw_rectangle(mlx_image_t *img, t_fpoint origin, t_fpoint end, int color);
-void	draw_ceiling(mlx_image_t *img, int color);
 void	draw_floor(mlx_image_t *img, int color);
+void	draw_ceiling(mlx_image_t *img, int color);
 void	draw_background(mlx_image_t *img, int color);
-void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
+
 void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color);
+void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
 
 // elevator.c
 t_elevator	init_elevator(t_cub *cub);
@@ -501,7 +493,7 @@ void		update_elevator_struct(t_cub *cub, t_elevator elevator);
 
 // error.c
 void	set_error(char *str);
-void	set_error_arg(char *str, char *arg); //broken ?
+void	set_error_arg(char *str, char *arg); //broken ? to test
 char	*get_error(void);
 void    error(void);
 void	error_arg(char *arg); //tmp
@@ -511,6 +503,7 @@ void	error_mlx(void);
 // fog.c
 int		fog_effect(int color, float raw_dist, float min, float max, int fog_color);
 int		fog_effect2(int color, float distance); //to test
+
 int		shadow_effect(int color, float raw_dist, float min, float max);
 int		apply_shadow(int color, float shadow_factor); //to test
 int		apply_bright(int color, float bright_factor); //to test
@@ -518,6 +511,23 @@ int		apply_bright(int color, float bright_factor); //to test
 // hooks.c
 void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
+
+// img_utils.c
+mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
+mlx_image_t	*copy_img(mlx_image_t *src, mlx_t *mlx);
+mlx_image_t *load_png(char *filepath, mlx_t *mlx);
+
+void		clear_img(mlx_image_t *img);
+void		fill_img(mlx_image_t *img, unsigned int grayscale);
+void		move_img(mlx_image_t *img, int x, int y);
+
+void		put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
+
+// info.c
+t_info	*call_info(void);
+void	free_info(void);
+bool    there_is_a_problem(void);
+void	reset_info(void);
 
 // level.c
 void	change_level(int index);
@@ -528,14 +538,17 @@ void	delete_level(void *level);
 t_level	*get_level(int index);
 t_map	*get_map(int index);
 
-// map.c
-t_map	init_map(t_scene *scene);
+// map_array.c
+int 	**allocate_grid(int height, int width);
+int		**get_2d_map(t_list *map_list, int height, int width);
+
+// map_list.c
 void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
 bool	is_wall_line(char *line);
-void	free_map_array(int **map_array, int height);
-int 	**allocate_grid(int height, int width);
-int		**get_2d_map(t_list *map_list, int height, int width);
+
+// map.c
+t_map	init_map(t_scene *scene);
 
 // math_utils.c
 float	degree_to_radian(int degree);
@@ -544,39 +557,39 @@ bool	is_in_circle(t_point point, t_point center, int radius);
 float	ft_lerp(float a, float b, float t);
 
 // minimap.c
-t_minimap	init_minimap(t_map *map);
 void		draw_minimap(t_minimap *mini, t_map *map);
+t_minimap	init_minimap(t_map *map);
 
 // mouse.c
 void	set_mouse(t_cub *cub);
 
-// parsing_floor_ceiling.c
-void	parse_floor_ceiling_texture(char *cubline, t_scene *scene);
+// parse_cubfile.c
+t_scene	parse_cubfile(char *filepath);
+
+// parse_floor_ceiling.c
 void	parse_floor_ceiling(char *cubline, t_scene *scene);
 
-// parsing_map.c
+// parse_map.c
 void	parse_map_line(char *line, t_scene *scene);
 
-// parsing_walls.c
+// parse_walls.c
 void	parse_wall_texture(char *cubline, t_scene *scene);
-
-// parsing.c
-t_scene	parse_cubfile(char *filepath);
 
 // pixels.c
 void	draw_pixel(mlx_image_t *img, int x, int y, int color);
+
 int		combine_rgba(int r, int g, int b, int a);
 int		get_pixel(mlx_image_t *img, int x, int y);
-void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
-int		rgb_to_int(int r, int g, int b);
-int		get_color(t_scene *scene, int id);
+
 int		get_red(int color);
 int		get_green(int color);
 int		get_blue(int color);
 int		get_alpha(int color);
 
+int		rgb_to_int(int r, int g, int b);
+int		get_color(t_scene *scene, int id);
+
 // player.c
-// t_player	init_player(t_scene *scene);
 t_player	init_player(t_map *map);
 // void	update_player_position(t_cub *cub);
 // void	update_player_direction(t_cub *cub);
@@ -587,55 +600,40 @@ int		check_hit(int map_y, int map_x);
 t_point	update_texture_position(t_texture tex, t_fpoint pos);
 // void	draw_assets(t_cub *cub, float z_buffer[NUMSPRITES]);
 void	draw_assets(t_cub *cub, float z_buffer[WIDTH]);
-
 void	draw_ceiling_floor(t_cub *cub, int y);
 void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x);
 void	execute_dda_algo(t_cub *cub, t_raycast *r);
 void	raycast(t_cub *cub);
 
-// scene.c
-void	retrieve_scene(t_cub *cub, char *filepath);
-
 // segworld.c
-void	call_segworld(t_cub *cub, t_elevator *e, t_fpoint pos, int ori);
+// void	call_segworld(t_cub *cub, t_elevator *e, t_fpoint pos, int ori);
 
 // test.c
 void	proof(char *str);
 void	cproof(char *str, char *color);
 void	vaproof(char *str, ...);
+
 void	test_scene(t_scene scene);
 void    test_map(t_map map);
 void	test_player(t_player player);
 
-void	test_term_colors(void);
-
-void	print_2d_array(int **array, int height, int width);
-
 // utils.c
-mlx_image_t *load_png(char *filepath, mlx_t *mlx);
-mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
-void		change_window_title(char *filepath);
-void		extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx);
-void		extract_floor_ceiling_textures(t_scene *scene, t_map *map, mlx_t *mlx);
-void		cleanup_wall_textures(t_map *map);
-void		cleanup_floor_ceiling_textures(t_map *map);
-// 
 void	toggle(bool *choice);
-void	clear_img(mlx_image_t *img);
-void	fill_img(mlx_image_t *img, unsigned int grayscale);
-void	move_img(mlx_image_t *img, int x, int y);
+void	change_window_title(char *filepath);
+
+// validate_elevator.c
+bool	valid_elevator(int **map, int y, int x);
 
 // validate.c
 void	validate_arguments(int argc, char **argv);
+
 void	validate_scene(t_scene *scene);
+
 void	validate_map(t_map *map);
 
 // vfx.c
-void	update_vfx(t_vfx *vfx);
-void	wall_vfx(int *color, float distance, float tex_pos_y);
-void	floor_ceiling_vfx(int *color[2], float distance);
-
-
-
+// void	update_vfx(t_vfx *vfx);
+// void	wall_vfx(int *color, float distance, float tex_pos_y);
+// void	floor_ceiling_vfx(int *color[2], float distance);
 
 #endif // CUB3D_H

@@ -6,11 +6,41 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 21:30:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:17:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
+{
+	int	i;
+
+	i = 0;
+	while (i < WALL_TEXTURE_LEN)
+	{
+		if (scene->wall_textures[i])
+			map->wall_textures_img[i] = load_png(scene->wall_textures[i], mlx);
+		else
+			map->wall_textures_img[i] = NULL; //use this here to check if bonus texture paths were parsed?
+		i++;
+	}
+}
+
+static void	extract_floor_ceiling_textures(t_scene *scene, t_map *map, mlx_t *mlx)
+{
+	int	i;
+
+	i = 0;
+	while (i < COLOR_TYPE_LEN)
+	{
+		if (scene->floor_ceiling_textures[i])
+			map->floor_ceiling_img[i] = load_png(scene->floor_ceiling_textures[i], mlx);
+		else
+			map->floor_ceiling_img[i] = load_png(call_cub()->floor_ceiling_default[i], mlx);
+		i++;
+	}
+}
 
 t_map	init_map(t_scene *scene)
 {

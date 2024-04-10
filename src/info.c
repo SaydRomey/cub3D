@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 11:01:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 12:32:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:51:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	reset_info(void)
 	info->found_direction = false;
 	
 	info->found_elevator = false;
+	// ...
 	
 	proof("reset info");
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 13:47:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:15:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	test_scene(t_scene scene)
 
 /* ************************************************************************** */
 
-# define GRAY "\033[90m"
+# define GRAY "\033[90m" //put in libft_utils.h
 
 static void	color_print(char *str, char *color)
 {
@@ -115,7 +115,7 @@ static void fancy_print(int value)
 		color_print("██", GRAY);
 }
 
-void	print_raw_array(int **array, int height, int width)
+static void	print_raw_array(int **array, int height, int width)
 {
 	int	i = 0;
 
@@ -134,7 +134,7 @@ void	print_raw_array(int **array, int height, int width)
 	printf("\n");
 }
 
-void	print_2d_array(int **array, int height, int width)
+static void	print_2d_array(int **array, int height, int width)
 {
 	int	i = 0;
 
@@ -190,55 +190,3 @@ void	test_player(t_player player)
 	printf("speed:      %f\n", player.speed);
 	printf("turn speed: %f\n", player.turn_speed);
 }
-
-
-/* ************************************************************************** */
-
-void	test_term_colors(void)
-{
-	int		i;
-	int		j;
-	int		code;
-
-	i = 0;
-	while (i < 16)
-	{
-		j = 0;
-		while (j < 16)
-		{
-			code = i * 16 + j;
-			printf("\033[38;5;%dm %4d", code, code);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-	printf("\033[0m\n");
-}
-
-/* ************************************************************************** */
-
-/*
-test to call in mlx_loop_hook's function
-*/
-// void	grayscale_test(t_cub *cub)
-// {
-// 	if (cub->keys.up)
-// 	{
-// 		if (call_info()->grayscale >= 245)
-// 			call_info()->grayscale = 0;
-// 		else
-// 			call_info()->grayscale += 5;
-// 	}
-// 	if (cub->keys.down)
-// 	{
-// 		if (call_info()->grayscale <= 10)
-// 			call_info()->grayscale = 255;
-// 		else
-// 			call_info()->grayscale -= 5;
-// 	}
-// 	if (cub->keys.backspace)
-// 		ft_printf("grayscale: %u\n", call_info()->grayscale);
-// 	fill_img((cub->mini).img, call_info()->grayscale); // tmp test to set grayscale
-// }
-/* ************************************************************************** */

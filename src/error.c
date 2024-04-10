@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 17:43:36 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:46:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,17 @@ void	set_error(char *str)
 	info->problem = true;
 }
 
-// void	set_error(char *str)
-// {
-// 	t_info	*info;
-
-// 	info = call_info();
-// 	info->error_msg = str;
-// 	info->problem = true;
-// }
-
-void	set_error_arg(char *str, char *arg) //fix this later.. i am loosing too much time on this..
+void	set_error_arg(char *str, char *arg)
 {
 	char	*full_error;
 
 	full_error = ft_strjoin_with(str, ": ", arg);
 	// full_error = ft_strjoin(str, arg);
-	// if (full_error)
-	// {
-	// 	set_error(full_error);
-	// 	free(full_error);	
-	// }
-	set_error(full_error);
+	if (full_error)
+	{
+		set_error(full_error);
+		free(full_error);	
+	}
 }
 
 char	*get_error(void)
@@ -99,39 +89,12 @@ void	error_mlx(void)
 	error(); //make sure this will free other mlx allocated ressources
 }
 
-
-// 
-// enum e_error_type
-// {
-// 	PARSING_ERROR,
-// 	MLX_ERROR
-// };
-
 /*
-test with adapt error to type
-*/
-// void	error(int error_type)
-// {
-// 	ft_putstr_fd("Error\n");
-// 	if (error_type == PARSING_ERROR)
-// 		ft_putendl_fd(get_error(), STDERR);
-// 	if (error_type == MLX_ERROR)
-// 		ft_putstr_fd((char *)mlx_strerror(mlx_errno), STDERR); //check format later
-
-// 	free_info();
-// 	exit(FAILURE);
-// }
-
-
-
-// possible errors : PARSING	EXTRACTING	MLX	
-
-//= Error Functions =//
 
 // const char* mlx_strerror(mlx_errno_t val);
 
-// The error codes used to identify the correct error message.
-/*
+The error codes used to identify the correct error message.
+
 typedef enum mlx_errno
 {
 	MLX_SUCCESS = 0,	// No Errors

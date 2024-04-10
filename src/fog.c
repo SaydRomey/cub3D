@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 11:56:13 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 19:51:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:46:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	fog_effect(int color, float raw_dist, float min, float max, int fog_color)
 }
 
 /* ************************************************************************** */
-int	blend_colors(int color1, int color2, float factor)
+static int	blend_colors(int color1, int color2, float factor)
 {
 	int	red;
 	int	green;
@@ -73,7 +73,6 @@ int	fog_effect2(int color, float distance)
 	factor = ft_fclamp(factor, 0.0f, 1.0f);
 	return (blend_colors(color, fog->color, factor));
 }
-
 
 /* ************************************************************************** */
 /* ************************************************************************** */

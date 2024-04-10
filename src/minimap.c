@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 15:48:43 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:00:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ static int	tile_color(t_map *map, int y, int x)
 
 	// if (x == (int)position.x && y == (int)position.y)
 	// 	return (HEX_PURPLE);
-	if (value == 42)
-		return (HEX_RED); //tmp
-	
+
+	if (value < 0)
+		return (HEX_GRAY);
 	else if (value == 0)
 		return (HEX_GREEN);
 	else if (value == 1)
@@ -38,8 +38,6 @@ static int	tile_color(t_map *map, int y, int x)
 		return (HEX_BLUE);
 	else if (value == 3) //ELEVATOR
 		return (HEX_OLILAS);
-	else if (value == -1 || value == -2)
-		return (HEX_GRAY);
 	else
 		return (HEX_RED); //should not get here
 }

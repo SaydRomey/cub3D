@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pixels.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/18 14:04:06 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/10 16:08:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,38 +50,6 @@ int	get_pixel(mlx_image_t *img, int x, int y)
 		return ((unsigned char)0xFF000000);
 	pixel = img->pixels + (y * img->width + x) * PIXEL_SIZE;
 	return (combine_rgba(*(pixel), *(pixel + 1), *(pixel + 2), *(pixel + 3)));
-}
-
-/* ************************************************************************** */
-
-/*
-in case the dst image is smaller
-*/
-static int	pixel_is_valid(mlx_image_t* img, t_u32 x, t_u32 y)
-{
-	return (x < img->width && y < img->height);
-}
-
-/*
-copy an image to another image
-*/
-void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y)
-{
-	int	i;
-	int	j;
-	
-	i = 0;
-	while (i < (int)src->width)
-	{
-		j = 0;
-		while (j < (int)src->height)
-		{
-			if (pixel_is_valid(src, i, j))
-				draw_pixel(dst, x + i, y + j, get_pixel(src, i, j));
-			j++;
-		}
-		i++;
-	}
 }
 
 /* ************************************************************************** */
@@ -145,22 +113,4 @@ int	get_color(t_scene *scene, int id)
 	}
 	color_int = rgb_to_int(r, g, b);
 	return (color_int);
-}
-
-/* ************************************************************************** */
-
-t_rgba	int_to_rgba(int color)
-{
-	t_rgba	rgba;
-
-	rgba.r = (color >> 24) & 0xFF;
-	rgba.g = (color >> 16) & 0xFF;
-	rgba.b = (color >> 8) & 0xFF;
-	rgba.a = color & 0xFF;
-	return (rgba);
-}
-
-int		rgba_to_int(t_rgba rgba)
-{
-	return ((rgba.r << 24) | (rgba.b << 16) | (rgba.b << 8) | rgba.a);
 }

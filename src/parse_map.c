@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 12:34:37 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:04:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static bool map_line_is_valid(const char *line)
 sets the spawn orientation in scene
 also sets the boolean flag 'found_direction'
 */
-void	scan_for_start(char *line, t_scene *scene)
+static void	scan_for_start(char *line, t_scene *scene)
 {
 	int	i;
 

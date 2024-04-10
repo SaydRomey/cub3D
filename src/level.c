@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 13:49:02 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:21:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ a 'next_lvl() prev_lvl()' that block at 0 and ft_lstsize - 1 ?
 
 set the t_player's position and orientation when changing levels *!!
 */
+
+// void	init_first_level();
 
 void	change_level(int index) //test with the minimap and window title only
 {
@@ -48,29 +50,17 @@ void	change_level(int index) //test with the minimap and window title only
 }
 
 /* ************************************************************************** */
+/* ************************************************************************** */
 
-mlx_image_t	*deep_copy_image(mlx_image_t *src)
-{
-	mlx_image_t *copy;
-	
-	if (!src)
-		return (NULL);
-	
-	copy = mlx_new_image(call_cub()->mlx, src->width, src->height);
-	if (!copy)
-		return (NULL);
-	
-	ft_memcpy(copy->pixels, src->pixels, src->width * src->height * sizeof(int));
-	
-	return (copy);
-}
-
-
+/* **separate this in helper functions
+*/
 t_map	deep_copy_map(t_map original)
 {
+	mlx_t	*mlx;
 	t_map	copy;
 	int		i;
 
+	mlx = call_cub()->mlx;
 	copy = original; //this copies the simple fields like height, width, etc.
 	
 	if (original.map_array != NULL) //deep copy of map_array
@@ -89,13 +79,13 @@ t_map	deep_copy_map(t_map original)
 	i = 0;
 	while (i < WALL_TEXTURE_LEN)
 	{
-		copy.wall_textures_img[i] = deep_copy_image(original.wall_textures_img[i]);
+		copy.wall_textures_img[i] = copy_img(original.wall_textures_img[i], mlx);
 		i++;
 	}
 	i = 0;
 	while (i < COLOR_TYPE_LEN)
 	{
-		copy.floor_ceiling_img[i] = deep_copy_image(original.floor_ceiling_img[i]);
+		copy.floor_ceiling_img[i] = copy_img(original.floor_ceiling_img[i], mlx);
 		i++;
 	}
 	return (copy);
@@ -115,8 +105,6 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 	new_level->map = deep_copy_map(map);
 	new_level->mini = init_minimap(&map);
 
-	
-	
 	node = ft_lstnew(new_level);
 	if (!node)
 	{
@@ -173,43 +161,4 @@ t_map	*get_map(int index)
 	if (!lvl)
 		return (NULL);
 	return (&(lvl->map));
-}
-
-/* ************************************************************************** */
-
-// to test when the structure is set
-
-/*
-get a specific 't_level' element using stddef.h's offsetof macro
-*/
-void	*get_level_element(t_list *levels, int index, size_t offset)
-{
-	t_list	*node;
-	t_level	*lvl;
-	void	*element_ptr = NULL;
-
-	node = ft_lstget(levels, index);
-	if (!node)
-		return (NULL);
-	
-	lvl = (t_level *)node->content;
-	if (!lvl)
-		return (NULL);
-
-	element_ptr = (void *)((char *)lvl + offset);
-
-	return (element_ptr);
-}
-
-t_map	*get_map2(t_list *levels, int index) //this is an example function to understand 'offsetof'...
-{
-	t_map	*map_ptr;
-	size_t	map_offset;
-
-	map_offset = offsetof(t_level, map);
-	
-	map_ptr = (t_map *)get_level_element(levels, index, map_offset);
-	if (!map_ptr)
-		return (NULL);
-	return (map_ptr);
 }

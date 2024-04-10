@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/18 14:10:42 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/10 15:41:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,6 @@ void	draw_rectangle(mlx_image_t *img, t_fpoint origin, t_fpoint end, int color)
 	}
 }
 
-void	draw_ceiling(mlx_image_t *img, int color)
-{
-	t_fpoint	start;
-	t_fpoint	end;
-	
-	start.x = 0;
-	start.y = 0;
-	end.x = img->width;
-	end.y = img->height / 2;
-	draw_rectangle(img, start, end, color);
-}
-
 void	draw_floor(mlx_image_t *img, int color)
 {
 	t_fpoint	start;
@@ -71,6 +59,19 @@ void	draw_floor(mlx_image_t *img, int color)
 	draw_rectangle(img, start, end, color);
 }
 
+void	draw_ceiling(mlx_image_t *img, int color)
+{
+	t_fpoint	start;
+	t_fpoint	end;
+	
+	start.x = 0;
+	start.y = 0;
+	end.x = img->width;
+	end.y = img->height / 2;
+	draw_rectangle(img, start, end, color);
+}
+
+// a.k.a. fill_img ?
 void	draw_background(mlx_image_t *img, int color)
 {
 	t_fpoint	dimensions;
@@ -81,6 +82,13 @@ void	draw_background(mlx_image_t *img, int color)
 }
 
 /* ************************************************************************** */
+
+void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color)
+{
+	draw_line(img, p1, p2, color);
+	draw_line(img, p2, p3, color);
+	draw_line(img, p3, p1, color);
+}
 
 void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color)
 {
@@ -106,13 +114,6 @@ void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color)
 		}
 		i++;
 	}
-}
-
-void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color)
-{
-	draw_line(img, p1, p2, color);
-	draw_line(img, p2, p3, color);
-	draw_line(img, p3, p1, color);
 }
 
 // void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color)
@@ -141,9 +142,4 @@ void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int 
 // 		}
 // 		i++;
 // 	}
-// }
-
-// void	draw_ortho_cube(mlx_image_t *img, t_point origin, int unit_size, int color)
-// {
-	
 // }

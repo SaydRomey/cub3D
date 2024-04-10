@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 18:04:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:24:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,6 @@ static void	check_map(t_list *map_list)
 /*
 checks if we have parsed all required info from .cub file
 (with the boolean checklist in t_info)
-
-*!! set bonus textures to default if they have not been found in cubfile
-
 */
 void	validate_scene(t_scene *scene)
 {

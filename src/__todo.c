@@ -6,14 +6,17 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 19:08:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 18:45:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
 
-connect rest of code.. next is elevator (need info from oli)..
+*! make it so t_elevator uses info from t_level (valid, position and orientation)
+(need to check if returning a radian when getting elevator orientation is better or not ..?)
+
+implement parsing and verification of elevator in parse_map()
 
 cleanup elevator (img)
 

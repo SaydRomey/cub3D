@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 22:30:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 19:32:17 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 
 /* tmp to display debug messages
 */
-# define PRINT_PROOF		0
-// # define PRINT_PROOF		1
+// # define PRINT_PROOF		0
+# define PRINT_PROOF		1
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -121,14 +121,6 @@ typedef enum e_map_elem
 	DOOR = 2,
 	ELEVATOR = 3,
 }	t_map_elem;
-
-# define ELEVATOR 3
-
-// remove when we can parse them, and implement default texture paths..
-# define F	0
-# define C	1
-# define I	2
-# define J	3
 
 enum wall_id
 {
@@ -314,12 +306,12 @@ typedef struct s_keys
 	bool	right;
 	
 	bool	spacebar;
-	bool	backspace; //to reset player position //might be too complex..
+	bool	backspace;
 	bool	leftshift; //to speedup
 	bool	leftcontrol;
 	
 	bool	m; //minimap toggle
-	bool	p; //player icon style
+	bool	p; //player icon style?
 	bool	one;
 	bool	two;
 	bool	three;
@@ -338,22 +330,6 @@ enum elevator_id
 	E_BTN_ON
 };
 
-// typedef struct s_elevator
-// {
-// 	int			id;
-// 	bool		door;
-// 	bool		door_open;
-// 	bool		map_change;
-// 	bool		valid;
-// 	int			orientation;
-// 	// t_point		orientation_vector;
-// 	t_point		position;
-// 	t_point		buttons_size;
-// 	//
-// 	t_animation	door_animation;
-// 	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
-// 	mlx_image_t	*buttons;
-// }				t_elevator;
 
 /* ************************************************************************** */
 /* ************************************************************************** */
@@ -373,6 +349,9 @@ typedef struct s_player
 	// 
 	int				size; //in minimap
 	int				color; //in minimap
+
+	// 
+	// bool		in_elevator; //?
 	
 }					t_player;
 
@@ -394,6 +373,7 @@ typedef struct s_scene
 typedef struct s_minimap
 {
 	mlx_image_t	*img;
+	bool		visible;
 		
 	int			tile_size;
 	t_point		center;
@@ -429,8 +409,8 @@ typedef struct s_level
 	t_minimap	mini;
 
 	bool		elevator_exists;
-	int			e_orientation;
-	t_point		e_position;
+	t_point		elevator_position;
+	int			elevator_orientation;
 
 }			t_level;
 
@@ -460,21 +440,18 @@ typedef struct s_elevator
 
 	t_button	buttons[2]; // 0 = UP, 1 = DOWN
 	
-	mlx_image_t	*user_interface;
-
 	int			id;
 	bool		door_open;
 	// 
-	t_point		buttons_size;
-	// mlx_image_t	*buttons;
-	//
 }				t_elevator;
 
 typedef struct s_cub
 {
 	mlx_t       *mlx;
 	mlx_image_t *img;
-	char		*floor_ceiling_default[2];
+	// mlx_image_t	*user_interface;
+
+	char		*floor_ceiling_default[COLOR_TYPE_LEN];
 
 	t_list		*levels;
 	int			current_level; //gets init to 0 with init_cub()
@@ -508,6 +485,7 @@ void	call_clean(void); //tmp
 void	cleanup_scene(t_scene *scene);
 void	free_map_array(int **map_array, int height); //put a generic version of this in libft..
 void	cleanup_map(t_map *map);
+void	cleanup_elevator(t_elevator *elevator);
 void	cleanup(t_cub *cub);
 
 // draw.c
@@ -568,7 +546,6 @@ bool    there_is_a_problem(void);
 void	reset_info(void);
 
 // level.c
-void	init_first_level(t_cub *cub);
 void	change_level(int index);
 
 void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main
@@ -657,10 +634,14 @@ void    test_map(t_map map);
 void	test_player(t_player player);
 
 // utils.c
+int		cardinal_to_radian(char cardinal);
+bool	find_value_in_array(t_map *map, int value_to_find, t_point *point_ptr);
 void	toggle(bool *choice);
 void	change_window_title(char *filepath);
 
 // validate_elevator.c
+int		get_elevator_orientation(int **map, t_point *position);
+void	get_elevator_info(t_level *lvl, t_map *map);
 bool	valid_elevator(int **map, int y, int x);
 
 // validate.c

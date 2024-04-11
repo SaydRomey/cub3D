@@ -6,14 +6,12 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:04:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 18:42:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/*
-*/
 static bool	is_map_line(const char *line)
 {
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 17:39:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 19:17:16 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ static int	tile_color(t_map *map, int y, int x)
 
 	if (value < 0)
 		return (HEX_GRAY);
-	else if (value == 0)
-		return (HEX_GREEN);
-	else if (value == 1)
-		return (HEX_ORANGE);
+	else if (value == 0) //WALKABLE
+		return (HEX_GROUND);
+	else if (value == 1) //WALL
+		return (HEX_BLACK);
 	else if (value == 2) //DOOR
 		return (HEX_BLUE);
 	else if (value == 3) //ELEVATOR
@@ -177,7 +177,7 @@ t_minimap	init_minimap(t_map *map)
 
 	ft_memset(&mini, 0, sizeof(t_minimap));
 	mini.img = new_img(call_cub()->mlx, width, height, true);
-		
+			
 	adjust_tile_size(&mini, map, margin);
 	mini.center = find_center(&mini);
 	mini.offset = find_offset(&mini, map);

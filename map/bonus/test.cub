@@ -3,8 +3,6 @@ SO ./img/window.png
 WE ./img/brick_wall.png
 EA ./img/lockers.png
 
-FL ./img/south.png
-
 F 142,136,73
 C 109,192,195
 

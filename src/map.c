@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:17:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 19:33:16 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,18 @@ static void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 		if (scene->wall_textures[i])
 			map->wall_textures_img[i] = load_png(scene->wall_textures[i], mlx);
 		else
-			map->wall_textures_img[i] = NULL; //use this here to check if bonus texture paths were parsed?
+			map->wall_textures_img[i] = NULL;
 		i++;
 	}
 }
 
 static void	extract_floor_ceiling_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 {
-	int	i;
-
+	// char	*floor_ceiling_default[COLOR_TYPE_LEN];
+	int		i;
+	
+	// floor_ceiling_default[FLOOR] = "img/checker.png";
+	// floor_ceiling_default[CEILING] = "img/light.png";
 	i = 0;
 	while (i < COLOR_TYPE_LEN)
 	{
@@ -38,6 +41,7 @@ static void	extract_floor_ceiling_textures(t_scene *scene, t_map *map, mlx_t *ml
 			map->floor_ceiling_img[i] = load_png(scene->floor_ceiling_textures[i], mlx);
 		else
 			map->floor_ceiling_img[i] = load_png(call_cub()->floor_ceiling_default[i], mlx);
+			// map->floor_ceiling_img[i] = load_png(floor_ceiling_default[i], mlx);
 		i++;
 	}
 }

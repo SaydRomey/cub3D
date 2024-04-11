@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 19:52:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 15:28:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,47 +100,6 @@ void	keyhooks(mlx_key_data_t data, void *param)
 	set_keys(data.key, &cub->keys, data.action);
 }
 
-/* ************************************************************************** */
-/* ************************************************************************** */
-
-// void	tmp_change_lvl_hook(t_cub *cub)
-// {
-// 	if (cub->keys.one)
-// 		change_level(1);
-// 	else
-// 		change_level(0);
-// }
-
-/*
-to be called in mlx_loop_hook()
-*/
-void	update(void *ptr)
-{
-	t_cub	*cub;
-	t_level	*lvl;
-
-	cub = (t_cub *)ptr;
-
-	update_player(cub);
-	
-	elevator_events(cub);
-	
-	
-	raycast(cub);
-	
-	// update_vfx(&cub->vfx);
-
-	//// level change
-	
-	// if (level chosen != cub->current_level)
-		// change_level(level chosen);
-	// tmp_change_lvl_hook(cub);
-
-	// minimap
-	lvl = get_level(cub->current_level);
-	lvl->mini.img->instances->enabled = cub->keys.m; //maybe pair it with a bool in t_lvl instead ?
-	
-}
 /* ************************************************************************** */
 /* ************************************************************************** */
 

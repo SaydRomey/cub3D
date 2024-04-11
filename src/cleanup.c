@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 18:48:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 19:10:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,23 +136,45 @@ void	cleanup_map(t_map *map)
 
 /* ************************************************************************** */
 
+// void	cleanup_elevator(t_elevator *elevator)
+// {
+// 	mlx_t	*mlx;
+// 	int		i;
+
+// 	mlx = call_cub()->mlx;
+// 	i = 0;
+// 	while (i < ELEVATOR_TEX_LEN)
+// 	{
+// 		if (elevator->texture[i])
+// 			mlx_delete_image(mlx, elevator->texture[i]);
+// 		i++;
+// 	}
+// 	i = 0;
+// 	while (i < 2)
+// 	{
+// 		if (elevator->buttons[0].button_imgs[i])
+// 			mlx_delete_image(mlx, elevator->buttons[0].button_imgs[i]);
+// 		if (elevator->buttons[1].button_imgs[i])
+// 			mlx_delete_image(mlx, elevator->buttons[1].button_imgs[i]);
+// 		i++;
+// 	}
+// }
+
 /*
 frees t_cub and mlx ressources
 */
 void	cleanup(t_cub *cub)
 {
-	
 	if (cub->levels)
 	{
 		ft_lstclear(&cub->levels, delete_level);
 		proof("lstcleared levels");
 	}
+	// if (cub->elevator.valid)
+	// 	cleanup_elevator(&cub->elevator);
 	
-	// mlx allocations:
 	mlx_delete_image(cub->mlx, cub->img);
+	// mlx_delete_image(cub->mlx, cub->user_interface);
 	mlx_terminate(cub->mlx);
 	proof("mlx terminated");
 }
-
-
-// cleanup elevator *!!

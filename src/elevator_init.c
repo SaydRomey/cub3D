@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/10 22:33:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 19:26:17 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,10 @@ t_elevator	init_elevator(t_cub *cub)
 	t_elevator	elevator;
 
 	ft_memset(&elevator, 0, sizeof (t_elevator));
-	parse_elevator(get_map(cub->current_level), &elevator);
-	elevator.user_interface = new_img(cub->mlx, WIDTH, HEIGHT, true); //
-	set_elevator_textures(cub, &elevator);
+	elevator.valid = true;
 	
-	// set_buttons(cub, &elevator);
+	parse_elevator(get_map(cub->current_level), &elevator);
+	set_elevator_textures(cub, &elevator);
 
 	return (elevator);
 }

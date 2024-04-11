@@ -6,24 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 19:42:18 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 17:08:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static int	spawning_orientation(char direction) //maybe put this in utils as 'cardinal_to_radian()' ? (since used in oli's code as well..)
-{
-	if (direction == 'N')
-		return (90);
-	if (direction == 'S')
-		return (270);
-	if (direction == 'E')
-		return (0);
-	if (direction == 'W')
-		return (180);
-	return (-1);
-}
 
 t_player	init_player(t_map *map)
 {
@@ -31,14 +18,15 @@ t_player	init_player(t_map *map)
 	
 	player.position.x = map->starting_position.x + 0.5;
 	player.position.y = map->starting_position.y + 0.5;
-	player.angle = spawning_orientation(map->spawn_orientation);
+	
+	player.speed = PLAYER_SPEED;
+	player.turn_speed = PLAYER_TURN_SPEED;
 	player.fov = PLAYER_FOV;
+	player.angle = cardinal_to_radian(map->spawn_orientation);
 	player.delta.x = cos(degree_to_radian(player.angle));
 	player.delta.y = -sin(degree_to_radian(player.angle));
 	player.cam_plane.x = -player.delta.y * player.fov;
 	player.cam_plane.y = player.delta.x * player.fov;
-	player.speed = PLAYER_SPEED;
-	player.turn_speed = PLAYER_TURN_SPEED;
 	// 
 	player.size = PLAYER_SIZE;
 	player.color = 0xFF00FFFF;
@@ -67,11 +55,13 @@ static float	get_move_value(t_cub *cub, int x, int y, float rtn_value)
 	
 	tile = check_hit(x, y); //next step of player
 
+	// if next step is elevator and door is closed and we are not inside
 	if (tile == 3 && cub->elevator.door == CLOSE
 		&& !((int) cub->player.position.x == cub->elevator.position.x
 		&& (int) cub->player.position.y == cub->elevator.position.y))
-		return (0); //? do we keep this
+		return (0);
 		
+	// if next step is walkable and door is closed and we are inside
 	if (tile == 0 && cub->elevator.door == CLOSE
 		&& (int) cub->player.position.x == cub->elevator.position.x
 		&& (int) cub->player.position.y == cub->elevator.position.y)

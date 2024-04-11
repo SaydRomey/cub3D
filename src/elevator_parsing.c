@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 19:53:02 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/10 22:40:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 17:42:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	check_only_one_side(t_map *map, t_elevator *elevator, int orientation
 	}
 }
 
-static void	get_elevator_orientation(t_map *map, t_elevator *elevator)
+static void	get_elevator_orientationnn(t_map *map, t_elevator *elevator)
 {
 	t_point	pos;
 
@@ -76,7 +76,7 @@ void	parse_elevator(t_map *map, t_elevator *elevator)
     
 	get_elevator_position(map, elevator);
 	if (elevator->valid)
-		get_elevator_orientation(map, elevator);
+		get_elevator_orientationnn(map, elevator);
     
 	if (!elevator->valid)
     {

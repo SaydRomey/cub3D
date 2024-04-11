@@ -6,27 +6,31 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 17:27:12 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 19:38:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/*
-TODO:
-a 'next_lvl() prev_lvl()' that block at 0 and ft_lstsize - 1 ? (maybe use ft_wrap)
-*/
+// void	go_up(void)
+// {
+// 	t_cub	*cub;
+// 	int		limit;
+	
+// 	cub = call_cub();
+// 	limit = (ft_lstsize(cub->levels) - 1);
+// 	change_level(ft_max(cub->current_level + 1, limit));
+// }
 
-void	init_first_level(t_cub *cub)
-{
-	t_level	*lvl;
+// void	go_down(void)
+// {
+// 	t_cub	*cub;
+	
+// 	cub = call_cub();
+// 	change_level(ft_min(cub->current_level - 1, 0));
+// }
 
-	lvl = get_level(cub->current_level);
-	change_window_title(lvl->filepath);
-	draw_minimap(&lvl->mini, &lvl->map);
-}
-
-void	change_level(int index) //test with the minimap and window title only
+void	change_level(int index)
 {
 	t_cub	*cub;
 	t_level	*lvl;
@@ -36,11 +40,9 @@ void	change_level(int index) //test with the minimap and window title only
 	if (cub->current_level == index)
 		return;
 	
-	// setup next level
 	next_lvl = get_level(index);
 	if (next_lvl)
 	{
-		// close current level stuff...
 		lvl = get_level(cub->current_level);
 		lvl->mini.img->instances->enabled = false;
 		
@@ -49,7 +51,8 @@ void	change_level(int index) //test with the minimap and window title only
 		cub->current_level = index;
 
 		// player adjustment (change to fit elevator logic instead later...)
-		cub->player = init_player(&next_lvl->map); //tmp, but maybe use similar logic
+		cub->player = init_player(&next_lvl->map); //tmp, but maybe use similar logic?
+		// cub->player = warp_player(next_lvl);
 	}
 	return;
 }
@@ -57,18 +60,55 @@ void	change_level(int index) //test with the minimap and window title only
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-/* **separate this in helper functions
-*/
+// static void	copy_map_images(t_map original, t_map copy)
+// {
+// 	mlx_t	*mlx;
+// 	int	i;
+
+// 	mlx = call_cub()->mlx;
+// 	i = 0;
+// 	while (i < ft_max(WALL_TEXTURE_LEN, COLOR_TYPE_LEN))
+// 	{
+// 		if (i < COLOR_TYPE_LEN)
+// 			copy.floor_ceiling_img[i] = copy_img(original.floor_ceiling_img[i], mlx);
+// 		if (i < WALL_TEXTURE_LEN)
+// 			copy.wall_textures_img[i] = copy_img(original.wall_textures_img[i], mlx);
+// 		i++;
+// 	}	
+// }
+
+// static void	copy_map_array(t_map original, t_map copy)
+// {
+// 	int		i;
+// 	size_t	n;
+
+// 	n = original.width * sizeof(int);
+// 	if (original.map_array != NULL) // && n > 0)
+// 	{
+// 		copy.map_array = allocate_grid(original.height, original.width);
+// 		if (copy.map_array != NULL)
+// 		{
+// 			i = 0;
+// 			while (i < original.height)
+// 			{
+// 				ft_memcpy(copy.map_array[i], original.map_array[i], n);
+// 				i++;
+// 			}
+// 		}
+// 	}
+// }
+
 t_map	deep_copy_map(t_map original)
 {
-	mlx_t	*mlx;
 	t_map	copy;
-	int		i;
 
-	mlx = call_cub()->mlx;
-	copy = original; //this copies the simple fields like height, width, etc.
+	copy = original;
+	// copy_map_array(original, copy); //one of these causes a segfault... check later..
+	// copy_map_images(original, copy); //one of these causes a segfault...
+
+	int	i;
 	
-	if (original.map_array != NULL) //deep copy of map_array
+	if (original.map_array != NULL) // && n > 0)
 	{
 		copy.map_array = allocate_grid(original.height, original.width);
 		if (copy.map_array != NULL)
@@ -84,13 +124,13 @@ t_map	deep_copy_map(t_map original)
 	i = 0;
 	while (i < WALL_TEXTURE_LEN)
 	{
-		copy.wall_textures_img[i] = copy_img(original.wall_textures_img[i], mlx);
+		copy.wall_textures_img[i] = copy_img(original.wall_textures_img[i], call_cub()->mlx);
 		i++;
 	}
 	i = 0;
 	while (i < COLOR_TYPE_LEN)
 	{
-		copy.floor_ceiling_img[i] = copy_img(original.floor_ceiling_img[i], mlx);
+		copy.floor_ceiling_img[i] = copy_img(original.floor_ceiling_img[i], call_cub()->mlx);
 		i++;
 	}
 	return (copy);
@@ -101,25 +141,25 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 	t_level	*new_level;
 	t_list	*node;
 
-	new_level = (t_level *)malloc(sizeof(t_level));
+	new_level = (t_level *)ft_calloc(1, sizeof(t_level));
 	if (!new_level)
-		return ; //malloc error
-	
+	{
+		set_error("Malloc error");
+		return ;
+	}	
 	new_level->filepath = filepath;
 	new_level->index = ft_lstsize(*levels);
 	new_level->map = deep_copy_map(map);
-	new_level->mini = init_minimap(&map);
-
+	new_level->mini = init_minimap(&map);	
+	get_elevator_info(new_level, &map);
 	node = ft_lstnew(new_level);
 	if (!node)
 	{
 		delete_level(new_level);
-		return ; //malloc error
+		set_error("Malloc error");
+		return ;
 	}
 	ft_lstadd_back(levels, node);
-
-	// if (new_level->index == 0)
-	// 	draw_minimap(&new_level->mini, &new_level->map); //maybe put this elsewhere.. ?
 }
 
 void	delete_level(void *level)
@@ -131,7 +171,6 @@ void	delete_level(void *level)
 	{
 		cleanup_map(&lvl->map);
 		mlx_delete_image(call_cub()->mlx, lvl->mini.img);
-		
 		free(lvl);
 		proof("deleted a level");
 	}
@@ -167,10 +206,3 @@ t_map	*get_map(int index)
 		return (NULL);
 	return (&(lvl->map));
 }
-
-/*
-	t_map	*map_ptr = get_map(cub->current_level);
-	if (map_ptr)
-		test_map(*map_ptr); //tmp, displays info about a specific map
-*/
-		

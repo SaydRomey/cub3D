@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 22:38:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 19:32:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_cub	*init_cub(char *title)
 		error_mlx();
 		
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
+	// cub->user_interface = new_img(cub->mlx, WIDTH, HEIGHT, true);
 
 	setup_default_texture_paths(cub);
 
@@ -61,57 +62,37 @@ void	parse_and_extract(t_cub *cub, int argc, char **argv)
 		
 		if (!there_is_a_problem())
 			add_new_level(&cub->levels, map, argv[i]); //copies the t_map and images, inits the t_minimap, and creates a t_lvl node
-				
+		
 		cleanup_scene(&scene);
 		cleanup_map(&map);
 		i++;
 	}
 }
 
-/*
-update info and render visuals
-*/
-void	cub_loop(t_cub *cub)
-{
-	mlx_loop_hook(cub->mlx, update, cub);
-	mlx_loop(cub->mlx);
-}
-
-/*
-sets the keys and mouse hooks,
-maybe setup the effects of pressing keys here .. ?
-(stuff like lvl->mini.img->instances->enabled = cub->keys.m)
-*/
-void	setup_control_hooks(t_cub *cub)
-{
-	set_mouse(cub);
-	mlx_key_hook(cub->mlx, &keyhooks, cub);
-}
-
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
+	t_level	*lvl = NULL;
 		
 	validate_arguments(argc, argv);
 	cub = init_cub(GAME_TITLE);
-	
 	parse_and_extract(cub, argc, argv);
-	
-	if (cub->levels)
+	if (cub->levels && !there_is_a_problem())
 	{
-		t_map	*map_ptr = get_map(call_cub()->current_level);
-		if (map_ptr)
-			test_map(*map_ptr);
-
-		cub->player = init_player(get_map(cub->current_level));
-		cub->elevator = init_elevator(cub);
-
-		test_buttons(&cub->elevator);
-
+		lvl = get_level(cub->current_level);
 		
-		init_first_level(cub);
-		setup_control_hooks(cub);
-		cub_loop(cub);
+		if (lvl->elevator_exists)
+			cub->elevator = init_elevator(cub);
+	
+		cub->player = init_player(&lvl->map);
+
+		change_window_title(lvl->filepath);
+		draw_minimap(&lvl->mini, &lvl->map);
+
+		set_mouse(cub);
+		mlx_key_hook(cub->mlx, &keyhooks, cub);
+		mlx_loop_hook(cub->mlx, update, cub);
+		mlx_loop(cub->mlx);
 	}
 	cleanup(cub);
 	free_info();

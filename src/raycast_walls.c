@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/10 19:59:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/11 17:24:57 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,44 +106,3 @@ void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 		y++;
 	}
 }
-
-// static float	ft_percent(float num, float total)
-// {
-//     if (total == 0)
-//         return (0);
-//     return ((num / total) * 100);
-// }
-
-// static float	ft_lerp(float a, float b, float t)
-// {
-//     return ((1 - t) * a + t * b);
-// }
-
-// static float	ft_fclamp(float value, float min, float max)
-// {
-//     return (ft_fmax(ft_fmin(value, max), min));
-// }
-
-// void	draw_wall_stripe(t_cub *cub, int x)
-// {
-// 	t_texture	tex;
-// 	t_line		line;
-// 	int			color;
-// 	float		dist;
-// 	int			y;
-
-// 	printf ("%f\n", cub->raycast.wall_perp_dist);
-// 	line = get_stripe_data(cub->raycast.wall_perp_dist);
-// 	tex = get_texture_info(cub, &line);
-// 	y = line.start;
-// 	dist = ft_fclamp(cub->raycast.wall_perp_dist, 0, 5) / 5;
-// 	while (y <= line.end)
-// 	{
-// 		// Is Bitwise AND really necessary here ?
-// 		tex.pixel.y = (int) tex.pos_y & (TEX_HEIGHT - 1);
-// 		tex.pos_y += tex.step_y;
-// 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
-// 		draw_pixel(cub->img, x, y, color * dist);
-// 		y++;
-// 	}
-// }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/08 14:46:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 19:59:27 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,23 @@
 
 static mlx_image_t	*get_tex(int x, int y, mlx_image_t *tex)
 {
-	(void)x; //tmp
-	(void)y; //tmp
-
-	
-	// if (check_hit(x, y) == ELEVATOR)
-	// 	return (call_cub()->elevator.texture[E_WALL]);
+	if (check_hit(x, y) == ELEVATOR)
+		return (call_cub()->elevator.texture[E_WALL]);
 	return (tex);
 }
 
 static mlx_image_t	*get_texture_to_draw(t_cub *cub, t_point ray_pos, bool side)
 {
 	t_map	*map;
-	// int		idx;
+	int		idx;
 
-	// map = cub->map;
 	map = get_map(cub->current_level);
 	
-	// if (check_hit(ray_pos.x, ray_pos.y) == ELEVATOR)
-	// {
-	// 	idx = cub->elevator.door_animation.current_frame;
-	// 	return (cub->elevator.door_animation.frames[idx]);
-	// }
+	if (check_hit(ray_pos.x, ray_pos.y) == ELEVATOR)
+	{
+		idx = cub->elevator.door_animation.current_frame;
+		return (cub->elevator.door_animation.frames[idx]);
+	}
 	if (side == 1 && cub->raycast.ray_dir.y < 0)
 		return (get_tex(ray_pos.x, ray_pos.y + 1, map->wall_textures_img[NO]));
 	if (side == 1 && cub->raycast.ray_dir.y > 0)
@@ -52,14 +47,8 @@ static t_texture	get_texture_info(float whp, t_point ray_pos, bool side)
 	t_cub		*cub;
 	t_texture	tex;
 
-	// (void)whp;
-	// (void)ray_pos;
-	// (void)side;
-
 
 	cub = call_cub();
-	
-	// ft_memset(&tex, 0, sizeof(t_texture)); //? does this fix the segfault ?
 	
 	tex.to_draw = get_texture_to_draw(cub, ray_pos, side);
 	tex.width = (int)tex.to_draw->width;

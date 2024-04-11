@@ -6,15 +6,16 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:56:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 19:08:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
-cleanup non-used functions and files, and put functions in proper files
 
 connect rest of code.. next is elevator (need info from oli)..
+
+cleanup elevator (img)
 
 **************************************************************************
 

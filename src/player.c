@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 15:48:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 19:42:18 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,18 @@ static float	get_move_value(t_cub *cub, int x, int y, float rtn_value)
 {
 	int	tile;
 	
-	(void)cub; //tmp
+	tile = check_hit(x, y); //next step of player
 
-	tile = check_hit(x, y);
-	// if (tile == 3 && cub->elevator.door == CLOSE
-	// 	&& !((int) cub->player.position.x == cub->elevator.position.x
-	// 	&& (int) cub->player.position.y == cub->elevator.position.y))
-	// 	return (0);
-	// if (tile == 0 && cub->elevator.door == CLOSE
-	// 	&& (int) cub->player.position.x == cub->elevator.position.x
-	// 	&& (int) cub->player.position.y == cub->elevator.position.y)
-	// 	return (0);
+	if (tile == 3 && cub->elevator.door == CLOSE
+		&& !((int) cub->player.position.x == cub->elevator.position.x
+		&& (int) cub->player.position.y == cub->elevator.position.y))
+		return (0); //? do we keep this
+		
+	if (tile == 0 && cub->elevator.door == CLOSE
+		&& (int) cub->player.position.x == cub->elevator.position.x
+		&& (int) cub->player.position.y == cub->elevator.position.y)
+		return (0);
+	
 	if (tile == 1)
 		return (0);
 	return (rtn_value);
@@ -169,5 +170,7 @@ void	update_player(t_cub *cub)
 	
 	update_player_position(cub);
 	update_player_direction(cub);
+
+	// draw miniplayer ..?
 
 }

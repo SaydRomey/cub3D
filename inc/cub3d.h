@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 17:02:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 22:30:49 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 
 /* tmp to display debug messages
 */
-// # define PRINT_PROOF		0
-# define PRINT_PROOF		1
+# define PRINT_PROOF		0
+// # define PRINT_PROOF		1
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -338,22 +338,22 @@ enum elevator_id
 	E_BTN_ON
 };
 
-typedef struct s_elevator
-{
-	int			id;
-	bool		door;
-	bool		door_open;
-	bool		map_change;
-	bool		valid;
-	int			orientation;
-	// t_point		orientation_vector;
-	t_point		position;
-	t_point		buttons_size;
-	//
-	t_animation	door_animation;
-	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
-	mlx_image_t	*buttons;
-}				t_elevator;
+// typedef struct s_elevator
+// {
+// 	int			id;
+// 	bool		door;
+// 	bool		door_open;
+// 	bool		map_change;
+// 	bool		valid;
+// 	int			orientation;
+// 	// t_point		orientation_vector;
+// 	t_point		position;
+// 	t_point		buttons_size;
+// 	//
+// 	t_animation	door_animation;
+// 	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
+// 	mlx_image_t	*buttons;
+// }				t_elevator;
 
 /* ************************************************************************** */
 /* ************************************************************************** */
@@ -428,12 +428,47 @@ typedef struct s_level
 	t_map		map;
 	t_minimap	mini;
 
-	// t_elevator	elevator;
+	bool		elevator_exists;
 	int			e_orientation;
 	t_point		e_position;
 
 }			t_level;
 
+
+typedef struct s_button
+{	
+	mlx_image_t	*button_imgs[2];
+	
+	t_point		position;
+	t_point		size;
+	
+	bool		state; //0 = OFF, 1 = ON
+	
+}				t_button;
+
+typedef struct s_elevator
+{
+	bool		valid;
+	t_point		position;
+	int			orientation;
+	
+	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
+	t_animation	door_animation;
+
+	bool		map_change; //
+	bool		door; // collision check and animation control
+
+	t_button	buttons[2]; // 0 = UP, 1 = DOWN
+	
+	mlx_image_t	*user_interface;
+
+	int			id;
+	bool		door_open;
+	// 
+	t_point		buttons_size;
+	// mlx_image_t	*buttons;
+	//
+}				t_elevator;
 
 typedef struct s_cub
 {
@@ -446,16 +481,18 @@ typedef struct s_cub
 	// int			chosen_level; //?maybe, to check if a level change request was triggered by an elevator event ?
 
 	t_player	player;
-	t_minimap	mini;
+	// t_minimap	mini;
 	
 	t_raycast	raycast;
-	t_elevator	elevator; //should there be one of these per level, or does it transcend ?
+	t_elevator	elevator; //it transcends !!
 	
 	t_keys		keys;
 	t_mouse		mouse;
 	
 	t_vfx		vfx;
 }   			t_cub;
+
+void    test_buttons(t_elevator *elevator);
 
 /* ************************************************************************** */
 

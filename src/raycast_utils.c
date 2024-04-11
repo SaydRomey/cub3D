@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/08 11:49:59 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 19:58:13 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	check_hit(int map_x, int map_y)
 {
 	t_map	*map;
 
-	// map = call_cub()->map;
 	map = get_map(call_cub()->current_level);
 	
 	if (map_x < 0 || map_x >= map->width || 

@@ -1,16 +1,16 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   elevator_init.c                                    :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
-// /*   Updated: 2024/04/08 12:19:28 by cdumais          ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   elevator_init.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
+/*   Updated: 2024/04/10 22:33:34 by cdumais          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #include "cub3d.h"
+#include "cub3d.h"
 
 // void	update_elevator_struct(t_cub *cub, t_elevator elevator)
 // {
@@ -55,9 +55,11 @@
 // 	size = elevator->buttons_size;
 // 	min = size.y - (size.x + floor_number * size.x);
 // 	max = size.y - floor_number * size.x;
+	
 // 	elevator->buttons->instances[0].x = 0;
 // 	elevator->buttons->instances[0].y = 0;
 // 	draw_buttons_pixels(elevator, size, min, max);
+	
 // 	elevator->buttons->instances[0].x = WIDTH - size.x;
 // 	elevator->buttons->instances[0].y = HEIGHT - size.y;
 // }
@@ -73,26 +75,31 @@
 // 	draw_buttons(elevator, 0);
 // }
 
-// static void	set_elevator_textures(t_cub *cub, t_elevator *elevator)
-// {
-// 	mlx_image_t	*door_img;
+static void	set_elevator_textures(t_cub *cub, t_elevator *elevator)
+{
+	mlx_image_t	*door_img;
 
-// 	elevator->texture[E_WALL] = load_png("img/elevator_wall.png", cub->mlx);
-// 	elevator->texture[E_FLOOR] = load_png("img/elevator_floor.png", cub->mlx);
-// 	elevator->texture[E_CEILING] = load_png("img/elevator_ceiling.png", cub->mlx);
-// 	elevator->texture[E_BTN_OFF] = load_png("img/elevator_btn_off.png", cub->mlx);
-// 	elevator->texture[E_BTN_ON] = load_png("img/elevator_btn_on.png", cub->mlx);
-// 	door_img = load_png("img/elevator_door.png", cub->mlx);
-// 	elevator->door_animation = set_animation(door_img);
-// 	mlx_delete_image(cub->mlx, door_img);
-// }
+	elevator->texture[E_WALL] = load_png("img/elevator_wall.png", cub->mlx);
+	elevator->texture[E_FLOOR] = load_png("img/elevator_floor.png", cub->mlx);
+	elevator->texture[E_CEILING] = load_png("img/elevator_ceiling.png", cub->mlx);
+	elevator->texture[E_BTN_OFF] = load_png("img/elevator_btn_off.png", cub->mlx);
+	elevator->texture[E_BTN_ON] = load_png("img/elevator_btn_on.png", cub->mlx);
+	
+	door_img = load_png("img/elevator_door.png", cub->mlx);
+	elevator->door_animation = set_animation(door_img);
+	mlx_delete_image(cub->mlx, door_img);
+}
 
-// t_elevator	init_elevator(t_cub *cub)
-// {
-// 	t_elevator	elevator;
+t_elevator	init_elevator(t_cub *cub)
+{
+	t_elevator	elevator;
 
-// 	parse_elevator(cub->map, &elevator);
-// 	set_elevator_textures(cub, &elevator);
-// 	set_buttons(cub, &elevator);
-// 	return (elevator);
-// }
+	ft_memset(&elevator, 0, sizeof (t_elevator));
+	parse_elevator(get_map(cub->current_level), &elevator);
+	elevator.user_interface = new_img(cub->mlx, WIDTH, HEIGHT, true); //
+	set_elevator_textures(cub, &elevator);
+	
+	// set_buttons(cub, &elevator);
+
+	return (elevator);
+}

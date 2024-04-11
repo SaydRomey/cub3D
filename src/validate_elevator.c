@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 10:59:43 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/08 10:59:29 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 18:28:16 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,8 +251,8 @@ static bool	check_south(int **map, int y, int x)
 	wall_count = 0;
 	valid = map[y + 1][x] == 0;
 	
-	wall_count += map[y][x+1] == 1;
-	wall_count += map[y][x-1] == 1;
+	wall_count += map[y][x + 1] == 1;
+	wall_count += map[y][x - 1] == 1;
 	wall_count += map[y-1][x] == 1;
 	return (valid && wall_count == 3);
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:15:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 22:38:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ void	test_map(t_map map)
 	ft_printf("orientation: %c\n", map.spawn_orientation);
 	printf("position:    X[%f], Y[%f]\n", map.starting_position.x, map.starting_position.y);
 }
+
 /* ************************************************************************** */
 
 void	test_player(t_player player)

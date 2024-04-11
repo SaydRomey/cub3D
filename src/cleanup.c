@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 15:36:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 18:48:19 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,3 +153,6 @@ void	cleanup(t_cub *cub)
 	mlx_terminate(cub->mlx);
 	proof("mlx terminated");
 }
+
+
+// cleanup elevator *!!

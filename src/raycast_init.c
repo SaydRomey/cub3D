@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/08 13:50:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 19:56:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	raycast(t_cub *cub)
 	}
 	while (x < WIDTH)
 	{
-		// cub->elevator.door_open = false;
+		cub->elevator.door_open = false;
 
 		
 		init_raycast_data(&cub->player, r, x);
@@ -89,8 +89,9 @@ void	raycast(t_cub *cub)
 
 
 
-		// if (cub->elevator.door_open)
-		// 	draw_wall_stripe(cub, r->ray_pos_door, &r->ray_door, x);
+		if (cub->elevator.door_open)
+			draw_wall_stripe(cub, r->ray_pos_door, &r->ray_door, x);
+		
 		// z_buffer[x] = cub->raycast.ray.wall_perp_dist;
 		x++;
 	}

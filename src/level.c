@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:52:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 17:27:12 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,8 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 	}
 	ft_lstadd_back(levels, node);
 
-	if (new_level->index == 0)
-		draw_minimap(&new_level->mini, &new_level->map); //maybe put this elsewhere.. ?
+	// if (new_level->index == 0)
+	// 	draw_minimap(&new_level->mini, &new_level->map); //maybe put this elsewhere.. ?
 }
 
 void	delete_level(void *level)

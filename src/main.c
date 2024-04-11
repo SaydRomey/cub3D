@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 17:00:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/10 22:38:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	setup_default_texture_paths(t_cub *cub)
 {
 	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
 	cub->floor_ceiling_default[CEILING] = "img/light.png";
+
+	// cub->elevator...
 	
 	// elevator / UI paths here.. ?
 }
@@ -97,8 +99,15 @@ int	main(int argc, char **argv)
 	
 	if (cub->levels)
 	{
+		t_map	*map_ptr = get_map(call_cub()->current_level);
+		if (map_ptr)
+			test_map(*map_ptr);
+
 		cub->player = init_player(get_map(cub->current_level));
-		// cub->...
+		cub->elevator = init_elevator(cub);
+
+		test_buttons(&cub->elevator);
+
 		
 		init_first_level(cub);
 		setup_control_hooks(cub);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 19:32:17 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 13:08:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # endif
 
 # define GAME_TITLE "cub3D"
+
+# define MAP_CHARS	"0123NSEW"
 
 /* tmp to display debug messages
 */
@@ -86,8 +88,6 @@
 # define COLOR_TYPE_LEN 	2
 # define RGB_LEN			3
 
-# define MAP_CHARS "0123NSEW"
-
 typedef struct s_fpoint
 {
 	float	x;
@@ -100,19 +100,7 @@ typedef struct s_point
 	int		y;
 }			t_point;
 
-typedef struct s_rgba
-{
-	int	r;
-	int	g;
-	int	b;
-	int	a;
-}		t_rgba;
-
-t_rgba	int_to_rgba(int color);
-int		rgba_to_int(t_rgba rgba);
-
-// change these names/values later... (currently not using this..)
-typedef enum e_map_elem
+enum e_map_elem
 {
 	OUTOFBOUND = -2,
 	SPACE = -1,
@@ -120,7 +108,7 @@ typedef enum e_map_elem
 	WALL = 1,
 	DOOR = 2,
 	ELEVATOR = 3,
-}	t_map_elem;
+};
 
 enum wall_id
 {
@@ -225,7 +213,7 @@ typedef struct s_info
 
 	// bonus and extra parsing
 	bool	color_check_bonus[COLOR_TYPE_LEN]; //for floor and ceiling textures
-	bool	found_elevator; //? (need to check how it is currently parsed...)
+	bool	found_elevator;
 
 }			t_info;
 
@@ -330,6 +318,36 @@ enum elevator_id
 	E_BTN_ON
 };
 
+typedef struct s_button
+{	
+	mlx_image_t	*button_imgs[2];
+	
+	t_point		position;
+	t_point		size;
+	
+	bool		state; //0 = OFF, 1 = ON
+	
+}				t_button;
+
+typedef struct s_elevator
+{
+	bool		valid;
+	t_point		position;
+	int			orientation;
+	
+	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
+	t_animation	door_animation;
+
+	bool		map_change;
+	bool		door;
+
+	t_button	buttons[2]; // 0 = UP, 1 = DOWN
+	
+	int			id;
+	bool		door_open;
+	// 
+}				t_elevator;
+
 
 /* ************************************************************************** */
 /* ************************************************************************** */
@@ -351,7 +369,7 @@ typedef struct s_player
 	int				color; //in minimap
 
 	// 
-	// bool		in_elevator; //?
+	// bool		in_elevator; //? //maybe to check if we display the minimap or gray grainy minimap *!?!
 	
 }					t_player;
 
@@ -362,7 +380,7 @@ used to parse the cubfiles and organize text data
 */
 typedef struct s_scene
 {	
-	char		*wall_textures[WALL_TEXTURE_LEN]; //change to 'wall_texture_paths[]'?
+	char		*wall_textures[WALL_TEXTURE_LEN];
 	char		*floor_ceiling_textures[COLOR_TYPE_LEN];
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];
 	t_list		*map_list;
@@ -406,44 +424,13 @@ typedef struct s_level
 	int			index;
 	
 	t_map		map;
-	t_minimap	mini;
+	t_minimap	mini; //a full scale tile based minimap
 
 	bool		elevator_exists;
 	t_point		elevator_position;
 	int			elevator_orientation;
 
 }			t_level;
-
-
-typedef struct s_button
-{	
-	mlx_image_t	*button_imgs[2];
-	
-	t_point		position;
-	t_point		size;
-	
-	bool		state; //0 = OFF, 1 = ON
-	
-}				t_button;
-
-typedef struct s_elevator
-{
-	bool		valid;
-	t_point		position;
-	int			orientation;
-	
-	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
-	t_animation	door_animation;
-
-	bool		map_change; //
-	bool		door; // collision check and animation control
-
-	t_button	buttons[2]; // 0 = UP, 1 = DOWN
-	
-	int			id;
-	bool		door_open;
-	// 
-}				t_elevator;
 
 typedef struct s_cub
 {
@@ -454,22 +441,19 @@ typedef struct s_cub
 	char		*floor_ceiling_default[COLOR_TYPE_LEN];
 
 	t_list		*levels;
-	int			current_level; //gets init to 0 with init_cub()
+	int			current_level;
 	// int			chosen_level; //?maybe, to check if a level change request was triggered by an elevator event ?
 
+	t_elevator	elevator;
 	t_player	player;
-	// t_minimap	mini;
-	
-	t_raycast	raycast;
-	t_elevator	elevator; //it transcends !!
 	
 	t_keys		keys;
 	t_mouse		mouse;
 	
+	t_raycast	raycast;
+	
 	t_vfx		vfx;
 }   			t_cub;
-
-void    test_buttons(t_elevator *elevator);
 
 /* ************************************************************************** */
 
@@ -477,15 +461,17 @@ void    test_buttons(t_elevator *elevator);
 t_animation	set_animation(mlx_image_t *img);
 void		update_animation(t_animation *a, bool direction);
 
-// call.c
-t_cub	*call_cub(void);
-void	call_clean(void); //tmp
+// cleanup_elevator.c
+void	cleanup_elevator(t_elevator *elevator);
 
-// cleanup.c
-void	cleanup_scene(t_scene *scene);
+// cleanup_nap.c
 void	free_map_array(int **map_array, int height); //put a generic version of this in libft..
 void	cleanup_map(t_map *map);
-void	cleanup_elevator(t_elevator *elevator);
+
+// cleanup_scene.c
+void	cleanup_scene(t_scene *scene);
+
+// cleanup.c
 void	cleanup(t_cub *cub);
 
 // draw.c
@@ -497,6 +483,7 @@ void	draw_background(mlx_image_t *img, int color);
 
 void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color);
 void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
+void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color);
 
 // elevator.c
 t_elevator	init_elevator(t_cub *cub);
@@ -507,12 +494,14 @@ void		change_map(t_cub *cub);
 void		check_for_map_change(t_cub *cub, int y);
 void		update_elevator_struct(t_cub *cub, t_elevator elevator);
 
+// elevator_buttons.c
+void    test_buttons(t_elevator *elevator);
+
 // error.c
 void	set_error(char *str);
-void	set_error_arg(char *str, char *arg); //broken ? to test
+void	set_error_arg(char *str, char *arg);
 char	*get_error(void);
 void    error(void);
-void	error_arg(char *arg); //tmp
 void	parsing_error(char *line, int fd, t_scene *scene);
 void	error_mlx(void);
 
@@ -554,6 +543,9 @@ void	delete_level(void *level);
 t_level	*get_level(int index);
 t_map	*get_map(int index);
 
+// main.c
+t_cub	*call_cub(void);
+
 // map_array.c
 int 	**allocate_grid(int height, int width);
 int		**get_2d_map(t_list *map_list, int height, int width);
@@ -561,7 +553,6 @@ int		**get_2d_map(t_list *map_list, int height, int width);
 // map_list.c
 void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
-bool	is_wall_line(char *line);
 
 // map.c
 t_map	init_map(t_scene *scene);
@@ -644,12 +635,14 @@ int		get_elevator_orientation(int **map, t_point *position);
 void	get_elevator_info(t_level *lvl, t_map *map);
 bool	valid_elevator(int **map, int y, int x);
 
-// validate.c
-void	validate_arguments(int argc, char **argv);
+// validate_map.c
+void	validate_map(t_map *map);
 
+// validate_scene.c
 void	validate_scene(t_scene *scene);
 
-void	validate_map(t_map *map);
+// validate.c
+void	validate_arguments(int argc, char **argv);
 
 // vfx.c
 // void	update_vfx(t_vfx *vfx);

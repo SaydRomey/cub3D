@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:34:21 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/10 16:15:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 13:35:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,6 @@ int	get_map_width(t_list *map_list)
 		map_list = map_list->next;
 	}
 	return (max_width);
-}
-
-/*
-check for first and last lines of the map
-(used in 'validate_scene')
-*/
-bool	is_wall_line(char *line)
-{
-	while (*line)
-	{
-		if (*line != '1' && !ft_isspace(*line))
-			return (false);
-		line++;
-	}
-	return (true);
 }
 
 /* **this version removes trailing whitespaces after last 'wall' char

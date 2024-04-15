@@ -6,20 +6,23 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 19:32:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 13:08:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	setup_default_texture_paths(t_cub *cub)
+t_cub	*call_cub(void)
 {
-	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
-	cub->floor_ceiling_default[CEILING] = "img/light.png";
+	static t_cub	*cub;
 
-	// cub->elevator...
-	
-	// elevator / UI paths here.. ?
+	if (cub == NULL)
+	{
+		cub = ft_calloc(1, sizeof(*cub));
+		if (!cub)
+			return (NULL);
+	}
+	return (cub);
 }
 
 t_cub	*init_cub(char *title)
@@ -35,7 +38,9 @@ t_cub	*init_cub(char *title)
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 	// cub->user_interface = new_img(cub->mlx, WIDTH, HEIGHT, true);
 
-	setup_default_texture_paths(cub);
+	// setup_default_texture_paths(cub);
+	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
+	cub->floor_ceiling_default[CEILING] = "img/light.png";
 
 	return (cub);
 }
@@ -61,7 +66,7 @@ void	parse_and_extract(t_cub *cub, int argc, char **argv)
 		validate_map(&map);
 		
 		if (!there_is_a_problem())
-			add_new_level(&cub->levels, map, argv[i]); //copies the t_map and images, inits the t_minimap, and creates a t_lvl node
+			add_new_level(&cub->levels, map, argv[i]); //copies the t_map and images, inits the t_minimap, and creates a t_lvl node (maybe split this.. ?)
 		
 		cleanup_scene(&scene);
 		cleanup_map(&map);

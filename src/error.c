@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 15:46:02 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 13:33:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,9 @@ void	error(void)
 	exit(FAILURE);
 }
 
-// tmp until i fix set_error_arg() **!!
-void	error_arg(char *arg)
-{
-	ft_putstr_fd("Error\n", STDERR);
-	ft_fprintf(STDERR, "%s%s: %s%s\n", RED, get_error(), arg, RESET);
-	free_info();
-	exit(FAILURE);
-}
-
+/*
+error function used during the 'get_next_line()' loop
+*/
 void	parsing_error(char *line, int fd, t_scene *scene)
 {
 	if (line)
@@ -81,12 +75,22 @@ void	parsing_error(char *line, int fd, t_scene *scene)
 	error();
 }
 
+/*
+mlx specific error function, uses 'mlx_errno' to identify error
+
+	** make sure this also frees other mlx allocated ressources
+	(like current images of t_cub when in init_elevator, etc.)
+
+	// set_error((char *)mlx_strerror(mlx_errno));
+
+*/
 void	error_mlx(void)
 {
-	// ft_putstr_fd((char *)mlx_strerror(mlx_errno), STDERR);
-	set_error((char *)mlx_strerror(mlx_errno));
-
-	error(); //make sure this will free other mlx allocated ressources
+	const char	*mlx_error_msg;
+	
+	mlx_error_msg = mlx_strerror(mlx_errno);
+	set_error((char *)mlx_error_msg);
+	error();
 }
 
 /*

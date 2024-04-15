@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 18:45:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 12:42:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ TODO:
 (need to check if returning a radian when getting elevator orientation is better or not ..?)
 
 implement parsing and verification of elevator in parse_map()
-
-cleanup elevator (img)
+** (make a list of what is valid, what is not, edge cases, etc..)
 
 **************************************************************************
 
@@ -31,6 +30,9 @@ continue working on radar version of minimap
 
 **************************************************************************
 Elevator:
+
+TODO:
+	cleanup elevator (img) (change when oli chooses how to do the buttons)
 
 *ideas*
 	can we select which level ?
@@ -90,6 +92,9 @@ create tutorial or instruction menu ? (mouse for clicking on elevator buttons)
 
 full ui ?
 
+// change all colors to unsigned ?
+
+
 **************************************************************************
 Segworld:
 
@@ -106,7 +111,6 @@ we go into segworld, and the elevator breaks... TUN TUN TUNNNNH !!!
 
 - use the lerp effect with random pixel value
 
-// change all colors to unsigned ?
 
 
 */

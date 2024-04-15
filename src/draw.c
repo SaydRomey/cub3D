@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 15:41:37 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 12:49:06 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,30 +116,30 @@ void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color)
 	}
 }
 
-// void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	distance_squared;
-// 	int	radius_squared;
-// 	int	inner_radius_squared;
+void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color)
+{
+	int	i;
+	int	j;
+	int	distance_squared;
+	int	radius_squared;
+	int	inner_radius_squared;
 
-// 	radius_squared = radius * radius;
-// 	inner_radius_squared = (radius - thickness) * (radius - thickness);
-// 	i = 0;
-// 	while (i < radius * 2)
-// 	{
-// 		j = 0;
-// 		while (j < radius * 2)
-// 		{
-// 			distance_squared = (i - radius) * (i - radius) + (j - radius) * (j
-// 					- radius);
-// 			if (distance_squared < radius_squared
-// 				&& distance_squared > inner_radius_squared)
-// 				draw_pixel(img, origin.x - radius + j, origin.y - radius + i,
-// 						color);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
+	radius_squared = radius * radius;
+	inner_radius_squared = (radius - thickness) * (radius - thickness);
+	i = 0;
+	while (i < radius * 2)
+	{
+		j = 0;
+		while (j < radius * 2)
+		{
+			distance_squared = (i - radius) * (i - radius) + (j - radius) * (j
+					- radius);
+			if (distance_squared < radius_squared
+				&& distance_squared > inner_radius_squared)
+				draw_pixel(img, origin.x - radius + j, origin.y - radius + i,
+						color);
+			j++;
+		}
+		i++;
+	}
+}

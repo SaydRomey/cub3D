@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 16:08:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 13:34:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,3 +114,20 @@ int	get_color(t_scene *scene, int id)
 	color_int = rgb_to_int(r, g, b);
 	return (color_int);
 }
+
+/* ************************************************************************** */
+
+/*
+test to see if we can make a 'black and white' effect
+
+
+int rgba_to_mono(int color)
+{
+	const char r = 0.299f * ((color >> 24) & 0xFF);
+	const char g = 0.587f * ((color >> 16) & 0xFF);
+	const char b = 0.114f * ((color >> 8) & 0xFF);
+	const char y = r + g + b;
+
+	return (y << 24 | y << 16 | y << 8 | (color & 0xFF));
+}
+*/

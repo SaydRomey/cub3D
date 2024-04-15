@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:08:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 16:02:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ t_cub	*init_cub(char *title)
 		error_mlx();
 		
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
-	// cub->user_interface = new_img(cub->mlx, WIDTH, HEIGHT, true);
+	
+	cub->radar_img = new_img(cub->mlx, 512, 512, true); //adjust dimensions with macro or ratio later..
+	move_img(cub->radar_img, WIDTH - 512 - 20, 20);
 
 	// setup_default_texture_paths(cub);
 	cub->floor_ceiling_default[FLOOR] = "img/checker.png";

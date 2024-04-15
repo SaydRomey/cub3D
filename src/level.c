@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 19:38:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 15:58:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,4 +205,19 @@ t_map	*get_map(int index)
 	if (!lvl)
 		return (NULL);
 	return (&(lvl->map));
+}
+
+/* ************************************************************************** */
+
+/*
+checks if a specific level has an elevator **(to test)
+*/
+bool	check_lvl_elevator(int index)
+{
+	t_level	*lvl;
+
+	lvl = get_level(index);
+	if (lvl)
+		return (lvl->elevator_exists);
+	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:08:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 15:58:23 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -418,26 +418,28 @@ typedef struct s_map
 	t_fpoint	starting_position;
 }		t_map;
 
+
 typedef struct s_level
 {
 	char		*filepath;
 	int			index;
 	
 	t_map		map;
-	t_minimap	mini; //a full scale tile based minimap
+	t_minimap	mini; //a full scale tile-based minimap
 
 	bool		elevator_exists;
 	t_point		elevator_position;
 	int			elevator_orientation;
 
-}			t_level;
+}				t_level;
+
 
 typedef struct s_cub
 {
 	mlx_t       *mlx;
 	mlx_image_t *img;
-	// mlx_image_t	*user_interface;
-
+	mlx_image_t	*radar_img; //for the round minimap (using pixel data of current level's minimap)
+	
 	char		*floor_ceiling_default[COLOR_TYPE_LEN];
 
 	t_list		*levels;
@@ -563,8 +565,13 @@ int	    fix_angle(int angle);
 bool	is_in_circle(t_point point, t_point center, int radius);
 float	ft_lerp(float a, float b, float t);
 
-// minimap.c
+// minimap_draw.c
 void		draw_minimap(t_minimap *mini, t_map *map);
+
+// minimap_radar.c
+void		draw_radar(t_cub *cub);
+
+// minimap.c
 t_minimap	init_minimap(t_map *map);
 
 // mouse.c

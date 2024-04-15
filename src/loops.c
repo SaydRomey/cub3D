@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:57:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 19:27:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 15:42:49 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ void	update(void *ptr)
 	//// level change
 	
 	// if (level chosen != cub->current_level)
-		// change_level(level chosen);
+	// 	change_level(level chosen);
 	// tmp_change_lvl_hook(cub);
 
 	// update_vfx(&cub->vfx);
 
-	// draw_radar(cub->user_interface, lvl);
+	draw_radar(cub);
 
 	// draw_assets()?
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:39:56 by cdumais           #+#    #+#             */
-/*   Updated: 2024/03/16 20:25:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 15:19:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,36 @@
 /*
 double  angle = M_PI / 4; // Rotate by 45 degrees
 */
-// void	rotate_image(mlx_image_t *src, mlx_image_t *dst, double angle)
-// {
-// 	int		x;
-// 	int		y;
-// 	int		new_x;
-// 	int		new_y;
-// 	int		center_x;
-// 	int		center_y;
-// 	double	cos_a;
-// 	double	sin_a;
+void	rotate_image(mlx_image_t *src, mlx_image_t *dst, double angle)
+{
+	int		x;
+	int		y;
+	int		new_x;
+	int		new_y;
+	int		center_x;
+	int		center_y;
+	double	cos_a;
+	double	sin_a;
 
-// 	center_x = src->width / 2;
-// 	center_y = src->height / 2;
-// 	cos_a = cos(angle);
-// 	sin_a = sin(angle);
+	center_x = src->width / 2;
+	center_y = src->height / 2;
+	cos_a = cos(angle);
+	sin_a = sin(angle);
 
-// 	y = 0;
-// 	while (y < dst->height)
-// 	{
-// 		x = 0;
-// 		while (x < dst->width)
-// 		{
-// 			new_x = (int)((x - center_x) * cos_a - (y - center_y) * sin_a) + center_x;
-// 			new_y = (int)((x - center_x) * sin_a + (y - center_y) * cos_a) + center_y;
-// 			draw_pixel(dst, x, y, get_pixel(src, new_x, new_y));
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
+	y = 0;
+	while (y < dst->height)
+	{
+		x = 0;
+		while (x < dst->width)
+		{
+			new_x = (int)((x - center_x) * cos_a - (y - center_y) * sin_a) + center_x;
+			new_y = (int)((x - center_x) * sin_a + (y - center_y) * cos_a) + center_y;
+			draw_pixel(dst, x, y, get_pixel(src, new_x, new_y));
+			x++;
+		}
+		y++;
+	}
+}
 
 /*
 add (double)angle variable to t_minimap to hold current angle of minimap

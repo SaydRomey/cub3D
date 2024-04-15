@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 12:47:04 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 15:53:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	cleanup(t_cub *cub)
 	// 	cleanup_elevator(&cub->elevator);
 	
 	mlx_delete_image(cub->mlx, cub->img);
-	// mlx_delete_image(cub->mlx, cub->user_interface);
+	mlx_delete_image(cub->mlx, cub->radar_img);
 	
 	mlx_terminate(cub->mlx);
 	proof("mlx terminated");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_floor.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/10 20:05:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 22:28:30 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_texture	get_texture_info(mlx_image_t *texture)
 }
 
 static void	draw_row_pixel(t_texture tex[4], t_fpoint pos, int x, int y)
-{	
+{
 	t_cub	*cub;
 	int		color[2];
 	// int		*color_ptrs[2] = {&color[FLOOR], &color[CEILING]};
@@ -63,7 +63,6 @@ static void	draw_row_pixel(t_texture tex[4], t_fpoint pos, int x, int y)
 	// color[0] = HEX_GROUND;
 	// color[1] = HEX_SKY;
 	
-
 	if ((int)pos.x == cub->elevator.position.x &&
 		(int)pos.y == cub->elevator.position.y)
 	{

@@ -3,23 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   elevator_init.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/11 19:26:17 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 22:25:55 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+void	update_elevator_struct(void)
+{
+	t_cub	*cub;
+	t_level	*lvl;
+
+	cub = call_cub();
+	lvl = get_level(cub->current_level);
+	cub->elevator.map_change = 0;
+	cub->elevator.orientation = lvl->elevator_orientation;
+	cub->elevator.position = lvl->elevator_position;
+}
+
 // void	update_elevator_struct(t_cub *cub, t_elevator elevator)
 // {
-// 	cub->elevator.door = elevator.door;
-// 	cub->elevator.door_open = elevator.door_open;
+// 	// cub->elevator.door = elevator.door;
+// 	// cub->elevator.door_open = elevator.door_open;
 // 	cub->elevator.map_change = elevator.map_change;
 // 	cub->elevator.orientation = elevator.orientation;
 // 	cub->elevator.position = elevator.position;
-// 	cub->elevator.valid = elevator.valid;
+// 	// cub->elevator.valid = elevator.valid;
 // }
 
 // static void	draw_buttons_pixels(t_elevator *e, t_point size, int min, int max)
@@ -82,8 +94,8 @@ static void	set_elevator_textures(t_cub *cub, t_elevator *elevator)
 	elevator->texture[E_WALL] = load_png("img/elevator_wall.png", cub->mlx);
 	elevator->texture[E_FLOOR] = load_png("img/elevator_floor.png", cub->mlx);
 	elevator->texture[E_CEILING] = load_png("img/elevator_ceiling.png", cub->mlx);
-	elevator->texture[E_BTN_OFF] = load_png("img/elevator_btn_off.png", cub->mlx);
-	elevator->texture[E_BTN_ON] = load_png("img/elevator_btn_on.png", cub->mlx);
+	// elevator->texture[E_BTN_OFF] = load_png("img/elevator_btn_off.png", cub->mlx);
+	// elevator->texture[E_BTN_ON] = load_png("img/elevator_btn_on.png", cub->mlx);
 	
 	door_img = load_png("img/elevator_door.png", cub->mlx);
 	elevator->door_animation = set_animation(door_img);
@@ -99,6 +111,8 @@ t_elevator	init_elevator(t_cub *cub)
 	
 	parse_elevator(get_map(cub->current_level), &elevator);
 	set_elevator_textures(cub, &elevator);
+
+	init_buttons(&elevator);
 
 	return (elevator);
 }

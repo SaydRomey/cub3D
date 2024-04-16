@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:08:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 22:12:48 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@
 # define CLOSE				0
 # define OPEN				1
 
-# define DOOR_DISTANCE		1
 # define DOOR_CHAR			2
 
 /* lengths of enums
@@ -307,6 +306,7 @@ typedef struct s_keys
 
 /* ************************************************************************** */
 
+# define BUTTON_SIZE 		64
 # define ELEVATOR_TEX_LEN	5
 
 enum elevator_id
@@ -324,9 +324,9 @@ typedef struct s_button
 	
 	t_point		position;
 	t_point		size;
-	
+
 	bool		state; //0 = OFF, 1 = ON
-	
+
 }				t_button;
 
 typedef struct s_elevator
@@ -341,6 +341,7 @@ typedef struct s_elevator
 	bool		map_change;
 	bool		door;
 
+	bool		buttons_on;
 	t_button	buttons[2]; // 0 = UP, 1 = DOWN
 	
 	int			id;
@@ -442,7 +443,7 @@ typedef struct s_cub
 
 	t_list		*levels;
 	int			current_level;
-	// int			chosen_level; //?maybe, to check if a level change request was triggered by an elevator event ?
+	int			chosen_level; //?maybe, to check if a level change request was triggered by an elevator event ?
 
 	t_elevator	elevator;
 	t_player	player;
@@ -488,14 +489,16 @@ void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thick
 // elevator.c
 t_elevator	init_elevator(t_cub *cub);
 void		draw_buttons(t_elevator *elevator, int floor_number);
+void		elevator_change_map(int lvl_index);
 void		elevator_events(t_cub *cub);
 void		parse_elevator(t_map *map, t_elevator *elevator);
 void		change_map(t_cub *cub);
 void		check_for_map_change(t_cub *cub, int y);
-void		update_elevator_struct(t_cub *cub, t_elevator elevator);
+void		update_elevator_struct(void);
 
 // elevator_buttons.c
-void    test_buttons(t_elevator *elevator);
+void	init_buttons(t_elevator *elevator);
+void	check_button_hover(t_button btn[2]);
 
 // error.c
 void	set_error(char *str);
@@ -600,7 +603,12 @@ int		get_color(t_scene *scene, int id);
 t_player	init_player(t_map *map);
 // void	update_player_position(t_cub *cub);
 // void	update_player_direction(t_cub *cub);
-void	update_player(t_cub *cub);
+void		update_player(t_cub *cub);
+t_player	warp_player(t_player old_player, t_level *lvl, t_level *next_lvl);
+
+// player_utils.c
+t_fpoint	rotate_vector_delta(t_fpoint tmp, int rotation);
+t_fpoint	rotate_vector_position(t_fpoint tmp, int rotation);
 
 // raycast.c
 int		check_hit(int map_y, int map_x);

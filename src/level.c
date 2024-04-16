@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   level.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 19:38:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 18:58:23 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	change_level(int index)
 		cub->current_level = index;
 
 		// player adjustment (change to fit elevator logic instead later...)
-		cub->player = init_player(&next_lvl->map); //tmp, but maybe use similar logic?
-		// cub->player = warp_player(next_lvl);
+		// cub->player = init_player(&next_lvl->map); //tmp, but maybe use similar logic?
+		cub->player = warp_player(cub->player, lvl, next_lvl);
 	}
 	return;
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:11:30 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 15:11:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 19:19:41 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,41 @@
 // implement the player pos tile drawing, since minimap is not drawn in each frame now..
 
 /* ************************************************************************** */
+// static int	tile_color(t_map *map, int y, int x)
+// {
+// 	int			value;
+// 	// t_fpoint	position;
+
+// 	value = map->map_array[y][x];
+// 	// position = call_cub()->player.position;
+
+// 	// if (x == (int)position.x && y == (int)position.y)
+// 	// 	return (HEX_PURPLE);
+
+// 	if (value < 0)
+// 		return (HEX_GRAY);
+// 	else if (value == 0) //WALKABLE
+// 		return (HEX_BLACK);
+// 	else if (value == 1) //WALL
+// 		return (HEX_WHITE);
+// 	else if (value == 2) //DOOR
+// 		return (HEX_BLUE);
+// 	else if (value == 3) //ELEVATOR
+// 		return (HEX_OLILAS);
+// 	else
+// 		return (HEX_RED); //should not get here
+// }
+
 static int	tile_color(t_map *map, int y, int x)
 {
 	int			value;
-	// t_fpoint	position;
 
 	value = map->map_array[y][x];
-	// position = call_cub()->player.position;
-
-	// if (x == (int)position.x && y == (int)position.y)
-	// 	return (HEX_PURPLE);
 
 	if (value < 0)
 		return (HEX_GRAY);
 	else if (value == 0) //WALKABLE
-		return (HEX_GROUND);
+		return (HEX_WHITE);
 	else if (value == 1) //WALL
 		return (HEX_BLACK);
 	else if (value == 2) //DOOR

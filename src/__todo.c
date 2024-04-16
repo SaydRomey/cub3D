@@ -6,12 +6,15 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 12:42:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 17:48:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
+
+**!! currently segfaults if a map has no elevator (in normal mode, did not test in bonus mode).
+
 
 *! make it so t_elevator uses info from t_level (valid, position and orientation)
 (need to check if returning a radian when getting elevator orientation is better or not ..?)

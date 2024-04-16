@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:57:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 15:42:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 22:22:21 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ to be called in mlx_loop_hook()
 void	update(void *ptr)
 {
 	t_cub	*cub;
+	t_level	*lvl;
 
 	cub = (t_cub *)ptr;
 
@@ -47,7 +48,7 @@ void	update(void *ptr)
 	
 	elevator_events(cub); //animation and level change trigger
 
-	//// level change
+	//// level change	
 	
 	// if (level chosen != cub->current_level)
 	// 	change_level(level chosen);
@@ -55,8 +56,13 @@ void	update(void *ptr)
 
 	// update_vfx(&cub->vfx);
 
-	draw_radar(cub);
-
+	lvl = get_level(cub->current_level);
+	if (lvl)
+	{
+		draw_radar(&lvl->mini);
+		// draw_radar(&lvl->mini, &lvl->map, &cub->player);
+	}
+	
 	// draw_assets()?
 
 	raycast(cub);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 15:58:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 22:18:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 
 /* tmp to display debug messages
 */
-// # define PRINT_PROOF		0
-# define PRINT_PROOF		1
+# define PRINT_PROOF		0
+// # define PRINT_PROOF		1
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -69,7 +69,7 @@
 /* player
 */
 # define PLAYER_FOV			0.80
-# define PLAYER_SIZE		10
+# define PLAYER_SIZE		24
 # define PLAYER_SPEED		0.1
 # define PLAYER_TURN_SPEED	0.1
 
@@ -346,6 +346,7 @@ typedef struct s_elevator
 	int			id;
 	bool		door_open;
 	// 
+	// bool		player_is_inside; //?
 }				t_elevator;
 
 
@@ -368,9 +369,7 @@ typedef struct s_player
 	int				size; //in minimap
 	int				color; //in minimap
 
-	// 
-	// bool		in_elevator; //? //maybe to check if we display the minimap or gray grainy minimap *!?!
-	
+	// 	
 }					t_player;
 
 /* ************************************************************************** */
@@ -544,6 +543,7 @@ void	delete_level(void *level);
 
 t_level	*get_level(int index);
 t_map	*get_map(int index);
+t_minimap	*get_minimap(int index);
 
 // main.c
 t_cub	*call_cub(void);
@@ -569,7 +569,8 @@ float	ft_lerp(float a, float b, float t);
 void		draw_minimap(t_minimap *mini, t_map *map);
 
 // minimap_radar.c
-void		draw_radar(t_cub *cub);
+void	draw_radar(t_minimap *mini);
+// void	draw_radar(t_minimap *mini, t_map *map, t_player *player);
 
 // minimap.c
 t_minimap	init_minimap(t_map *map);

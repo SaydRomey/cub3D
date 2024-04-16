@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 10:59:43 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 19:13:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 18:55:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,9 @@ void	get_elevator_info(t_level *lvl, t_map *map)
 	if (lvl->elevator_exists)
 		lvl->elevator_orientation = get_elevator_orientation(map->map_array, pos);
 	// 
-	ft_printf("Elevator info:\nexists = %d\n", lvl->elevator_exists);
-	ft_printf("position.x = %d\n", lvl->elevator_position.x);
-	ft_printf("position.y = %d\n", lvl->elevator_position.y);
+	// ft_printf("Elevator info:\nexists = %d\n", lvl->elevator_exists);
+	// ft_printf("position.x = %d\n", lvl->elevator_position.x);
+	// ft_printf("position.y = %d\n", lvl->elevator_position.y);
 }
 
 

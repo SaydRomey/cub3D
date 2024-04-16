@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 15:58:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 19:46:14 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,20 @@ t_map	*get_map(int index)
 	if (!lvl)
 		return (NULL);
 	return (&(lvl->map));
+}
+
+t_minimap	*get_minimap(int index)
+{
+	t_list	*node;
+	t_level	*lvl;
+
+	node = ft_lstget(call_cub()->levels, index);
+	if (!node)
+		return (NULL);
+	lvl = (t_level *)node->content;
+	if (!lvl)
+		return (NULL);
+	return (&(lvl->mini));
 }
 
 /* ************************************************************************** */

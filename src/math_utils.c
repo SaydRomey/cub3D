@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 15:58:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 16:55:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,8 @@ bool	is_in_circle(t_point point, t_point center, int radius)
 
 	distance.x = point.x - center.x;
 	distance.y = point.y - center.y;
-	distance_squared = distance.x * distance.x - distance.y * distance.y;
+	distance_squared = distance.x * distance.x + distance.y * distance.y;
 	return (distance_squared <= radius * radius);
-	// return (pow(point.x - center.x, 2) + pow(point.y - center.y, 2)) <= pow(radius, 2);
 }
 
 /*

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   elevator_events.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/11 19:28:13 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 01:22:57 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,42 @@
 static void	check_near_elevator(t_fpoint pos, t_elevator *e)
 {
 	if (e->map_change == 0 && (check_hit(pos.x, pos.y) == ELEVATOR
-		|| check_hit(pos.x + DOOR_DISTANCE, pos.y) == ELEVATOR
-		|| check_hit(pos.x + DOOR_DISTANCE, pos.y - DOOR_DISTANCE) == ELEVATOR
-		|| check_hit(pos.x, pos.y - DOOR_DISTANCE) == ELEVATOR
-		|| check_hit(pos.x - DOOR_DISTANCE, pos.y - DOOR_DISTANCE) == ELEVATOR
-		|| check_hit(pos.x - DOOR_DISTANCE, pos.y) == ELEVATOR
-		|| check_hit(pos.x - DOOR_DISTANCE, pos.y + DOOR_DISTANCE) == ELEVATOR
-		|| check_hit(pos.x, pos.y + DOOR_DISTANCE) == ELEVATOR
-		|| check_hit(pos.x + DOOR_DISTANCE, pos.y + DOOR_DISTANCE) == ELEVATOR))
+		|| check_hit(pos.x + 1, pos.y) == ELEVATOR
+		|| check_hit(pos.x + 1, pos.y - 1) == ELEVATOR
+		|| check_hit(pos.x, pos.y - 1) == ELEVATOR
+		|| check_hit(pos.x - 1, pos.y - 1) == ELEVATOR
+		|| check_hit(pos.x - 1, pos.y) == ELEVATOR
+		|| check_hit(pos.x - 1, pos.y + 1) == ELEVATOR
+		|| check_hit(pos.x, pos.y + 1) == ELEVATOR
+		|| check_hit(pos.x + 1, pos.y + 1) == ELEVATOR))
 		e->door = OPEN;
 	else
 		e->door = CLOSE;
 }
 
-// static void	toggle_elevator_buttons(t_fpoint pos, t_elevator *e)
-// {
-// 	if (check_hit(pos.x, pos.y) == ELEVATOR)
-// 		e->buttons->enabled = true;
-// 	else
-// 		e->buttons->enabled = false;
-// }
+static void	toggle_elevator_buttons(t_fpoint pos, t_elevator *e)
+{
+	if (check_hit(pos.x, pos.y) == ELEVATOR)
+	{
+		if (!e->buttons_on)
+		{
+			e->buttons_on = true;
+			e->buttons[0].button_imgs[0]->instances->enabled = true;
+			e->buttons[1].button_imgs[0]->instances->enabled = true;
+		}
+	}
+	else
+	{
+		if (e->buttons_on)
+		{
+			e->buttons_on = false;
+			e->buttons[0].button_imgs[0]->instances->enabled = false;
+			e->buttons[0].button_imgs[1]->instances->enabled = false;
+			e->buttons[1].button_imgs[0]->instances->enabled = false;
+			e->buttons[1].button_imgs[1]->instances->enabled = false;
+		}
+	}
+}
 
 static void	update_door_animation(t_elevator *e)
 {
@@ -47,9 +63,38 @@ static void	update_door_animation(t_elevator *e)
 	{
 		if (e->door_animation.current_frame != 0)
 			update_animation(&e->door_animation, GO_LEFT);
-		// else if (e->map_change == 1)
-		// 	change_map(call_cub());
+		else if (e->map_change == 1)
+		{
+			change_level(call_cub()->chosen_level);
+			update_elevator_struct();
+			// e->map_change = 0;
+		}
 	}
+}
+
+void	elevator_change_map(int lvl_index)
+{
+	t_cub	*cub;
+
+	cub = call_cub();
+	if (get_level(lvl_index)
+		&& !(get_level(cub->current_level)->is_segworld
+		&& lvl_index > cub->current_level))
+	{
+		cub->elevator.map_change = 1;
+		cub->chosen_level = lvl_index;
+	}
+}
+
+void	elevator_events(t_cub *cub)
+{
+	check_near_elevator(cub->player.position, &cub->elevator);
+
+	toggle_elevator_buttons(cub->player.position, &cub->elevator);
+	if (cub->elevator.buttons_on)
+		check_button_hover(cub->elevator.buttons);
+
+	update_door_animation(&cub->elevator);
 }
 
 // void	check_for_map_change(t_cub *cub, int y)
@@ -72,11 +117,3 @@ static void	update_door_animation(t_elevator *e)
 // 		i++;
 // 	}
 // }
-
-void	elevator_events(t_cub *cub)
-{
-	check_near_elevator(cub->player.position, &cub->elevator);
-
-	// toggle_elevator_buttons(cub->player.position, &cub->elevator);
-	update_door_animation(&cub->elevator);
-}

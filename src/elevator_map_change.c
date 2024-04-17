@@ -10,9 +10,9 @@
 // /*                                                                            */
 // /* ************************************************************************** */
 
-// #include "cub3d.h"
+#include "cub3d.h"
 
-// static t_fpoint	rotate_vector_position(t_fpoint tmp, int rotation)
+// t_fpoint	rotate_vector_position(t_fpoint tmp, int rotation)
 // {
 // 	t_fpoint	new;
 
@@ -34,7 +34,7 @@
 // 	return (new);
 // }
 
-// static t_fpoint	rotate_vector_delta(t_fpoint tmp, int rotation)
+// t_fpoint	rotate_vector_delta(t_fpoint tmp, int rotation)
 // {
 // 	t_fpoint	new;
 

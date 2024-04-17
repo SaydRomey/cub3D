@@ -3,26 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/10 19:44:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/15 21:34:30 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// static void	mouse_events(t_cub *cub)
+// static void	mouse_click_events(t_cub *cub)
 // {
-// 	int	x;
-// 	int	y;
-
-// 	mlx_get_mouse_pos(cub->mlx, &x, &y);
-// 	if (cub->elevator.buttons->enabled == true
-// 		&& x >= (int)(WIDTH - cub->elevator.buttons->width) && x < WIDTH
-// 		&& y >= (int)(HEIGHT - cub->elevator.buttons->height) && y < HEIGHT)
-// 		check_for_map_change(cub, y);
+// 	if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
+// 		change_level(cub->current_level + 1);
+// 	if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
+// 		change_level(cub->current_level - 1);
 // }
+
+static void	mouse_click_events(t_cub *cub)
+{
+	if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
+		elevator_change_map(cub->current_level + 1);
+	if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
+		elevator_change_map(cub->current_level - 1);
+}
 
 static void	set_mouse_mode(bool enabled) // should we use (if SPACEBAR, set mouse mode off (normal), when released enable ?)
 {
@@ -48,8 +52,8 @@ static void	mouse_hook(mouse_key_t btn, action_t a, modifier_key_t m, void *para
 	cub = (t_cub *)param;
 	if (btn == MLX_MOUSE_BUTTON_RIGHT && a == MLX_PRESS)
 		toggle(&cub->mouse.enabled);
-	// if (btn == MLX_MOUSE_BUTTON_LEFT && a == MLX_PRESS)
-	// 	mouse_events(cub);
+	if (btn == MLX_MOUSE_BUTTON_LEFT && a == MLX_PRESS)
+		mouse_click_events(cub);
 	set_mouse_mode(cub->mouse.enabled);
 }
 

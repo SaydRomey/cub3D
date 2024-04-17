@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 22:19:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 15:57:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,27 @@ t_player	init_player(t_map *map)
 	return (player);	
 }
 
-// t_player	warp_player(t_elevator *elevator)
-// {
-	// ??
-// }
+t_player	warp_player(t_player old_player, t_level *lvl, t_level *next_lvl)
+{
+	t_player	player;
+	t_fpoint	pos;
+	int			rotation;
+
+	player = old_player;
+	pos.x = player.position.x - lvl->elevator_position.x;
+	pos.y = player.position.y - lvl->elevator_position.y;
+	rotation = next_lvl->elevator_orientation - lvl->elevator_orientation;
+	if (rotation)
+	{
+		pos = rotate_vector_position(pos, rotation);
+		player.delta = rotate_vector_delta(player.delta, -rotation);
+		player.cam_plane.x = -player.delta.y * player.fov;
+		player.cam_plane.y = player.delta.x * player.fov;
+	}
+	player.position.x = next_lvl->elevator_position.x + pos.x;
+	player.position.y = next_lvl->elevator_position.y + pos.y;
+	return (player);
+}
 
 static t_fpoint	get_velocity(t_cub *cub)
 {

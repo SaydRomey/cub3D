@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_walls.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/11 17:24:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 15:06:20 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,19 @@ static t_texture	get_texture_info(float whp, t_point ray_pos, bool side)
 	return (tex);
 }
 
-static t_line	get_stripe_data(float wall_perp_dist)
-{
-	t_line	line;
+// static t_line	get_stripe_data(float wall_perp_dist)
+// {
+// 	t_line	line;
 
-	line.height = (int)(HEIGHT / wall_perp_dist);
-	line.start = (HEIGHT / 2) - (line.height / 2);
-	if (line.start < 0)
-		line.start = 0;
-	line.end = (HEIGHT / 2) + (line.height / 2);
-	if (line.end >= HEIGHT)
-		line.end = HEIGHT - 1;
-	return (line);
-}
+// 	line.height = (int)(HEIGHT / wall_perp_dist);
+// 	line.start = (HEIGHT / 2) - (line.height / 2);
+// 	if (line.start < 0)
+// 		line.start = 0;
+// 	line.end = (HEIGHT / 2) + (line.height / 2);
+// 	if (line.end >= HEIGHT)
+// 		line.end = HEIGHT - 1;
+// 	return (line);
+// }
 
 void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 {
@@ -83,14 +83,10 @@ void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 	int				color;
 	int				y;
 
-	(void)cub;
-	// (void)ray_pos;
-	// (void)x;
-
-	line = get_stripe_data(r->wall_perp_dist);
+	line = get_stripe_data(r->wall_perp_dist, HEIGHT / 2, HEIGHT);
 	tex = get_texture_info(r->wall_hit_pos, ray_pos, r->side);
-	tex.step_y = tex.to_draw->height / (float) line.height;
-	tex.pos_y = (line.start - (HEIGHT / 2) + (line.height / 2)) * tex.step_y;
+	tex.step_y = tex.to_draw->height / (float) line.size;
+	tex.pos_y = (line.start - (HEIGHT / 2) + (line.size / 2)) * tex.step_y;
 	y = line.start;
 	while (y <= line.end)
 	{

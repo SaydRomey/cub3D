@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/17 00:34:28 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/17 15:42:52 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,23 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
 	get_initial_offset(p, r);
 }
 
+static void	raycast_vertical(t_cub *cub)
+{
+	int	y;
+
+	y = HEIGHT / 2;
+	while (y < HEIGHT)
+	{
+		draw_ceiling_floor(cub, y);
+		y++;
+	}
+}
+
 void	raycast(t_cub *cub)
 {
+	float		z_buffer[WIDTH];
 	t_raycast	*r;
-	// float		z_buffer[WIDTH];
 	int			x;
-	int			y;
 
 	// if (cub->vfx.textures_enabled == false)
 	// {
@@ -70,33 +81,24 @@ void	raycast(t_cub *cub)
 	// 	draw_floor(cub->img, cub->map->floor_color);
 	// }
 	x = 0;
-	y = HEIGHT / 2;
 	r = &cub->raycast;
 	clear_img(cub->img);
 	if (get_map(cub->current_level)->floor_ceiling_img[0])
-	{
-		while (y < HEIGHT)
-		{
-			draw_ceiling_floor(cub, y);
-			y++;
-		}
-	}
+		raycast_vertical(cub);
 	while (x < WIDTH)
 	{
 		cub->elevator.door_open = false;
 
-		
 		init_raycast_data(&cub->player, r, x);
 		execute_dda_algo(cub, &cub->raycast);
 		draw_wall_stripe(cub, r->ray_pos, &r->ray, x);
 
-
-
 		if (cub->elevator.door_open)
 			draw_wall_stripe(cub, r->ray_pos_door, &r->ray_door, x);
 		
-		// z_buffer[x] = cub->raycast.ray.wall_perp_dist;
+		z_buffer[x] = r->ray.wall_perp_dist;
 		x++;
 	}
-	// draw_assets(cub, z_buffer);
+	if (get_level(cub->current_level)->assets)
+		draw_assets(cub, z_buffer);
 }

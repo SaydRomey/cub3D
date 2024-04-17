@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/10 19:58:13 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 15:45:23 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,20 @@ int	check_hit(int map_x, int map_y)
 		map_y < 0 || map_y >= map->height)
 		return (1);
 	return (map->map_array[map_y][map_x]);
+}
+
+t_line	get_stripe_data(float divider, int center, int limit)
+{
+	t_line	line;
+
+	line.size = ft_abs((int)(HEIGHT / divider));
+	line.start = center - (line.size / 2);
+	if (line.start < 0)
+		line.start = 0;
+	line.end = center + (line.size / 2);
+	if (line.end >= limit)
+		line.end = limit - 1;
+	return (line);
 }
 
 t_point	update_texture_position(t_texture tex, t_fpoint pos)

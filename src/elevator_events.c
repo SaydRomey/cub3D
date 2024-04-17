@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   elevator_events.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/15 22:26:08 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/17 01:22:57 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static void	update_door_animation(t_elevator *e)
 			change_level(call_cub()->chosen_level);
 			update_elevator_struct();
 			// e->map_change = 0;
-			printf ("elevator x: %i | elevator y: %i\n", e->position.x, e->position.y);
 		}
 	}
 }
@@ -78,7 +77,9 @@ void	elevator_change_map(int lvl_index)
 	t_cub	*cub;
 
 	cub = call_cub();
-	if (lvl_index >= 0)
+	if (get_level(lvl_index)
+		&& !(get_level(cub->current_level)->is_segworld
+		&& lvl_index > cub->current_level))
 	{
 		cub->elevator.map_change = 1;
 		cub->chosen_level = lvl_index;

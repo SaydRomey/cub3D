@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   level.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 18:58:23 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/17 01:03:50 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,18 @@ void	change_level(int index)
 	cub = call_cub();
 	if (cub->current_level == index)
 		return;
-	
+
 	next_lvl = get_level(index);
 	if (next_lvl)
 	{
+		if (!next_lvl->elevator_exists)
+			replace_with_segworld(next_lvl);
 		lvl = get_level(cub->current_level);
 		lvl->mini.img->instances->enabled = false;
 		
 		change_window_title(next_lvl->filepath);
 		draw_minimap(&next_lvl->mini, &next_lvl->map);
 		cub->current_level = index;
-
 		// player adjustment (change to fit elevator logic instead later...)
 		// cub->player = init_player(&next_lvl->map); //tmp, but maybe use similar logic?
 		cub->player = warp_player(cub->player, lvl, next_lvl);
@@ -150,7 +151,7 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 	new_level->filepath = filepath;
 	new_level->index = ft_lstsize(*levels);
 	new_level->map = deep_copy_map(map);
-	new_level->mini = init_minimap(&map);	
+	new_level->mini = init_minimap(&map);
 	get_elevator_info(new_level, &map);
 	node = ft_lstnew(new_level);
 	if (!node)

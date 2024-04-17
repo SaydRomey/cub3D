@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/10 19:56:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 00:34:28 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,13 @@ void	raycast(t_cub *cub)
 	y = HEIGHT / 2;
 	r = &cub->raycast;
 	clear_img(cub->img);
-	while (y < HEIGHT)
+	if (get_map(cub->current_level)->floor_ceiling_img[0])
 	{
-		draw_ceiling_floor(cub, y);
-		y++;
+		while (y < HEIGHT)
+		{
+			draw_ceiling_floor(cub, y);
+			y++;
+		}
 	}
 	while (x < WIDTH)
 	{

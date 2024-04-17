@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 22:12:48 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/17 01:13:51 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,6 +431,8 @@ typedef struct s_level
 	t_point		elevator_position;
 	int			elevator_orientation;
 
+	bool		is_segworld;
+
 }			t_level;
 
 typedef struct s_cub
@@ -621,7 +623,8 @@ void	execute_dda_algo(t_cub *cub, t_raycast *r);
 void	raycast(t_cub *cub);
 
 // segworld.c
-// void	call_segworld(t_cub *cub, t_elevator *e, t_fpoint pos, int ori);
+t_level *call_segworld(t_level *next_lvl);
+void 	replace_with_segworld(t_level *next_lvl);
 
 // test.c
 void	proof(char *str);

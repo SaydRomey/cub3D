@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:57:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:36:06 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:24:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ static void	update_controls(t_cub *cub)
 
 /*
 to be called in mlx_loop_hook()
+
+	// update_vfx(&cub->vfx);
+
 */
 void	update(void *ptr)
 {
@@ -40,14 +43,7 @@ void	update(void *ptr)
 	lvl = get_level(cub->current_level);
 	if (lvl)
 	{
-		// if (cub->current_level != cub->chosen_level)
-			// ... (if we split radar caluculations and rendering)
-
 		draw_radar(&lvl->mini);
 	}
-	// update_vfx(&cub->vfx);
 	raycast(cub);
 }
-
-
-

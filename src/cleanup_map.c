@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:45:38 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 14:42:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:43:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 /* **check if 'free_matrix()' from libft does the trick instead..
 
-*/ 
+*/
 void	free_map_array(int **map_array, int height)
 {
 	int	i;
 
 	if (!map_array)
-		return;
+		return ;
 	i = 0;
 	while (i < height)
 	{
@@ -66,7 +66,6 @@ frees allocated memory in a t_map struct
 void	cleanup_map(t_map *map)
 {
 	free_map_array(map->map_array, map->height);
-	// free_matrix(map->map_array); //to test
 	cleanup_wall_textures(map);
 	cleanup_floor_ceiling_textures(map);
 }

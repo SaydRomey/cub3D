@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:54:24 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/04 21:20:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:54:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	parse_wall_texture(char *cubline, t_scene *scene)
 	{
 		if (ft_strncmp(line, wall[id], 3) == SAME)
 		{
-			// printf ("ID = %i\n", id);
 			if (call_info()->wall_check[id])
 				set_error("Duplicate wall texture path");
 			else
@@ -40,5 +39,4 @@ void	parse_wall_texture(char *cubline, t_scene *scene)
 		id++;
 	}
 	free(line);
-	return;
 }

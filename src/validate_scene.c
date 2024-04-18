@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:56:05 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:07:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:44:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 /*
 check for first and last lines of the map
-
-** need to edge case test to improve this (a wall line can be just a '1', but not just a ' ' ...)
 
 */
 static bool	is_wall_line(char *line)
@@ -29,7 +27,6 @@ static bool	is_wall_line(char *line)
 	return (true);
 }
 
-
 static void	check_walls(void)
 {
 	int	i;
@@ -40,7 +37,7 @@ static void	check_walls(void)
 		if (!call_info()->wall_check[i])
 		{
 			set_error("Missing wall texture path");
-			break;
+			break ;
 		}
 		i++;
 	}

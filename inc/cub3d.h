@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:02:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:28:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,28 @@
 # define PI					3.1415926535
 # define ISO_ANGLE			0.523599
 
+/* ************************************************************************** */
+# define PRESS 1
+# define RELEASE 0
+
+# define ESC 256
+# define W 87
+# define A 65
+# define S 83
+# define D 68
+# define UP 265
+# define LEFT 263
+# define DOWN 264
+# define RIGHT 262
+# define M 77
+# define P 80
+# define K_1 49
+# define K_2 50
+# define K_3 51
+# define SPACEBAR 32
+# define BACKSPACE 259
+# define LEFTSHIFT 340
+# define LEFTCONTROL 341
 /* ************************************************************************** */
 
 // https://imagecolorpicker.com/en
@@ -387,6 +409,17 @@ typedef struct s_player
 }					t_player;
 
 /* ************************************************************************** */
+
+typedef struct s_radar
+{
+	mlx_image_t	*img;
+	t_fpoint	player_pos;
+	t_fpoint	offset; //map center offset
+	t_fpoint	player_minimap;
+	t_fpoint	center;
+	int			radius;
+	t_fpoint	top_left; //visible top left
+}				t_radar;
 
 /*
 used to parse the cubfiles and organize text data

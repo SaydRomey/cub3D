@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 15:57:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:10:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ bool	is_in_circle(t_fpoint point, t_fpoint center, int radius)
 checks if a point is within the annular region
 (the region between two concentric circles, a ring)
 */
-bool	is_in_annulus(t_fpoint point, t_fpoint center, int outer_radius, int inner_radius)
+bool	is_in_annulus(t_fpoint point, t_fpoint center, \
+int outer_radius, int inner_radius)
 {
 	int	dx;
 	int	dy;
@@ -50,18 +51,19 @@ bool	is_in_annulus(t_fpoint point, t_fpoint center, int outer_radius, int inner_
 	distance_squared = dx * dx + dy * dy;
 	outer_radius_squared = outer_radius * outer_radius;
 	inner_radius_squared = inner_radius * inner_radius;
-
-	return (distance_squared < outer_radius_squared && distance_squared > inner_radius_squared);
+	return (distance_squared < outer_radius_squared \
+	&& distance_squared > inner_radius_squared);
 }
 
 /*
 'a' start value
 'b' end value
 't' interpolation factor that ranges from 0 to 1
+
+((1 - t) * a + t * b)
 */
 float	ft_lerp(float a, float b, float t)
 {
-	// return ((1 - t) * a + t * b);
 	return (a + (b - a) * t);
 }
 
@@ -77,6 +79,8 @@ returns:
 	positive if 'point' is to the left of the line from 'a' to 'b'
 	negative if 'point' is to the right of the line from 'a' to 'b'
 	0 if 'point' is on the line
+	
+((point.x - b.x) * (a.y - b.y) - (a.x - b.x) * (point.y - b.y));
 */
 static int	cross_product(t_fpoint point, t_fpoint a, t_fpoint b)
 {
@@ -89,9 +93,7 @@ static int	cross_product(t_fpoint point, t_fpoint a, t_fpoint b)
 	vector2.x = a.x - b.x;
 	vector2.y = a.y - b.y;
 	cross_product = (vector1.x * vector2.y) - (vector2.x * vector1.y);
-	
 	return (cross_product);
-	// return ((point.x - b.x) * (a.y - b.y) - (a.x - b.x) * (point.y - b.y)); //if we wanted a one-liner...
 }
 
 int	point_in_triangle(t_fpoint point, t_triangle triangle)
@@ -105,10 +107,7 @@ int	point_in_triangle(t_fpoint point, t_triangle triangle)
 	d1 = cross_product(point, triangle.front, triangle.left);
 	d2 = cross_product(point, triangle.left, triangle.right);
 	d3 = cross_product(point, triangle.right, triangle.front);
-
 	has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
 	has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
-
 	return (!(has_neg && has_pos));
 }
-

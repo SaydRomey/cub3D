@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:38:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:04:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,52 +15,36 @@
 t_triangle	init_player_icon(t_player *player, t_fpoint center)
 {
 	t_triangle	t;
-	
+
 	t.half_base = player->size * tan(degree_to_radian(30));
 	t.height = player->size * (sqrt(3) / 2);
-
 	t.centroid.x = center.x - player->delta.x * (t.height / 3);
 	t.centroid.y = center.y - player->delta.y * (t.height / 3);
-
 	t.front.x = t.centroid.x + player->delta.x * player->size;
 	t.front.y = t.centroid.y + player->delta.y * player->size;
-	
 	t.left.x = t.centroid.x - player->delta.y * t.half_base;
 	t.left.y = t.centroid.y + player->delta.x * t.half_base;
 	t.right.x = t.centroid.x + player->delta.y * t.half_base;
 	t.right.y = t.centroid.y - player->delta.x * t.half_base;
-
 	t.base_center.x = (t.left.x + t.right.x) / 2;
 	t.base_center.y = (t.left.y + t.right.y) / 2;
-
 	return (t);
 }
 
+/*
+	draw_triangle(img, &t, player->color);
+	draw_full_triangle(img, &t, player->color);
+*/
 void	draw_player(mlx_image_t *img, t_player *player, t_fpoint center)
 {
 	t_triangle	t;
-	int			thickness = 4; //change to test effect (1 is minimum and PLAYER_SIZE -1 is max)
-	
-	t = init_player_icon(player, center);
 
+	t = init_player_icon(player, center);
 	draw_line(img, t.base_center, t.front, HEX_GREEN);
-	// draw_triangle(img, &t, player->color);
-	// draw_full_triangle(img, &t, player->color);
-	draw_full_triangle_hollow(img, &t, thickness, player->color);
+	draw_full_triangle_hollow(img, &t, 8, player->color);
 }
 
 /* ************************************************************************** */
-
-typedef struct s_radar
-{
-	mlx_image_t	*img;
-	t_fpoint	player_pos;
-	t_fpoint	offset; //map center offset
-	t_fpoint	player_minimap;
-	t_fpoint	center;
-	int			radius;
-	t_fpoint	top_left; //visible top left
-}				t_radar;
 
 static t_radar	init_radar(t_minimap *mini)
 {
@@ -70,15 +54,12 @@ static t_radar	init_radar(t_minimap *mini)
 
 	cub = call_cub();
 	map = get_map(cub->current_level);
-	
 	r.img = cub->radar_img;
 	r.player_pos = cub->player.position;
 	r.offset.x = (mini->img->width - map->width * mini->tile_size) / 2;
 	r.offset.y = (mini->img->height - map->height * mini->tile_size) / 2;
 	r.player_minimap.x = r.player_pos.x * mini->tile_size + r.offset.x;
 	r.player_minimap.y = r.player_pos.y * mini->tile_size + r.offset.y;
-	// r.player_minimap.x = round(r.player_pos.x * mini->tile_size) + r.offset.x;
-	// r.player_minimap.y = round(r.player_pos.y * mini->tile_size) + r.offset.y;
 	r.center.x = r.img->width / 2;
 	r.center.y = r.img->height / 2;
 	r.radius = (ft_min(r.img->width, r.img->height) / 2) - 10;
@@ -86,7 +67,6 @@ static t_radar	init_radar(t_minimap *mini)
 	r.top_left.y = r.player_minimap.y - r.center.y;
 	r.top_left.x = ft_clamp(r.top_left.x, 0, mini->img->width - r.img->width);
 	r.top_left.y = ft_clamp(r.top_left.y, 0, mini->img->height - r.img->height);
-
 	return (r);
 }
 
@@ -124,19 +104,13 @@ void	draw_radar(t_minimap *mini)
 	radar = init_radar(mini);
 	player = &call_cub()->player;
 	clear_img(radar.img);
-
 	if (player_is_in_elevator(player))
-		draw_circle(radar.img, radar.center, radar.radius, HEX_BLACK); //change for a t.v. static effect
+		draw_circle(radar.img, radar.center, radar.radius, HEX_BLACK);
 	else
 	{
 		draw_visible_minimap(mini, radar);
 		draw_player(radar.img, player, radar.center);
 	}
-	
-	// draw_circle_hollow(radar.img, (t_fpoint){radar.center.x, radar.center.y}, 10, 2, HEX_BLUE);
-	// draw_circle(radar.img, (t_fpoint){radar.center.x, radar.center.y}, 10, HEX_BLUE);
-
-	draw_circle_hollow(radar.img, radar.center, radar.radius + 10, 20, HEX_GRAY);
-
-
+	draw_circle_hollow(radar.img, radar.center, \
+	radar.radius + 10, 20, HEX_GRAY);
 }

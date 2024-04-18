@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:57:06 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:04:25 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:46:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,21 @@ static bool	check_vertical(int **map_array, int y, int x)
 	int	current;
 	int	up;
 	int	down;
-	
+
 	current = map_array[y][x];
 	up = map_array[y - 1][x];
 	down = map_array[y + 1][x];
-
-	if (current == 0) //EMPTY)
+	if (current == 0)
 	{
 		if (up >= current && down >= current)
 			return (true);
 		else
 			return (false);
 	}
-	if (current == -1) //SPACE)
+	if (current == -1)
 	{
-		if ((up == current || up == 1 || up == -2) && (down == current || down == 1 || down == -2))
+		if ((up == current || up == 1 || up == -2) \
+		&& (down == current || down == 1 || down == -2))
 			return (true);
 		else
 			return (false);
@@ -69,9 +69,9 @@ static bool	columns_are_valid(int **map_array, int width, int height)
 		y = 0;
 		while (y < height)
 		{
-			if (y > 0 && y < height - 1) //don't check first and last line
+			if (y > 0 && y < height - 1)
 				if (!check_vertical(map_array, y, x))
-					return (false);		
+					return (false);
 			y++;
 		}
 		x++;
@@ -81,7 +81,7 @@ static bool	columns_are_valid(int **map_array, int width, int height)
 
 void	validate_map(t_map *map)
 {
-	if (there_is_a_problem()) //if an error occured in init_map
+	if (there_is_a_problem())
 		return ;
 	if (!columns_are_valid(map->map_array, map->width, map->height))
 		set_error("Invalid array column");

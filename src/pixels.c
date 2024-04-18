@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:34:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:53:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,25 @@ void	draw_pixel(mlx_image_t *img, int x, int y, int color)
 	unsigned char	*pixel;
 
 	if (img)
+	{
 		if (x >= 0 && x < (int)img->width && y >= 0 && y < (int)img->height)
-		{	
+		{
 			pixel = &img->pixels[(y * img->width + x) * PIXEL_SIZE];
 			set_pixel(pixel, color);
 		}
+	}
 }
 
 /* ************************************************************************** */
 
-int combine_rgba(int r, int g, int b, int a)
+int	combine_rgba(int r, int g, int b, int a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
 int	get_pixel(mlx_image_t *img, int x, int y)
 {
-	unsigned char   *pixel;
+	unsigned char	*pixel;
 
 	if (x > (int)img->width || y > (int)img->height)
 		return ((unsigned char)0xFF000000);
@@ -109,7 +111,7 @@ int	get_color(t_scene *scene, int id)
 	b = ft_atoi(scene->colors[id][B]);
 	if (color_is_invalid(r, g, b))
 	{
-		return (0x000000FF); // color is already validated in parsing
+		return (0x000000FF);
 	}
 	color_int = rgb_to_int(r, g, b);
 	return (color_int);

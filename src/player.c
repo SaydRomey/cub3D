@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 15:20:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:52:43 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 t_player	init_player(t_map *map)
 {
 	t_player	player;
-	
+
 	player.position.x = map->starting_position.x + 0.5;
 	player.position.y = map->starting_position.y + 0.5;
-	
 	player.speed = PLAYER_SPEED;
 	player.turn_speed = PLAYER_TURN_SPEED;
 	player.fov = PLAYER_FOV;
@@ -29,7 +28,7 @@ t_player	init_player(t_map *map)
 	player.cam_plane.y = player.delta.x * player.fov;
 	player.size = PLAYER_SIZE;
 	player.color = HEX_GREEN;
-	return (player);	
+	return (player);
 }
 
 t_player	warp_player(t_player old_player, t_level *lvl, t_level *next_lvl)
@@ -66,21 +65,16 @@ static t_fpoint	get_velocity(t_cub *cub)
 static float	get_move_value(t_cub *cub, int x, int y, float rtn_value)
 {
 	int	tile;
-	
-	tile = check_hit(x, y); //next step of player
 
-	// if next step is elevator and door is closed and we are not inside
-	if (tile == 3 && cub->elevator.door == CLOSE
-		&& !((int) cub->player.position.x == cub->elevator.position.x
-		&& (int) cub->player.position.y == cub->elevator.position.y))
+	tile = check_hit(x, y);
+	if (tile == 3 && cub->elevator.door == CLOSE \
+	&& !((int) cub->player.position.x == cub->elevator.position.x \
+	&& (int) cub->player.position.y == cub->elevator.position.y))
 		return (0);
-		
-	// if next step is walkable and door is closed and we are inside
 	if (tile == 0 && cub->elevator.door == CLOSE
 		&& (int) cub->player.position.x == cub->elevator.position.x
 		&& (int) cub->player.position.y == cub->elevator.position.y)
 		return (0);
-	
 	if (tile == 1)
 		return (0);
 	return (rtn_value);
@@ -157,7 +151,6 @@ void	update_player_direction(t_cub *cub)
 static void	update_player_stats(t_player *player, t_keys *keys)
 {
 	player->speedup = keys->leftshift;
-
 	if (player->speedup)
 		player->speed = PLAYER_SPEED * 2;
 	else
@@ -169,10 +162,7 @@ void	update_player(t_cub *cub)
 	t_player	*player;
 
 	player = &cub->player;
-	
 	update_player_stats(player, &cub->keys);
-	
 	update_player_position(cub);
 	update_player_direction(cub);
-
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:18:05 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/17 15:57:04 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:28:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,19 @@ mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible)
 
 mlx_image_t	*copy_img(mlx_image_t *src, mlx_t *mlx)
 {
-	mlx_image_t *copy;
-	
+	mlx_image_t	*copy;
+
 	if (!src)
 		return (NULL);
 	copy = mlx_new_image(mlx, src->width, src->height);
 	if (!copy)
 		return (NULL);
-	ft_memcpy(copy->pixels, src->pixels, src->width * src->height * sizeof(int));
+	ft_memcpy(copy->pixels, src->pixels, \
+	src->width * src->height * sizeof(int));
 	return (copy);
 }
 
-mlx_image_t *load_png(char *filepath, mlx_t *mlx)
+mlx_image_t	*load_png(char *filepath, mlx_t *mlx)
 {
 	mlx_image_t		*img;
 	mlx_texture_t	*texture;
@@ -98,7 +99,7 @@ void	move_img(mlx_image_t *img, int x, int y)
 /*
 in case the dst image is smaller
 */
-static int	pixel_is_valid(mlx_image_t* img, t_u32 x, t_u32 y)
+static int	pixel_is_valid(mlx_image_t *img, t_u32 x, t_u32 y)
 {
 	return (x < img->width && y < img->height);
 }
@@ -110,7 +111,7 @@ void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y)
 {
 	int	i;
 	int	j;
-	
+
 	i = 0;
 	while (i < (int)src->width)
 	{

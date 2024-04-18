@@ -6,33 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 16:12:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:28:30 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-# define PRESS 1
-# define RELEASE 0
-
-# define ESC 256
-# define W 87
-# define A 65
-# define S 83
-# define D 68
-# define UP 265
-# define LEFT 263
-# define DOWN 264
-# define RIGHT 262
-# define M 77
-# define P 80
-# define K_1 49
-# define K_2 50
-# define K_3 51
-# define SPACEBAR 32
-# define BACKSPACE 259
-# define LEFTSHIFT 340
-# define LEFTCONTROL 341
 
 static void	set_toggle_keys(int key, t_keys *keys, bool state)
 {

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:34:21 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:35:47 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:11:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	store_map_line(t_list **map_list, char *line)
 
 	node = ft_lstnew(ft_strtrim(line, "\n"));
 	if (!node)
-		return ; //malloc error
+		return ;
 	ft_lstadd_back(map_list, node);
 }
 
@@ -54,7 +54,7 @@ int	get_map_width(t_list *map_list)
 // 	last_one = ft_strrchr(copy, '1');
 // 	if (last_one != NULL)
 // 	{
-// 		new_len = last_one - copy + 1; // calculate length from start to the last '1'
+// 		new_len = last_one - copy + 1;
 // 		trimmed = ft_substr(copy, 0, new_len);
 // 		if (!trimmed)
 // 		{

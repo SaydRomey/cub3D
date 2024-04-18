@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/03 21:16:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:59:23 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@ static void	extract_starting_position(t_scene *scene)
 	node_count = 0;
 	while (node != NULL)
 	{
-		found = ft_strchr((char *)node->content, (char)scene->spawn_orientation);
+		found = ft_strchr((char *)node->content, \
+		(char)scene->spawn_orientation);
 		if (found)
 		{
 			scene->starting_position.x = found - (char *)node->content;
 			scene->starting_position.y = node_count;
-			break;
+			break ;
 		}
 		node = node->next;
 		node_count++;
@@ -48,7 +49,7 @@ t_scene	parse_cubfile(char *filepath)
 	t_scene	scene;
 	int		fd;
 	char	*line;
-	
+
 	ft_memset(&scene, 0, sizeof(t_scene));
 	fd = open(filepath, READ);
 	line = get_next_line(fd);

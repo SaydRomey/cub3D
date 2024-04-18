@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 18:42:02 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:57:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,16 @@ static bool	check_contour(const char *line, int i)
 	char	current;
 	char	prev;
 	char	next;
-	
+
 	current = line[i];
+	prev = '\0';
 	if (i > 0)
 		prev = line[i - 1];
-	else
-		prev = '\0';
 	next = line[i + 1];
 	if (current == '0' || current == ' ')
 	{
-		if ((prev == '1' || prev == current || ft_strchr("3NSEW", prev)) && 
-			(next == '1' || next == current || ft_strchr("3NSEW", next)))
+		if ((prev == '1' || prev == current || ft_strchr("3NSEW", prev)) \
+		&& (next == '1' || next == current || ft_strchr("3NSEW", next)))
 			return (true);
 		else
 			return (false);
@@ -75,7 +74,7 @@ checks if first and last map squares are walls
 *(after having trimmed leading and trailing spaces)
 also checks for valid contours for each values
 */
-static bool map_line_is_valid(const char *line)
+static bool	map_line_is_valid(const char *line)
 {
 	int	len;
 	int	i;
@@ -87,10 +86,10 @@ static bool map_line_is_valid(const char *line)
 	while (line[i] != '\0')
 	{
 		if (!check_contour(line, i))
-				return (false);
+			return (false);
 		i++;
 	}
-	return (true);	
+	return (true);
 }
 
 /*
@@ -109,7 +108,7 @@ static void	scan_for_start(char *line, t_scene *scene)
 			if (call_info()->found_direction)
 			{
 				set_error("More than one starting point found in map");
-				return;
+				return ;
 			}
 			else
 			{
@@ -130,12 +129,12 @@ void	parse_map_line(char *cubline, t_scene *scene)
 	char	*line;
 
 	line = ft_strtrim(cubline, " \t\n");
-	if (is_map_line(line)) //must have only valid chars from "0123 NSEW"
+	if (is_map_line(line))
 	{
 		if (map_line_is_valid(line))
 		{
 			store_map_line(&scene->map_list, cubline);
-			scan_for_start(cubline, scene); //will set error if duplicate start
+			scan_for_start(cubline, scene);
 		}
 		else
 			set_error("Invalid map line");

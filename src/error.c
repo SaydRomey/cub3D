@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:33:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:32:12 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,10 @@ void	set_error_arg(char *str, char *arg)
 	char	*full_error;
 
 	full_error = ft_strjoin_with(str, ": ", arg);
-	// full_error = ft_strjoin(str, arg);
 	if (full_error)
 	{
 		set_error(full_error);
-		free(full_error);	
+		free(full_error);
 	}
 }
 
@@ -87,36 +86,8 @@ mlx specific error function, uses 'mlx_errno' to identify error
 void	error_mlx(void)
 {
 	const char	*mlx_error_msg;
-	
+
 	mlx_error_msg = mlx_strerror(mlx_errno);
 	set_error((char *)mlx_error_msg);
 	error();
 }
-
-/*
-
-// const char* mlx_strerror(mlx_errno_t val);
-
-The error codes used to identify the correct error message.
-
-typedef enum mlx_errno
-{
-	MLX_SUCCESS = 0,	// No Errors
-	MLX_INVEXT,			// File has an invalid extension
-	MLX_INVFILE,		// File was invalid / does not exist.
-	MLX_INVPNG,			// Something is wrong with the given PNG file.
-	MLX_INVXPM,			// Something is wrong with the given XPM file.
-	MLX_INVPOS,			// The specified X/Y positions are out of bounds.
-	MLX_INVDIM,			// The specified W/H dimensions are out of bounds.
-	MLX_INVIMG,			// The provided image is invalid, might indicate mismanagement of images.
-	MLX_VERTFAIL,		// Failed to compile the vertex shader.
-	MLX_FRAGFAIL,		// Failed to compile the fragment shader.
-	MLX_SHDRFAIL,		// Failed to compile the shaders.
-	MLX_MEMFAIL,		// Dynamic memory allocation has failed.
-	MLX_GLADFAIL,		// OpenGL loader has failed.
-	MLX_GLFWFAIL,		// GLFW failed to initialize.
-	MLX_WINFAIL,		// Failed to create a window.
-	MLX_STRTOOBIG,		// The string is too big to be drawn.
-	MLX_ERRMAX,			// Error count
-}	mlx_errno_t;
-*/

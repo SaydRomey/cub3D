@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 16:22:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:25:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	change_level(int index)
 
 	cub = call_cub();
 	if (cub->current_level == index)
-		return;
-
+		return ;
 	next_lvl = get_level(index);
 	if (next_lvl)
 	{
@@ -34,7 +33,7 @@ void	change_level(int index)
 		cub->current_level = index;
 		cub->player = warp_player(cub->player, lvl, next_lvl);
 	}
-	return;
+	return ;
 }
 
 /* ************************************************************************** */
@@ -50,11 +49,13 @@ static void	copy_map_images(t_map *original, t_map *copy)
 	while (i < ft_max(WALL_TEXTURE_LEN, COLOR_TYPE_LEN))
 	{
 		if (i < COLOR_TYPE_LEN && original->floor_ceiling_img[i])
-			copy->floor_ceiling_img[i] = copy_img(original->floor_ceiling_img[i], mlx);
+			copy->floor_ceiling_img[i] = \
+		copy_img(original->floor_ceiling_img[i], mlx);
 		if (i < WALL_TEXTURE_LEN && original->wall_textures_img[i])
-			copy->wall_textures_img[i] = copy_img(original->wall_textures_img[i], mlx);
+			copy->wall_textures_img[i] = \
+		copy_img(original->wall_textures_img[i], mlx);
 		i++;
-	}	
+	}
 }
 
 static void	copy_map_array(t_map *original, t_map *copy)
@@ -85,7 +86,6 @@ t_map	deep_copy_map(t_map original)
 	copy = original;
 	copy_map_array(&original, &copy);
 	copy_map_images(&original, &copy);
-
 	return (copy);
 }
 
@@ -99,7 +99,7 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 	{
 		set_error("Malloc error");
 		return ;
-	}	
+	}
 	new_level->filepath = filepath;
 	new_level->index = ft_lstsize(*levels);
 	new_level->map = deep_copy_map(map);
@@ -118,7 +118,7 @@ void	add_new_level(t_list **levels, t_map map, char *filepath)
 void	delete_level(void *level)
 {
 	t_level	*lvl;
-	
+
 	lvl = (t_level *)level;
 	if (lvl)
 	{
@@ -131,7 +131,7 @@ void	delete_level(void *level)
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-t_level *get_level(int index)
+t_level	*get_level(int index)
 {
 	t_list	*node;
 	t_level	*lvl;

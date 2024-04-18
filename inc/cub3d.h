@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/17 19:47:38 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 01:34:40 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,13 @@ typedef struct s_point
 
 typedef struct s_triangle
 {
-	t_fpoint	front;
-	t_fpoint	left;
-	t_fpoint	right;
 	float		half_base;
 	float		height;
 	t_point		centroid;
+	t_fpoint	front;
+	t_fpoint	left;
+	t_fpoint	right;
+	t_fpoint	base_center;
 }				t_triangle;
 
 enum e_map_elem
@@ -496,6 +497,8 @@ void	draw_background(mlx_image_t *img, int color);
 
 void	draw_triangle(mlx_image_t *img, t_triangle *triangle, int color);
 void	draw_full_triangle(mlx_image_t *img, t_triangle *tri, int color);
+void	draw_full_triangle_hollow(mlx_image_t *img, t_triangle *tri, int thickness, int color);
+
 void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
 void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color);
 
@@ -578,6 +581,7 @@ t_map	init_map(t_scene *scene);
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
 bool	is_in_circle(t_point point, t_point center, int radius);
+bool	is_in_annulus(t_fpoint point, t_fpoint center, int outer_radius, int inner_radius);
 float	ft_lerp(float a, float b, float t);
 
 int		point_in_triangle(t_fpoint p, t_triangle triangle);

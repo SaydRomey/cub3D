@@ -6,39 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/17 19:50:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 01:34:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// void	draw_player(mlx_image_t *img, t_player *player, t_point radar_center)
-// {
-// 	t_fpoint	front;
-// 	t_fpoint	left;
-// 	t_fpoint	right;
-// 	t_fpoint	base_center;
-// 	float		half_base;
-
-// 	half_base = player->size * tan(degree_to_radian(30));
-
-// 	// Front vertex of the triangle
-// 	front.x = radar_center.x + player->delta.x * player->size;
-// 	front.y = radar_center.y + player->delta.y * player->size;
-
-// 	// Left and right vertices
-// 	left.x = radar_center.x - player->delta.y * half_base;
-// 	left.y = radar_center.y + player->delta.x * half_base;
-// 	right.x = radar_center.x + player->delta.y * half_base;
-// 	right.y = radar_center.y - player->delta.x * half_base;
-
-// 	// Calculating the midpoint of the base
-// 	base_center.x = (left.x + right.x) / 2;
-// 	base_center.y = (left.y + right.y) / 2;
-
-// 	draw_triangle(img, front, left, right, player->color);
-// 	draw_line(img, base_center, front, HEX_MAGENTA);
-// }
 
 t_triangle	init_player_icon(t_player *player, t_point radar_center)
 {
@@ -52,10 +24,14 @@ t_triangle	init_player_icon(t_player *player, t_point radar_center)
 
 	t.front.x = t.centroid.x + player->delta.x * player->size;
 	t.front.y = t.centroid.y + player->delta.y * player->size;
+	
 	t.left.x = t.centroid.x - player->delta.y * t.half_base;
 	t.left.y = t.centroid.y + player->delta.x * t.half_base;
 	t.right.x = t.centroid.x + player->delta.y * t.half_base;
 	t.right.y = t.centroid.y - player->delta.x * t.half_base;
+
+	t.base_center.x = (t.left.x + t.right.x) / 2;
+	t.base_center.y = (t.left.y + t.right.y) / 2;
 
 	return (t);
 }
@@ -63,82 +39,92 @@ t_triangle	init_player_icon(t_player *player, t_point radar_center)
 void	draw_player(mlx_image_t *img, t_player *player, t_point radar_center)
 {
 	t_triangle	t;
+	int			thickness = 8; //change to test effect (1 is minimum and PLAYER_SIZE -1 is max)
 	
 	t = init_player_icon(player, radar_center);
+
+	draw_line(img, t.base_center, t.front, HEX_GREEN);	
 	// draw_triangle(img, &t, player->color);
-	draw_full_triangle(img, &t, player->color);
-	
+	// draw_full_triangle(img, &t, player->color);
+	draw_full_triangle_hollow(img, &t, thickness, player->color);
 }
-void draw_radar(t_minimap *mini)
+
+/* ************************************************************************** */
+
+typedef struct s_radar
 {
-	mlx_image_t	*radar = call_cub()->radar_img;
+	mlx_image_t	*img;
+	t_fpoint	player_pos;
+	t_fpoint	map_center_offset;
+	t_fpoint	player_minimap;
+	t_point		radar_center;
+	int			radius;
+	t_fpoint	visible_top_left;
+}				t_radar;
+
+static t_radar	init_radar(t_minimap *mini)
+{
+	t_cub	*cub;
+	t_map	*map;
+	t_radar	r;
+
+	cub = call_cub();
+	map = get_map(cub->current_level);
 	
-	t_map	*map = get_map(call_cub()->current_level);
-	t_fpoint player_pos = call_cub()->player.position;
-	
-	// Calculate the minimap centering offset due to non-square dimensions
-	int map_width_pixels = map->width * mini->tile_size;
-	int map_height_pixels = map->height * mini->tile_size;
-	int map_center_offset_x = (mini->img->width - map_width_pixels) / 2;
-	int map_center_offset_y = (mini->img->height - map_height_pixels) / 2;
+	r.img = cub->radar_img;
+	r.player_pos = cub->player.position;
+	r.map_center_offset.x = (mini->img->width - map->width * mini->tile_size) / 2;
+	r.map_center_offset.y = (mini->img->height - map->height * mini->tile_size) / 2;
+	r.player_minimap.x = round(r.player_pos.x * mini->tile_size) + r.map_center_offset.x;
+	r.player_minimap.y = round(r.player_pos.y * mini->tile_size) + r.map_center_offset.y;
+	r.radar_center.x = r.img->width / 2;
+	r.radar_center.y = r.img->height / 2;
+	r.radius = ft_min(r.img->width, r.img->height) / 2;
+	r.visible_top_left.x = r.player_minimap.x - r.radar_center.x;
+	r.visible_top_left.y = r.player_minimap.y - r.radar_center.y;
+	r.visible_top_left.x = ft_clamp(r.visible_top_left.x, 0, mini->img->width - r.img->width);
+	r.visible_top_left.y = ft_clamp(r.visible_top_left.y, 0, mini->img->height - r.img->height);
 
-	// Convert player's map position to pixel coordinates on the minimap with center offset
-	t_point	player_minimap;
-	player_minimap.x = round(player_pos.x * mini->tile_size) + map_center_offset_x;
-	player_minimap.y = round(player_pos.y * mini->tile_size) + map_center_offset_y;
+	return (r);
+}
 
-	// Radar center should match player's position
-	int radar_center_x = radar->width / 2;
-	int radar_center_y = radar->height / 2;
-	int radius = ft_min(radar->width, radar->height) / 2;
-
-	// Calculate the top-left corner of the area to be displayed in the radar
-	t_point	visible_top_left;
-	visible_top_left.x = player_minimap.x - radar_center_x;
-	visible_top_left.y = player_minimap.y - radar_center_y;
-
-	// Clamp these values to ensure they are within the bounds of the full minimap
-	visible_top_left.x = ft_clamp(visible_top_left.x, 0, mini->img->width - radar->width);
-	visible_top_left.y = ft_clamp(visible_top_left.y, 0, mini->img->height - radar->height);
-	
-	clear_img(radar);
-
-	// Draw the visible part of the minimap onto the radar
+static void	draw_visible_minimap(t_minimap *mini, t_radar r)
+{
 	int		y;
 	int		x;
 	t_point	map_pixel;
 	int		color;
 
 	y = 0;
-	while (y < (int)radar->height)
+	while (y < (int)r.img->height)
 	{
 		x = 0;
-		while (x < (int)radar->width)
+		while (x < (int)r.img->width)
 		{
-			map_pixel.x = visible_top_left.x + x;
-			map_pixel.y = visible_top_left.y + y;
-			if (is_in_circle((t_point){x, y}, (t_point){radar_center_x, radar_center_y}, radius - 100))
+			map_pixel.x = r.visible_top_left.x + x;
+			map_pixel.y = r.visible_top_left.y + y;
+			if (is_in_circle((t_point){x, y}, (t_point){r.radar_center.x, r.radar_center.y}, r.radius - 100))
 			{
 				color = get_pixel(mini->img, map_pixel.x, map_pixel.y);
-				draw_pixel(radar, x, y, color);
+				draw_pixel(r.img, x, y, color);
 			}
 			x++;
 		}
 		y++;
 	}
-	draw_player(radar, &call_cub()->player, (t_point){radar_center_x, radar_center_y});
-	// draw_circle_hollow(radar, (t_fpoint){radar_center_x, radar_center_y}, 12, 5, HEX_GREEN);
 }
 
-/* ************************************************************************** */
-/* ************************************************************************** */
+void	draw_radar(t_minimap *mini)
+{
+	t_radar		radar;
+	t_player	*player;
 
-// typedef struct s_radar
-// {
-// 	mlx_image_t	*img;
-// 	t_point		player_minimap;
-// 	t_point		top_left;
-// 	t_point		center;
-// 	t_minimap	*mini;
-// 	int			radius;
-// }				t_radar;
+	radar = init_radar(mini);
+	player = &call_cub()->player;
+	clear_img(radar.img);
+	draw_visible_minimap(mini, radar);
+	draw_player(radar.img, player, radar.radar_center);
+	
+	// draw_circle_hollow(radar.img, (t_fpoint){radar.radar_center.x, radar.radar_center.y}, 10, 2, HEX_BLUE);
+	// draw_circle(radar.img, (t_fpoint){radar.radar_center.x, radar.radar_center.y}, 10, HEX_BLUE);
+}

@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/17 15:38:46 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/18 16:42:31 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,7 @@ typedef struct s_asset
 	t_line		h;
 	t_line		v;
 	mlx_image_t	*tex;
+	t_animation	anim;
 }				t_asset;
 
 /* ************************************************************************** */
@@ -469,11 +470,11 @@ typedef struct s_cub
 /* ************************************************************************** */
 
 // animation.c
-t_animation	set_animation(mlx_image_t *img);
+t_animation	set_animation(mlx_image_t *img, int slice_total);
 void		update_animation(t_animation *a, bool direction);
 
 // assets.c
-t_asset	*init_assets(char *texture_path);
+t_asset	*init_assets(char *texture_path, int slice_total);
 
 // cleanup_elevator.c
 void	cleanup_elevator(t_elevator *elevator);

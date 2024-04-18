@@ -6,15 +6,16 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:53:13 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/17 15:34:46 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/18 17:02:53 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_asset	*init_assets(char *texture_path)
+t_asset	*init_assets(char *texture_path, int slice_total)
 {
 	mlx_image_t	*texture;
+	t_animation	animation;
 	t_asset		*assets;
 	int			i;
 
@@ -26,10 +27,18 @@ t_asset	*init_assets(char *texture_path)
 	texture = load_png(texture_path, call_cub()->mlx);
 	if (!texture)
 		return (NULL);
+	if (slice_total > 1)
+	{
+		animation = set_animation(texture, slice_total);
+		mlx_delete_image(call_cub()->mlx, texture);
+	}
 	i = 0;
 	while (i < NUMSPRITES)
 	{
-		assets[i].tex = texture;
+		// if (slice_total > 1)
+		// 	assets[i].anim = animation;
+		// else
+			assets[i].tex = texture;
 		i++;
 	}
 	return (assets);

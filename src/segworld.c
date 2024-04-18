@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:07:44 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/17 15:24:49 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/18 16:37:44 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void replace_with_segworld(t_level *next_lvl)
 	set_segworld_elevator(next_lvl, next_lvl->elevator_position);
 	next_lvl->mini = init_minimap(&next_lvl->map);
 	next_lvl->is_segworld = true;
-	next_lvl->assets = init_assets("img/tree_trunk.png");
+	next_lvl->assets = init_assets("img/flames.png", 8);
 }
 
 // t_level *call_segworld(void)

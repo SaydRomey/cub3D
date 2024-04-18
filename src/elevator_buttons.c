@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   elevator_buttons.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:34:36 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/17 01:11:12 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/17 16:02:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// /*
-// implement a better way of alternating between the btn_on and btn_off for each of the buttons
-
-// */
-// // void	toggle_button(t_button *button, int state)
-// // {
-// // 	// mlx_set_instance_depth()
-// // }
 
 void	check_button_hover(t_button btn[2])
 {
@@ -59,7 +50,7 @@ static t_button	new_button(t_point pos)
 	button.button_imgs[ON]->instances->y = pos.y;
 
 	button.position = pos;
-	button.size = (t_point){64, 64}; //change to fit an image size..?
+	button.size = (t_point){64, 64}; //change to a macro ?
 
 	return (button);
 }
@@ -83,36 +74,3 @@ void	init_buttons(t_elevator *elevator)
 	position.y = HEIGHT - margin - BUTTON_SIZE;
 	elevator->buttons[down] = new_button(position);
 }
-
-// static void	draw_button(mlx_image_t *img, t_point origin, t_point size, bool state, int index)
-// {
-// 	int	x;
-// 	int	y;
-// 	int color;
-
-// 	y = 0;
-// 	while (y < size.y)
-// 	{
-// 		x = 0;
-// 		while (x < size.x)
-// 		{
-// 			color = get_pixel(call_cub()->elevator.buttons[index].button_imgs[state], x, y);
-// 			draw_pixel(img, origin.x + x, origin.y + y, color);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
-
-
-// void    test_buttons(t_elevator *elevator)
-// {
-
-// 	init_buttons(elevator);
-
-// 	draw_button(call_cub()->user_interface, elevator->buttons[0].position, elevator->buttons[0].size, elevator->buttons[0].state, 0);
-// 	draw_button(call_cub()->user_interface, elevator->buttons[1].position, elevator->buttons[1].size, elevator->buttons[1].state, 1);
-// }
-
-
-// // draw_button_img(); //draw a full image_t for the ui

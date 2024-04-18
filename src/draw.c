@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 12:49:06 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 19:45:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,47 @@ void	draw_background(mlx_image_t *img, int color)
 
 /* ************************************************************************** */
 
-void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color)
+void	draw_triangle(mlx_image_t *img, t_triangle *triangle, int color)
 {
-	draw_line(img, p1, p2, color);
-	draw_line(img, p2, p3, color);
-	draw_line(img, p3, p1, color);
+	t_fpoint	front;
+	t_fpoint	left;
+	t_fpoint	right;
+
+	front = triangle->front;
+	left = triangle->left;
+	right = triangle->right;
+	draw_line(img, left, front, color);
+	draw_line(img, front, right, color);
+	draw_line(img, right, left, color);
 }
+
+void	draw_full_triangle(mlx_image_t *img, t_triangle *tri, int color)
+{
+	int			min_x;
+	int			max_x;
+	int			min_y;
+	int			max_y;
+    t_fpoint	p;
+
+	min_x = ft_fmin(tri->left.x, ft_fmin(tri->right.x, tri->front.x));
+    max_x = ft_fmax(tri->left.x, ft_fmax(tri->right.x, tri->front.x));
+    min_y = ft_fmin(tri->left.y, ft_fmin(tri->right.y, tri->front.y));
+    max_y = ft_fmax(tri->left.y, ft_fmax(tri->right.y, tri->front.y));
+
+	p.y = min_y;
+	while (p.y <= max_y)
+	{
+		p.x = min_x;
+		while (p.x <= max_x)
+		{
+			if (point_in_triangle(p, *tri))
+				draw_pixel(img, p.x, p.y, color);
+			p.x++;
+		}
+		p.y++;
+	}
+}
+
 
 void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color)
 {

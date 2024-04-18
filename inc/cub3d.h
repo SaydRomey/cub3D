@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/17 15:56:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 19:47:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@
 /* player
 */
 # define PLAYER_FOV			0.80
-# define PLAYER_SIZE		24
+# define PLAYER_SIZE		24 //check what works best or if we set it in makefile..
 # define PLAYER_SPEED		0.1
 # define PLAYER_TURN_SPEED	0.1
 
@@ -98,6 +98,16 @@ typedef struct s_point
 	int		x;
 	int		y;
 }			t_point;
+
+typedef struct s_triangle
+{
+	t_fpoint	front;
+	t_fpoint	left;
+	t_fpoint	right;
+	float		half_base;
+	float		height;
+	t_point		centroid;
+}				t_triangle;
 
 enum e_map_elem
 {
@@ -484,7 +494,8 @@ void	draw_floor(mlx_image_t *img, int color);
 void	draw_ceiling(mlx_image_t *img, int color);
 void	draw_background(mlx_image_t *img, int color);
 
-void	draw_triangle(mlx_image_t *img, t_fpoint p1, t_fpoint p2, t_fpoint p3, int color);
+void	draw_triangle(mlx_image_t *img, t_triangle *triangle, int color);
+void	draw_full_triangle(mlx_image_t *img, t_triangle *tri, int color);
 void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
 void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color);
 
@@ -568,6 +579,8 @@ float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
 bool	is_in_circle(t_point point, t_point center, int radius);
 float	ft_lerp(float a, float b, float t);
+
+int		point_in_triangle(t_fpoint p, t_triangle triangle);
 
 // minimap_draw.c
 void		draw_minimap(t_minimap *mini, t_map *map);

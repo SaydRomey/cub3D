@@ -6,40 +6,69 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 22:20:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/17 19:50:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	draw_player(mlx_image_t *img, t_player *player, t_point radar_center)
+// void	draw_player(mlx_image_t *img, t_player *player, t_point radar_center)
+// {
+// 	t_fpoint	front;
+// 	t_fpoint	left;
+// 	t_fpoint	right;
+// 	t_fpoint	base_center;
+// 	float		half_base;
+
+// 	half_base = player->size * tan(degree_to_radian(30));
+
+// 	// Front vertex of the triangle
+// 	front.x = radar_center.x + player->delta.x * player->size;
+// 	front.y = radar_center.y + player->delta.y * player->size;
+
+// 	// Left and right vertices
+// 	left.x = radar_center.x - player->delta.y * half_base;
+// 	left.y = radar_center.y + player->delta.x * half_base;
+// 	right.x = radar_center.x + player->delta.y * half_base;
+// 	right.y = radar_center.y - player->delta.x * half_base;
+
+// 	// Calculating the midpoint of the base
+// 	base_center.x = (left.x + right.x) / 2;
+// 	base_center.y = (left.y + right.y) / 2;
+
+// 	draw_triangle(img, front, left, right, player->color);
+// 	draw_line(img, base_center, front, HEX_MAGENTA);
+// }
+
+t_triangle	init_player_icon(t_player *player, t_point radar_center)
 {
-	t_fpoint	front;
-	t_fpoint	left;
-	t_fpoint	right;
-	t_fpoint	base_center;
-	float		half_base;
+	t_triangle	t;
 	
-	half_base = player->size * tan(degree_to_radian(30)); // 30 degrees for equilateral triangle
+	t.half_base = player->size * tan(degree_to_radian(30));
+	t.height = player->size * (sqrt(3) / 2);
 
-	// Front vertex of the triangle
-	front.x = radar_center.x + player->delta.x * player->size;
-	front.y = radar_center.y + player->delta.y * player->size;
+	t.centroid.x = radar_center.x - player->delta.x * (t.height / 3);
+	t.centroid.y = radar_center.y - player->delta.y * (t.height / 3);
 
-	// Left and right vertices
-	left.x = radar_center.x - player->delta.y * half_base;
-	left.y = radar_center.y + player->delta.x * half_base;
-	right.x = radar_center.x + player->delta.y * half_base;
-	right.y = radar_center.y - player->delta.x * half_base;
+	t.front.x = t.centroid.x + player->delta.x * player->size;
+	t.front.y = t.centroid.y + player->delta.y * player->size;
+	t.left.x = t.centroid.x - player->delta.y * t.half_base;
+	t.left.y = t.centroid.y + player->delta.x * t.half_base;
+	t.right.x = t.centroid.x + player->delta.y * t.half_base;
+	t.right.y = t.centroid.y - player->delta.x * t.half_base;
 
-	// Calculating the midpoint of the base
-	base_center.x = (left.x + right.x) / 2;
-	base_center.y = (left.y + right.y) / 2;
-
-	draw_triangle(img, front, left, right, player->color);
-	draw_line(img, base_center, front, HEX_MAGENTA);
+	return (t);
 }
 
+void	draw_player(mlx_image_t *img, t_player *player, t_point radar_center)
+{
+	t_triangle	t;
+	
+	t = init_player_icon(player, radar_center);
+	// draw_triangle(img, &t, player->color);
+	draw_full_triangle(img, &t, player->color);
+	
+}
 void draw_radar(t_minimap *mini)
 {
 	mlx_image_t	*radar = call_cub()->radar_img;

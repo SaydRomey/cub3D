@@ -6,29 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/17 15:58:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 16:22:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// void	go_up(void)
-// {
-// 	t_cub	*cub;
-// 	int		limit;
-	
-// 	cub = call_cub();
-// 	limit = (ft_lstsize(cub->levels) - 1);
-// 	change_level(ft_max(cub->current_level + 1, limit));
-// }
-
-// void	go_down(void)
-// {
-// 	t_cub	*cub;
-	
-// 	cub = call_cub();
-// 	change_level(ft_min(cub->current_level - 1, 0));
-// }
 
 void	change_level(int index)
 {
@@ -47,12 +29,9 @@ void	change_level(int index)
 			replace_with_segworld(next_lvl);
 		lvl = get_level(cub->current_level);
 		lvl->mini.img->instances->enabled = false;
-		
 		change_window_title(next_lvl->filepath);
 		draw_minimap(&next_lvl->mini, &next_lvl->map);
 		cub->current_level = index;
-		// player adjustment (change to fit elevator logic instead later...)
-		// cub->player = init_player(&next_lvl->map); //tmp, but maybe use similar logic?
 		cub->player = warp_player(cub->player, lvl, next_lvl);
 	}
 	return;
@@ -61,79 +40,52 @@ void	change_level(int index)
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-// static void	copy_map_images(t_map original, t_map copy)
-// {
-// 	mlx_t	*mlx;
-// 	int	i;
+static void	copy_map_images(t_map *original, t_map *copy)
+{
+	mlx_t	*mlx;
+	int		i;
 
-// 	mlx = call_cub()->mlx;
-// 	i = 0;
-// 	while (i < ft_max(WALL_TEXTURE_LEN, COLOR_TYPE_LEN))
-// 	{
-// 		if (i < COLOR_TYPE_LEN)
-// 			copy.floor_ceiling_img[i] = copy_img(original.floor_ceiling_img[i], mlx);
-// 		if (i < WALL_TEXTURE_LEN)
-// 			copy.wall_textures_img[i] = copy_img(original.wall_textures_img[i], mlx);
-// 		i++;
-// 	}	
-// }
+	mlx = call_cub()->mlx;
+	i = 0;
+	while (i < ft_max(WALL_TEXTURE_LEN, COLOR_TYPE_LEN))
+	{
+		if (i < COLOR_TYPE_LEN && original->floor_ceiling_img[i])
+			copy->floor_ceiling_img[i] = copy_img(original->floor_ceiling_img[i], mlx);
+		if (i < WALL_TEXTURE_LEN && original->wall_textures_img[i])
+			copy->wall_textures_img[i] = copy_img(original->wall_textures_img[i], mlx);
+		i++;
+	}	
+}
 
-// static void	copy_map_array(t_map original, t_map copy)
-// {
-// 	int		i;
-// 	size_t	n;
+static void	copy_map_array(t_map *original, t_map *copy)
+{
+	int		i;
+	size_t	n;
 
-// 	n = original.width * sizeof(int);
-// 	if (original.map_array != NULL) // && n > 0)
-// 	{
-// 		copy.map_array = allocate_grid(original.height, original.width);
-// 		if (copy.map_array != NULL)
-// 		{
-// 			i = 0;
-// 			while (i < original.height)
-// 			{
-// 				ft_memcpy(copy.map_array[i], original.map_array[i], n);
-// 				i++;
-// 			}
-// 		}
-// 	}
-// }
+	n = original->width * sizeof(int);
+	if (original->map_array != NULL)
+	{
+		copy->map_array = allocate_grid(original->height, original->width);
+		if (copy->map_array != NULL)
+		{
+			i = 0;
+			while (i < original->height)
+			{
+				ft_memcpy(copy->map_array[i], original->map_array[i], n);
+				i++;
+			}
+		}
+	}
+}
 
 t_map	deep_copy_map(t_map original)
 {
 	t_map	copy;
 
 	copy = original;
-	// copy_map_array(original, copy); //one of these causes a segfault... check later..
-	// copy_map_images(original, copy); //one of these causes a segfault...
+	copy_map_array(&original, &copy);
+	copy_map_images(&original, &copy);
 
-	int	i;
-	
-	if (original.map_array != NULL) // && n > 0)
-	{
-		copy.map_array = allocate_grid(original.height, original.width);
-		if (copy.map_array != NULL)
-		{
-			i = 0;
-			while (i < original.height)
-			{
-				ft_memcpy(copy.map_array[i], original.map_array[i], original.width * sizeof(int));
-				i++;
-			}
-		}
-	}
-	i = 0;
-	while (i < WALL_TEXTURE_LEN)
-	{
-		copy.wall_textures_img[i] = copy_img(original.wall_textures_img[i], call_cub()->mlx);
-		i++;
-	}
-	i = 0;
-	while (i < COLOR_TYPE_LEN)
-	{
-		copy.floor_ceiling_img[i] = copy_img(original.floor_ceiling_img[i], call_cub()->mlx);
-		i++;
-	}
 	return (copy);
 }
 
@@ -173,7 +125,6 @@ void	delete_level(void *level)
 		cleanup_map(&lvl->map);
 		mlx_delete_image(call_cub()->mlx, lvl->mini.img);
 		free(lvl);
-		proof("deleted a level");
 	}
 }
 
@@ -196,43 +147,20 @@ t_level *get_level(int index)
 
 t_map	*get_map(int index)
 {
-	t_list	*node;
 	t_level	*lvl;
-	
-	node = ft_lstget(call_cub()->levels, index);
-	if (!node)
-		return (NULL);
-	lvl = (t_level *)node->content;
+
+	lvl = get_level(index);
 	if (!lvl)
 		return (NULL);
-	return (&(lvl->map));
+	return (&lvl->map);
 }
 
 t_minimap	*get_minimap(int index)
 {
-	t_list	*node;
-	t_level	*lvl;
-
-	node = ft_lstget(call_cub()->levels, index);
-	if (!node)
-		return (NULL);
-	lvl = (t_level *)node->content;
-	if (!lvl)
-		return (NULL);
-	return (&(lvl->mini));
-}
-
-/* ************************************************************************** */
-
-/*
-checks if a specific level has an elevator **(to test)
-*/
-bool	check_lvl_elevator(int index)
-{
 	t_level	*lvl;
 
 	lvl = get_level(index);
-	if (lvl)
-		return (lvl->elevator_exists);
-	return (false);
+	if (!lvl)
+		return (NULL);
+	return (&lvl->mini);
 }

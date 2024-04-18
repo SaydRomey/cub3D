@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 22:02:48 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 16:47:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_minimap	init_minimap(t_map *map)
 	int			margin = 2; //this can be changed, (will make tests for window limits with radar later..)
 
 	ft_memset(&mini, 0, sizeof(t_minimap));
-	mini.img = new_img(call_cub()->mlx, width, height, true);
+	mini.img = new_img(call_cub()->mlx, width, height, false);
 			
 	adjust_tile_size(&mini, map, margin);
 	mini.center = find_center(&mini);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/17 15:57:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 15:20:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,8 @@ t_player	init_player(t_map *map)
 	player.delta.y = -sin(degree_to_radian(player.angle));
 	player.cam_plane.x = -player.delta.y * player.fov;
 	player.cam_plane.y = player.delta.x * player.fov;
-	// 
 	player.size = PLAYER_SIZE;
-	player.color = HEX_ORANGE;
-	// 
-	cproof("***** player init *****", MAGENTA);
+	player.color = HEX_GREEN;
 	return (player);	
 }
 
@@ -173,11 +170,9 @@ void	update_player(t_cub *cub)
 
 	player = &cub->player;
 	
-	update_player_stats(player, &cub->keys); //test, might use this for inventory ?
+	update_player_stats(player, &cub->keys);
 	
 	update_player_position(cub);
 	update_player_direction(cub);
-
-	// draw miniplayer ..?
 
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/11 15:28:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 16:12:41 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	keyhooks(mlx_key_data_t data, void *param)
 	cub = (t_cub *)param;
 	if (data.key == ESC && data.action == PRESS)
 	{
-		proof("Pressed ESC");
 		mlx_close_window(cub->mlx);
 		cleanup(cub);
 		exit(SUCCESS);

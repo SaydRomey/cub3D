@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 22:24:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:02:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,16 @@ void	change_window_title(char *filepath)
 	free(title);
 }
 
-// check if we should implement t_point utility functions like this..
-// (this one could be used in get_move_value() to see if we are in the elevator or not)
-bool	points_are_the_same(t_point a, t_point b)
+bool	player_is_in_elevator(t_player *player)
 {
-	return ((a.x == b.x) && (a.y == b.y));
+	t_level	*lvl;
+
+	lvl = get_level(call_cub()->current_level);
+	if (lvl)
+	{
+		if (lvl->elevator_position.x == (int)player->position.x && \
+			lvl->elevator_position.y == (int)player->position.y)
+			return (true);
+	}
+	return (false);
 }

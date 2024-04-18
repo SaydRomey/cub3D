@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/11 17:24:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:37:59 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,9 @@ void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 {
 	t_texture		tex;
 	t_line			line;
-	// float		distance;
+	float		distance;
 	int				color;
 	int				y;
-
-	(void)cub;
-	// (void)ray_pos;
-	// (void)x;
 
 	line = get_stripe_data(r->wall_perp_dist);
 	tex = get_texture_info(r->wall_hit_pos, ray_pos, r->side);
@@ -98,9 +94,13 @@ void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
 		
-	// 	// distance = cub->raycast.wall_perp_dist;
-	// 	// wall_vfx(&color, distance, (float)tex.pos_y);
+		distance = cub->raycast.ray.wall_perp_dist;
+		// wall_vfx(&color, distance, (float)tex.pos_y);
 		
+		if (cub->vfx.shadow.enabled)
+		{
+			color = shadow_effect(color, distance, 0.0f, 5.0f);
+		}		
 		if (get_alpha(color) == 255)
 			draw_pixel(cub->img, x, y, color);
 		y++;

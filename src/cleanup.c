@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 15:53:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 14:46:07 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	cleanup(t_cub *cub)
 		ft_lstclear(&cub->levels, delete_level);
 		proof("lstcleared levels");
 	}
-	// if (cub->elevator.valid)
-	// 	cleanup_elevator(&cub->elevator);
+	if (cub->elevator.valid)
+		cleanup_elevator(&cub->elevator);
 	
 	mlx_delete_image(cub->mlx, cub->img);
 	mlx_delete_image(cub->mlx, cub->radar_img);

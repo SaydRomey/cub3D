@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 01:34:40 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:02:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # ifndef BONUS
 #  define BONUS 0
 # endif
+
+# define RADAR_SIZE		300
+# define RADAR_MARGIN	20
 
 # define GAME_TITLE "cub3D"
 
@@ -381,7 +384,6 @@ typedef struct s_player
 	int				size; //in minimap
 	int				color; //in minimap
 
-	// 	
 }					t_player;
 
 /* ************************************************************************** */
@@ -580,14 +582,14 @@ t_map	init_map(t_scene *scene);
 // math_utils.c
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
-bool	is_in_circle(t_point point, t_point center, int radius);
+bool	is_in_circle(t_fpoint point, t_fpoint center, int radius);
 bool	is_in_annulus(t_fpoint point, t_fpoint center, int outer_radius, int inner_radius);
 float	ft_lerp(float a, float b, float t);
 
 int		point_in_triangle(t_fpoint p, t_triangle triangle);
 
 // minimap_draw.c
-void		draw_minimap(t_minimap *mini, t_map *map);
+void	draw_minimap(t_minimap *mini, t_map *map);
 
 // minimap_radar.c
 void	draw_radar(t_minimap *mini);
@@ -664,6 +666,7 @@ int		cardinal_to_radian(char cardinal);
 bool	find_value_in_array(t_map *map, int value_to_find, t_point *point_ptr);
 void	toggle(bool *choice);
 void	change_window_title(char *filepath);
+bool	player_is_in_elevator(t_player *player);
 
 // validate_elevator.c
 int		get_elevator_orientation(int **map, t_point *position);

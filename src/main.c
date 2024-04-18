@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 22:14:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/18 15:07:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,14 @@ t_cub	*init_cub(char *title)
 
 	cub = call_cub();
 	
-	cub->mlx = mlx_init(WIDTH, HEIGHT, title, FALSE);
+	cub->mlx = mlx_init(WIDTH, HEIGHT, title, false);
 	if (!cub->mlx)
 		error_mlx();
 		
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 	
-	// cub->radar_img = new_img(cub->mlx, WIDTH, HEIGHT, true);
-	cub->radar_img = new_img(cub->mlx, 512, 512, true); //adjust dimensions with macro or ratio later..
-	move_img(cub->radar_img, WIDTH - 512 - 20, 20);
+	cub->radar_img = new_img(cub->mlx, RADAR_SIZE, RADAR_SIZE, true);
+	move_img(cub->radar_img, WIDTH - RADAR_SIZE - RADAR_MARGIN, RADAR_MARGIN);
 
 	// setup_default_texture_paths(cub);
 	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
@@ -69,7 +68,7 @@ void	parse_and_extract(t_cub *cub, int argc, char **argv)
 		validate_map(&map);
 		
 		if (!there_is_a_problem())
-			add_new_level(&cub->levels, map, argv[i]); //copies the t_map and images, inits the t_minimap, and creates a t_lvl node (maybe split this.. ?)
+			add_new_level(&cub->levels, map, argv[i]);
 		
 		cleanup_scene(&scene);
 		cleanup_map(&map);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   segworld.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 15:07:44 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/17 01:05:14 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/18 15:47:32 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void replace_with_segworld(t_level *next_lvl)
 	next_lvl->elevator_exists = 1;
 	next_lvl->elevator_position = (t_point){1, 1};
 	next_lvl->elevator_orientation = cardinal_to_radian('N');
-	free_matrix(next_lvl->map.map_array);
+	// free_matrix(next_lvl->map.map_array);
 	next_lvl->map = set_segworld_map();
 	set_segworld_elevator(next_lvl, next_lvl->elevator_position);
 	next_lvl->mini = init_minimap(&next_lvl->map);

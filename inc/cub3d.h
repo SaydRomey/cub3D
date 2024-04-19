@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 16:42:31 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/19 16:26:19 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ typedef struct s_line
 	int		end;
 }			t_line;
 
-# define NUMSPRITES 2
+# define SPRITE_MAX	32
 
 typedef struct s_asset
 {
@@ -440,6 +440,7 @@ typedef struct s_level
 
 	bool		is_segworld;
 
+	int			assets_total;
 	t_asset		*assets;
 
 }				t_level;
@@ -474,7 +475,9 @@ t_animation	set_animation(mlx_image_t *img, int slice_total);
 void		update_animation(t_animation *a, bool direction);
 
 // assets.c
-t_asset	*init_assets(char *texture_path, int slice_total);
+// t_asset	*init_assets(char *texture_path, int assets_total, int slice_total);
+t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total);
+void	update_assets(t_cub *cub);
 
 // cleanup_elevator.c
 void	cleanup_elevator(t_elevator *elevator);

@@ -12,13 +12,13 @@
 
 #include "cub3d.h"
 
-static void	sort_sprites(t_asset *sprite)
+static void	sort_sprites(t_asset *sprite, int sprite_total)
 {
 	t_asset	tmp;
 	int		swap_times;
 	int		i;
 
-	swap_times = NUMSPRITES - 1;
+	swap_times = sprite_total - 1;
 	while (swap_times)
 	{
 		i = 0;
@@ -36,7 +36,7 @@ static void	sort_sprites(t_asset *sprite)
 	}
 }
 
-static void	set_sprite_distance(t_asset *s)
+static void	set_sprite_distance(t_asset *s, int sprite_total)
 {
 	t_fpoint	player;
 	t_fpoint	sprite;
@@ -44,7 +44,7 @@ static void	set_sprite_distance(t_asset *s)
 
 	i = 0;
 	player = call_cub()->player.position;
-	while (i < NUMSPRITES)
+	while (i < sprite_total)
 	{
 		sprite = s[i].pos;
 		s[i].pos_relative.x = sprite.x - player.x;
@@ -88,14 +88,16 @@ void	draw_assets(t_cub *cub, float z_buffer[WIDTH])
 {
 	t_asset		*s;
 	float		inv_det;
+	int			sprite_total;
 	int			i;
 
+	sprite_total = get_level(cub->current_level)->assets_total;
 	s = get_level(cub->current_level)->assets;
-	set_sprite_distance(s);
-	sort_sprites(s);
+	set_sprite_distance(s, sprite_total);
+	sort_sprites(s, sprite_total);
 	//
 	i = 0;
-	while (i < NUMSPRITES)
+	while (i < sprite_total)
 	{
 		inv_det = 1.0 / (cub->player.cam_plane.x * cub->player.delta.y - cub->player.delta.x * cub->player.cam_plane.y);
 		s[i].transform.x = inv_det * (cub->player.delta.y * s[i].pos_relative.x - cub->player.delta.x * s[i].pos_relative.y);

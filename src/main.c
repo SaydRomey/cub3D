@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:08:21 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/19 16:22:56 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,5 @@ int	main(int argc, char **argv)
 	}
 	cleanup(cub);
 	free_info();
-	return (SUCCESS);	
+	return (SUCCESS);
 }

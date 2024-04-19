@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:57:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 17:32:09 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/19 13:23:19 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	update(void *ptr)
 	update_controls(cub);
 	
 	update_player(cub); //movement based on keyhooks
+
+	update_assets(cub);
 	
 	elevator_events(cub); //animation and level change trigger
 

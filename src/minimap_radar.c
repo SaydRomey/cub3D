@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:04:05 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:28:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,11 @@ void	draw_radar(t_minimap *mini)
 	player = &call_cub()->player;
 	clear_img(radar.img);
 	if (player_is_in_elevator(player))
-		draw_circle(radar.img, radar.center, radar.radius, HEX_BLACK);
+	{
+		// draw_circle(radar.img, radar.center, radar.radius, HEX_BLACK);
+		draw_visible_minimap(mini, radar);
+		draw_player(radar.img, player, radar.center);
+	}
 	else
 	{
 		draw_visible_minimap(mini, radar);

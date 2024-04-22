@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:02:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:57:07 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ else will return false
 */
 bool	find_value_in_array(t_map *map, int value_to_find, t_point *point_ptr)
 {
-	int		x;
 	int		y;
+	int		x;
 
 	y = 0;
 	while (y < map->height)
@@ -51,6 +51,57 @@ bool	find_value_in_array(t_map *map, int value_to_find, t_point *point_ptr)
 		y++;
 	}
 	return (false);
+}
+
+bool	has_duplicate(t_map *map, int value_to_find)
+{
+	int		y;
+	int		x;
+	bool	found;
+
+	found = false;
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			if (map->map_array[y][x] == value_to_find)
+			{
+				if (found)
+					return (true);
+				else
+					found = true;
+			}
+			x++;
+		}
+		y++;
+	}
+	return (false);
+}
+
+int	n_in_array(int **array, int width, int height, int value_to_find)
+{
+	int	y;
+	int	x;
+	int	count;
+	
+	count = 0;
+	y = 0;
+	while (y < height)
+	{
+		x = 0;
+		while (x < width)
+		{
+			if (array[y][x] == value_to_find)
+			{
+				count++;
+			}
+			x++;
+		}
+		y++;
+	}
+	return (count);
 }
 
 void	toggle(bool *choice)

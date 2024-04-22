@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:44:45 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 12:45:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:59:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static void	free_texture_paths(t_scene *scene)
 			free(scene->wall_textures[i]);
 		i++;
 	}
-	proof("scene wall texture paths freed");
 	i = 0;
 	while (i < COLOR_TYPE_LEN)
 	{
@@ -31,7 +30,6 @@ static void	free_texture_paths(t_scene *scene)
 			free(scene->floor_ceiling_textures[i]);
 		i++;
 	}
-	proof("scene floor/ceiling texture paths freed");
 }
 
 static void	free_rgb_strings(t_scene *scene)
@@ -47,7 +45,6 @@ static void	free_rgb_strings(t_scene *scene)
 			free(scene->colors[CEILING][i]);
 		i++;
 	}
-	proof("scene rgb strings freed");
 }
 
 /*
@@ -60,5 +57,4 @@ void	cleanup_scene(t_scene *scene)
 	free_rgb_strings(scene);
 	if (scene->map_list)
 		ft_lstclear(&scene->map_list, free);
-	proof("t_scene cleaned up");
 }

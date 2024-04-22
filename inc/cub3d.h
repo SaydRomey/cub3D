@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 11:32:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 18:00:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
 
 # define GAME_TITLE "cub3D"
 
-# define MAP_CHARS	"0123NSEW"
+# define MAP_CHARS	"0123NSEW" //should we define differently if not in BONUS
 
 /* tmp to display debug messages
 */
-# define PRINT_PROOF		0
-// # define PRINT_PROOF		1
+// # define PRINT_PROOF		0
+# define PRINT_PROOF		1
 
 # define PIXEL_SIZE			4
 # define PI					3.1415926535
@@ -248,8 +248,6 @@ typedef struct s_info
 
 	// bonus and extra parsing
 	bool	color_check_bonus[COLOR_TYPE_LEN]; //for floor and ceiling textures
-	bool	found_elevator;
-
 }			t_info;
 
 /* ************************************************************************** */
@@ -374,7 +372,6 @@ typedef struct s_button
 
 typedef struct s_elevator
 {
-	bool		valid;
 	t_point		position;
 	int			orientation;
 	
@@ -389,8 +386,6 @@ typedef struct s_elevator
 	
 	int			id;
 	bool		door_open;
-	// 
-	// bool		player_is_inside; //?
 }				t_elevator;
 
 
@@ -407,16 +402,20 @@ typedef struct s_player
 	t_fpoint		cam_plane;
 	float			speed;
 	float			turn_speed;
-	// 
+
 	bool			speedup;
-	// 
-	int				size; //in minimap
-	int				color; //in minimap
+
+	int				size;
+	int				color;
 
 }					t_player;
 
 /* ************************************************************************** */
 
+/*	should we separate the calculation and rendering logic,
+	to only calculate on level change, and render in each frame? **?
+
+*/
 typedef struct s_radar
 {
 	mlx_image_t	*img;
@@ -553,11 +552,10 @@ void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
 void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color);
 
 // elevator.c
-t_elevator	init_elevator(t_cub *cub);
+t_elevator	init_elevator(t_cub *cub, t_level *lvl);
 void		draw_buttons(t_elevator *elevator, int floor_number);
 void		elevator_change_map(int lvl_index);
 void		elevator_events(t_cub *cub);
-void		parse_elevator(t_map *map, t_elevator *elevator);
 void		change_map(t_cub *cub);
 void		check_for_map_change(t_cub *cub, int y);
 void		update_elevator_struct(void);
@@ -717,6 +715,8 @@ void	test_player(t_player player);
 // utils.c
 int		cardinal_to_radian(char cardinal);
 bool	find_value_in_array(t_map *map, int value_to_find, t_point *point_ptr);
+bool	has_duplicate(t_map *map, int value_to_find);
+int		n_in_array(int **array, int width, int height, int value_to_find);
 void	toggle(bool *choice);
 void	change_window_title(char *filepath);
 bool	player_is_in_elevator(t_player *player);

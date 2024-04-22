@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 11:01:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:26:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:45:32 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,4 @@ void	reset_info(void)
 	ft_bzero(info->color_check, sizeof(bool) * COLOR_TYPE_LEN);
 	ft_bzero(info->color_check_bonus, sizeof(bool) * COLOR_TYPE_LEN);
 	info->found_direction = false;
-	info->found_elevator = false;
 }

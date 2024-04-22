@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:59:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:39:09 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	extract_starting_position(t_scene *scene)
 	}
 }
 
-/*	**? do we have a check for random line content,
+/*	**? do we have a check for random line content, (between relevant lines *!)
 	should we flag an error or ignore irrelevant lines ?
 
 */

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 11:36:03 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:31:43 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	parse_and_extract(t_cub *cub, int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		if (there_is_a_problem())
-			error();
 		reset_info();
 		scene = parse_cubfile(argv[i]);
 		validate_scene(&scene);
@@ -61,6 +59,8 @@ void	parse_and_extract(t_cub *cub, int argc, char **argv)
 			add_new_level(&cub->levels, map, argv[i]);
 		cleanup_scene(&scene);
 		cleanup_map(&map);
+		if (there_is_a_problem())
+			error();
 		i++;
 	}
 }
@@ -73,12 +73,10 @@ int	main(int argc, char **argv)
 	validate_arguments(argc, argv);
 	cub = init_cub(GAME_TITLE);
 	parse_and_extract(cub, argc, argv);
-	lvl = NULL;
 	if (cub->levels && !there_is_a_problem())
 	{
 		lvl = get_level(cub->current_level);
-		if (lvl->elevator_exists)
-			cub->elevator = init_elevator(cub);
+		cub->elevator = init_elevator(cub, lvl);
 		cub->player = init_player(&lvl->map);
 		change_window_title(lvl->filepath);
 		draw_minimap(&lvl->mini, &lvl->map);

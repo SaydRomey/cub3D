@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:14:18 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 13:00:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:08:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,4 @@ void	validate_arguments(int argc, char **argv)
 			error();
 		i++;
 	}
-	vaproof("%d valid arg", i - 1);
 }

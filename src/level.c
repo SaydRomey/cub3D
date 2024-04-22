@@ -6,11 +6,19 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:25:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 14:38:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+// static void	update_elevator(t_elevator *elevator, t_level *lvl)
+// {
+// 	elevator->map_change = 0;
+// 	elevator->orientation = lvl->elevator_orientation;
+// 	elevator->position = lvl->elevator_position;
+// }
+
 
 void	change_level(int index)
 {

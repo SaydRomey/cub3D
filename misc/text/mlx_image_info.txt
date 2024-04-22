@@ -1,0 +1,53 @@
+
+
+Images
+(lib/MLX42/docs/images.md)
+
+Each instance has an X, Y and Z parameter to determine their position and depth.
+A change in the image's buffer results in a change for all currently displayed instances.
+
+* An image with an individual buffer that can be rendered.
+
+typedef struct mlx_image
+{
+	const uint32_t	width; // (cannot be modified)
+	const uint32_t	height; // (cannot be modified)
+	uint8_t*		pixels; // char* pixel data
+	mlx_instance_t*	instances; // x, y, z location data
+	int32_t			count; // element count of the instances array
+	bool			enabled; // true: image drawn on screen, false: not drawn
+	void*			context; // abstracted opengl data (cannot be modified)
+}	mlx_image_t;
+
+typedef struct mlx_instance
+{
+	int32_t	x;
+	int32_t	y;
+	int32_t	z; // The z depth, controls if the image is on the fore or background. (To change the z value, use mlx_set_instance_depth!)
+	bool	enabled;
+}	mlx_instance_t;
+
+
+// Modify the x & y position of an already existing instance.
+img->instances[0].x += 5;
+img->instances[0].y += 5;
+
+Functions:
+
+// Creates a whole new image.
+mlx_image_t* mlx_new_image(mlx_t* mlx, uint16_t width, uint16_t height)
+
+// Creates a new instance/copy of an already existing image.
+void mlx_image_to_window(mlx_image_t* img, int32_t x, int32_t y)
+
+// Deletes an image and removes it from the render queue.
+void mlx_delete_image(mlx* mlx, mlx_image_t* image)
+
+// ?
+void mlx_set_instance_depth(mlx_instance_t* instance, int32_t zdepth)
+
+// ? 
+bool mlx_resize_image(mlx_image_t* img, uint32_t nwidth, uint32_t nheight)
+
+
+

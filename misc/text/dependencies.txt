@@ -1,0 +1,83 @@
+
+# **************************************************************************** #
+# ---------------------------------- TESTS ----------------------------------- #
+# **************************************************************************** #
+
+
+# tests (a trier)
+
+# ifeq ($(shell uname),Linux)
+# 	GLFW_DIR := /usr/include/GLFW/
+# 	GLFW_EXISTS := $(shell pkg-config --exists glfw3 && echo TRUE)
+# 	ifeq ($(GLFW_EXISTS), TRUE)
+# 		LIBRARIES += -lglfw -ldl -lm -pthread
+# 	else
+# 		$(error GLFW not found. Please run 'make dep' to install necessary packages.)
+# 	endif
+# else ifeq ($(shell uname),Darwin)
+# 	BREW_EXISTS := $(shell brew --version && echo TRUE)
+# 	ifeq ($(BREW_EXISTS), TRUE)
+# 		GLFW_EXISTS := $(shell brew list --formula | grep glfw && echo TRUE)
+# 		ifeq ($(GLFW_EXISTS), TRUE)
+# 			LIBRARIES += -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+# 		else
+# 			$(error GLFW not found. Please run 'make dep' to install necessary packages.)
+# 		endif
+# 	else
+# 		$(error Homebrew not found. Please run 'make dep' to install necessary packages.)
+# 	endif
+# 	GLFW_DIR := $(shell brew --prefix glfw)$(LIB_DIR)
+# else
+# 	$(error Unsupported operating system: $(shell uname))
+# endif
+
+# # **************************************************************************** #
+
+# # //
+# VOID := /dev/null
+
+# ifeq ($(shell uname),Linux)
+# 	cmake_check := $(shell cmake --version > $(VOID))
+# 	install_packages:
+# 	@echo "Installing required packages..."
+# 	@sudo apt update > $(VOID) 2>&1
+# 	@sudo apt install -y build-essential libx11-dev libglfw3-dev libglfw3 xorg-dev > $(VOID)
+# 	@if [ ! -z "$(cmake_check)" ]; then \
+# 		echo "To compile MLX42, please run 'make cmake' to install CMake.";	\
+# 	fi
+# else ifeq ($(shell uname),Darwin)
+# 	brew_check := $(shell brew --version > $(VOID))
+# 	cmake_check := $(shell cmake --version > $(VOID))
+# 	install_packages:
+# 		@echo "Installing required packages..."
+# 		@if [ ! -z "$(brew_check)" ]; then \
+# 			brew install glfw; \
+# 		elif [ ! -z "$(cmake_check)" ]; then \
+# 			echo "To install GLFW, please run 'make brew' to install Homebrew."; \
+# 		else \
+# 			echo "To compile MLX42 and/or install CMake, please run 'make cmake' to install CMake."; \
+# 		fi
+# else
+# 	$(error Unsupported operating system: $(shell uname))
+# endif
+
+# # 'dep' target to install dependencies
+# dep: install_packages
+# 	@echo "Dependencies installed."
+
+# # 'brew' target to install Homebrew
+# brew:
+# 	@echo "Installing Homebrew..."
+# 	@/bin/bash -c \
+# 	"$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# # installing cmake with brew if on mac, or with apt if on linux
+# cmake:
+# ifeq ($(shell uname),Darwin)
+# 	@echo "Installing CMake..."
+# 	@brew install cmake
+# else ifeq ($(shell uname),Linux)
+# 	@echo "Installing CMake..."
+# 	@sudo apt install -y cmake
+# else
+# 	$(error Unsupported operating system: $(shell uname)) //*to fix and test

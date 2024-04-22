@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/26 15:07:44 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/18 15:47:32 by cdumais          ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/04/22 11:37:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "cub3d.h"
 
@@ -155,6 +156,7 @@ void replace_with_segworld(t_level *next_lvl)
 	set_segworld_elevator(next_lvl, next_lvl->elevator_position);
 	next_lvl->mini = init_minimap(&next_lvl->map);
 	next_lvl->is_segworld = true;
+	next_lvl->assets = init_assets("img/flames.png", next_lvl, 8);
 }
 
 // t_level *call_segworld(void)

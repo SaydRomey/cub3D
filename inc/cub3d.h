@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:28:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:32:53 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,23 +255,30 @@ typedef struct s_info
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-# define NUMSPRITES 2
+typedef struct s_line
+{
+	int		size;
+	int		start;
+	int		end;
+}			t_line;
+
+# define SPRITE_MAX	32
 
 typedef struct s_asset
 {
 	float		distance;
-	t_fpoint	position;
+	int			screen_x;
+	t_fpoint	pos;
+	t_fpoint	pos_relative;
+	t_fpoint	transform;
+	t_line		h;
+	t_line		v;
+	mlx_image_t	*tex;
+	t_animation	anim;
 }				t_asset;
 
 /* ************************************************************************** */
 /* ************************************************************************** */
-
-typedef struct s_line
-{
-	int		height;
-	int		start;
-	int		end;
-}			t_line;
 
 typedef struct s_render
 {
@@ -479,7 +486,10 @@ typedef struct s_level
 
 	bool		is_segworld;
 
-}			t_level;
+	int			assets_total;
+	t_asset		*assets;
+
+}				t_level;
 
 typedef struct s_cub
 {
@@ -507,8 +517,13 @@ typedef struct s_cub
 /* ************************************************************************** */
 
 // animation.c
-t_animation	set_animation(mlx_image_t *img);
+t_animation	set_animation(mlx_image_t *img, int slice_total);
 void		update_animation(t_animation *a, bool direction);
+
+// assets.c
+// t_asset	*init_assets(char *texture_path, int assets_total, int slice_total);
+t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total);
+void	update_assets(t_cub *cub);
 
 // cleanup_elevator.c
 void	cleanup_elevator(t_elevator *elevator);
@@ -672,17 +687,22 @@ t_fpoint	rotate_vector_delta(t_fpoint tmp, int rotation);
 t_fpoint	rotate_vector_position(t_fpoint tmp, int rotation);
 
 // raycast.c
-int		check_hit(int map_y, int map_x);
-t_point	update_texture_position(t_texture tex, t_fpoint pos);
-// void	draw_assets(t_cub *cub, float z_buffer[NUMSPRITES]);
 void	draw_assets(t_cub *cub, float z_buffer[WIDTH]);
-void	draw_ceiling_floor(t_cub *cub, int y);
+void	draw_ceiling_floor(t_cub *cub, t_texture tex[4], int y);
+// void	draw_ceiling_floor(t_cub *cub, int y);
 void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x);
 void	execute_dda_algo(t_cub *cub, t_raycast *r);
 void	raycast(t_cub *cub);
+t_texture	get_texture_floor_info(mlx_image_t *texture);
+
+// raycast_utils.c
+int		check_hit(int map_y, int map_x);
+void	get_ray_bounds(t_cub *cub);
+t_line	get_stripe_data(float divider, int center, int limit);
+float	rot_matrix(t_fpoint a, t_fpoint b);
+t_point	update_texture_position(t_texture tex, t_fpoint pos);
 
 // segworld.c
-t_level *call_segworld(t_level *next_lvl);
 void 	replace_with_segworld(t_level *next_lvl);
 
 // test.c

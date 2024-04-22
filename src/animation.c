@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 16:29:55 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/03/20 18:28:20 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/19 13:30:21 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,24 @@ static t_animation	get_frames_from_image(mlx_image_t *img, t_slice slice)
 	return (anim);
 }
 
-static t_slice	get_slice_info(mlx_image_t *img)
+static t_slice	get_slice_info(mlx_image_t *img, int slice_total)
 {
 	t_slice	slice;
 
 	slice.position.x = 0;
 	slice.position.y = 0;
-	slice.total = img->width / img->height;
+	slice.total = slice_total;
 	slice.width = img->width / slice.total;
 	slice.height = img->height;
 	return (slice);
 }
 
-t_animation	set_animation(mlx_image_t *img)
+t_animation	set_animation(mlx_image_t *img, int slice_total)
 {
 	t_animation	anim;
 	t_slice		slice;
 
-	slice = get_slice_info(img);
+	slice = get_slice_info(img, slice_total);
 	anim = get_frames_from_image(img, slice);
 	anim.frame_speed = FRAME_SPEED;
 	return (anim);

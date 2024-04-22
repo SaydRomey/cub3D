@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/15 22:25:55 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/18 16:31:55 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static void	set_elevator_textures(t_cub *cub, t_elevator *elevator)
 	// elevator->texture[E_BTN_ON] = load_png("img/elevator_btn_on.png", cub->mlx);
 	
 	door_img = load_png("img/elevator_door.png", cub->mlx);
-	elevator->door_animation = set_animation(door_img);
+	elevator->door_animation = set_animation(door_img, 4);
 	mlx_delete_image(cub->mlx, door_img);
 }
 

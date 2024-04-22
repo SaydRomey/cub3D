@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:57:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:24:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:35:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	update(void *ptr)
 	cub = (t_cub *)ptr;
 	update_controls(cub);
 	update_player(cub);
+	update_assets(cub);
 	elevator_events(cub);
 	lvl = get_level(cub->current_level);
 	if (lvl)

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:38:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:41:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,8 @@ void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color)
 	t_fpoint	current_point;
 	t_fpoint	center;
 
-	center = {origin.x, origin.y};
+	center.x = origin.x;
+	center.y = origin.y;
 	i = 0;
 	while (i < radius * 2)
 	{
@@ -236,7 +237,8 @@ int radius, int thickness, int color)
 	t_fpoint	center;
 	int			inner_radius;
 
-	center = {origin.x, origin.y};
+	center.x = origin.x;
+	center.y = origin.y;
 	inner_radius = radius - thickness;
 	i = 0;
 	while (i < radius * 2)

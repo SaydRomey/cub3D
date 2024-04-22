@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 11:37:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:42:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ void	draw_ceiling_floor(t_cub *cub, t_texture tex[4], int y)
 	// tex[2] = get_texture_info(cub->elevator.texture[E_FLOOR]);
 	// tex[3] = get_texture_info(cub->elevator.texture[E_CEILING]);
 	// get_ray_bounds(cub);
-	// distance = get_position_and_step(cub, &pos, &step, y);
-	get_position_and_step(&pos, &step, y);
+	distance = get_position_and_step(&pos, &step, y);
 	while (x < WIDTH)
 	{
 		tex[0].pixel = update_texture_position(tex[0], pos);

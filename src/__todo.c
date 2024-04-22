@@ -6,12 +6,18 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 15:59:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:45:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
+
+add 'if (BONUS)' checks for functions that are not in mandatory part:
+	mouse control,
+	...
+
+Complete parsing, then isolate in 
 
 **!! currently segfaults if a map has no elevator (in normal mode, did not test in bonus mode).
 

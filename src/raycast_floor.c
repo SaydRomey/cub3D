@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_floor.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/15 22:28:30 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/22 01:03:23 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,7 @@ static float	get_position_and_step(t_fpoint *pos, t_fpoint *step, int y)
 	return (row_distance);
 }
 
-static void	get_ray_bounds(t_cub *cub)
-{
-	cub->raycast.ray_dir_min.x = cub->player.delta.x - cub->player.cam_plane.x;
-	cub->raycast.ray_dir_min.y = cub->player.delta.y - cub->player.cam_plane.y;
-	cub->raycast.ray_dir_max.x = cub->player.delta.x + cub->player.cam_plane.x;
-	cub->raycast.ray_dir_max.y = cub->player.delta.y + cub->player.cam_plane.y;
-}
-
-static t_texture	get_texture_info(mlx_image_t *texture)
+t_texture	get_texture_floor_info(mlx_image_t *texture)
 {
 	t_texture	tex;
 
@@ -58,8 +50,6 @@ static void	draw_row_pixel(t_texture tex[4], t_fpoint pos, int x, int y)
 	// int		*color_ptrs[2] = {&color[FLOOR], &color[CEILING]};
 
 	cub = call_cub();
-	color[0] = get_pixel(tex[0].to_draw, tex[0].pixel.x, tex[0].pixel.y);
-	color[1] = get_pixel(tex[1].to_draw, tex[1].pixel.x, tex[1].pixel.y);
 	// color[0] = HEX_GROUND;
 	// color[1] = HEX_SKY;
 	
@@ -79,23 +69,24 @@ static void	draw_row_pixel(t_texture tex[4], t_fpoint pos, int x, int y)
 	draw_pixel(cub->img, x, HEIGHT - y - 1, color[1]);
 }
 
-void	draw_ceiling_floor(t_cub *cub, int y)
+void	draw_ceiling_floor(t_cub *cub, t_texture tex[4], int y)
 {
-	t_texture	tex[4];
+	// t_texture	tex[4];
 	t_fpoint	pos;
 	t_fpoint	step;
 	// float		distance;
 	int			x;
 
+	(void) cub;
 	x = 0;
 	// tex[0] = get_texture_info(cub->texture[F]);
-	tex[0] = get_texture_info(get_map(cub->current_level)->floor_ceiling_img[FLOOR]);
-	// tex[1] = get_texture_info(cub->texture[C]);
-	tex[1] = get_texture_info(get_map(cub->current_level)->floor_ceiling_img[CEILING]);
+	// tex[0] = get_texture_info(get_map(cub->current_level)->floor_ceiling_img[FLOOR]);
+	// // tex[1] = get_texture_info(cub->texture[C]);
+	// tex[1] = get_texture_info(get_map(cub->current_level)->floor_ceiling_img[CEILING]);
 	
-	tex[2] = get_texture_info(cub->elevator.texture[E_FLOOR]);
-	tex[3] = get_texture_info(cub->elevator.texture[E_CEILING]);
-	get_ray_bounds(cub);
+	// tex[2] = get_texture_info(cub->elevator.texture[E_FLOOR]);
+	// tex[3] = get_texture_info(cub->elevator.texture[E_CEILING]);
+	// get_ray_bounds(cub);
 	// distance = get_position_and_step(cub, &pos, &step, y);
 	get_position_and_step(&pos, &step, y);
 	while (x < WIDTH)

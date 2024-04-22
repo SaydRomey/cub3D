@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/17 15:45:23 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/22 00:45:13 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@ int	check_hit(int map_x, int map_y)
 	return (map->map_array[map_y][map_x]);
 }
 
+void	get_ray_bounds(t_cub *cub)
+{
+	cub->raycast.ray_dir_min.x = cub->player.delta.x - cub->player.cam_plane.x;
+	cub->raycast.ray_dir_min.y = cub->player.delta.y - cub->player.cam_plane.y;
+	cub->raycast.ray_dir_max.x = cub->player.delta.x + cub->player.cam_plane.x;
+	cub->raycast.ray_dir_max.y = cub->player.delta.y + cub->player.cam_plane.y;
+}
+
 t_line	get_stripe_data(float divider, int center, int limit)
 {
 	t_line	line;
@@ -36,6 +44,11 @@ t_line	get_stripe_data(float divider, int center, int limit)
 	if (line.end >= limit)
 		line.end = limit - 1;
 	return (line);
+}
+
+float	rot_matrix(t_fpoint a, t_fpoint b)
+{
+	return (a.x * b.y - b.x * a.y);
 }
 
 t_point	update_texture_position(t_texture tex, t_fpoint pos)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/19 16:58:08 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/22 01:03:32 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,18 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
 
 static void	raycast_vertical(t_cub *cub)
 {
-	int	y;
+	t_texture	tex[4];
+	int			y;
 
+	tex[0] = get_texture_floor_info(get_map(cub->current_level)->floor_ceiling_img[FLOOR]);
+	tex[1] = get_texture_floor_info(get_map(cub->current_level)->floor_ceiling_img[CEILING]);
+	tex[2] = get_texture_floor_info(cub->elevator.texture[E_FLOOR]);
+	tex[3] = get_texture_floor_info(cub->elevator.texture[E_CEILING]);
+	get_ray_bounds(cub);
 	y = HEIGHT / 2;
 	while (y < HEIGHT)
 	{
-		draw_ceiling_floor(cub, y);
+		draw_ceiling_floor(cub, tex, y);
 		y++;
 	}
 }

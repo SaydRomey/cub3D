@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_walls.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/19 13:34:54 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/22 00:48:14 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,7 @@ static t_texture	get_texture_info(float whp, t_point ray_pos, bool side)
 	t_cub		*cub;
 	t_texture	tex;
 
-
 	cub = call_cub();
-	
 	tex.to_draw = get_texture_to_draw(cub, ray_pos, side);
 	tex.width = (int)tex.to_draw->width;
 	tex.height = (int)tex.to_draw->height;

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:41:04 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/15 15:19:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 20:18:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static t_point project_iso(t_point point, float iso_angle)
 {
     t_point projected;
-    // Assuming iso_angle is in radians. If you're using degrees, convert it first.
+    // Assuming iso_angle is in radians. If using degrees, convert it first.
     projected.x = (point.x - point.y) * cos(iso_angle);
     projected.y = ((point.x + point.y) * sin(iso_angle)) / 2; // Dividing by 2 to reduce vertical stretching
     return projected;

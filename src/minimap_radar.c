@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 17:28:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 20:25:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,20 @@ t_triangle	init_player_icon(t_player *player, t_fpoint center)
 	return (t);
 }
 
-/*
-	draw_triangle(img, &t, player->color);
-	draw_full_triangle(img, &t, player->color);
-*/
 void	draw_player(mlx_image_t *img, t_player *player, t_fpoint center)
 {
 	t_triangle	t;
 
 	t = init_player_icon(player, center);
-	draw_line(img, t.base_center, t.front, HEX_GREEN);
-	draw_full_triangle_hollow(img, &t, 8, player->color);
+	if (call_cub()->keys.p)
+	{
+		draw_triangle(img, &t, player->color);
+	}
+	else
+	{
+		draw_line(img, t.base_center, t.front, HEX_RED);
+		draw_triangle_hollow(img, &t, 8, player->color);
+	}
 }
 
 /* ************************************************************************** */

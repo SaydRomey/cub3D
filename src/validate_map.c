@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:57:06 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 18:01:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 18:04:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ void	validate_elevator(t_map *map)
 		return ;
 	if (!find_value_in_array(map, ELEVATOR, &pos))
 		return ;
-	if (n_in_array(map->map_array, map->width, map->height, ELEVATOR) > 1)
-	// if (has_duplicate(map, ELEVATOR))
+	if (has_duplicate(map, ELEVATOR))
 	{
-		int	n = n_in_array(map->map_array, map->width, map->height, ELEVATOR);
-		ft_printf("number of elevators: %d\n", n);
-		
 		set_error("More than one elevator found in map");
 	}
 	else if (get_elevator_orientation(map->map_array, &pos) == -1)
@@ -62,7 +58,6 @@ static bool	check_vertical(int **map_array, int y, int x)
 	current = map_array[y][x];
 	up = map_array[y - 1][x];
 	down = map_array[y + 1][x];
-	
 	if (current == 0)
 	{
 		return (up >= current && down >= current);

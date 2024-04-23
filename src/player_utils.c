@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:03:07 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/15 19:10:16 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/22 20:10:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,18 @@ t_fpoint	rotate_vector_delta(t_fpoint tmp, int rotation)
 		new.y = -tmp.y;
 	}
 	return (new);
+}
+
+bool	player_is_in_elevator(t_player *player)
+{
+	t_level	*lvl;
+
+	lvl = get_level(call_cub()->current_level);
+	if (lvl)
+	{
+		if (lvl->elevator_position.x == (int)player->position.x && \
+			lvl->elevator_position.y == (int)player->position.y)
+			return (true);
+	}
+	return (false);
 }

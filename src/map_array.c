@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:30:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:20:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 20:27:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ static void	fill_row(int *grid, int width, int value)
 	}
 }
 
-/*
-check with ft_calloc instead, if filling it is necessary..
-
-*/
 int	**allocate_grid(int height, int width)
 {
 	int	**grid;

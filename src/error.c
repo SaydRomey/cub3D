@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:32:12 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 20:15:32 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,10 @@ void	error(void)
 }
 
 /*
-error function used during the 'get_next_line()' loop
-*/
-void	parsing_error(char *line, int fd, t_scene *scene)
-{
-	if (line)
-		free(line);
-	close(fd);
-	cleanup_scene(scene);
-	error();
-}
-
-/*
 mlx specific error function, uses 'mlx_errno' to identify error
 
 	** make sure this also frees other mlx allocated ressources
 	(like current images of t_cub when in init_elevator, etc.)
-
-	// set_error((char *)mlx_strerror(mlx_errno));
 
 */
 void	error_mlx(void)

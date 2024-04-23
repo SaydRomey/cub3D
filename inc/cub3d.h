@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 18:00:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 20:30:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -524,32 +524,26 @@ void		update_animation(t_animation *a, bool direction);
 t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total);
 void	update_assets(t_cub *cub);
 
-// cleanup_elevator.c
+// cleanup.c
+void	free_map_array(int **map_array, int height); //tmp?
+
+void	cleanup(t_cub *cub);
+void	cleanup_scene(t_scene *scene);
+void	cleanup_map(t_map *map);
 void	cleanup_elevator(t_elevator *elevator);
 
-// cleanup_nap.c
-void	free_map_array(int **map_array, int height); //put a generic version of this in libft..
-void	cleanup_map(t_map *map);
+// draw_circle.c
+void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
+void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color);
 
-// cleanup_scene.c
-void	cleanup_scene(t_scene *scene);
-
-// cleanup.c
-void	cleanup(t_cub *cub);
+// draw_triangle.c
+void	draw_triangle(mlx_image_t *img, t_triangle *tri, int color);
+void	draw_triangle_hollow(mlx_image_t *img, t_triangle *tri, int thickness, int color);
 
 // draw.c
 void	draw_line(mlx_image_t *img, t_fpoint start, t_fpoint end, int color);
 void	draw_rectangle(mlx_image_t *img, t_fpoint origin, t_fpoint end, int color);
-void	draw_floor(mlx_image_t *img, int color);
-void	draw_ceiling(mlx_image_t *img, int color);
-void	draw_background(mlx_image_t *img, int color);
-
-void	draw_triangle(mlx_image_t *img, t_triangle *triangle, int color);
-void	draw_full_triangle(mlx_image_t *img, t_triangle *tri, int color);
-void	draw_full_triangle_hollow(mlx_image_t *img, t_triangle *tri, int thickness, int color);
-
-void	draw_circle(mlx_image_t *img, t_fpoint origin, int radius, int color);
-void	draw_circle_hollow(mlx_image_t *img, t_fpoint origin, int radius, int thickness, int color);
+void	draw_floor_ceiling(mlx_image_t *img, t_map *map);
 
 // elevator.c
 t_elevator	init_elevator(t_cub *cub, t_level *lvl);
@@ -558,7 +552,6 @@ void		elevator_change_map(int lvl_index);
 void		elevator_events(t_cub *cub);
 void		change_map(t_cub *cub);
 void		check_for_map_change(t_cub *cub, int y);
-void		update_elevator_struct(void);
 
 // elevator_buttons.c
 void	init_buttons(t_elevator *elevator);
@@ -569,7 +562,6 @@ void	set_error(char *str);
 void	set_error_arg(char *str, char *arg);
 char	*get_error(void);
 void    error(void);
-void	parsing_error(char *line, int fd, t_scene *scene);
 void	error_mlx(void);
 
 // fog.c
@@ -584,32 +576,21 @@ int		apply_bright(int color, float bright_factor); //to test
 void	keyhooks(mlx_key_data_t data, void *param);
 void	update(void *ptr);
 
-// img_utils.c
-mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
-mlx_image_t	*copy_img(mlx_image_t *src, mlx_t *mlx);
-mlx_image_t *load_png(char *filepath, mlx_t *mlx);
-
-void		clear_img(mlx_image_t *img);
-void		fill_img(mlx_image_t *img, unsigned int grayscale);
-void		move_img(mlx_image_t *img, int x, int y);
-
-void		put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y);
-
 // info.c
 t_info	*call_info(void);
 void	free_info(void);
 bool    there_is_a_problem(void);
 void	reset_info(void);
 
-// level.c
-void	change_level(int index);
-
-void	add_new_level(t_list **levels, t_map map, char *filepath); //this one is with the deep copy of a map init in main
-void	delete_level(void *level);
-
+// level_utils.c
 t_level	*get_level(int index);
 t_map	*get_map(int index);
-t_minimap	*get_minimap(int index);
+t_map	deep_copy_map(t_map original);
+
+// level.c
+void	change_level(int index);
+void	add_new_level(t_list **levels, t_map map, char *filepath);
+void	delete_level(void *level);
 
 // main.c
 t_cub	*call_cub(void);
@@ -622,17 +603,25 @@ int		**get_2d_map(t_list *map_list, int height, int width);
 void	store_map_line(t_list **map_list, char *line);
 int		get_map_width(t_list *map_list);
 
+// map_utils.c
+bool	find_value_in_array(t_map *map, int value_to_find, t_point *point_ptr);
+bool	has_duplicate(t_map *map, int value_to_find);
+
 // map.c
 t_map	init_map(t_scene *scene);
+
+// math_utils_circle.c
+bool	is_in_circle(t_fpoint point, t_fpoint center, int radius);
+bool	is_in_annulus(t_fpoint point, t_fpoint center, int outer_radius, int inner_radius);
+
+// math_utils_triangle.c
+int		point_in_triangle(t_fpoint p, t_triangle triangle);
 
 // math_utils.c
 float	degree_to_radian(int degree);
 int	    fix_angle(int angle);
-bool	is_in_circle(t_fpoint point, t_fpoint center, int radius);
-bool	is_in_annulus(t_fpoint point, t_fpoint center, int outer_radius, int inner_radius);
 float	ft_lerp(float a, float b, float t);
-
-int		point_in_triangle(t_fpoint p, t_triangle triangle);
+float	magnitude_between(t_fpoint a, t_fpoint b);
 
 // minimap_draw.c
 void	draw_minimap(t_minimap *mini, t_map *map);
@@ -675,14 +664,14 @@ int		get_color(t_scene *scene, int id);
 
 // player.c
 t_player	init_player(t_map *map);
-// void	update_player_position(t_cub *cub);
-// void	update_player_direction(t_cub *cub);
 void		update_player(t_cub *cub);
 t_player	warp_player(t_player old_player, t_level *lvl, t_level *next_lvl);
 
 // player_utils.c
 t_fpoint	rotate_vector_delta(t_fpoint tmp, int rotation);
 t_fpoint	rotate_vector_position(t_fpoint tmp, int rotation);
+bool		player_is_in_elevator(t_player *player);
+
 
 // raycast.c
 void	draw_assets(t_cub *cub, float z_buffer[WIDTH]);
@@ -703,23 +692,17 @@ t_point	update_texture_position(t_texture tex, t_fpoint pos);
 // segworld.c
 void 	replace_with_segworld(t_level *next_lvl);
 
-// test.c
-void	proof(char *str);
-void	cproof(char *str, char *color);
-void	vaproof(char *str, ...);
-
-void	test_scene(t_scene scene);
-void    test_map(t_map map);
-void	test_player(t_player player);
+// utils_img.c
+mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
+mlx_image_t	*copy_img(mlx_image_t *src, mlx_t *mlx);
+mlx_image_t *load_png(char *filepath, mlx_t *mlx);
+void		clear_img(mlx_image_t *img);
+void		move_img(mlx_image_t *img, int x, int y);
 
 // utils.c
 int		cardinal_to_radian(char cardinal);
-bool	find_value_in_array(t_map *map, int value_to_find, t_point *point_ptr);
-bool	has_duplicate(t_map *map, int value_to_find);
-int		n_in_array(int **array, int width, int height, int value_to_find);
 void	toggle(bool *choice);
 void	change_window_title(char *filepath);
-bool	player_is_in_elevator(t_player *player);
 
 // validate_elevator.c
 int		get_elevator_orientation(int **map, t_point *position);
@@ -734,10 +717,5 @@ void	validate_scene(t_scene *scene);
 
 // validate.c
 void	validate_arguments(int argc, char **argv);
-
-// vfx.c
-// void	update_vfx(t_vfx *vfx);
-// void	wall_vfx(int *color, float distance, float tex_pos_y);
-// void	floor_ceiling_vfx(int *color[2], float distance);
 
 #endif // CUB3D_H

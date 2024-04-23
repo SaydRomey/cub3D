@@ -6,11 +6,23 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:21:44 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 17:39:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 20:14:34 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+/*
+error function used during the 'get_next_line()' loop
+*/
+static void	parsing_error(char *line, int fd, t_scene *scene)
+{
+	if (line)
+		free(line);
+	close(fd);
+	cleanup_scene(scene);
+	error();
+}
 
 static void	extract_starting_position(t_scene *scene)
 {

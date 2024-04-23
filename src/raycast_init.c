@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 01:03:32 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/22 20:36:18 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,13 @@ void	raycast(t_cub *cub)
 	int			x;
 
 	// if (cub->vfx.textures_enabled == false)
-	// {
-	// 	draw_ceiling(cub->img, cub->map->ceiling_color);
-	// 	draw_floor(cub->img, cub->map->floor_color);
-	// }
+// ...
 	x = 0;
 	r = &cub->raycast;
 	clear_img(cub->img);
-	if (get_map(cub->current_level)->floor_ceiling_img[0])
+	// if (get_map(cub->current_level)->floor_ceiling_img[0])
+	if (get_map(cub->current_level)->floor_ceiling_img[0] \
+	&& !cub->keys.two)
 		raycast_vertical(cub);
 	while (x < WIDTH)
 	{

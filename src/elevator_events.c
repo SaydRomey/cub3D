@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   elevator_events.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/17 01:22:57 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/22 18:34:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ static void	update_door_animation(t_elevator *e)
 		else if (e->map_change == 1)
 		{
 			change_level(call_cub()->chosen_level);
-			update_elevator_struct();
-			// e->map_change = 0;
 		}
 	}
 }
@@ -89,31 +87,10 @@ void	elevator_change_map(int lvl_index)
 void	elevator_events(t_cub *cub)
 {
 	check_near_elevator(cub->player.position, &cub->elevator);
-
 	toggle_elevator_buttons(cub->player.position, &cub->elevator);
 	if (cub->elevator.buttons_on)
+	{
 		check_button_hover(cub->elevator.buttons);
-
+	}
 	update_door_animation(&cub->elevator);
 }
-
-// void	check_for_map_change(t_cub *cub, int y)
-// {
-// 	int	width;
-// 	int	i;
-
-// 	i = 0;
-// 	width = cub->elevator.buttons->width;
-// 	while (i < cub->scene_total)
-// 	{
-// 		if ((y >= HEIGHT - (width + i * width) && y < HEIGHT - i * width)
-// 			&& cub->elevator.id != i)
-// 		{
-// 			draw_buttons(&cub->elevator, i);
-// 			cub->elevator.map_change = 1;
-// 			cub->elevator.id = i;
-// 			break ;
-// 		}
-// 		i++;
-// 	}
-// }

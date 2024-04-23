@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_walls.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 11:38:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 13:58:23 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,25 +59,11 @@ static t_texture	get_texture_info(float whp, t_point ray_pos, bool side)
 	return (tex);
 }
 
-// static t_line	get_stripe_data(float wall_perp_dist)
-// {
-// 	t_line	line;
-
-// 	line.height = (int)(HEIGHT / wall_perp_dist);
-// 	line.start = (HEIGHT / 2) - (line.height / 2);
-// 	if (line.start < 0)
-// 		line.start = 0;
-// 	line.end = (HEIGHT / 2) + (line.height / 2);
-// 	if (line.end >= HEIGHT)
-// 		line.end = HEIGHT - 1;
-// 	return (line);
-// }
-
 void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 {
 	t_texture		tex;
 	t_line			line;
-	float		distance;
+	float			distance;
 	int				color;
 	int				y;
 

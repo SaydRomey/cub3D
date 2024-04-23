@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 11:32:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 13:59:51 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -557,6 +557,7 @@ t_elevator	init_elevator(t_cub *cub);
 void		draw_buttons(t_elevator *elevator, int floor_number);
 void		elevator_change_map(int lvl_index);
 void		elevator_events(t_cub *cub);
+void		elevator_waiting(void);
 void		parse_elevator(t_map *map, t_elevator *elevator);
 void		change_map(t_cub *cub);
 void		check_for_map_change(t_cub *cub, int y);

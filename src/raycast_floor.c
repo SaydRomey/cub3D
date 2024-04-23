@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_floor.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 11:42:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 13:08:01 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,48 +108,3 @@ void	draw_ceiling_floor(t_cub *cub, t_texture tex[4], int y)
 		x++;
 	}
 }
-
-// void	draw_ceiling_floor(t_cub *cub, int y)
-// {
-// 	t_point		tex_pos_f;
-// 	t_point		tex_pos_c;
-// 	t_point		tex_size_f;
-// 	t_point		tex_size_c;
-// 	t_fpoint	pos;
-// 	t_fpoint	step;
-// 	// float		distance;
-// 	int			color[2];
-// 	// int			*color_ptrs[2] = {&color[FLOOR], &color[CEILING]};
-// 	int			x;
-
-// 	x = 0;
-// 	tex_size_f = (t_point){cub->texture[F]->width, cub->texture[F]->height};
-// 	tex_size_c = (t_point){cub->texture[C]->width, cub->texture[C]->height};
-// 	get_ray_bounds(cub);
-// 	// distance = get_position_and_step(cub, &pos, &step, y);
-// 	get_position_and_step(&pos, &step, y);
-// 	while (x < WIDTH)
-// 	{
-// 		tex_pos_f.x = ft_abs((int)(tex_size_f.x * (pos.x - (int) pos.x)));
-// 		tex_pos_f.y = ft_abs((int)(tex_size_f.y * (pos.y - (int) pos.y)));
-// 		tex_pos_c.x = ft_abs((int)(tex_size_c.x * (pos.x - (int) pos.x)));
-// 		tex_pos_c.y = ft_abs((int)(tex_size_c.y * (pos.y - (int) pos.y)));
-// 		pos.x += step.x;
-// 		pos.y += step.y;
-// 		if ((int)pos.x == cub->elevator.position.x && (int)pos.y == cub->elevator.position.y)
-// 		{
-// 			color[FLOOR] = get_pixel(cub->elevator.texture[E_FLOOR], tex_pos_f.x, tex_pos_f.y);
-// 			color[CEILING] = get_pixel(cub->elevator.texture[E_CEILING], tex_pos_f.x, tex_pos_f.y);
-// 		}
-// 		else
-// 		{
-// 			color[FLOOR] = get_pixel(cub->texture[F], tex_pos_f.x, tex_pos_f.y);
-// 			color[CEILING] = get_pixel(cub->texture[C], tex_pos_c.x, tex_pos_c.y);
-// 		}
-// 		// floor_ceiling_vfx(color_ptrs, distance);
-
-// 		draw_pixel(cub->img, x, y, color[FLOOR]);
-// 		draw_pixel(cub->img, x, HEIGHT - y - 1, color[CEILING]);
-// 		x++;
-// 	}
-// }

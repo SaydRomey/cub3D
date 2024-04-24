@@ -3,63 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   segworld.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/04/22 11:37:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 00:36:28 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "cub3d.h"
-
-// void	call_segworld(t_cub *cub, t_elevator *e, t_fpoint pos, int ori)
-// {
-// 	int	map[8][8] = 
-// 	{
-// 		{1, 1, 1, 1, 1, 1, 1, 1},
-// 		{1, 0, 1, 3, 1, 0, 0, 1},
-// 		{1, 0, 0, 0, 1, 1, 0, 1},
-// 		{1, 0, 1, 0, 0, 0, 0, 1},
-// 		{1, 0, 1, 1, 1, 1, 0, 1},
-// 		{1, 0, 0, 1, 0, 0, 0, 1},
-// 		{1, 1, 0, 0, 0, 1, 0, 1},
-// 		{1, 1, 1, 1, 1, 1, 1, 1}
-// 	};
-// 	int	x;
-// 	int	y;
-	
-// 	y = 0;
-// 	cub->map.width = 8;
-// 	cub->map.height = 8;
-// 	cub->map.floor_color = 0x00;
-// 	cub->map.ceiling_color = 0x00;
-// 	cub->map.wall_textures_img[NO] = load_png("img/checker.png", cub->mlx);
-// 	cub->map.wall_textures_img[SO] = load_png("img/paint.png", cub->mlx);
-// 	cub->map.wall_textures_img[EA] = load_png("img/pokeball.png", cub->mlx);
-// 	cub->map.wall_textures_img[WE] = load_png("img/tree_trunk.png", cub->mlx);
-// 	free_matrix(cub->map.map_array);
-// 	cub->map.map_array = ft_calloc(cub->map.height, sizeof (int *));
-// 	if (!cub->map.map_array)
-// 		printf ("Malloc error\n");
-// 	while (y < cub->map.height)
-// 	{
-// 		x = 0;
-// 		cub->map.map_array[y] = ft_calloc(cub->map.width, sizeof (int));
-// 		if (!cub->map.map_array[y])
-// 			printf ("Malloc error\n");
-// 		while (x < cub->map.width)
-// 		{
-// 			cub->map.map_array[y][x] = map[y][x];
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	parse_elevator(&cub->map, e);
-// 	e->id = -1;
-// 	update_elevator_struct(cub, *e);
-// 	change_character_coordinates(cub, pos, ori);
-// }
 
 static void	set_segworld_elevator(t_level *segworld, t_point pos)
 {
@@ -136,8 +87,8 @@ static t_map	set_segworld_map(void)
 	map.height = 8;
 	map.width = 8;
 	map.map_array = fill_segworld_map(map.height, map.width);
-	// map.floor_color = HEX_DGRAY;
-	// map.ceiling_color = HEX_GRAY;
+	map.floor_color = HEX_GROUND;
+	map.ceiling_color = HEX_SKY;
 	map.wall_textures_img[NO] = load_png("img/checker.png", mlx);
 	map.wall_textures_img[SO] = load_png("img/paint.png", mlx);
 	map.wall_textures_img[EA] = load_png("img/pokeball.png", mlx);
@@ -158,21 +109,3 @@ void replace_with_segworld(t_level *next_lvl)
 	next_lvl->is_segworld = true;
 	next_lvl->assets = init_assets("img/flames.png", next_lvl, 8);
 }
-
-// t_level *call_segworld(void)
-// {
-// 	static t_level	segworld;
-
-// 	if (segworld.index == 0)
-// 	{
-// 		segworld.filepath = "segworld";
-// 		segworld.index = -1;
-// 		segworld.elevator_exists = 1;
-// 		segworld.elevator_position = (t_point){1, 1};
-// 		segworld.elevator_orientation = cardinal_to_radian('N');
-// 		segworld.map = set_segworld_map();
-// 		set_segworld_elevator(&segworld, segworld.elevator_position);
-// 		segworld.mini = init_minimap(&segworld.map);
-// 	}
-// 	return (&segworld);
-// }

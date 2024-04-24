@@ -6,7 +6,7 @@
 /*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/23 19:35:57 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/24 00:41:49 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ static void	get_initial_offset(t_player *p, t_raycast *r)
 	}
 }
 
+/**
+ * Cross Product here.
+ * Since we use units of 1, only a division is needed in this case.
+*/
 static float	get_grid_increment_value(float ray_dir)
 {
 	if (ray_dir == 0)
@@ -57,6 +61,13 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
 	get_initial_offset(p, r);
 }
 
+/**
+ * Raycasting logic, drawing in this order:
+ * - Background colors
+ * - Floor / Ceiling textures
+ * - Walls
+ * - Assets
+*/
 void	raycast(t_cub *cub)
 {
 	t_raycast	*r;
@@ -64,25 +75,26 @@ void	raycast(t_cub *cub)
 
 	x = 0;
 	r = &cub->raycast;
-	clear_img(cub->img);
+	// clear_img(cub->img);
+	draw_base_colors(cub);
 	// if BONUS
 	draw_floor_ceiling(cub);
 	while (x < WIDTH)
 	{
-		cub->elevator.door_open = false;
+		cub->elevator.door_open_and_visible = false;
 
 		init_raycast_data(&cub->player, r, x);
 		execute_dda_algo(cub, &cub->raycast);
 		draw_wall_stripe(cub, r->ray_pos, &r->ray, x);
 		//
 		// Perform additional wall drawing to get elevator door info
-		// (Possibly some optimization to do here - draw only if elevator hit)
-		if (cub->elevator.door_open)
+		if (cub->elevator.door_open_and_visible)
 			draw_wall_stripe(cub, r->ray_pos_door, &r->ray_door, x);
 		//
 		// Store max distance for asset drawing later on
 		r->z_buffer[x] = r->ray.wall_perp_dist;
 		x++;
 	}
+	// if BONUS
 	draw_assets(cub);
 }

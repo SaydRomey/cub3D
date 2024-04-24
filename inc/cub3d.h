@@ -6,7 +6,7 @@
 /*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/23 20:00:18 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/24 00:40:39 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,7 +389,7 @@ typedef struct s_elevator
 	t_button	buttons[2]; // 0 = UP, 1 = DOWN
 	
 	int			id;
-	bool		door_open;
+	bool		door_open_and_visible;
 	// 
 	// bool		player_is_inside; //?
 }				t_elevator;
@@ -690,6 +690,7 @@ t_fpoint	rotate_vector_position(t_fpoint tmp, int rotation);
 
 // raycast.c
 void	draw_assets(t_cub *cub);
+void	draw_base_colors(t_cub *cub);
 void	draw_floor_ceiling(t_cub *cub);
 void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x);
 void	execute_dda_algo(t_cub *cub, t_raycast *r);
@@ -699,7 +700,6 @@ t_texture	get_texture_floor_info(mlx_image_t *texture);
 // raycast_utils.c
 int		check_hit(int map_x, int map_y);
 t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos);
-void	get_ray_bounds(t_cub *cub);
 t_line	get_stripe_data(float divider, int center, int limit);
 bool	position_is_elevator(int pos_x, int pos_y);
 float	rot_matrix(t_fpoint a, t_fpoint b);

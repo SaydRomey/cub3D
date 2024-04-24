@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_dda.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:49:53 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/10 20:02:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 00:56:56 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+/**
+ * Hit data useful for drawing walls.
+ * Note that this function is called twice when the elevator is open and visible
+ * 
+ * @param wall_perp_dist Perpendicular distance to camera plane
+ * @param wall_hit_pos Position on wall (number between 0 and 1)
+*/
 static void	get_hit_data(float *wall_perp_dist, float *wall_hit_pos)
 {
 	t_player	*p;
@@ -40,7 +47,7 @@ static void	get_hit_data(float *wall_perp_dist, float *wall_hit_pos)
 
 static void	get_elevator_hit_data(t_cub *cub, t_raycast *r)
 {
-	cub->elevator.door_open = true;
+	cub->elevator.door_open_and_visible = true;
 	r->ray_pos_door = r->ray_pos;
 	r->ray_door.side = r->ray.side;
 	get_hit_data(&r->ray_door.wall_perp_dist, &r->ray_door.wall_hit_pos);
@@ -63,7 +70,7 @@ static int	get_next_unit(t_raycast *r)
 	return (1);
 }
 
-static bool	check_inside_elevator(t_cub *cub, t_raycast *r)
+static bool	check_if_is_inside_elevator(t_cub *cub, t_raycast *r)
 {
 	if (check_hit(r->ray_pos.x, r->ray_pos.y) == ELEVATOR
 		&& get_next_unit(r) == 0)
@@ -75,12 +82,18 @@ static bool	check_inside_elevator(t_cub *cub, t_raycast *r)
 	}
 	return (0);
 }
-
+/**
+ * DDA (Digital Differential Analyzer):
+ * The ray increments of 1 unit in a specific direction
+ * until it hits a line on the grid.
+ * side 0 = East and West
+ * side 1 = North and South
+*/
 void	execute_dda_algo(t_cub *cub, t_raycast *r)
 {
-	bool	hit = 0;
+	bool	hit;
 
-	hit = check_inside_elevator(cub, r);
+	hit = check_if_is_inside_elevator(cub, r);
 	while (!hit)
 	{
 		if (r->length.x < r->length.y)

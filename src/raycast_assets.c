@@ -66,14 +66,12 @@ static void	draw_asset_pixels(t_cub *cub, t_asset s, float z_buffer[WIDTH])
 	x = s.h.start;
 	while (x < s.h.end)
 	{
-		// tex.x = (int)(256 * (x - (s.screen_x - s.h.size / 2)) * s.tex->width / s.h.size) / 256;
 		tex.x = ft_abs(x - (s.screen_x - s.h.size / 2)) * s.tex->width / s.h.size;
 		if (s.transform.y > 0 && x >= 0 && x < WIDTH && s.transform.y < z_buffer[x])
 		{
 			y = s.v.start;
 			while (y < s.v.end)
 			{
-				// start_pos = y * 256 - HEIGHT * 128 + s.v.size * 128;
 				start_pos = ft_abs(y - HEIGHT / 2 + s.v.size / 2);
 				tex.y = start_pos * s.tex->height / s.v.size;
 				color = get_pixel(s.tex, tex.x, tex.y);

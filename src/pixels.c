@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pixels.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:53:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/23 21:44:30 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	get_pixel(mlx_image_t *img, int x, int y)
 {
 	unsigned char	*pixel;
 
-	if (x > (int)img->width || y > (int)img->height)
+	if (!img || x > (int)img->width || y > (int)img->height)
 		return ((unsigned char)0xFF000000);
 	pixel = img->pixels + (y * img->width + x) * PIXEL_SIZE;
 	return (combine_rgba(*(pixel), *(pixel + 1), *(pixel + 2), *(pixel + 3)));

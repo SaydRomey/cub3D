@@ -86,13 +86,42 @@ static void	draw_asset_pixels(t_cub *cub, t_asset s, float z_buffer[WIDTH])
 	}
 }
 
-void	draw_assets(t_cub *cub, float z_buffer[WIDTH])
+// void	draw_assets(t_cub *cub, float z_buffer[WIDTH])
+// {
+// 	t_asset		*s;
+// 	float		inv;
+// 	int			total;
+// 	int			i;
+// 	float		scale_factor;
+
+// 	total = get_level(cub->current_level)->assets_total;
+// 	s = get_level(cub->current_level)->assets;
+// 	set_sprite_distance(s, total);
+// 	sort_sprites(s, total);
+// 	//
+// 	i = 0;
+// 	while (i < total)
+// 	{
+// 		scale_factor = s[i].tex->height / s[i].distance;
+// 		s[i].screen_x = WIDTH * s[i].pos.x / ;
+
+// 		// Calculate dimensions
+// 		s[i].v = get_stripe_data(s[i].transform.y, HEIGHT / 2, HEIGHT);
+// 		s[i].h = get_stripe_data(s[i].transform.y, s[i].screen_x, WIDTH);
+
+// 		// Loop through all vertical stripes of the sprites
+// 		draw_asset_pixels(cub, s[i], z_buffer);
+		
+// 		i++;
+// 	}
+// }
+
+static void	start_drawing_assets(t_cub *cub, float z_buffer[WIDTH])
 {
 	t_asset		*s;
 	float		inv;
 	int			total;
 	int			i;
-	float		scale_factor;
 
 	total = get_level(cub->current_level)->assets_total;
 	s = get_level(cub->current_level)->assets;
@@ -102,8 +131,10 @@ void	draw_assets(t_cub *cub, float z_buffer[WIDTH])
 	i = 0;
 	while (i < total)
 	{
-		scale_factor = s[i].tex->height / s[i].distance;
-		s[i].screen_x = WIDTH * s[i].pos.x / ;
+		inv = 1.0 / rot_matrix(cub->player.cam_plane, cub->player.delta); // -1,25
+		s[i].transform.x = inv * rot_matrix(s[i].pos_relative, cub->player.delta); // -1,25
+		s[i].transform.y = inv * rot_matrix(cub->player.cam_plane, s[i].pos_relative); // 3
+		s[i].screen_x = (int)((WIDTH / 2) * (1 + s[i].transform.x / s[i].transform.y));
 
 		// Calculate dimensions
 		s[i].v = get_stripe_data(s[i].transform.y, HEIGHT / 2, HEIGHT);
@@ -116,33 +147,8 @@ void	draw_assets(t_cub *cub, float z_buffer[WIDTH])
 	}
 }
 
-// void	draw_assets(t_cub *cub, float z_buffer[WIDTH])
-// {
-// 	t_asset		*s;
-// 	float		inv;
-// 	int			total;
-// 	int			i;
-
-// 	total = get_level(cub->current_level)->assets_total;
-// 	s = get_level(cub->current_level)->assets;
-// 	set_sprite_distance(s, total);
-// 	sort_sprites(s, total);
-// 	//
-// 	i = 0;
-// 	while (i < total)
-// 	{
-// 		inv = 1.0 / rot_matrix(cub->player.cam_plane, cub->player.delta); // -1,25
-// 		s[i].transform.x = inv * rot_matrix(s[i].pos_relative, cub->player.delta); // -1,25
-// 		s[i].transform.y = inv * rot_matrix(cub->player.cam_plane, s[i].pos_relative); // 3
-// 		s[i].screen_x = (int)((WIDTH / 2) * (1 + s[i].transform.x / s[i].transform.y));
-
-// 		// Calculate dimensions
-// 		s[i].v = get_stripe_data(s[i].transform.y, HEIGHT / 2, HEIGHT);
-// 		s[i].h = get_stripe_data(s[i].transform.y, s[i].screen_x, WIDTH);
-
-// 		// Loop through all vertical stripes of the sprites
-// 		draw_asset_pixels(cub, s[i], z_buffer);
-		
-// 		i++;
-// 	}
-// }
+void	draw_assets(t_cub *cub)
+{
+	if (get_level(cub->current_level)->assets)
+		start_drawing_assets(cub, cub->raycast.z_buffer);
+}

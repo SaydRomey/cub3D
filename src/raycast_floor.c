@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 11:42:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 18:48:32 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	draw_row_pixel(t_texture tex[4], t_fpoint pos, int x, int y, float d
 	draw_pixel(cub->img, x, HEIGHT - y - 1, color[1]);
 }
 
-void	draw_ceiling_floor(t_cub *cub, t_texture tex[4], int y)
+void	draw_ceiling_floor(t_texture tex[4], int y)
 {
 	// t_texture	tex[4];
 	t_fpoint	pos;
@@ -84,7 +84,6 @@ void	draw_ceiling_floor(t_cub *cub, t_texture tex[4], int y)
 	float		distance;
 	int			x;
 
-	(void) cub;
 	x = 0;
 	// tex[0] = get_texture_info(cub->texture[F]);
 	// tex[0] = get_texture_info(get_map(cub->current_level)->floor_ceiling_img[FLOOR]);

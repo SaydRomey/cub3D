@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 18:34:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 19:18:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,11 @@ static void	toggle_elevator_buttons(t_fpoint pos, t_elevator *e)
 static void	update_door_animation(t_elevator *e)
 {
 	if (e->door == OPEN)
-	{
 		if (e->door_animation.current_frame < e->door_animation.last_frame)
 			update_animation(&e->door_animation, GO_RIGHT);
-	}
-	else
-	{
+	if (e->door == CLOSE)
 		if (e->door_animation.current_frame != 0)
 			update_animation(&e->door_animation, GO_LEFT);
-		else if (e->map_change == 1)
-		{
-			change_level(call_cub()->chosen_level);
-		}
-	}
 }
 
 void	elevator_change_map(int lvl_index)
@@ -84,8 +76,14 @@ void	elevator_change_map(int lvl_index)
 	}
 }
 
-void	elevator_events(t_cub *cub)
+void	elevator_events(void *param)
 {
+	t_cub		*cub;
+	t_elevator	*e;
+
+	cub = (t_cub *)param;
+	e = &cub->elevator;
+	// 
 	check_near_elevator(cub->player.position, &cub->elevator);
 	toggle_elevator_buttons(cub->player.position, &cub->elevator);
 	if (cub->elevator.buttons_on)
@@ -93,4 +91,9 @@ void	elevator_events(t_cub *cub)
 		check_button_hover(cub->elevator.buttons);
 	}
 	update_door_animation(&cub->elevator);
+	// 
+	if (e->door == CLOSE \
+	&& e->door_animation.current_frame == 0 \
+	&& e->map_change == 1)
+		change_level(cub->chosen_level);
 }

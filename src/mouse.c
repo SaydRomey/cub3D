@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 20:31:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 16:49:31 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,11 @@ static void	cursor_hook(double xpos, double ypos, void *param)
 	set_mouse_mode(cub->mouse.enabled);
 }
 
-void	set_mouse(t_cub *cub)
+void	set_mouse(void *param)
 {
+	t_cub	*cub;
+
+	cub = (t_cub *)param;
 	cub->mouse.enabled = ON;
 	set_mouse_mode(cub->mouse.enabled);
 	mlx_cursor_hook(cub->mlx, &cursor_hook, cub);

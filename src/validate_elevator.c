@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 10:59:43 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 16:49:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 17:56:00 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	get_elevator_info(t_level *lvl, t_map *map)
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-bool	valid_elevator(int **map, int y, int x)
+bool	valid_elevator(int **map, int y, int x) //is this used ?
 {
 	if (check_north(map, y, x))
 		return (true);

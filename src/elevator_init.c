@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/22 18:34:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 17:32:13 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ static void	set_elevator_textures(t_cub *cub, t_elevator *elevator)
 	mlx_delete_image(cub->mlx, door_img);
 }
 
-t_elevator	init_elevator(t_cub *cub, t_level *lvl)
+t_elevator	init_elevator(t_level *lvl)
 {
+	t_cub		*cub;
 	t_elevator	elevator;
 
+	cub = call_cub();
 	ft_memset(&elevator, 0, sizeof (t_elevator));
 	if (lvl->elevator_exists)
 	{

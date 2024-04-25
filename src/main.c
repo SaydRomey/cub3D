@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 19:22:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 20:07:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ t_cub	*call_cub(void)
 	return (cub);
 }
 
-t_cub	*init_cub(char *title)
+/*	**should this function be static or not ?
+
+*/
+static t_cub	*init_cub(char *title)
 {
 	t_cub	*cub;
 
@@ -41,7 +44,7 @@ t_cub	*init_cub(char *title)
 	return (cub);
 }
 
-void	parse_and_extract(t_cub *cub, int argc, char **argv)
+static void	parse_and_extract(t_cub *cub, int argc, char **argv)
 {
 	t_scene	scene;
 	t_map	map;
@@ -65,6 +68,32 @@ void	parse_and_extract(t_cub *cub, int argc, char **argv)
 	}
 }
 
+/*
+*/
+void	update(void *ptr)
+{
+	t_cub	*cub;
+	t_level	*lvl;
+
+	cub = (t_cub *)ptr;
+	update_controls(cub);
+	update_player(&cub->player);
+	update_assets(cub);
+	elevator_events(cub);
+	lvl = get_level(cub->current_level);
+	if (lvl)
+	{
+		draw_radar(&lvl->mini);
+	}
+	raycast();
+}
+
+/*
+	*(tmp)
+	ft_printf("Bonus flag: %d\n", BONUS);
+	ft_printf("Map chars:  %s\n", MAP_CHARS);
+
+*/
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -76,7 +105,7 @@ int	main(int argc, char **argv)
 	if (cub->levels && !there_is_a_problem())
 	{
 		lvl = get_level(cub->current_level);
-		cub->elevator = init_elevator(cub, lvl);
+		cub->elevator = init_elevator(lvl);
 		cub->player = init_player(&lvl->map);
 		change_window_title(lvl->filepath);
 		draw_minimap(&lvl->mini, &lvl->map);

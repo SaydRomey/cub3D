@@ -6,13 +6,13 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 19:10:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 19:14:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/* **check if 'free_matrix()' from libft does the trick instead..
+/* **check if 'free_matrix()' from libft does the trick instead.. //or put this in libft ? (must compare)
 
 */
 void	free_map_array(int **map_array, int height)
@@ -36,8 +36,11 @@ void	free_map_array(int **map_array, int height)
 
 /*
 */
-void	cleanup(t_cub *cub)
+void	cleanup(void *param)
 {
+	t_cub	*cub;
+	
+	cub = (t_cub *)param;
 	if (cub->levels)
 	{
 		ft_lstclear(&cub->levels, delete_level);

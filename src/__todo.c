@@ -6,29 +6,24 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 20:38:50 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 19:50:12 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
 
-make floor ceiling raycasting an option (currently testing with '2')
-*!! (check if colors are getting copied okay...)
+test other way for player.c and player.c code logic ?
 
-cleanup 'pixel.c'
+add asset and anim cleanup (if mlx does not take care of it already)
 
-add 'if (BONUS)' checks for functions that are not in mandatory part:
-	mouse control,
-	...
+enums's name must start with 'e_'
 
 **************************************************************************
 
 Minimap:
 
-add enable/disable controls
-
-clamp on the edges or use margin ??**
+reimplement the colored tile rendering ? in update()
 
 make tests with rotating the minimap instead of the player
 make tests with iso minimap
@@ -55,16 +50,5 @@ create tutorial or instruction menu ? (mouse for clicking on elevator buttons)
 
 **************************************************************************
 Segworld:
-
-
-if one of the levels does not have an elevator,
-and the player tries to get to it through an elevator,
-we go into segworld, and the elevator breaks... TUN TUN TUNNNNH !!!
-
-- add flickering lights, shadow effect
-
-- invert controls ?
-
-- use the lerp effect with random pixel value
 
 */

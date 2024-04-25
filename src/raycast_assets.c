@@ -86,13 +86,15 @@ static void	draw_asset_pixels(t_cub *cub, t_asset s, float z_buffer[WIDTH])
 	}
 }
 
-void	draw_assets(t_cub *cub, float z_buffer[WIDTH])
+void	draw_assets(float z_buffer[WIDTH])
 {
+	t_cub		*cub;
 	t_asset		*s;
 	float		inv;
 	int			total;
 	int			i;
 
+	cub = call_cub();
 	total = get_level(cub->current_level)->assets_total;
 	s = get_level(cub->current_level)->assets;
 	set_sprite_distance(s, total);

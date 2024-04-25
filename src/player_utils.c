@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:03:07 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 20:10:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 19:48:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,43 @@ t_fpoint	rotate_vector_delta(t_fpoint tmp, int rotation)
 	return (new);
 }
 
-bool	player_is_in_elevator(t_player *player)
-{
-	t_level	*lvl;
+/* ************************************************************************** */
 
-	lvl = get_level(call_cub()->current_level);
-	if (lvl)
-	{
-		if (lvl->elevator_position.x == (int)player->position.x && \
-			lvl->elevator_position.y == (int)player->position.y)
-			return (true);
-	}
-	return (false);
+t_fpoint	get_velocity(t_player *player)
+{
+	t_fpoint	velocity;
+
+	velocity.x = player->delta.x * player->speed;
+	velocity.y = player->delta.y * player->speed;
+	return (velocity);
+}
+
+float	get_move_value(int x, int y, float rtn_value)
+{
+	t_cub	*cub;
+	int		tile;
+
+	cub = call_cub();
+	tile = check_hit(x, y);
+	if (tile == 3 && cub->elevator.door == CLOSE \
+	&& !((int) cub->player.position.x == cub->elevator.position.x \
+	&& (int) cub->player.position.y == cub->elevator.position.y))
+		return (0);
+	if (tile == 0 && cub->elevator.door == CLOSE
+		&& (int) cub->player.position.x == cub->elevator.position.x
+		&& (int) cub->player.position.y == cub->elevator.position.y)
+		return (0);
+	if (tile == 1)
+		return (0);
+	return (rtn_value);
+}
+
+void	apply_rotation_matrix(t_fpoint *src, float turn_speed)
+{
+	t_fpoint	tmp;
+
+	tmp.x = src->x;
+	tmp.y = src->y;
+	src->x = tmp.x * cos(turn_speed) - tmp.y * sin(turn_speed);
+	src->y = tmp.x * sin(turn_speed) + tmp.y * cos(turn_speed);
 }

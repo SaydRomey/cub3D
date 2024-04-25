@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/04/11 18:03:10 by cdumais          ###   ########.fr        #
+#    Updated: 2024/04/24 15:13:24 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,8 +52,8 @@ TMP_DIR		:= tmp
 WAV_DIR		:= wav
 
 COMPILE		:= gcc
-# C_FLAGS		:= -Wall -Wextra -Werror -Ofast -flto
-C_FLAGS		:= -Wall -Wextra -Werror -g
+C_FLAGS		:= -Wall -Wextra -Werror -Ofast -flto
+# C_FLAGS		:= -Wall -Wextra -Werror -g
 L_FLAGS		:= 
 HEADERS		:= -I$(INC_DIR)
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:53:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 14:44:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ void	draw_pixel(mlx_image_t *img, int x, int y, int color)
 
 /* ************************************************************************** */
 
-int	combine_rgba(int r, int g, int b, int a)
-{
-	return (r << 24 | g << 16 | b << 8 | a);
-}
-
 int	get_pixel(mlx_image_t *img, int x, int y)
 {
 	unsigned char	*pixel;
@@ -53,83 +48,3 @@ int	get_pixel(mlx_image_t *img, int x, int y)
 	pixel = img->pixels + (y * img->width + x) * PIXEL_SIZE;
 	return (combine_rgba(*(pixel), *(pixel + 1), *(pixel + 2), *(pixel + 3)));
 }
-
-/* ************************************************************************** */
-
-int	get_red(int color)
-{
-	return ((color >> 24) & 0xFF);
-}
-
-int	get_green(int color)
-{
-	return ((color >> 16) & 0xFF);
-}
-
-int	get_blue(int color)
-{
-	return ((color >> 8) & 0xFF);
-}
-
-int	get_alpha(int color)
-{
-	return (color & 0xFF);
-}
-
-/* ************************************************************************** */
-
-int	rgb_to_int(int r, int g, int b)
-{
-	int	red;
-	int	green;
-	int	blue;
-	int	alpha;
-
-	red = r << 24;
-	green = g << 16;
-	blue = b << 8;
-	alpha = 0xFF;
-	return (red | green | blue | alpha);
-}
-
-static int	color_is_invalid(int r, int g, int b)
-{
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return (TRUE);
-	return (FALSE);
-}
-
-int	get_color(t_scene *scene, int id)
-{
-	int	r;
-	int	g;
-	int	b;
-	int	color_int;
-
-	r = ft_atoi(scene->colors[id][R]);
-	g = ft_atoi(scene->colors[id][G]);
-	b = ft_atoi(scene->colors[id][B]);
-	if (color_is_invalid(r, g, b))
-	{
-		return (0x000000FF);
-	}
-	color_int = rgb_to_int(r, g, b);
-	return (color_int);
-}
-
-/* ************************************************************************** */
-
-/*
-test to see if we can make a 'black and white' effect
-
-
-int rgba_to_mono(int color)
-{
-	const char r = 0.299f * ((color >> 24) & 0xFF);
-	const char g = 0.587f * ((color >> 16) & 0xFF);
-	const char b = 0.114f * ((color >> 8) & 0xFF);
-	const char y = r + g + b;
-
-	return (y << 24 | y << 16 | y << 8 | (color & 0xFF));
-}
-*/

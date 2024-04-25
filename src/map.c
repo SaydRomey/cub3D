@@ -6,11 +6,40 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:13:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:21:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 14:44:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static int	color_is_invalid(int r, int g, int b)
+{
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+		return (TRUE);
+	return (FALSE);
+}
+
+int	get_color(t_scene *scene, int id)
+{
+	int	r;
+	int	g;
+	int	b;
+	int	a;
+	int	color_int;
+
+	r = ft_atoi(scene->colors[id][R]);
+	g = ft_atoi(scene->colors[id][G]);
+	b = ft_atoi(scene->colors[id][B]);
+	a = 0xFF;
+	if (color_is_invalid(r, g, b))
+	{
+		return (0x000000FF);
+	}
+	color_int = combine_rgba(r, g, b, a);
+	return (color_int);
+}
+
+/* ************************************************************************** */
 
 static void	extract_wall_textures(t_scene *scene, t_map *map, mlx_t *mlx)
 {

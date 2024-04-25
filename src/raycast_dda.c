@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:49:53 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/10 20:02:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 18:47:19 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,12 @@ static bool	check_inside_elevator(t_cub *cub, t_raycast *r)
 	return (0);
 }
 
-void	execute_dda_algo(t_cub *cub, t_raycast *r)
+void	execute_dda_algo(t_raycast *r)
 {
+	t_cub	*cub;
 	bool	hit = 0;
 
+	cub = call_cub();
 	hit = check_inside_elevator(cub, r);
 	while (!hit)
 	{

@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:53:13 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 20:52:29 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/25 16:14:06 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 /**
  * Go through all assets and update their texture based on the animation.
- * 
- * To do: Test if it's better to point to animation instead of stacking them.
 */
 void	update_assets(t_cub *cub)
 {
@@ -24,19 +22,26 @@ void	update_assets(t_cub *cub)
 	int		i;
 
 	current = get_level(cub->current_level);
-	if (current->assets) // && current->assets->anim
+	if (current->assets)
 	{
 		i = 0;
 		while (i < current->assets_total)
 		{
-			update_animation(&current->assets[i].anim, GO_RIGHT);
-			idx = current->assets[i].anim.current_frame;
-			current->assets[i].tex = current->assets[i].anim.frames[idx];
+			if (current->assets[i].is_animated)
+			{
+				update_animation(&current->assets[i].anim, GO_RIGHT);
+				idx = current->assets[i].anim.current_frame;
+				current->assets[i].tex = current->assets[i].anim.frames[idx];
+			}
 			i++;
 		}
 	}
 }
 
+/**
+ * Here, the loaded texture is either the path passed in parameter
+ * or a slice in the sprite sheet.
+*/
 static void	set_anim_and_tex(t_asset *assets, int total, char *path, int slices)
 {
 	t_animation	animation;
@@ -60,6 +65,14 @@ static void	set_anim_and_tex(t_asset *assets, int total, char *path, int slices)
 	}
 }
 
+/**
+ * We iterate through the map and place an asset according to these conditions:
+ * - The total number of assets is lower than SPRITE_MAX
+ * - The current tile is 0 ("WALKABLE")
+ * - The asset is not near the elevator
+ * 
+ * We also create a bit of randomness with ft_rand().
+*/
 static void	get_assets_pos(t_map *map, t_fpoint pos[SPRITE_MAX], int *total)
 {
 	int	x;
@@ -72,6 +85,8 @@ static void	get_assets_pos(t_map *map, t_fpoint pos[SPRITE_MAX], int *total)
 		x = 0;
 		while (x < map->width)
 		{
+			if (*total >= SPRITE_MAX)
+				return ;
 			if (map->map_array[y][x] == 0
 				&& !is_near_elevator(map, x, y)
 				&& ft_rand(0, 5) == 3)
@@ -85,6 +100,10 @@ static void	get_assets_pos(t_map *map, t_fpoint pos[SPRITE_MAX], int *total)
 	}
 }
 
+/**
+ * Currently, assets are placed randomly on the map with a max number of assets
+ * defined by SPRITE_MAX. We then set their animation and texture.
+*/
 t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total)
 {
 	t_fpoint	pos[SPRITE_MAX];
@@ -100,6 +119,8 @@ t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total)
 	assets_total = current_lvl->assets_total;
 	while (i < assets_total)
 	{
+		if (slice_total > 1)
+			assets[i].is_animated = true;
 		assets[i].pos = pos[i];
 		i++;
 	}

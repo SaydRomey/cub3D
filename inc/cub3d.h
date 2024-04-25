@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 20:47:20 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/25 16:17:33 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,7 @@ typedef struct s_asset
 	t_line		v;
 	mlx_image_t	*tex;
 	t_animation	anim;
+	bool		is_animated;
 }				t_asset;
 
 /* ************************************************************************** */
@@ -381,9 +382,9 @@ typedef struct s_elevator
 	t_point		position;
 	int			orientation;
 	
+	int			pixels[HEIGHT][WIDTH];
 	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
 	t_animation	door_animation;
-	// door_animation boolean maybe ??
 
 	bool		map_change;
 	bool		door;
@@ -499,6 +500,7 @@ typedef struct s_cub
 	mlx_image_t	*radar_img; //for the round minimap (using pixel data of current level's minimap)
 	
 	char		*floor_ceiling_default[COLOR_TYPE_LEN];
+	mlx_image_t	*user_img;
 
 	t_list		*levels;
 	int			current_level;
@@ -701,9 +703,9 @@ t_texture	get_texture_floor_info(mlx_image_t *texture);
 
 // raycast_utils.c
 int		check_hit(int map_x, int map_y);
+int		get_next_unit(t_raycast *r);
 t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos);
 t_line	get_stripe_data(float divider, int center, int limit);
-// bool	position_is_elevator(int pos_x, int pos_y);
 float	rot_matrix(t_fpoint a, t_fpoint b);
 
 // segworld.c

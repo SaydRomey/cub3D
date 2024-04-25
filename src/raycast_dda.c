@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:49:53 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 19:35:53 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/25 16:11:43 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,6 @@ static void	get_door_hit_data(t_raycast *r)
 	r->ray_pos_door = r->ray_pos;
 	r->ray_door.side = r->ray.side;
 	get_hit_data(&r->ray_door.wall_perp_dist, &r->ray_door.wall_hit_pos);
-}
-
-static int	get_next_unit(t_raycast *r)
-{
-	if (r->length.x < r->length.y)
-	{
-		r->ray.side = 0;
-		if (check_hit(r->ray_pos.x + r->step.x, r->ray_pos.y) == 0)
-			return (0);
-	}
-	else
-	{
-		r->ray.side = 1;
-		if (check_hit(r->ray_pos.x, r->ray_pos.y + r->step.y) == 0)
-			return (0);
-	}
-	return (1);
 }
 
 static bool	check_if_is_inside_elevator(t_cub *cub, t_raycast *r)

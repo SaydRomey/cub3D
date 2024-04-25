@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 16:01:23 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/25 15:39:17 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ static mlx_image_t	*get_tex(int x, int y, mlx_image_t *tex)
 {
 	if (check_hit(x, y) == ELEVATOR)
 		return (call_cub()->elevator.texture[E_WALL]);
+	if (get_level(call_cub()->current_level)->is_segworld
+		&& x == 1 && y == 1)
+		return (call_cub()->user_img);
 	return (tex);
 }
 
@@ -92,7 +95,7 @@ void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 		tex.pixel.y = (int)tex.pos_y & (tex.width - 1);
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
-		distance = cub->raycast.ray.wall_perp_dist;
+		distance = r->wall_perp_dist;
 		if (cub->vfx.shadow.enabled)
 			color = shadow_effect(color, distance, 0.0f, 5.0f);
 		if (get_alpha(color) == 255)

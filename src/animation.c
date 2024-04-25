@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 16:29:55 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/19 13:30:21 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/25 15:58:47 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ static void	add_frame(t_animation *anim, mlx_image_t *img, t_slice slice, int i)
 
 	frame = mlx_new_image(call_cub()->mlx, slice.width, slice.height);
 	if (!frame)
+	{
+		set_error("MLX Image error");
 		error();
+	}
 	y = 0;
 	while (y < slice.height)
 	{
@@ -46,7 +49,10 @@ static t_animation	get_frames_from_image(mlx_image_t *img, t_slice slice)
 	ft_memset(&anim, 0, sizeof (t_animation));
 	anim.frames = ft_calloc(slice.total, sizeof (mlx_image_t *));
 	if (!anim.frames)
-		printf ("Frames not malloced properly\n");
+	{
+		set_error("Malloc error");
+		error();
+	}
 	while (i < slice.total)
 	{
 		add_frame(&anim, img, slice, i);

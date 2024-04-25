@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 14:44:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:05:17 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,34 @@ int	get_pixel(mlx_image_t *img, int x, int y)
 		return ((unsigned char)0xFF000000);
 	pixel = img->pixels + (y * img->width + x) * PIXEL_SIZE;
 	return (combine_rgba(*(pixel), *(pixel + 1), *(pixel + 2), *(pixel + 3)));
+}
+
+/* ************************************************************************** */
+
+/*
+returns a random color, 'brightness_level' caps at 255
+*/
+int	random_pixel(int brightness_level)
+{
+	int	r;
+	int	g;
+	int	b;
+	int	a;
+
+	brightness_level = ft_clamp(brightness_level, 0, 255);
+	r = ft_rand(0, brightness_level);
+	g = ft_rand(0, brightness_level);
+	b = ft_rand(0, brightness_level);
+	a = 0xFF;
+	return (combine_rgba(r, g, b, a));
+}
+
+int	interference_pixel(void)
+{
+	int	color;
+
+	color = HEX_GRAY;
+	if (ft_rand(0, 10) % 2)
+		color = HEX_DGRAY;
+	return (color);
 }

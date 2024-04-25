@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 20:06:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 16:32:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,48 +16,50 @@ static void	set_toggle_keys(int key, t_keys *keys, bool state)
 {
 	if (state == ON)
 	{
-		if (key == M)
+		if (key == MLX_KEY_M)
 			toggle(&keys->m);
-		if (key == P)
+		if (key == MLX_KEY_P)
 			toggle(&keys->p);
-		if (key == K_1)
+		if (key == MLX_KEY_R)
+			toggle(&keys->r);
+		if (key == MLX_KEY_1)
 			toggle(&keys->one);
-		if (key == K_2)
+		if (key == MLX_KEY_2)
 			toggle(&keys->two);
-		if (key == K_3)
+		if (key == MLX_KEY_3)
 			toggle(&keys->three);
 	}
 }
 
 static void	set_extra_keys(int key, t_keys *keys, bool state)
 {
-	if (key == SPACEBAR)
+	if (key == MLX_KEY_SPACE)
 		keys->spacebar = state;
-	if (key == BACKSPACE)
+	if (key == MLX_KEY_BACKSPACE)
 		keys->backspace = state;
-	if (key == LEFTSHIFT)
+	if (key == MLX_KEY_LEFT_SHIFT)
 		keys->leftshift = state;
-	if (key == LEFTCONTROL)
+	if (key == MLX_KEY_LEFT_CONTROL)
 		keys->leftcontrol = state;
 }
 
 static void	set_keys(int key, t_keys *keys, bool state)
 {
-	if (key == W)
+	if (key == MLX_KEY_W)
 		keys->w = state;
-	if (key == A)
+	if (key == MLX_KEY_A)
 		keys->a = state;
-	if (key == S)
+	if (key == MLX_KEY_S)
 		keys->s = state;
-	if (key == D)
+	if (key == MLX_KEY_D)
 		keys->d = state;
-	if (key == UP)
+	if (key == MLX_KEY_UP)
 		keys->up = state;
-	if (key == LEFT)
+	if (key == MLX_KEY_LEFT)
 		keys->left = state;
-	if (key == DOWN)
+	if (key == MLX_KEY_DOWN)
 		keys->down = state;
-	if (key == RIGHT)
+	if (key == MLX_KEY_RIGHT)
 		keys->right = state;
 	set_extra_keys(key, keys, state);
 	set_toggle_keys(key, keys, state);
@@ -68,7 +70,7 @@ void	keyhooks(mlx_key_data_t data, void *param)
 	t_cub	*cub;
 
 	cub = (t_cub *)param;
-	if (data.key == ESC && data.action == PRESS)
+	if (data.key == MLX_KEY_ESCAPE && data.action == MLX_PRESS)
 	{
 		mlx_close_window(cub->mlx);
 		cleanup(cub);
@@ -91,9 +93,11 @@ void	update_controls(void *param)
 	lvl = get_level(cub->current_level);
 	if (lvl)
 	{
-		lvl->mini.img->instances->enabled = (keys->leftcontrol);
+		lvl->mini.img->instances->enabled = (keys->m && !keys->r);
+		lvl->mini.highlight_player_pos = (keys->m && keys->p);
 	}
-	cub->radar_img->instances->enabled = keys->m;
-	cub->vfx.shadow.enabled = keys->one;
+	cub->radar_img->instances->enabled = (keys->m && keys->r);
 	cub->player.speedup = keys->leftshift;
+	cub->vfx.textures_enabled = !keys->one;
+	cub->vfx.shadow.enabled = keys->two;
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 20:07:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 15:35:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,37 @@ static void	parse_and_extract(t_cub *cub, int argc, char **argv)
 			error();
 		i++;
 	}
+	// add_segworld(&cub->levels);
 }
+
+/*
+void	add_segworld(t_list **levels)
+{
+	t_level	*seg_lvl;
+	t_list	*node;
+
+	seg_lvl = (t_level *)ft_calloc(1, sizeof(t_level));
+	if (seg_lvl)
+	{
+		// seg_lvl->...
+	}
+	else
+		set_error("Malloc error");
+	if (!there_is_a_problem())
+	{
+		node = ft_lstnew(seg_lvl);
+		if (!node)
+		{
+			delete_level(seg_lvl);
+			set_error("Malloc error");
+		}
+		else
+			ft_lstadd_back(levels, node);
+	}
+	else
+		error();
+}
+*/
 
 /*
 */
@@ -83,6 +113,7 @@ void	update(void *ptr)
 	lvl = get_level(cub->current_level);
 	if (lvl)
 	{
+		draw_minimap(&lvl->mini, &lvl->map);
 		draw_radar(&lvl->mini);
 	}
 	raycast();

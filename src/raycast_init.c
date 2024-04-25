@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 20:11:57 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:22:43 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ void	raycast(void)
 	cub = call_cub();
 	x = 0;
 	r = &cub->raycast;
-	clear_img(cub->img);
+	draw_floor_ceiling(cub->img, get_map(cub->current_level));
 	if (get_map(cub->current_level)->floor_ceiling_img[0] \
-	&& !cub->keys.two)
+	&& cub->vfx.textures_enabled)
 		raycast_vertical(cub);
 	while (x < WIDTH)
 	{

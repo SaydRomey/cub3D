@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 19:56:04 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 16:03:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_player	init_player(t_map *map)
 	player.cam_plane.x = -player.delta.y * player.fov;
 	player.cam_plane.y = player.delta.x * player.fov;
 	player.size = PLAYER_SIZE;
-	player.color = HEX_GREEN;
+	player.color = PLAYER_COLOR;
 	return (player);
 }
 

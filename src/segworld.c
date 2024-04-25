@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/04/24 20:14:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 16:58:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,21 +158,3 @@ void replace_with_segworld(t_level *next_lvl)
 	next_lvl->is_segworld = true;
 	next_lvl->assets = init_assets("img/flames.png", next_lvl, 8);
 }
-
-// t_level *call_segworld(void)
-// {
-// 	static t_level	segworld;
-
-// 	if (segworld.index == 0)
-// 	{
-// 		segworld.filepath = "segworld";
-// 		segworld.index = -1;
-// 		segworld.elevator_exists = 1;
-// 		segworld.elevator_position = (t_point){1, 1};
-// 		segworld.elevator_orientation = cardinal_to_radian('N');
-// 		segworld.map = set_segworld_map();
-// 		set_segworld_elevator(&segworld, segworld.elevator_position);
-// 		segworld.mini = init_minimap(&segworld.map);
-// 	}
-// 	return (&segworld);
-// }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:25:21 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 20:08:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:02:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define PLAYER_SIZE		24
 # define PLAYER_SPEED		0.1
 # define PLAYER_TURN_SPEED	0.1
+# define PLAYER_COLOR		0x00FF00FF
+# define PLAYER_ICON_ANGLE	30
 
 typedef struct s_player
 {

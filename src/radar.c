@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minimap_radar.c                                    :+:      :+:    :+:   */
+/*   radar.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 20:25:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:02:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_triangle	init_player_icon(t_player *player, t_fpoint center)
 {
 	t_triangle	t;
 
-	t.half_base = player->size * tan(degree_to_radian(30));
+	t.half_base = player->size * tan(degree_to_radian(PLAYER_ICON_ANGLE));
 	t.height = player->size * (sqrt(3) / 2);
 	t.centroid.x = center.x - player->delta.x * (t.height / 3);
 	t.centroid.y = center.y - player->delta.y * (t.height / 3);
@@ -36,11 +36,7 @@ void	draw_player(mlx_image_t *img, t_player *player, t_fpoint center)
 	t_triangle	t;
 
 	t = init_player_icon(player, center);
-	if (call_cub()->keys.p)
-	{
-		draw_triangle(img, &t, player->color);
-	}
-	else
+	if (!call_cub()->keys.p)
 	{
 		draw_line(img, t.base_center, t.front, HEX_RED);
 		draw_triangle_hollow(img, &t, 8, player->color);
@@ -109,9 +105,7 @@ void	draw_radar(t_minimap *mini)
 	clear_img(radar.img);
 	if (player_is_in_elevator(player))
 	{
-		// draw_circle(radar.img, radar.center, radar.radius, HEX_BLACK);
-		draw_visible_minimap(mini, radar);
-		draw_player(radar.img, player, radar.center);
+		radar_interference(radar.img, radar.center, radar.radius);
 	}
 	else
 	{
@@ -119,5 +113,7 @@ void	draw_radar(t_minimap *mini)
 		draw_player(radar.img, player, radar.center);
 	}
 	draw_circle_hollow(radar.img, radar.center, \
-	radar.radius + 10, 20, HEX_GRAY);
+	radar.radius + 10, 20, HEX_BLACK);
+	draw_circle_hollow(radar.img, radar.center, \
+	radar.radius + 5, 10, RADAR_FRAME_COL);
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 20:05:17 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:45:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	draw_line(mlx_image_t *img, t_fpoint start, t_fpoint end, int color)
 	}
 }
 
-void	draw_rectangle(mlx_image_t *img, t_fpoint origin, \
-t_fpoint end, int color)
+void	draw_rectangle(mlx_image_t *img, t_point origin, \
+t_point end, int color)
 {
 	int	x;
 	int	y;
@@ -49,12 +49,31 @@ t_fpoint end, int color)
 	}
 }
 
+void	draw_random_rectangle(mlx_image_t *img, \
+t_point origin, t_point end, int brightness_level)
+{
+	int	x;
+	int	y;
+	
+	y = origin.y;
+	while (y < origin.y + end.y)
+	{
+		x = origin.x;
+		while (x < origin.x + end.x)
+		{
+			draw_pixel(img, x, y, random_pixel(brightness_level));
+			x++;
+		}
+		y++;
+	}
+}
+
 /* ************************************************************************** */
 
 void	draw_floor_ceiling(mlx_image_t *img, t_map *map)
 {
-	t_fpoint	start;
-	t_fpoint	end;
+	t_point	start;
+	t_point	end;
 	
 	start.x = 0;
 	start.y = img->height / 2;
@@ -65,5 +84,8 @@ void	draw_floor_ceiling(mlx_image_t *img, t_map *map)
 	start.y = 0;
 	end.x = img->width;
 	end.y = img->height / 2;
-	draw_rectangle(img, start, end, map->ceiling_color);
+	if (get_level(call_cub()->current_level)->is_segworld)
+		draw_random_rectangle(img, start, end, SW_C_BRIGHT_LVL);
+	else
+		draw_rectangle(img, start, end, map->ceiling_color);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/22 00:45:13 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/24 20:12:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ int	check_hit(int map_x, int map_y)
 	return (map->map_array[map_y][map_x]);
 }
 
-void	get_ray_bounds(t_cub *cub)
+void	get_ray_bounds(void)
 {
+	t_cub	*cub;
+
+	cub = call_cub();
 	cub->raycast.ray_dir_min.x = cub->player.delta.x - cub->player.cam_plane.x;
 	cub->raycast.ray_dir_min.y = cub->player.delta.y - cub->player.cam_plane.y;
 	cub->raycast.ray_dir_max.x = cub->player.delta.x + cub->player.cam_plane.x;

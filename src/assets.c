@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   assets.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:53:13 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/19 16:47:51 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/24 20:19:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	update_assets(t_cub *cub)
+void	update_assets(void *param)
 {
+	t_cub	*cub;
 	t_level	*current;
 	int		idx;
 	int		i;
 
+	cub = (t_cub *)param;
 	current = get_level(cub->current_level);
 	if (current->assets) // && current->assets->anim
 	{
@@ -55,14 +57,16 @@ static void	get_assets_position(t_map map, t_fpoint pos[SPRITE_MAX], int *total)
 	}
 }
 
-t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total)
+t_asset	*init_assets(char *texture_path, void *param, int slice_total)
 {
+	t_level		*current_lvl;
 	t_fpoint	position[SPRITE_MAX];
 	t_animation	animation;
 	t_asset		*assets;
 	mlx_image_t	*texture;
 	int			i;
 
+	current_lvl = (t_level *)param;
 	get_assets_position(current_lvl->map, position, &current_lvl->assets_total);
 	assets = ft_calloc(current_lvl->assets_total, sizeof (t_asset));
 	if (!assets)

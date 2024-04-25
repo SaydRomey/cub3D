@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 11:38:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 20:13:20 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,16 @@ static t_texture	get_texture_info(float whp, t_point ray_pos, bool side)
 // 	return (line);
 // }
 
-void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
+void	draw_wall_stripe(t_point ray_pos, t_render *r, int x)
 {
+	t_cub			*cub;
 	t_texture		tex;
 	t_line			line;
 	float		distance;
 	int				color;
 	int				y;
 
+	cub = call_cub();
 	line = get_stripe_data(r->wall_perp_dist, HEIGHT / 2, HEIGHT);
 	tex = get_texture_info(r->wall_hit_pos, ray_pos, r->side);
 	tex.step_y = tex.to_draw->height / (float) line.size;

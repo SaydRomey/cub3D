@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:57:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/22 15:17:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,37 +35,34 @@ static bool	is_map_line(const char *line)
 /*
 for each map square, validates its horizontal neighbouring spaces
 
-** need to add doors and elevators
-
-** if inside elevator, forget about starting point
-
 */
 static bool	check_contour(const char *line, int i)
 {
+	char	*walkable;
 	char	current;
 	char	prev;
 	char	next;
 
+	if (BONUS)
+		walkable = "03NSEW";
+	else
+		walkable = "0NSEW";
+	
 	current = line[i];
 	prev = '\0';
 	if (i > 0)
 		prev = line[i - 1];
 	next = line[i + 1];
-	if (current == '0' || current == ' ')
-	{
-		if ((prev == '1' || prev == current || ft_strchr("3NSEW", prev)) \
-		&& (next == '1' || next == current || ft_strchr("3NSEW", next)))
-			return (true);
-		else
-			return (false);
-	}
+
+	if (current == '0')
+		return ((prev == '1' || ft_strchr(walkable, prev)) \
+		&& (next == '1' || ft_strchr(walkable, next)));
+	else if (current == ' ')
+		return ((prev == '1' || prev == current) \
+		&& (next == '1' || next == current));
 	else if (ft_strchr("NSEW", current))
-	{
-		if ((prev == '1' || prev == '0') && (next == '1' || next == '0'))
-			return (true);
-		else
-			return (false);
-	}
+		return ((prev == '1' || prev == '0') \
+		&& (next == '1' || next == '0'));
 	return (true);
 }
 
@@ -120,10 +117,6 @@ static void	scan_for_start(char *line, t_scene *scene)
 	}
 }
 
-/* **will need to change all this for doors...
-
-also fix the edge case when 2 starting chars are on the same map
-*/
 void	parse_map_line(char *cubline, t_scene *scene)
 {
 	char	*line;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 01:03:32 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/25 17:22:43 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,45 +66,43 @@ static void	raycast_vertical(t_cub *cub)
 	tex[1] = get_texture_floor_info(get_map(cub->current_level)->floor_ceiling_img[CEILING]);
 	tex[2] = get_texture_floor_info(cub->elevator.texture[E_FLOOR]);
 	tex[3] = get_texture_floor_info(cub->elevator.texture[E_CEILING]);
-	get_ray_bounds(cub);
+	get_ray_bounds();
 	y = HEIGHT / 2;
 	while (y < HEIGHT)
 	{
-		draw_ceiling_floor(cub, tex, y);
+		draw_ceiling_floor(tex, y);
 		y++;
 	}
 }
 
-void	raycast(t_cub *cub)
+void	raycast(void)
 {
+	t_cub		*cub;
 	float		z_buffer[WIDTH];
 	t_raycast	*r;
 	int			x;
 
-	// if (cub->vfx.textures_enabled == false)
-	// {
-	// 	draw_ceiling(cub->img, cub->map->ceiling_color);
-	// 	draw_floor(cub->img, cub->map->floor_color);
-	// }
+	cub = call_cub();
 	x = 0;
 	r = &cub->raycast;
-	clear_img(cub->img);
-	if (get_map(cub->current_level)->floor_ceiling_img[0])
+	draw_floor_ceiling(cub->img, get_map(cub->current_level));
+	if (get_map(cub->current_level)->floor_ceiling_img[0] \
+	&& cub->vfx.textures_enabled)
 		raycast_vertical(cub);
 	while (x < WIDTH)
 	{
 		cub->elevator.door_open = false;
 
 		init_raycast_data(&cub->player, r, x);
-		execute_dda_algo(cub, &cub->raycast);
-		draw_wall_stripe(cub, r->ray_pos, &r->ray, x);
+		execute_dda_algo(&cub->raycast);
+		draw_wall_stripe(r->ray_pos, &r->ray, x);
 
 		if (cub->elevator.door_open)
-			draw_wall_stripe(cub, r->ray_pos_door, &r->ray_door, x);
+			draw_wall_stripe(r->ray_pos_door, &r->ray_door, x);
 		
 		z_buffer[x] = r->ray.wall_perp_dist;
 		x++;
 	}
 	if (get_level(cub->current_level)->assets)
-		draw_assets(cub, z_buffer);
+		draw_assets(z_buffer);
 }

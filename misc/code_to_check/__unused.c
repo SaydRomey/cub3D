@@ -1,69 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   img_utils.c                                        :+:      :+:    :+:   */
+/*   __unused.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/10 16:18:05 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:28:08 by cdumais          ###   ########.fr       */
+/*   Created: 2024/04/22 18:56:11 by cdumais           #+#    #+#             */
+/*   Updated: 2024/04/22 20:09:09 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible)
-{
-	mlx_image_t	*img;
-
-	img = mlx_new_image(mlx, width, height);
-	if (!img)
-		error_mlx();
-	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
-		error_mlx();
-	img->instances->enabled = visible;
-	return (img);
-}
-
-mlx_image_t	*copy_img(mlx_image_t *src, mlx_t *mlx)
-{
-	mlx_image_t	*copy;
-
-	if (!src)
-		return (NULL);
-	copy = mlx_new_image(mlx, src->width, src->height);
-	if (!copy)
-		return (NULL);
-	ft_memcpy(copy->pixels, src->pixels, \
-	src->width * src->height * sizeof(int));
-	return (copy);
-}
-
-mlx_image_t	*load_png(char *filepath, mlx_t *mlx)
-{
-	mlx_image_t		*img;
-	mlx_texture_t	*texture;
-
-	texture = mlx_load_png(filepath);
-	if (!texture)
-		error_mlx();
-	img = mlx_texture_to_image(mlx, texture);
-	if (!img)
-		error_mlx();
-	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
-		error_mlx();
-	img->instances->enabled = false;
-	mlx_delete_texture(texture);
-	return (img);
-}
-
-void	clear_img(mlx_image_t *img)
-{
-	int	total_pixels;
-
-	total_pixels = img->width * img->height * PIXEL_SIZE;
-	ft_bzero(img->pixels, total_pixels);
-}
 
 /*
 check if we can modify this to take a real color instead of a grayscale ..
@@ -81,21 +28,7 @@ void	fill_img(mlx_image_t *img, unsigned int grayscale)
 	ft_memset(img->pixels, color, total_pixels);
 }
 
-/*
-if 'x' or 'y' is negative, the image's 'x' or 'y' stays the same
-*/
-void	move_img(mlx_image_t *img, int x, int y)
-{
-	if (!img)
-		return ;
-	if (x > 0)
-		img->instances->x = x;
-	if (y > 0)
-		img->instances->y = y;
-}
-
 /* ************************************************************************** */
-
 /*
 in case the dst image is smaller
 */
@@ -125,3 +58,54 @@ void	put_img_to_img(mlx_image_t *dst, mlx_image_t *src, int x, int y)
 		i++;
 	}
 }
+
+/* ************************************************************************** */
+void	draw_background(mlx_image_t *img, int color)
+{
+	t_fpoint	dimensions;
+
+	dimensions.x = img->width;
+	dimensions.y = img->height;
+	draw_rectangle(img, (t_fpoint){0, 0}, dimensions, color);
+}
+
+// void	draw_triangle(mlx_image_t *img, t_triangle *triangle, int color)
+// {
+// 	t_fpoint	front;
+// 	t_fpoint	left;
+// 	t_fpoint	right;
+
+// 	front = triangle->front;
+// 	left = triangle->left;
+// 	right = triangle->right;
+// 	draw_line(img, left, front, color);
+// 	draw_line(img, front, right, color);
+// 	draw_line(img, right, left, color);
+// }
+
+/* ************************************************************************** */
+int	n_in_array(int **array, int width, int height, int value_to_find)
+{
+	int	y;
+	int	x;
+	int	count;
+	
+	count = 0;
+	y = 0;
+	while (y < height)
+	{
+		x = 0;
+		while (x < width)
+		{
+			if (array[y][x] == value_to_find)
+			{
+				count++;
+			}
+			x++;
+		}
+		y++;
+	}
+	return (count);
+}
+/* ************************************************************************** */
+

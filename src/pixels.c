@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:49:39 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:53:52 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:05:17 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ void	draw_pixel(mlx_image_t *img, int x, int y, int color)
 
 /* ************************************************************************** */
 
-int	combine_rgba(int r, int g, int b, int a)
-{
-	return (r << 24 | g << 16 | b << 8 | a);
-}
-
 int	get_pixel(mlx_image_t *img, int x, int y)
 {
 	unsigned char	*pixel;
@@ -56,80 +51,30 @@ int	get_pixel(mlx_image_t *img, int x, int y)
 
 /* ************************************************************************** */
 
-int	get_red(int color)
-{
-	return ((color >> 24) & 0xFF);
-}
-
-int	get_green(int color)
-{
-	return ((color >> 16) & 0xFF);
-}
-
-int	get_blue(int color)
-{
-	return ((color >> 8) & 0xFF);
-}
-
-int	get_alpha(int color)
-{
-	return (color & 0xFF);
-}
-
-/* ************************************************************************** */
-
-int	rgb_to_int(int r, int g, int b)
-{
-	int	red;
-	int	green;
-	int	blue;
-	int	alpha;
-
-	red = r << 24;
-	green = g << 16;
-	blue = b << 8;
-	alpha = 0xFF;
-	return (red | green | blue | alpha);
-}
-
-static int	color_is_invalid(int r, int g, int b)
-{
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return (TRUE);
-	return (FALSE);
-}
-
-int	get_color(t_scene *scene, int id)
+/*
+returns a random color, 'brightness_level' caps at 255
+*/
+int	random_pixel(int brightness_level)
 {
 	int	r;
 	int	g;
 	int	b;
-	int	color_int;
+	int	a;
 
-	r = ft_atoi(scene->colors[id][R]);
-	g = ft_atoi(scene->colors[id][G]);
-	b = ft_atoi(scene->colors[id][B]);
-	if (color_is_invalid(r, g, b))
-	{
-		return (0x000000FF);
-	}
-	color_int = rgb_to_int(r, g, b);
-	return (color_int);
+	brightness_level = ft_clamp(brightness_level, 0, 255);
+	r = ft_rand(0, brightness_level);
+	g = ft_rand(0, brightness_level);
+	b = ft_rand(0, brightness_level);
+	a = 0xFF;
+	return (combine_rgba(r, g, b, a));
 }
 
-/* ************************************************************************** */
-
-/*
-test to see if we can make a 'black and white' effect
-
-
-int rgba_to_mono(int color)
+int	interference_pixel(void)
 {
-	const char r = 0.299f * ((color >> 24) & 0xFF);
-	const char g = 0.587f * ((color >> 16) & 0xFF);
-	const char b = 0.114f * ((color >> 8) & 0xFF);
-	const char y = r + g + b;
+	int	color;
 
-	return (y << 24 | y << 16 | y << 8 | (color & 0xFF));
+	color = HEX_GRAY;
+	if (ft_rand(0, 10) % 2)
+		color = HEX_DGRAY;
+	return (color);
 }
-*/

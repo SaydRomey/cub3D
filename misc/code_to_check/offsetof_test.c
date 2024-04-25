@@ -32,7 +32,9 @@ t_map	*get_map2(t_list *levels, int index) //this is an example function to unde
 
 	map_offset = offsetof(t_level, map);
 	
+	// 
 	map_ptr = (t_map *)get_level_element(levels, index, map_offset);
+	// 
 	if (!map_ptr)
 		return (NULL);
 	return (map_ptr);

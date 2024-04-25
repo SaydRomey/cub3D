@@ -6,11 +6,43 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:25:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 13:44:53 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static void	update_elevator(t_elevator *elevator, t_level *lvl)
+{
+	// if (!lvl->elevator_exists)
+	// 	replace_with_segworld(lvl);
+	elevator->map_change = 0;
+	elevator->orientation = lvl->elevator_orientation;
+	elevator->position = lvl->elevator_position;
+}
+
+static t_player	warp_player(t_player old_player, \
+							t_level *lvl, t_level *next_lvl)
+{
+	t_player	player;
+	t_fpoint	pos;
+	int			rotation;
+
+	player = old_player;
+	pos.x = player.position.x - lvl->elevator_position.x;
+	pos.y = player.position.y - lvl->elevator_position.y;
+	rotation = next_lvl->elevator_orientation - lvl->elevator_orientation;
+	if (rotation)
+	{
+		pos = rotate_vector_position(pos, rotation);
+		player.delta = rotate_vector_delta(player.delta, -rotation);
+		player.cam_plane.x = -player.delta.y * player.fov;
+		player.cam_plane.y = player.delta.x * player.fov;
+	}
+	player.position.x = next_lvl->elevator_position.x + pos.x;
+	player.position.y = next_lvl->elevator_position.y + pos.y;
+	return (player);
+}
 
 void	change_level(int index)
 {
@@ -22,72 +54,24 @@ void	change_level(int index)
 	if (cub->current_level == index)
 		return ;
 	next_lvl = get_level(index);
-	if (next_lvl)
+	lvl = get_level(cub->current_level);
+	if (lvl && next_lvl)
 	{
 		if (!next_lvl->elevator_exists)
 			replace_with_segworld(next_lvl);
-		lvl = get_level(cub->current_level);
-		lvl->mini.img->instances->enabled = false;
 		change_window_title(next_lvl->filepath);
+		lvl->mini.img->instances->enabled = false;
 		draw_minimap(&next_lvl->mini, &next_lvl->map);
+		draw_floor_ceiling(cub->img, &next_lvl->map);
 		cub->current_level = index;
 		cub->player = warp_player(cub->player, lvl, next_lvl);
+		update_elevator(&cub->elevator, next_lvl);
 	}
+	// error if no next lvl ?
 	return ;
 }
 
 /* ************************************************************************** */
-/* ************************************************************************** */
-
-static void	copy_map_images(t_map *original, t_map *copy)
-{
-	mlx_t	*mlx;
-	int		i;
-
-	mlx = call_cub()->mlx;
-	i = 0;
-	while (i < ft_max(WALL_TEXTURE_LEN, COLOR_TYPE_LEN))
-	{
-		if (i < COLOR_TYPE_LEN && original->floor_ceiling_img[i])
-			copy->floor_ceiling_img[i] = \
-		copy_img(original->floor_ceiling_img[i], mlx);
-		if (i < WALL_TEXTURE_LEN && original->wall_textures_img[i])
-			copy->wall_textures_img[i] = \
-		copy_img(original->wall_textures_img[i], mlx);
-		i++;
-	}
-}
-
-static void	copy_map_array(t_map *original, t_map *copy)
-{
-	int		i;
-	size_t	n;
-
-	n = original->width * sizeof(int);
-	if (original->map_array != NULL)
-	{
-		copy->map_array = allocate_grid(original->height, original->width);
-		if (copy->map_array != NULL)
-		{
-			i = 0;
-			while (i < original->height)
-			{
-				ft_memcpy(copy->map_array[i], original->map_array[i], n);
-				i++;
-			}
-		}
-	}
-}
-
-t_map	deep_copy_map(t_map original)
-{
-	t_map	copy;
-
-	copy = original;
-	copy_map_array(&original, &copy);
-	copy_map_images(&original, &copy);
-	return (copy);
-}
 
 void	add_new_level(t_list **levels, t_map map, char *filepath)
 {
@@ -126,41 +110,4 @@ void	delete_level(void *level)
 		mlx_delete_image(call_cub()->mlx, lvl->mini.img);
 		free(lvl);
 	}
-}
-
-/* ************************************************************************** */
-/* ************************************************************************** */
-
-t_level	*get_level(int index)
-{
-	t_list	*node;
-	t_level	*lvl;
-
-	node = ft_lstget(call_cub()->levels, index);
-	if (!node)
-		return (NULL);
-	lvl = (t_level *)node->content;
-	if (!lvl)
-		return (NULL);
-	return (lvl);
-}
-
-t_map	*get_map(int index)
-{
-	t_level	*lvl;
-
-	lvl = get_level(index);
-	if (!lvl)
-		return (NULL);
-	return (&lvl->map);
-}
-
-t_minimap	*get_minimap(int index)
-{
-	t_level	*lvl;
-
-	lvl = get_level(index);
-	if (!lvl)
-		return (NULL);
-	return (&lvl->mini);
 }

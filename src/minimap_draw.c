@@ -6,27 +6,32 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:11:30 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:06:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/25 16:09:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	tile_color(t_map *map, int y, int x)
+static int	tile_color(t_minimap *mini, t_map *map, int y, int x)
 {
 	int			value;
+	t_player	*player;
 
 	value = map->map_array[y][x];
+	player = &call_cub()->player;
+	if (x == (int)player->position.x && y == (int)player->position.y \
+	&& mini->highlight_player_pos)
+		return (player->color);
 	if (value < 0)
-		return (HEX_GRAY);
+		return (MINI_VOID_COL);
 	else if (value == 0)
-		return (HEX_WHITE);
+		return (MINI_WALK_COL);
 	else if (value == 1)
-		return (HEX_BLACK);
+		return (MINI_WALL_COL);
 	else if (value == 2)
-		return (HEX_BLUE);
+		return (MINI_DOOR_COL);
 	else if (value == 3)
-		return (HEX_OLILAS);
+		return (MINI_ELEV_COL);
 	else
 		return (HEX_RED);
 }
@@ -67,7 +72,7 @@ static void	draw_tiles(t_minimap *mini, t_map *map, t_point start, t_point end)
 			tile.x = ((x - start.x) * mini->tile_size) + mini->offset.x;
 			tile.y = ((y - start.y) * mini->tile_size) + mini->offset.y;
 			if (x >= 0 && x < map->width && y >= 0 && y < map->height)
-				draw_tile(mini->img, tile, size, tile_color(map, y, x));
+				draw_tile(mini->img, tile, size, tile_color(mini, map, y, x));
 			x++;
 		}
 		y++;
@@ -98,6 +103,7 @@ void	draw_minimap(t_minimap *mini, t_map *map)
 	t_point	start;
 	t_point	end;
 
+	clear_img(mini->img);
 	calculate_bounds(mini, map, &start, &end);
 	draw_tiles(mini, map, start, end);
 }

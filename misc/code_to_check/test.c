@@ -6,11 +6,16 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:15:08 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/10 22:38:26 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 15:06:36 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+/* tmp to display debug messages
+*/
+// # define PRINT_PROOF		0
+# define PRINT_PROOF		1
 
 void	proof(char *str)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 00:41:49 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/24 18:32:26 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,16 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
  * - Floor / Ceiling textures
  * - Walls
  * - Assets
+ * 
+ * The ray_hits_opened_door variable is used to draw a door texture
+ * and what's after it if the pixel is transparent.
+ * 
+ * The wall_perp_dist is stored in the z_buffer used to prevent assets
+ * further than the walls to be drawn.
+ * 
+ * To do :
+ * - check to have only one get_texture_info() function
+ * - Recheck asset casting
 */
 void	raycast(t_cub *cub)
 {
@@ -75,26 +85,21 @@ void	raycast(t_cub *cub)
 
 	x = 0;
 	r = &cub->raycast;
-	// clear_img(cub->img);
 	draw_base_colors(cub);
-	// if BONUS
-	draw_floor_ceiling(cub);
+	// draw_floor_ceiling(cub);
+	if (BONUS)
+		draw_floor_ceiling_textures(cub);
 	while (x < WIDTH)
 	{
-		cub->elevator.door_open_and_visible = false;
-
+		r->ray_hits_opened_door = false;
 		init_raycast_data(&cub->player, r, x);
 		execute_dda_algo(cub, &cub->raycast);
 		draw_wall_stripe(cub, r->ray_pos, &r->ray, x);
-		//
-		// Perform additional wall drawing to get elevator door info
-		if (cub->elevator.door_open_and_visible)
+		if (r->ray_hits_opened_door)
 			draw_wall_stripe(cub, r->ray_pos_door, &r->ray_door, x);
-		//
-		// Store max distance for asset drawing later on
 		r->z_buffer[x] = r->ray.wall_perp_dist;
 		x++;
 	}
-	// if BONUS
-	draw_assets(cub);
+	if (BONUS)
+		draw_assets(cub);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 00:40:39 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/24 20:47:20 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,8 @@ typedef struct s_render
 
 typedef struct s_raycast
 {
+	bool		ray_hits_opened_door;
+	float		row_distance[HEIGHT / 2];
 	float		z_buffer[WIDTH];
 	t_point		step;
 	t_point		ray_pos;
@@ -381,6 +383,7 @@ typedef struct s_elevator
 	
 	mlx_image_t	*texture[ELEVATOR_TEX_LEN];
 	t_animation	door_animation;
+	// door_animation boolean maybe ??
 
 	bool		map_change;
 	bool		door;
@@ -389,9 +392,6 @@ typedef struct s_elevator
 	t_button	buttons[2]; // 0 = UP, 1 = DOWN
 	
 	int			id;
-	bool		door_open_and_visible;
-	// 
-	// bool		player_is_inside; //?
 }				t_elevator;
 
 
@@ -525,6 +525,7 @@ void		update_animation(t_animation *a, bool direction);
 // t_asset	*init_assets(char *texture_path, int assets_total, int slice_total);
 t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total);
 void	update_assets(t_cub *cub);
+bool	is_near_elevator(t_map *map, int x, int y);
 
 // cleanup_elevator.c
 void	cleanup_elevator(t_elevator *elevator);
@@ -691,7 +692,8 @@ t_fpoint	rotate_vector_position(t_fpoint tmp, int rotation);
 // raycast.c
 void	draw_assets(t_cub *cub);
 void	draw_base_colors(t_cub *cub);
-void	draw_floor_ceiling(t_cub *cub);
+void	draw_floor_ceiling_row(t_texture tex[4], int y);
+void	draw_floor_ceiling_textures(t_cub *cub);
 void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x);
 void	execute_dda_algo(t_cub *cub, t_raycast *r);
 void	raycast(t_cub *cub);
@@ -701,11 +703,12 @@ t_texture	get_texture_floor_info(mlx_image_t *texture);
 int		check_hit(int map_x, int map_y);
 t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos);
 t_line	get_stripe_data(float divider, int center, int limit);
-bool	position_is_elevator(int pos_x, int pos_y);
+// bool	position_is_elevator(int pos_x, int pos_y);
 float	rot_matrix(t_fpoint a, t_fpoint b);
 
 // segworld.c
 void 	replace_with_segworld(t_level *next_lvl);
+t_point	get_orientation_vector(int orientation);
 
 // test.c
 void	proof(char *str);

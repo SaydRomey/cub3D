@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/23 22:56:49 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/24 18:49:12 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ int	check_hit(int map_x, int map_y)
 	return (map->map_array[map_y][map_x]);
 }
 
+/**
+ * @param divider Used to get the size of the line
+ * @param center Used to get the start and end of line
+ * @param limit Max posible value on screen 
+*/
 t_line	get_stripe_data(float divider, int center, int limit)
 {
 	t_line	line;
@@ -54,15 +59,4 @@ t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos)
 	tex_pos.x = ft_abs((int)(tex.width * (pos.x - (int) pos.x)));
 	tex_pos.y = ft_abs((int)(tex.height * (pos.y - (int) pos.y)));
 	return (tex_pos);
-}
-
-bool	position_is_elevator(int pos_x, int pos_y)
-{
-	t_cub	*cub;
-
-	cub = call_cub();
-	if ((int)pos_x == cub->elevator.position.x &&
-		(int)pos_y == cub->elevator.position.y)
-		return (true);
-	return (false);
 }

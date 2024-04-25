@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/18 18:00:58 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/24 12:53:52 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// static void	mouse_click_events(t_cub *cub)
-// {
-// 	if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
-// 		change_level(cub->current_level + 1);
-// 	if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
-// 		change_level(cub->current_level - 1);
-// }
 
 static void	mouse_click_events(t_cub *cub)
 {

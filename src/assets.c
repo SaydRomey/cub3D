@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   assets.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:53:13 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 00:36:41 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/24 20:52:29 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+/**
+ * Go through all assets and update their texture based on the animation.
+ * 
+ * To do: Test if it's better to point to animation instead of stacking them.
+*/
 void	update_assets(t_cub *cub)
 {
 	t_level	*current;
@@ -32,21 +37,46 @@ void	update_assets(t_cub *cub)
 	}
 }
 
-static void	get_assets_position(t_map map, t_fpoint pos[SPRITE_MAX], int *total)
+static void	set_anim_and_tex(t_asset *assets, int total, char *path, int slices)
+{
+	t_animation	animation;
+	mlx_image_t	*texture;
+	int			i;
+
+	texture = load_png(path, call_cub()->mlx);
+	ft_memset(&animation, 0, sizeof (t_animation));
+	if (slices > 1)
+	{
+		animation = set_animation(texture, slices);
+		mlx_delete_image(call_cub()->mlx, texture);
+		texture = animation.frames[0];
+	}
+	i = 0;
+	while (i < total)
+	{
+		assets[i].anim = animation;
+		assets[i].tex = texture;
+		i++;
+	}
+}
+
+static void	get_assets_pos(t_map *map, t_fpoint pos[SPRITE_MAX], int *total)
 {
 	int	x;
 	int	y;
 
 	*total = 0;
 	y = 0;
-	while (y < map.height)
+	while (y < map->height)
 	{
 		x = 0;
-		while (x < map.width)
+		while (x < map->width)
 		{
-			if (map.map_array[y][x] == 0 && ft_rand(0, 5) == 3)
+			if (map->map_array[y][x] == 0
+				&& !is_near_elevator(map, x, y)
+				&& ft_rand(0, 5) == 3)
 			{
-				pos[*total] = (t_fpoint){x + 0.5, y + 0.5}; 
+				pos[*total] = (t_fpoint){x + 0.5, y + 0.5};
 				(*total)++;
 			}
 			x++;
@@ -57,38 +87,22 @@ static void	get_assets_position(t_map map, t_fpoint pos[SPRITE_MAX], int *total)
 
 t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total)
 {
-	t_fpoint	position[SPRITE_MAX];
-	t_animation	animation;
+	t_fpoint	pos[SPRITE_MAX];
 	t_asset		*assets;
-	mlx_image_t	*texture;
+	int			assets_total;
 	int			i;
 
-	get_assets_position(current_lvl->map, position, &current_lvl->assets_total);
+	get_assets_pos(&current_lvl->map, pos, &current_lvl->assets_total);
 	assets = ft_calloc(current_lvl->assets_total, sizeof (t_asset));
 	if (!assets)
 		return (NULL);
 	i = 0;
-	while (i < current_lvl->assets_total)
+	assets_total = current_lvl->assets_total;
+	while (i < assets_total)
 	{
-		assets[i].pos = position[i];
+		assets[i].pos = pos[i];
 		i++;
 	}
-	texture = load_png(texture_path, call_cub()->mlx);
-	if (!texture)
-		return (NULL);
-	ft_memset(&animation, 0, sizeof (t_animation));
-	if (slice_total > 1)
-	{
-		animation = set_animation(texture, slice_total);
-		mlx_delete_image(call_cub()->mlx, texture);
-		texture = animation.frames[0];
-	}
-	i = 0;
-	while (i < current_lvl->assets_total)
-	{
-		assets[i].anim = animation;
-		assets[i].tex = texture;
-		i++;
-	}
+	set_anim_and_tex(assets, assets_total, texture_path, slice_total);
 	return (assets);
 }

@@ -125,7 +125,6 @@ static void	start_drawing_assets(t_cub *cub, float z_buffer[WIDTH])
 	s = get_level(cub->current_level)->assets;
 	set_sprite_distance(s, total);
 	sort_sprites(s, total);
-	//
 	i = 0;
 	while (i < total)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   segworld.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/04/24 00:36:28 by olivierroy       ###   ########.fr       */
+/*   Created: 2024/04/24 12:10:29 by oroy              #+#    #+#             */
+/*   Updated: 2024/04/24 20:11:40 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,54 +41,40 @@ static void	set_segworld_elevator(t_level *segworld, t_point pos)
 	}
 }
 
-static int	set_segworld_map_char(int height, int width, int x, int y)
+static void	fill_segworld_array(t_map *map)
 {
-	if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
-		return (1);
-	return (0);
+    int x;
+    int y;
+
+    if (map->map_array)
+    {
+        y = 0;
+        while (y < map->height)
+        {
+            x = 0;
+            while (x < map->width)
+            {
+                if (y == 0 || y ==map->height - 1 \
+                || x == 0 || x == map->width - 1)
+                    map->map_array[y][x] = WALL;
+                else
+                    map->map_array[y][x] = WALKABLE;
+                x++;
+            }
+            y++;
+        }
+    }
 }
 
-static int	**fill_segworld_map(int height, int width)
-{
-	int	**map_array;
-	int	x;
-	int	y;
-
-	map_array = ft_calloc(height, sizeof (int *));
-	if (!map_array)
-		return (NULL);
-	y = 0;
-	while (y < height)
-	{
-		map_array[y] = ft_calloc(width, sizeof (int));
-		if (!map_array[y])
-		{
-			free_matrix(map_array);
-			return (NULL);
-		}
-		x = 0;
-		while (x < width)
-		{
-			map_array[y][x] = set_segworld_map_char(height, width, x, y);
-			x++;
-		}
-		y++;
-	}
-	return (map_array);
-}
-
-static t_map	set_segworld_map(void)
+static t_map	init_segworld_map(mlx_t *mlx)
 {
 	t_map	map;
-	mlx_t	*mlx;
 
-	mlx = call_cub()->mlx;
 	ft_memset(&map, 0, sizeof (t_map));
 	map.height = 8;
 	map.width = 8;
-	map.map_array = fill_segworld_map(map.height, map.width);
-	map.floor_color = HEX_GROUND;
-	map.ceiling_color = HEX_SKY;
+	map.map_array = allocate_grid(map.height, map.width);
+	fill_segworld_array(&map);
 	map.wall_textures_img[NO] = load_png("img/checker.png", mlx);
 	map.wall_textures_img[SO] = load_png("img/paint.png", mlx);
 	map.wall_textures_img[EA] = load_png("img/pokeball.png", mlx);
@@ -98,14 +84,19 @@ static t_map	set_segworld_map(void)
 
 void replace_with_segworld(t_level *next_lvl)
 {
-	next_lvl->filepath = "segworld";
-	next_lvl->elevator_exists = 1;
-	next_lvl->elevator_position = (t_point){1, 1};
-	next_lvl->elevator_orientation = cardinal_to_radian('N');
-	// free_matrix(next_lvl->map.map_array);
-	next_lvl->map = set_segworld_map();
-	set_segworld_elevator(next_lvl, next_lvl->elevator_position);
-	next_lvl->mini = init_minimap(&next_lvl->map);
-	next_lvl->is_segworld = true;
-	next_lvl->assets = init_assets("img/flames.png", next_lvl, 8);
+	t_level	*segworld;
+	// t_point	orientation;
+
+	segworld = next_lvl;
+	segworld->filepath = "segworld";
+	cleanup_map(&segworld->map);
+	segworld->map = init_segworld_map(call_cub()->mlx);
+	segworld->mini = init_minimap(&segworld->map);
+	segworld->elevator_exists = 1;
+	segworld->elevator_position = (t_point){1, 2};
+	segworld->elevator_orientation = cardinal_to_radian('S');
+	// orientation = get_orientation_vector(segworld->elevator_orientation);
+	set_segworld_elevator(segworld, segworld->elevator_position);
+	segworld->is_segworld = true;
+	segworld->assets = init_assets("img/flames.png", segworld, 8);
 }

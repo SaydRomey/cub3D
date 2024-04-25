@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/22 13:06:49 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/24 20:45:14 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,24 +96,3 @@ void	elevator_events(t_cub *cub)
 
 	update_door_animation(&cub->elevator);
 }
-
-// void	check_for_map_change(t_cub *cub, int y)
-// {
-// 	int	width;
-// 	int	i;
-
-// 	i = 0;
-// 	width = cub->elevator.buttons->width;
-// 	while (i < cub->scene_total)
-// 	{
-// 		if ((y >= HEIGHT - (width + i * width) && y < HEIGHT - i * width)
-// 			&& cub->elevator.id != i)
-// 		{
-// 			draw_buttons(&cub->elevator, i);
-// 			cub->elevator.map_change = 1;
-// 			cub->elevator.id = i;
-// 			break ;
-// 		}
-// 		i++;
-// 	}
-// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assets.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:53:13 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/25 16:14:06 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/26 16:44:37 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,15 @@ static void	set_anim_and_tex(t_asset *assets, int total, char *path, int slices)
 	{
 		animation = set_animation(texture, slices);
 		mlx_delete_image(call_cub()->mlx, texture);
-		texture = animation.frames[0];
 	}
 	i = 0;
 	while (i < total)
 	{
+		if (slices > 1)
+		{
+			animation.current_frame = ft_rand(0, animation.last_frame);
+			texture = animation.frames[animation.current_frame];
+		}
 		assets[i].anim = animation;
 		assets[i].tex = texture;
 		i++;

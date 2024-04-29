@@ -3,6 +3,7 @@
 
 # include "MLX42.h"
 # include "animations.h"
+# include "map.h"
 
 # define SPRITE_MAX	32
 
@@ -17,7 +18,11 @@ typedef struct s_asset
 	t_line		v;
 	mlx_image_t	*tex;
 	t_animation	anim;
+	bool		is_animated;
 }				t_asset;
+
+// assets_utils.c
+bool	is_near_elevator(t_map *map, int x, int y);
 
 // assets.c
 t_asset	*init_assets(char *texture_path, void *param, int slice_total);

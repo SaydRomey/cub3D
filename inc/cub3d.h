@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 14:22:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 11:32:50 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_cub
 	t_raycast	raycast;
 	t_vfx		vfx;
 	char		*floor_ceiling_default[COLOR_TYPE_LEN];
+	mlx_image_t	*user_img; //to cleanup ?
 }   			t_cub;
 
 /* ************************************************************************** */

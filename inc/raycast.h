@@ -13,6 +13,9 @@ typedef struct s_render
 
 typedef struct s_raycast
 {
+	bool		ray_hits_opened_door;
+	float		row_distance[HEIGHT / 2];
+	float		z_buffer[WIDTH];
 	t_point		step;
 	t_point		ray_pos;
 	t_point		ray_pos_door;
@@ -36,24 +39,27 @@ typedef struct s_texture
 }				t_texture;
 
 // raycast_assets.c
-void		draw_assets(float z_buffer[WIDTH]);
+void		draw_assets(void *param);
 
 // raycast_dda.c
 void		execute_dda_algo(t_raycast *r);
 
+// raycast_floor_draw.c
+void		draw_floor_ceiling_row(t_texture tex[4], int y);
+
 // raycast_floor.c
 t_texture	get_texture_floor_info(mlx_image_t *texture);
-void		draw_ceiling_floor(t_texture tex[4], int y);
+void		draw_floor_ceiling_textures(void *param);
 
 // raycast_init.c
 void		raycast(void);
 
 // raycast_utils.c
 int			check_hit(int map_y, int map_x);
-void		get_ray_bounds(void);
 t_line		get_stripe_data(float divider, int center, int limit);
 float		rot_matrix(t_fpoint a, t_fpoint b);
-t_point		update_texture_position(t_texture tex, t_fpoint pos);
+t_point		get_pixel_in_texture(t_texture tex, t_fpoint pos);
+int			get_next_unit(t_raycast *r);
 
 // raycast_walls.c
 void		draw_wall_stripe(t_point ray_pos, t_render *r, int x);

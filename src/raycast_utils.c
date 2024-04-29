@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/24 20:12:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 13:04:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,17 @@ int	check_hit(int map_x, int map_y)
 	t_map	*map;
 
 	map = get_map(call_cub()->current_level);
-	
-	if (map_x < 0 || map_x >= map->width || 
-		map_y < 0 || map_y >= map->height)
+	if (map_x < 0 || map_x >= map->width
+		|| map_y < 0 || map_y >= map->height)
 		return (1);
 	return (map->map_array[map_y][map_x]);
 }
 
-void	get_ray_bounds(void)
-{
-	t_cub	*cub;
-
-	cub = call_cub();
-	cub->raycast.ray_dir_min.x = cub->player.delta.x - cub->player.cam_plane.x;
-	cub->raycast.ray_dir_min.y = cub->player.delta.y - cub->player.cam_plane.y;
-	cub->raycast.ray_dir_max.x = cub->player.delta.x + cub->player.cam_plane.x;
-	cub->raycast.ray_dir_max.y = cub->player.delta.y + cub->player.cam_plane.y;
-}
-
+/**
+ * @param divider Used to get the size of the line
+ * @param center Used to get the start and end of line
+ * @param limit Max posible value on screen 
+*/
 t_line	get_stripe_data(float divider, int center, int limit)
 {
 	t_line	line;
@@ -49,16 +42,38 @@ t_line	get_stripe_data(float divider, int center, int limit)
 	return (line);
 }
 
-float	rot_matrix(t_fpoint a, t_fpoint b)
+float	rot_matrix(t_fpoint a, t_fpoint b) //? can this be generic or usefull elsewhere ?
 {
 	return (a.x * b.y - b.x * a.y);
 }
 
-t_point	update_texture_position(t_texture tex, t_fpoint pos)
+/**
+ * Get pixel coordinates according to position in grid.
+ * Getting the absolute value (ft_abs) is necessary
+ * since there are no negative values in texture.
+*/
+t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos)
 {
 	t_point	tex_pos;
-	
+
 	tex_pos.x = ft_abs((int)(tex.width * (pos.x - (int) pos.x)));
 	tex_pos.y = ft_abs((int)(tex.height * (pos.y - (int) pos.y)));
 	return (tex_pos);
+}
+
+int	get_next_unit(t_raycast *r)
+{
+	if (r->length.x < r->length.y)
+	{
+		r->ray.side = 0;
+		if (check_hit(r->ray_pos.x + r->step.x, r->ray_pos.y) == 0)
+			return (0);
+	}
+	else
+	{
+		r->ray.side = 1;
+		if (check_hit(r->ray_pos.x, r->ray_pos.y + r->step.y) == 0)
+			return (0);
+	}
+	return (1);
 }

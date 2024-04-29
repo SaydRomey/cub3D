@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/25 17:22:43 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 13:32:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ static void	get_initial_offset(t_player *p, t_raycast *r)
 	}
 }
 
+/**
+ * Cross Product here.
+ * Since we use units of 1, only a division is needed in this case.
+*/
 static float	get_grid_increment_value(float ray_dir)
 {
 	if (ray_dir == 0)
@@ -57,52 +61,45 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
 	get_initial_offset(p, r);
 }
 
-static void	raycast_vertical(t_cub *cub)
-{
-	t_texture	tex[4];
-	int			y;
-
-	tex[0] = get_texture_floor_info(get_map(cub->current_level)->floor_ceiling_img[FLOOR]);
-	tex[1] = get_texture_floor_info(get_map(cub->current_level)->floor_ceiling_img[CEILING]);
-	tex[2] = get_texture_floor_info(cub->elevator.texture[E_FLOOR]);
-	tex[3] = get_texture_floor_info(cub->elevator.texture[E_CEILING]);
-	get_ray_bounds();
-	y = HEIGHT / 2;
-	while (y < HEIGHT)
-	{
-		draw_ceiling_floor(tex, y);
-		y++;
-	}
-}
-
+/**
+ * Raycasting logic, drawing in this order:
+ * - Background colors
+ * - Floor / Ceiling textures
+ * - Walls
+ * - Assets
+ * 
+ * The ray_hits_opened_door variable is used to draw a door texture
+ * and what's after it if the pixel is transparent.
+ * 
+ * The wall_perp_dist is stored in the z_buffer used to prevent assets
+ * further than the walls to be drawn.
+ * 
+ * To do :
+ * - check to have only one get_texture_info() function
+ * - Recheck asset casting
+*/
 void	raycast(void)
 {
 	t_cub		*cub;
-	float		z_buffer[WIDTH];
 	t_raycast	*r;
 	int			x;
 
 	cub = call_cub();
-	x = 0;
 	r = &cub->raycast;
-	draw_floor_ceiling(cub->img, get_map(cub->current_level));
-	if (get_map(cub->current_level)->floor_ceiling_img[0] \
-	&& cub->vfx.textures_enabled)
-		raycast_vertical(cub);
+	if (BONUS)
+		draw_floor_ceiling_textures(cub);
+	x = 0;
 	while (x < WIDTH)
 	{
-		cub->elevator.door_open = false;
-
+		r->ray_hits_opened_door = false;
 		init_raycast_data(&cub->player, r, x);
 		execute_dda_algo(&cub->raycast);
 		draw_wall_stripe(r->ray_pos, &r->ray, x);
-
-		if (cub->elevator.door_open)
+		if (r->ray_hits_opened_door)
 			draw_wall_stripe(r->ray_pos_door, &r->ray_door, x);
-		
-		z_buffer[x] = r->ray.wall_perp_dist;
+		r->z_buffer[x] = r->ray.wall_perp_dist;
 		x++;
 	}
-	if (get_level(cub->current_level)->assets)
-		draw_assets(z_buffer);
+	if (BONUS)
+		draw_assets(cub);
 }

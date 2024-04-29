@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 19:01:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 19:22:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	draw_floor_ceiling_textures(void *param)
 	y = HEIGHT / 2;
 	while (y < HEIGHT)
 	{
-		draw_floor_ceiling_row(tex, y);
+		if (cub->vfx.textures_enabled)
+			draw_floor_ceiling_row(tex, y);
 		y++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 12:53:52 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/27 22:35:39 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 
 static void	mouse_click_events(t_cub *cub)
 {
-	if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
-		elevator_change_map(cub->current_level + 1);
-	if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
-		elevator_change_map(cub->current_level - 1);
+	if (get_level(cub->current_level)->elevator_exists)
+	{
+		if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
+			elevator_change_map(cub->current_level + 1);
+		if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
+			elevator_change_map(cub->current_level - 1);
+	}
 }
 
 static void	set_mouse_mode(bool enabled)

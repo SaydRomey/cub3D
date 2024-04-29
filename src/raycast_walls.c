@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_walls.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/25 15:39:17 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/27 22:35:12 by olivierroy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 	y = line.start;
 	while (y <= line.end)
 	{
-		tex.pixel.y = (int)tex.pos_y & (tex.width - 1);
+		tex.pixel.y = (int)tex.pos_y;
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
 		distance = r->wall_perp_dist;

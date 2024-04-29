@@ -3,7 +3,7 @@ SO ./img/forest.png
 WE ./img/forest.png
 EA ./img/forest.png
 
-FL ./img/tree_trunk.png
+FL ./img/forest_ground.png
 CE ./img/pokeball.png
 
 F 142,136,73

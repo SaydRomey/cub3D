@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:34:36 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 12:12:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:03:38 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,11 @@ void	check_button_hover(t_button btn[2])
 static t_button	new_button(t_point pos)
 {
 	t_button	button;
+	t_button	button;
 	mlx_t		*mlx;
 
 	mlx = call_cub()->mlx;
+	ft_memset(&button, 0, sizeof(t_button));
 	ft_memset(&button, 0, sizeof(t_button));
 	button.button_imgs[OFF] = load_png("img/elevator_btn_off.png", mlx);
 	button.button_imgs[ON] = load_png("img/elevator_btn_on.png", mlx);

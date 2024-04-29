@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 13:26:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:03:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 static void	check_near_elevator(t_fpoint pos, t_elevator *e)
 {
 	if (e->map_change == 0 && (check_hit(pos.x, pos.y) == ELEVATOR
-		|| check_hit(pos.x + 1, pos.y) == ELEVATOR
-		|| check_hit(pos.x + 1, pos.y - 1) == ELEVATOR
-		|| check_hit(pos.x, pos.y - 1) == ELEVATOR
-		|| check_hit(pos.x - 1, pos.y - 1) == ELEVATOR
-		|| check_hit(pos.x - 1, pos.y) == ELEVATOR
-		|| check_hit(pos.x - 1, pos.y + 1) == ELEVATOR
-		|| check_hit(pos.x, pos.y + 1) == ELEVATOR
-		|| check_hit(pos.x + 1, pos.y + 1) == ELEVATOR))
+			|| check_hit(pos.x + 1, pos.y) == ELEVATOR
+			|| check_hit(pos.x + 1, pos.y - 1) == ELEVATOR
+			|| check_hit(pos.x, pos.y - 1) == ELEVATOR
+			|| check_hit(pos.x - 1, pos.y - 1) == ELEVATOR
+			|| check_hit(pos.x - 1, pos.y) == ELEVATOR
+			|| check_hit(pos.x - 1, pos.y + 1) == ELEVATOR
+			|| check_hit(pos.x, pos.y + 1) == ELEVATOR
+			|| check_hit(pos.x + 1, pos.y + 1) == ELEVATOR))
 		e->door = OPEN;
 	else
 		e->door = CLOSE;
@@ -65,6 +65,7 @@ static void	update_door_animation(t_elevator *e)
 		else if (e->map_change == 1)
 		{
 			// elevator_waiting();
+			// elevator_waiting();
 			change_level(call_cub()->chosen_level);
 		}
 	}
@@ -77,6 +78,7 @@ void	elevator_change_map(int lvl_index)
 	cub = call_cub();
 	if (get_level(lvl_index)
 		&& !(get_level(cub->current_level)->is_segworld
+			&& lvl_index > cub->current_level))
 			&& lvl_index > cub->current_level))
 	{
 		cub->elevator.map_change = 1;

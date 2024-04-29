@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 18:56:09 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 13:32:45 by cdumais          ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/04/29 13:58:50 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "cub3d.h"
 
@@ -36,6 +37,10 @@ static void	get_initial_offset(t_player *p, t_raycast *r)
 	}
 }
 
+/**
+ * Cross Product here.
+ * Since we use units of 1, only a division is needed in this case.
+*/
 /**
  * Cross Product here.
  * Since we use units of 1, only a division is needed in this case.
@@ -91,6 +96,7 @@ void	raycast(void)
 	x = 0;
 	while (x < WIDTH)
 	{
+		r->ray_hits_opened_door = false;
 		r->ray_hits_opened_door = false;
 		init_raycast_data(&cub->player, r, x);
 		execute_dda_algo(&cub->raycast);

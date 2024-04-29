@@ -18,6 +18,9 @@
 **/tmp/
 **/obj/
 
+# misc
+generic.png
+
 # Sentinel files
 .init_check
 .testfile

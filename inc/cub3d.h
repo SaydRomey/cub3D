@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 16:17:33 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/29 18:36:35 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ typedef struct s_asset
 	int			screen_x;
 	t_fpoint	pos;
 	t_fpoint	pos_relative;
-	t_fpoint	transform;
+	t_fpoint	tf;
 	t_line		h;
 	t_line		v;
 	mlx_image_t	*tex;
@@ -310,7 +310,9 @@ typedef struct s_texture
 	mlx_image_t	*to_draw;
 	t_point		pixel;
 	float		pos_y;
+	float		pos_x;
 	float		step_y;
+	float		step_x;
 	int			width;
 	int			height;
 }				t_texture;
@@ -528,6 +530,7 @@ void		update_animation(t_animation *a, bool direction);
 t_asset	*init_assets(char *texture_path, t_level *current_lvl, int slice_total);
 void	update_assets(t_cub *cub);
 bool	is_near_elevator(t_map *map, int x, int y);
+void	asset_pixel(mlx_image_t *img, int x, int y, int color);
 
 // cleanup_elevator.c
 void	cleanup_elevator(t_elevator *elevator);
@@ -699,14 +702,14 @@ void	draw_floor_ceiling_textures(t_cub *cub);
 void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x);
 void	execute_dda_algo(t_cub *cub, t_raycast *r);
 void	raycast(t_cub *cub);
-t_texture	get_texture_floor_info(mlx_image_t *texture);
 
 // raycast_utils.c
 int		check_hit(int map_x, int map_y);
 int		get_next_unit(t_raycast *r);
-t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos);
+// t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos);
 t_line	get_stripe_data(float divider, int center, int limit);
 float	rot_matrix(t_fpoint a, t_fpoint b);
+t_texture	get_texture_info(mlx_image_t *texture);
 
 // segworld.c
 void 	replace_with_segworld(t_level *next_lvl);

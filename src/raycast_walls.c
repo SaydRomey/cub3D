@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_walls.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/27 22:35:12 by olivierroy       ###   ########.fr       */
+/*   Updated: 2024/04/29 18:38:46 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,18 @@ static mlx_image_t	*get_texture_to_draw(t_cub *cub, t_point ray_pos, bool side)
 	return (NULL);
 }
 
-static t_texture	get_texture_wall_info(float whp, t_point ray_pos, bool side)
+static void	add_wall_texture_info(t_texture *tex, t_render *r, t_line line)
 {
-	t_cub		*cub;
-	t_texture	tex;
+	t_cub	*cub;
 
 	cub = call_cub();
-	tex.to_draw = get_texture_to_draw(cub, ray_pos, side);
-	tex.width = (int)tex.to_draw->width;
-	tex.height = (int)tex.to_draw->height;
-	tex.pixel.x = (int)(whp * tex.width);
-	if ((side == 0 && cub->raycast.ray_dir.x < 0)
-		|| (side == 1 && cub->raycast.ray_dir.y > 0))
-		tex.pixel.x = tex.width - tex.pixel.x - 1;
-	tex.pixel.y = 0;
-	return (tex);
+	tex->pixel.x = (int)(r->wall_hit_pos * tex->width);
+	if ((r->side == 0 && cub->raycast.ray_dir.x < 0)
+		|| (r->side == 1 && cub->raycast.ray_dir.y > 0))
+		tex->pixel.x = tex->width - tex->pixel.x - 1;
+	tex->pixel.y = 0;
+	tex->step_y = tex->to_draw->height / (float)line.size;
+	tex->pos_y = (line.start - (HEIGHT / 2) + (line.size / 2)) * tex->step_y;
 }
 
 /**
@@ -86,13 +83,15 @@ void	draw_wall_stripe(t_cub *cub, t_point ray_pos, t_render *r, int x)
 	int			y;
 
 	line = get_stripe_data(r->wall_perp_dist, HEIGHT / 2, HEIGHT);
-	tex = get_texture_wall_info(r->wall_hit_pos, ray_pos, r->side);
-	tex.step_y = tex.to_draw->height / (float)line.size;
-	tex.pos_y = (line.start - (HEIGHT / 2) + (line.size / 2)) * tex.step_y;
+	tex = get_texture_info(get_texture_to_draw(cub, ray_pos, r->side));
+	add_wall_texture_info(&tex, r, line);
 	y = line.start;
 	while (y <= line.end)
 	{
-		tex.pixel.y = (int)tex.pos_y;
+		if (get_level(cub->current_level)->is_segworld)
+			tex.pixel.y = (int)tex.pos_y & (tex.width - 1);
+		else
+			tex.pixel.y = (int)tex.pos_y % tex.height;
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
 		distance = r->wall_perp_dist;

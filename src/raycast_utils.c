@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/25 16:15:18 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/29 18:34:45 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,6 @@ float	rot_matrix(t_fpoint a, t_fpoint b)
 	return (a.x * b.y - b.x * a.y);
 }
 
-/**
- * Get pixel coordinates according to position in grid.
- * Getting the absolute value (ft_abs) is necessary
- * since there are no negative values in texture.
-*/
-t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos)
-{
-	t_point	tex_pos;
-
-	tex_pos.x = ft_abs((int)(tex.width * (pos.x - (int) pos.x)));
-	tex_pos.y = ft_abs((int)(tex.height * (pos.y - (int) pos.y)));
-	return (tex_pos);
-}
-
 int	get_next_unit(t_raycast *r)
 {
 	if (r->length.x < r->length.y)
@@ -76,4 +62,18 @@ int	get_next_unit(t_raycast *r)
 			return (0);
 	}
 	return (1);
+}
+
+t_texture	get_texture_info(mlx_image_t *texture)
+{
+	t_texture	tex;
+
+	ft_memset(&tex, 0, sizeof (t_texture));
+	if (texture)
+	{
+		tex.to_draw = texture;
+		tex.width = (int)tex.to_draw->width;
+		tex.height = (int)tex.to_draw->height;
+	}
+	return (tex);
 }

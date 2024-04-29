@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 15:53:20 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/29 18:31:44 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,15 @@ static void	get_ray_bounds(t_cub *cub)
 	cub->raycast.ray_dir_max.y = cub->player.delta.y + cub->player.cam_plane.y;
 }
 
-t_texture	get_texture_floor_info(mlx_image_t *texture)
-{
-	t_texture	tex;
-
-	ft_memset(&tex, 0, sizeof (t_texture));
-	if (texture)
-	{
-		tex.to_draw = texture;
-		tex.width = (int)tex.to_draw->width;
-		tex.height = (int)tex.to_draw->height;
-	}
-	return (tex);
-}
-
 static void	set_floor_ceiling_textures(t_cub *cub, t_texture tex[4])
 {
 	t_map	*current_lvl;
 
 	current_lvl = get_map(cub->current_level);
-	tex[0] = get_texture_floor_info(cub->elevator.texture[E_FLOOR]);
-	tex[1] = get_texture_floor_info(cub->elevator.texture[E_CEILING]);
-	tex[2] = get_texture_floor_info(current_lvl->floor_ceiling_img[FLOOR]);
-	tex[3] = get_texture_floor_info(current_lvl->floor_ceiling_img[CEILING]);
+	tex[0] = get_texture_info(cub->elevator.texture[E_FLOOR]);
+	tex[1] = get_texture_info(cub->elevator.texture[E_CEILING]);
+	tex[2] = get_texture_info(current_lvl->floor_ceiling_img[FLOOR]);
+	tex[3] = get_texture_info(current_lvl->floor_ceiling_img[CEILING]);
 }
 
 void	draw_floor_ceiling_textures(t_cub *cub)

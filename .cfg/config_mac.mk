@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    config_mac.mk                                      :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: olivierroy <olivierroy@student.42.fr>      +#+  +:+       +#+         #
+#    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 17:11:25 by cdumais           #+#    #+#              #
-#    Updated: 2024/04/26 16:09:02 by olivierroy       ###   ########.fr        #
+#    Updated: 2024/04/29 16:08:53 by oroy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,8 @@ SOUND		:= afplay
 # SCREEN_W	:= $(shell $(OSA_SCREEN) | awk '{gsub(/,/, "", $$3); print $$3}' || echo $(DEFAULT_W))
 # SCREEN_H	:= $(shell $(OSA_SCREEN) | awk '{gsub(/,/, "", $$4); print $$4}' || echo $(DEFAULT_H))
 
-SCREEN_W	:= 1280
-SCREEN_H	:= 720
+SCREEN_W	:= 1920
+SCREEN_H	:= 1080
 
 # Dependencies
 

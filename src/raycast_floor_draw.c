@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:43:59 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 18:48:33 by oroy             ###   ########.fr       */
+/*   Updated: 2024/04/29 18:34:04 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,20 @@ static float	get_initial_pos_and_step(t_fpoint *pos, t_fpoint *step, int y)
 	step->x = row_distance * (r->ray_dir_max.x - r->ray_dir_min.x) / WIDTH;
 	step->y = row_distance * (r->ray_dir_max.y - r->ray_dir_min.y) / WIDTH;
 	return (row_distance);
+}
+
+/**
+ * Get pixel coordinates according to position in grid.
+ * Getting the absolute value (ft_abs) is necessary
+ * since there are no negative values in texture.
+*/
+static t_point	get_pixel_in_texture(t_texture tex, t_fpoint pos)
+{
+	t_point	tex_pos;
+
+	tex_pos.x = ft_abs((int)(tex.width * (pos.x - (int) pos.x)));
+	tex_pos.y = ft_abs((int)(tex.height * (pos.y - (int) pos.y)));
+	return (tex_pos);
 }
 
 static void	draw_row_pixel(t_texture tex[2], float distance, int x, int y)

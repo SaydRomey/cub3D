@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:24:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 19:10:59 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,6 @@ void	replace_with_segworld(t_level *next_lvl)
 	set_segworld_elevator(segworld, segworld->elevator_position);
 	segworld->is_segworld = true;
 	segworld->assets = init_assets("img/flames.png", segworld, 8);
+	// 
 	cub->user_img = load_png("generic.png", cub->mlx);
 }

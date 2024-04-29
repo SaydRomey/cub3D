@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:34:28 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:34:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 18:54:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@
 
 # define SPRITE_MAX	32
 
+/*
+*/
 typedef struct s_asset
 {
 	float		distance;
 	int			screen_x;
 	t_fpoint	pos;
 	t_fpoint	pos_relative;
-	t_fpoint	transform;
+	t_fpoint	tf;
 	t_line		h;
 	t_line		v;
 	mlx_image_t	*tex;
@@ -34,6 +36,7 @@ typedef struct s_asset
 }				t_asset;
 
 // assets_utils.c
+void	asset_pixel(mlx_image_t *img, int x, int y, int color);
 bool	is_near_elevator(t_map *map, int x, int y);
 
 // assets.c

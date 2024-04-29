@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:39:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:39:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 18:55:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ typedef struct s_texture
 	mlx_image_t	*to_draw;
 	t_point		pixel;
 	float		pos_y;
+	float		pos_x;
 	float		step_y;
+	float		step_x;
 	int			width;
 	int			height;
 }				t_texture;
@@ -70,8 +72,9 @@ void		raycast(void);
 int			check_hit(int map_y, int map_x);
 t_line		get_stripe_data(float divider, int center, int limit);
 float		rot_matrix(t_fpoint a, t_fpoint b);
-t_point		get_pixel_in_texture(t_texture tex, t_fpoint pos);
+// t_point		get_pixel_in_texture(t_texture tex, t_fpoint pos);
 int			get_next_unit(t_raycast *r);
+t_texture	get_texture_info(mlx_image_t *texture);
 
 // raycast_walls.c
 void		draw_wall_stripe(t_point ray_pos, t_render *r, int x);

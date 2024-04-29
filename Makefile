@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/04/29 14:00:28 by cdumais          ###   ########.fr        #
+#    Updated: 2024/04/29 17:47:54 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,10 +51,16 @@ SRC_DIR		:= src
 TMP_DIR		:= tmp
 WAV_DIR		:= wav
 
+# https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+# -Ofast	-> 
+# -flto		-> link-time optimisation
+
 COMPILE		:= gcc
 C_FLAGS		:= -Wall -Wextra -Werror -Ofast -flto
 # C_FLAGS		:= -Wall -Wextra -Werror -g
 L_FLAGS		:= 
+# LDFLAGS		:= (non-library linker flags, such as -L)
+# LDLIBS		:= (for libraries)
 HEADERS		:= -I$(INC_DIR)
 
 REMOVE		:= rm -rf

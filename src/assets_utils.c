@@ -6,11 +6,17 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 20:39:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 14:10:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 17:42:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	asset_pixel(mlx_image_t *img, int x, int y, int color)
+{
+	if (get_alpha(color) == 255)
+		draw_pixel(img, x, y, color);
+}
 
 bool	is_near_elevator(t_map *map, int x, int y)
 {

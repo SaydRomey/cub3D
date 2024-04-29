@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:36:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:37:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 18:54:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define CLOSE				0
 # define OPEN				1
 
-enum e_elevator_id
+enum e_elevator_id //check this **!
 {
 	E_WALL,
 	E_FLOOR,

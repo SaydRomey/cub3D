@@ -23,7 +23,7 @@ generic.png
 
 # Sentinel files
 .init_check
-.testfile
+.bonus
 
 # Executables
 cub3D

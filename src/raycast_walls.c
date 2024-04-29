@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 14:14:09 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:48:17 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	draw_wall_stripe(t_point ray_pos, t_render *r, int x)
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
 		distance = r->wall_perp_dist;
-		if (call_cub()->vfx.shadow.enabled)
+		if (call_cub()->vfx.shadow_enabled)
 			color = shadow_effect(color, distance, 0.0f, 5.0f);
 		if (get_alpha(color) == 255)
 			draw_pixel(call_cub()->img, x, y, color);

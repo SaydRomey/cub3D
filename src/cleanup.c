@@ -6,13 +6,14 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 11:44:14 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:26:08 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/* **check if 'free_matrix()' from libft does the trick instead.. //or put this in libft ? (must compare)
+/* **check if 'free_matrix()' from libft does the trick instead..
+	or put this in libft ? (must compare)
 
 */
 void	free_map_array(int **map_array, int height)
@@ -39,7 +40,7 @@ void	free_map_array(int **map_array, int height)
 void	cleanup(void *param)
 {
 	t_cub	*cub;
-	
+
 	cub = (t_cub *)param;
 	if (cub->levels)
 	{
@@ -48,10 +49,9 @@ void	cleanup(void *param)
 	cleanup_elevator(&cub->elevator);
 	mlx_delete_image(cub->mlx, cub->img);
 	mlx_delete_image(cub->mlx, cub->radar_img);
-	// mlx_delete_image(cub->mlx, cub->user_img); //?
+	mlx_delete_image(cub->mlx, cub->user_img);
 	mlx_terminate(cub->mlx);
-	// 
-	// free(cub); //? to test
+	free(cub);
 }
 
 /*
@@ -61,7 +61,7 @@ frees allocated memory in a t_scene struct
 void	cleanup_scene(t_scene *scene)
 {
 	int	i;
-	
+
 	i = 0;
 	while (++i < WALL_TEXTURE_LEN)
 	{

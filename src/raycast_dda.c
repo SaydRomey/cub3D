@@ -6,12 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:49:53 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 13:56:49 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:23:11 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 /**
  * Hit data useful for drawing walls.

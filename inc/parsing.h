@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:46:26 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 19:24:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:39:24 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 used to parse the cubfiles and organize text data
 */
 typedef struct s_scene
-{	
+{
 	char		*wall_textures[WALL_TEXTURE_LEN];
 	char		*floor_ceiling_textures[COLOR_TYPE_LEN];
 	char		*colors[COLOR_TYPE_LEN][RGB_LEN];

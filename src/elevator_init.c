@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 21:55:00 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/29 14:04:03 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:08:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static void	set_elevator_textures(t_cub *cub, t_elevator *elevator)
 
 	elevator->texture[E_WALL] = load_png("img/elevator_wall.png", cub->mlx);
 	elevator->texture[E_FLOOR] = load_png("img/elevator_floor.png", cub->mlx);
-	elevator->texture[E_CEILING] = load_png("img/elevator_ceiling.png", cub->mlx);
+	elevator->texture[E_CEILING] = \
+	load_png("img/elevator_ceiling.png", cub->mlx);
 	door_img = load_png("img/elevator_door.png", cub->mlx);
 	elevator->door_animation = set_animation(door_img, 4);
 	mlx_delete_image(cub->mlx, door_img);

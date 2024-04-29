@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 14:03:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:05:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	check_near_elevator(t_fpoint pos, t_elevator *e)
 	else
 		e->door = CLOSE;
 }
+
 static void	toggle_elevator_buttons(t_fpoint pos, t_elevator *e)
 {
 	if (check_hit(pos.x, pos.y) == ELEVATOR)
@@ -64,8 +65,6 @@ static void	update_door_animation(t_elevator *e)
 			update_animation(&e->door_animation, GO_LEFT);
 		else if (e->map_change == 1)
 		{
-			// elevator_waiting();
-			// elevator_waiting();
 			change_level(call_cub()->chosen_level);
 		}
 	}
@@ -78,7 +77,6 @@ void	elevator_change_map(int lvl_index)
 	cub = call_cub();
 	if (get_level(lvl_index)
 		&& !(get_level(cub->current_level)->is_segworld
-			&& lvl_index > cub->current_level))
 			&& lvl_index > cub->current_level))
 	{
 		cub->elevator.map_change = 1;

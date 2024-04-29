@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 14:00:12 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:14:09 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	draw_wall_stripe(t_point ray_pos, t_render *r, int x)
 	y = line.start;
 	while (y <= line.end)
 	{
-		tex.pixel.y = (int)tex.pos_y;
+		tex.pixel.y = (int)tex.pos_y % tex.height;
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
 		distance = r->wall_perp_dist;

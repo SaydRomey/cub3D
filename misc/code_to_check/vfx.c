@@ -6,11 +6,112 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:36:14 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:18:43 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:12:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+typedef struct s_shadow
+{
+	bool	enabled;
+	float	density;
+	float	max;
+
+	// bool	flashlight; maybe a class itself, with enabled(on/off), range, light color, battery level?
+}			t_shadow;
+
+typedef struct s_fog
+{
+	bool	enabled;
+	int		color;
+	float	density;
+	float	max;
+}			t_fog;
+
+typedef struct s_vfx
+{
+	bool	textures_enabled; //add a separate flag for floor/celing ?
+	
+	
+	t_shadow	shadow;
+	
+	bool	shadow_enabled;
+	float	shadow_intensity; //?
+	float	shadow_min; //?
+	float	shadow_max; //?
+	
+	
+	t_fog	fog;
+	
+	bool	fog_enabled; //fog effect on walls, floor and ceiling **(if no textures, adapt draw_floor and draw_ceiling)
+	int		fog_color;
+	bool	floor_fog_enabled; //fog effect on floor and a portion of walls *(can exist without 'fog_enabled also)
+	float	floor_fog_level; //defines how high on the wall the floor fog goes [0.0f is none, 1.0f is all the way up]
+	int		floor_fog_color;
+	
+}			t_vfx;
+
+
+static float	normalize_fog(float distance, float min, float max)
+{
+	float	clamped_dist;
+	float	normalized_dist;
+
+	clamped_dist = ft_fclamp(distance, min, max);
+	normalized_dist = (clamped_dist - min) / (max - min);
+	return (normalized_dist);
+}
+
+int	lerp_color(int color1, int color2, float factor)
+{
+	int	red;
+	int	green;
+	int	blue;
+	int	alpha;
+
+	red = (int)ft_lerp(get_red(color1), get_red(color2), factor);
+	green = (int)ft_lerp(get_green(color1), get_green(color2), factor);
+	blue = (int)ft_lerp(get_blue(color1), get_blue(color2), factor);
+	alpha = (int)ft_lerp(get_alpha(color1), get_alpha(color2), factor);
+	return (combine_rgba(red, green, blue, alpha));
+}
+
+int	fog_effect(int color, float raw_dist, float min, float max, int fog_color)
+{
+	float	dist;
+
+	dist = normalize_fog(raw_dist, min, max);
+	return (lerp_color(color, fog_color, dist));
+}
+
+/* ************************************************************************** */
+static int	blend_colors(int color1, int color2, float factor)
+{
+	int	red;
+	int	green;
+	int	blue;
+	int	alpha;
+
+	factor = ft_fclamp(factor, 0.0f, 1.0f);
+	red = (int)ft_lerp(get_red(color1), get_red(color2), factor);
+	green = (int)ft_lerp(get_green(color1), get_green(color2), factor);
+	blue = (int)ft_lerp(get_blue(color1), get_blue(color2), factor);
+	alpha = (int)get_alpha(color1);
+	return (combine_rgba(red, green, blue, alpha));
+}
+
+int	fog_effect2(int color, float distance)
+{
+	t_fog	*fog;
+	float	factor;
+
+	fog = &call_cub()->vfx.fog;
+	factor = distance / fog->max;
+	factor = ft_fclamp(factor, 0.0f, 1.0f);
+	return (blend_colors(color, fog->color, factor));
+}
+
 
 // typedef enum e_effect_state
 // {

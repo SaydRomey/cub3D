@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:23:57 by olivierroy        #+#    #+#             */
-/*   Updated: 2024/04/29 13:59:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:23:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_line	get_stripe_data(float divider, int center, int limit)
 	return (line);
 }
 
-float	rot_matrix(t_fpoint a, t_fpoint b) //? can this be generic or usefull elsewhere ?
+float	rot_matrix(t_fpoint a, t_fpoint b)
 {
 	return (a.x * b.y - b.x * a.y);
 }

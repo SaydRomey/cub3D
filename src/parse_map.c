@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 15:17:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:19:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,11 @@ static bool	check_contour(const char *line, int i)
 		walkable = "03NSEW";
 	else
 		walkable = "0NSEW";
-	
 	current = line[i];
 	prev = '\0';
 	if (i > 0)
 		prev = line[i - 1];
 	next = line[i + 1];
-
 	if (current == '0')
 		return ((prev == '1' || ft_strchr(walkable, prev)) \
 		&& (next == '1' || ft_strchr(walkable, next)));

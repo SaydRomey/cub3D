@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:32:23 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 17:34:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:30:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	radar_interference(mlx_image_t *img, t_fpoint origin, int radius)
 		while (j < radius * 2)
 		{
 			color = interference_pixel();
-			// color = random_pixel(42);
-			// color = random_pixel(142);
 			current_point.x = origin.x - radius + j;
 			current_point.y = origin.y - radius + i;
 			if (is_in_circle(current_point, center, radius))

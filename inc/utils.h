@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 13:57:17 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:41:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ enum e_map_elem
 	ELEVATOR = 3,
 };
 
-enum wall_id
+enum e_wall_id
 {
 	NO,
 	SO,
@@ -62,13 +62,13 @@ enum wall_id
 	WE
 };
 
-enum color_id
+enum e_color_id
 {
 	FLOOR,
 	CEILING
 };
 
-enum rgb_id
+enum e_rgb_id
 {
 	R,
 	G,
@@ -78,13 +78,13 @@ enum rgb_id
 // utils_img.c
 mlx_image_t	*new_img(mlx_t *mlx, t_u32 width, t_u32 height, bool visible);
 mlx_image_t	*copy_img(mlx_image_t *src, mlx_t *mlx);
-mlx_image_t *load_png(char *filepath, mlx_t *mlx);
+mlx_image_t	*load_png(char *filepath, mlx_t *mlx);
 void		clear_img(mlx_image_t *img);
 void		move_img(mlx_image_t *img, int x, int y);
 
 // utils.c
-int		cardinal_to_radian(char cardinal);
-void	toggle(bool *choice);
-void	change_window_title(char *filepath);
+int			cardinal_to_radian(char cardinal);
+void		toggle(bool *choice);
+void		change_window_title(char *filepath);
 
 #endif // UTILS_H

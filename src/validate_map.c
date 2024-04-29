@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:57:06 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 18:04:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:33:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static bool	check_vertical(int **map_array, int y, int x)
 	if (current == 0)
 	{
 		return (up >= current && down >= current);
-	}	
+	}
 	else if (current == -1)
 	{
 		return ((up == current || up == 1 || up == -2) \

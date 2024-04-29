@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 14:05:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:35:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ typedef struct s_info
 */
 typedef struct s_cub
 {
-	mlx_t       *mlx;
-	mlx_image_t *img;
+	mlx_t		*mlx;
+	mlx_image_t	*img;
 	mlx_image_t	*radar_img;
 	t_list		*levels;
 	int			current_level;
@@ -77,15 +77,15 @@ typedef struct s_cub
 	t_raycast	raycast;
 	t_vfx		vfx;
 	char		*floor_ceiling_default[COLOR_TYPE_LEN];
-	mlx_image_t	*user_img; //to cleanup ?
-}   			t_cub;
+	mlx_image_t	*user_img;
+}				t_cub;
 
 /* ************************************************************************** */
 
 // info.c
 t_info	*call_info(void);
 void	free_info(void);
-bool    there_is_a_problem(void);
+bool	there_is_a_problem(void);
 void	reset_info(void);
 
 // main.c

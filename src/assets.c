@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:53:13 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 14:03:19 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:09:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,9 @@ void	update_assets(void *param)
 	cub = (t_cub *)param;
 	current = get_level(cub->current_level);
 	if (current->assets)
-	if (current->assets)
 	{
 		i = 0;
 		while (i < current->assets_total)
-		{
-			if (current->assets[i].is_animated)
-			{
-				update_animation(&current->assets[i].anim, GO_RIGHT);
-				idx = current->assets[i].anim.current_frame;
-				current->assets[i].tex = current->assets[i].anim.frames[idx];
-			}
 		{
 			if (current->assets[i].is_animated)
 			{
@@ -95,10 +87,8 @@ static void	get_assets_pos(t_map *map, t_fpoint pos[SPRITE_MAX], int *total)
 	*total = 0;
 	y = 0;
 	while (y < map->height)
-	while (y < map->height)
 	{
 		x = 0;
-		while (x < map->width)
 		while (x < map->width)
 		{
 			if (*total >= SPRITE_MAX)
@@ -106,13 +96,7 @@ static void	get_assets_pos(t_map *map, t_fpoint pos[SPRITE_MAX], int *total)
 			if (map->map_array[y][x] == 0
 				&& !is_near_elevator(map, x, y)
 				&& ft_rand(0, 5) == 3)
-			if (*total >= SPRITE_MAX)
-				return ;
-			if (map->map_array[y][x] == 0
-				&& !is_near_elevator(map, x, y)
-				&& ft_rand(0, 5) == 3)
 			{
-				pos[*total] = (t_fpoint){x + 0.5, y + 0.5};
 				pos[*total] = (t_fpoint){x + 0.5, y + 0.5};
 				(*total)++;
 			}
@@ -132,7 +116,6 @@ t_asset	*init_assets(char *texture_path, void *param, int slice_total)
 	t_fpoint	pos[SPRITE_MAX];
 	t_asset		*assets;
 	int			assets_total;
-	int			assets_total;
 	int			i;
 
 	current_lvl = (t_level *)param;
@@ -147,15 +130,8 @@ t_asset	*init_assets(char *texture_path, void *param, int slice_total)
 		if (slice_total > 1)
 			assets[i].is_animated = true;
 		assets[i].pos = pos[i];
-	assets_total = current_lvl->assets_total;
-	while (i < assets_total)
-	{
-		if (slice_total > 1)
-			assets[i].is_animated = true;
-		assets[i].pos = pos[i];
 		i++;
 	}
-	set_anim_and_tex(assets, assets_total, texture_path, slice_total);
 	set_anim_and_tex(assets, assets_total, texture_path, slice_total);
 	return (assets);
 }

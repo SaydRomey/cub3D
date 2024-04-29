@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_elevator.c                                :+:      :+:    :+:   */
+/*   elevator_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/13 10:59:43 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 17:56:00 by cdumais          ###   ########.fr       */
+/*   Created: 2024/04/29 15:27:01 by cdumais           #+#    #+#             */
+/*   Updated: 2024/04/29 15:28:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,34 +106,4 @@ int	get_elevator_orientation(int **map, t_point *position)
 	else if (check_west(map, y, x))
 		return (cardinal_to_radian('W'));
 	return (-1);
-}
-
-/* ************************************************************************** */
-/* ************************************************************************** */
-
-void	get_elevator_info(t_level *lvl, t_map *map)
-{
-	t_point	*pos;
-
-	pos = &lvl->elevator_position;
-	lvl->elevator_exists = find_value_in_array(map, ELEVATOR, pos);
-	if (lvl->elevator_exists)
-		lvl->elevator_orientation = \
-	get_elevator_orientation(map->map_array, pos);
-}
-
-/* ************************************************************************** */
-/* ************************************************************************** */
-
-bool	valid_elevator(int **map, int y, int x) //is this used ?
-{
-	if (check_north(map, y, x))
-		return (true);
-	if (check_south(map, y, x))
-		return (true);
-	if (check_east(map, y, x))
-		return (true);
-	if (check_west(map, y, x))
-		return (true);
-	return (false);
 }

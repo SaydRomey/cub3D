@@ -1,7 +1,7 @@
-NO ./img/north.png
-SO ./img/south.png
-WE ./img/west.png
-EA ./img/east.png
+NO ./img/symbols/north.png
+SO ./img/symbols/south.png
+WE ./img/symbols/west.png
+EA ./img/symbols/east.png
 
 F 142,136,73
 C 109,192,195

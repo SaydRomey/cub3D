@@ -6,7 +6,7 @@
 #    By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/04/24 18:43:00 by oroy             ###   ########.fr        #
+#    Updated: 2024/04/29 20:59:59 by oroy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@
 AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
 MAP			:= map/test.cub
-MAPS_BONUS	:= map/bonus/test.cub map/bonus/test1.cub map/bonus/test2.cub map/bonus/test3.cub
+MAPS_BONUS	:= map/bonus/kitchen.cub map/bonus/castle.cub map/bonus/water.cub map/bonus/fire.cub map/bonus/futuristic.cub map/bonus/forest.cub
 
 CFG_DIR		:= .cfg
 IMG_DIR		:= img
@@ -52,8 +52,8 @@ TMP_DIR		:= tmp
 WAV_DIR		:= wav
 
 COMPILE		:= gcc
-# C_FLAGS		:= -Wall -Wextra -Werror -Ofast -flto
-C_FLAGS		:= -Wall -Wextra -Werror -g
+C_FLAGS		:= -Wall -Wextra -Werror -Ofast -flto
+# C_FLAGS		:= -Wall -Wextra -Werror -g
 L_FLAGS		:= 
 HEADERS		:= -I$(INC_DIR)
 

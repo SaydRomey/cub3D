@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:18:05 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 18:28:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 21:33:41 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,16 @@ mlx_image_t	*load_png(char *filepath, mlx_t *mlx)
 
 	texture = mlx_load_png(filepath);
 	if (!texture)
+	{
+		ft_printf("%s\n", filepath);
 		error_mlx();
+	}
 	img = mlx_texture_to_image(mlx, texture);
 	if (!img)
+	{
+		ft_printf("%s\n", filepath);	
 		error_mlx();
+	}
 	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
 		error_mlx();
 	img->instances->enabled = false;

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:45:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:43:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	keyhooks(mlx_key_data_t data, void *param)
 
 /* **in this function we can associate keys to booleans in various structs *!!
 
-	**!adjust so it starts differently in BONUS and also starts with round
 */
 void	update_controls(void *param)
 {
@@ -94,10 +93,10 @@ void	update_controls(void *param)
 	lvl = get_level(cub->current_level);
 	if (lvl)
 	{
-		lvl->mini.img->instances->enabled = (keys->m && !keys->r);
-		lvl->mini.highlight_player_pos = (keys->m && keys->p);
+		lvl->mini.img->instances->enabled = (keys->m);
+		lvl->mini.highlight_player_pos = (keys->m);
 	}
-	cub->radar_img->instances->enabled = (keys->m && keys->r);
+	cub->radar_img->instances->enabled = (!keys->m);
 	cub->player.speedup = keys->leftshift;
 	cub->vfx.textures_enabled = !keys->one;
 	cub->vfx.shadow_enabled = keys->two;

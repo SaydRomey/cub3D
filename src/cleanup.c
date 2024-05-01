@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 14:26:08 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 16:41:14 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,19 @@ void	cleanup_scene(t_scene *scene)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	while (++i < WALL_TEXTURE_LEN)
 	{
 		if (scene->wall_textures[i])
 			free(scene->wall_textures[i]);
 	}
-	i = 0;
+	i = -1;
 	while (++i < COLOR_TYPE_LEN)
 	{
 		if (scene->floor_ceiling_textures[i])
 			free(scene->floor_ceiling_textures[i]);
 	}
-	i = 0;
+	i = -1;
 	while (++i < RGB_LEN)
 	{
 		if (scene->colors[FLOOR][i])

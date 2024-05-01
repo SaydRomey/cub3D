@@ -6,28 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/30 21:33:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 14:56:49 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-t_minideco	minimap_deco(t_map *map)
-{
-	t_minideco	deco;
-
-	ft_memset(&deco, 0, sizeof(t_minideco));
-	deco.colors[WALKABLE] = average_color(map->floor_ceiling_img[FLOOR]);
-	deco.colors[WALL] = average_color(map->wall_textures_img[NO]);
-	deco.colors[DOOR] = complement_color(deco.colors[WALKABLE]);
-	deco.colors[ELEVATOR] = complement_color(deco.colors[WALL]);
-	deco.radar_frame = RADAR_FRAME_COL; //connect this later maybe ?
-	
-	return (deco);
-}
-
-
-/* ************************************************************************** */
 
 static void	adjust_tile_size(t_minimap *mini, t_map *map, int margin_tiles)
 {
@@ -84,6 +67,6 @@ t_minimap	init_minimap(t_map *map)
 	adjust_tile_size(&mini, map, 2);
 	mini.center = find_center(&mini);
 	mini.offset = find_offset(&mini, map);
-	mini.deco = minimap_deco(map);
+	set_minimap_colors(map, mini.colors);
 	return (mini);
 }

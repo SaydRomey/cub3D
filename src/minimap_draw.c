@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:11:30 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/30 21:33:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:24:44 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,40 +25,16 @@ static int	tile_color(t_minimap *mini, t_map *map, int y, int x)
 	if (value < 0)
 		return (MINI_VOID_COL);
 	else if (value == 0)
-		return (mini->deco.colors[WALKABLE]);
+		return (mini->colors[WALKABLE]);
 	else if (value == 1)
-		return (mini->deco.colors[WALL]);
+		return (mini->colors[WALL]);
 	else if (value == 2)
-		return (mini->deco.colors[DOOR]);
+		return (mini->colors[DOOR]);
 	else if (value == 3)
-		return (mini->deco.colors[ELEVATOR]);
+		return (mini->colors[ELEVATOR]);
 	else
 		return (HEX_RED);
 }
-
-
-// static int	tile_color(t_minimap *mini, t_map *map, int y, int x)
-// {
-// 	int			value;
-// 	t_player	*player;
-
-// 	value = map->map_array[y][x];
-// 	player = &call_cub()->player;
-// 	if (x == (int)player->position.x && y == (int)player->position.y && mini->highlight_player_pos)
-// 		return (player->color);
-// 	if (value < 0)
-// 		return (MINI_VOID_COL);
-// 	else if (value == 0)
-// 		return (MINI_WALK_COL);
-// 	else if (value == 1)
-// 		return (MINI_WALL_COL);
-// 	else if (value == 2)
-// 		return (MINI_DOOR_COL);
-// 	else if (value == 3)
-// 		return (MINI_ELEV_COL);
-// 	else
-// 		return (HEX_RED);
-// }
 
 static void	draw_tile(mlx_image_t *img, t_point origin, t_point size, int color)
 {
@@ -124,9 +100,11 @@ draws a full size minimap once,
 */
 void	draw_minimap(t_minimap *mini, t_map *map)
 {
-	t_point	start;
-	t_point	end;
+	t_player	*player;
+	t_point		start;
+	t_point		end;
 
+	player = &call_cub()->player;
 	clear_img(mini->img);
 	calculate_bounds(mini, map, &start, &end);
 	draw_tiles(mini, map, start, end);

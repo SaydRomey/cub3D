@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:31:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:33:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 17:04:55 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_player	warp_player(t_player old_player, \
 	}
 	player.position.x = next_lvl->elevator_position.x + pos.x;
 	player.position.y = next_lvl->elevator_position.y + pos.y;
+	player.color = complement_color(next_lvl->mini.colors[WALKABLE]);
 	return (player);
 }
 

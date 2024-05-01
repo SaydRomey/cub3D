@@ -6,44 +6,11 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:02:20 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:43:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-t_triangle	init_player_icon(t_player *player, t_fpoint center)
-{
-	t_triangle	t;
-
-	t.half_base = player->size * tan(degree_to_radian(PLAYER_ICON_ANGLE));
-	t.height = player->size * (sqrt(3) / 2);
-	t.centroid.x = center.x - player->delta.x * (t.height / 3);
-	t.centroid.y = center.y - player->delta.y * (t.height / 3);
-	t.front.x = t.centroid.x + player->delta.x * player->size;
-	t.front.y = t.centroid.y + player->delta.y * player->size;
-	t.left.x = t.centroid.x - player->delta.y * t.half_base;
-	t.left.y = t.centroid.y + player->delta.x * t.half_base;
-	t.right.x = t.centroid.x + player->delta.y * t.half_base;
-	t.right.y = t.centroid.y - player->delta.x * t.half_base;
-	t.base_center.x = (t.left.x + t.right.x) / 2;
-	t.base_center.y = (t.left.y + t.right.y) / 2;
-	return (t);
-}
-
-void	draw_player(mlx_image_t *img, t_player *player, t_fpoint center)
-{
-	t_triangle	t;
-
-	t = init_player_icon(player, center);
-	if (!call_cub()->keys.p)
-	{
-		draw_line(img, t.base_center, t.front, HEX_RED);
-		draw_triangle_hollow(img, &t, 8, player->color);
-	}
-}
-
-/* ************************************************************************** */
 
 static t_radar	init_radar(t_minimap *mini)
 {
@@ -87,6 +54,8 @@ static void	draw_visible_minimap(t_minimap *mini, t_radar r)
 			if (is_in_circle((t_fpoint){x, y}, r.center, r.radius))
 			{
 				color = get_pixel(mini->img, map_pixel.x, map_pixel.y);
+				if (get_alpha(color) != 255)
+					color = RADAR_BG_COL;
 				draw_pixel(r.img, x, y, color);
 			}
 			x++;
@@ -110,10 +79,6 @@ void	draw_radar(t_minimap *mini)
 	else
 	{
 		draw_visible_minimap(mini, radar);
-		draw_player(radar.img, player, radar.center);
 	}
-	draw_circle_hollow(radar.img, \
-	(t_circle){radar.center, radar.radius + 10, HEX_BLACK}, 20);
-	draw_circle_hollow(radar.img, \
-	(t_circle){radar.center, radar.radius + 5, RADAR_FRAME_COL}, 10);
+	draw_radar_frame(&radar);
 }

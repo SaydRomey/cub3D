@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:47:00 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/30 20:23:53 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 18:05:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 */
 # define HEX_BLACK		0x000000FF
 # define HEX_GRAY		0x424242FF
+# define HEX_LGRAY		0xBEBBB8FF
 # define HEX_DGRAY		0x2A2A2AFF
 # define HEX_WHITE		0xFFFFFFFF
 # define HEX_RED		0xFF0000FF
@@ -44,8 +45,14 @@
 # define HEX_GROUND		0x8E8849FF
 # define HEX_SKY		0x6DC0C3FF
 
-// color.c
-int		average_color(mlx_image_t *img);
+// pixel_color_utils.c
+void	add_color_totals(int *totals, int color);
+void	process_pixels(mlx_image_t *img, int *totals, int *count);
+void	compute_averages(int *totals, int count, int *averages);
+
+// pixel_colors.c
+int		average_img_color(mlx_image_t *img);
+int		average_color(int *colors, int n);
 int		complement_color(int color);
 
 // pixel_utils.c

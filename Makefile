@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/04/29 17:47:54 by cdumais          ###   ########.fr        #
+#    Updated: 2024/05/01 15:46:38 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,6 +106,9 @@ C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
 INIT_CHECK	:= $(LIB_DIR)/.init_check
 INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
 # **************************************************************************** #
+# PIC_CHECK	:= ./$(IMG_DIR)/.pic_check
+# PIC			:= $(if $(wildcard $(PIC_CHECK)),,eval_pic)
+# **************************************************************************** #
 # --------------------------------- H FILES ---------------------------------- #
 # **************************************************************************** #
 # INC		:= 
@@ -128,6 +131,7 @@ OBJS	:=	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # **************************************************************************** #
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
+# all: $(INIT) $(PIC) $(NAME)
 all: $(INIT) $(NAME)
 
 $(NAME): $(MLX42) $(LIBFT) $(OBJS) $(INCS)
@@ -562,6 +566,8 @@ sound:
 
 .PHONY: sound
 # **************************************************************************** #
+# **************************************************************************** #
+# **************************************************************************** #
 
 # TOCHECK: using evaluator image in sgoinfre
 # (mac only)
@@ -596,3 +602,100 @@ convert:
 # maybe change the file name to a generic one, to be called in cub3D ..?
 
 .PHONY: user_picture
+
+# **************************************************************************** #
+# **************************************************************************** #
+# **************************************************************************** #
+SGOINFRE := ~/sgoinfre/photos_etudiants/*/*
+PROFILE_PIC := $(shell whoami).JPG
+DESTINATION := ./$(shell whoami)_profile_copy.JPG
+PNG_DESTINATION := ./img/evaluator.png
+
+eval_pic: $(PIC_CHECK)
+
+$(PIC_CHECK):
+	@if [ ! -f $(PIC_CHECK) ]; then \
+		echo "Searching for $(PROFILE_PIC) in $(SGOINFRE)..."; \
+		FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC) | head -n 1); \
+		if [ -z "$$FILE_PATH" ]; then \
+			echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
+			exit 1; \
+		else \
+			echo "Found file at $$FILE_PATH"; \
+			cp "$$FILE_PATH" $(DESTINATION); \
+			echo "File copied to $(DESTINATION)"; \
+		fi; \
+	fi
+	@if [ ! -f $(PIC_CHECK) ]; then \
+		echo "Converting $(DESTINATION) to PNG format..."; \
+		sips -s format png $(DESTINATION) --out $(PNG_DESTINATION); \
+		if [ $$? -ne 0 ]; then \
+			echo "Error: Conversion failed."; \
+			exit 1; \
+		else \
+			echo "Conversion successful. PNG file saved to $(PNG_DESTINATION)"; \
+			echo "Deleting original JPEG file..."; \
+			rm $(DESTINATION); \
+			echo "JPEG file deleted."; \
+		fi; \
+	fi	
+	@touch $(PIC_CHECK)
+
+# find_copy_profile_pic:
+# 	@echo "Searching for $(PROFILE_PIC) in $(SGOINFRE)..."
+# 	@FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC) | head -n 1); \
+# 	if [ -z "$$FILE_PATH" ]; then \
+# 		echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
+# 		exit 1; \
+# 	else \
+# 		echo "Found file at $$FILE_PATH"; \
+# 		cp "$$FILE_PATH" $(DESTINATION); \
+# 		echo "File copied to $(DESTINATION)"; \
+# 	fi
+
+# convert_to_png:
+# 	@echo "Converting $(DESTINATION) to PNG format..."
+# 	@sips -s format png $(DESTINATION) --out $(PNG_DESTINATION); \
+# 	if [ $$? -ne 0 ]; then \
+# 		echo "Error: Conversion failed."; \
+# 		exit 1; \
+# 	else \
+# 		echo "Conversion successful. PNG file saved to $(PNG_DESTINATION)"; \
+# 		echo "Deleting original JPEG file..."; \
+# 		rm $(DESTINATION); \
+# 		echo "JPEG file deleted."; \
+# 	fi
+
+# find_copy_profile_pic:
+# 	@if [ ! -f $(PIC_CHECK) ]; then \
+# 		echo "Searching for $(PROFILE_PIC) in $(SGOINFRE)..."; \
+# 		FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC) | head -n 1); \
+# 		if [ -z "$$FILE_PATH" ]; then \
+# 			echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
+# 			exit 1; \
+# 		else \
+# 			echo "Found file at $$FILE_PATH"; \
+# 			cp "$$FILE_PATH" $(DESTINATION); \
+# 			echo "File copied to $(DESTINATION)"; \
+# 		fi; \
+# 	fi
+
+# convert_to_png:
+# 	@if [ ! -f $(PIC_CHECK) ]; then \
+# 		echo "Converting $(DESTINATION) to PNG format..."; \
+# 		sips -s format png $(DESTINATION) --out $(PNG_DESTINATION); \
+# 		if [ $$? -ne 0 ]; then \
+# 			echo "Error: Conversion failed."; \
+# 			exit 1; \
+# 		else \
+# 			echo "Conversion successful. PNG file saved to $(PNG_DESTINATION)"; \
+# 			echo "Deleting original JPEG file..."; \
+# 			rm $(DESTINATION); \
+# 			echo "JPEG file deleted."; \
+# 		fi; \
+# 	fi
+
+# evaluator_picture: find_copy_profile_pic convert_to_png
+# 	@touch $(PIC_CHECK)
+
+# .PHONY: find_copy_profile_pic convert_to_png evaluator_picture

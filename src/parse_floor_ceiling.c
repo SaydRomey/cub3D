@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/18 17:58:37 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 14:45:16 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static void	split_rgb(int id, char *line, t_scene *scene)
 		if (split[i] == NULL)
 		{
 			set_error("Missing color component");
-			break ;
+			free_split(split);
+			return ;
 		}
 		scene->colors[id][i] = ft_strtrim(split[i], " ");
 		i++;

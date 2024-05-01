@@ -6,13 +6,13 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:14:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 16:03:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 18:59:05 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_player	init_player(t_map *map)
+t_player	init_player(t_map *map, t_minimap *mini)
 {
 	t_player	player;
 
@@ -27,7 +27,7 @@ t_player	init_player(t_map *map)
 	player.cam_plane.x = -player.delta.y * player.fov;
 	player.cam_plane.y = player.delta.x * player.fov;
 	player.size = PLAYER_SIZE;
-	player.color = PLAYER_COLOR;
+	player.color = complement_color(mini->colors[WALKABLE]);
 	return (player);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 19:10:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:23:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,10 @@ void	update(void *ptr)
 	lvl = get_level(cub->current_level);
 	if (lvl)
 	{
+		draw_floor_ceiling(cub->img, &lvl->map); //should we only redraw if we changed level ?
 		draw_minimap(&lvl->mini, &lvl->map);
+		draw_player(&lvl->mini, &cub->player);
 		draw_radar(&lvl->mini);
-		draw_floor_ceiling(cub->img, &lvl->map);
 	}
 	raycast();
 }
@@ -108,7 +109,7 @@ int	main(int argc, char **argv)
 	{
 		lvl = get_level(cub->current_level);
 		cub->elevator = init_elevator(lvl);
-		cub->player = init_player(&lvl->map);
+		cub->player = init_player(&lvl->map, &lvl->mini);
 		change_window_title(lvl->filepath);
 		draw_minimap(&lvl->mini, &lvl->map);
 		draw_floor_ceiling(cub->img, &lvl->map);

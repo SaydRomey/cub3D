@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:41:05 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/30 20:06:41 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,12 @@ enum e_color_id
 	CEILING
 };
 
-enum e_rgb_id
+enum e_rgba_id
 {
 	R,
 	G,
-	B
+	B,
+	A
 };
 
 // utils_img.c

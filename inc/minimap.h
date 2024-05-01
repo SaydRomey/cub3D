@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:37:51 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 17:50:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/30 20:51:33 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,17 @@
 # define RADAR_SIZE			300
 # define RADAR_MARGIN		20
 # define RADAR_FRAME_COL	0x887251FF
+
+typedef struct s_minideco
+{
+	int	colors[4];
+	// int	walkable;
+	// int	wall;
+	// int	door;
+	// int	elevator;
+	int	radar_frame;
+	// int	background;
+}		t_minideco;
 
 /*
 */
@@ -52,6 +63,7 @@ typedef struct s_minimap
 	int			half_width;
 	int			half_height;
 	t_point		offset;
+	t_minideco	deco;
 }				t_minimap;
 
 // minimap_draw.c

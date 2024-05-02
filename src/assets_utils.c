@@ -6,11 +6,20 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 20:39:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 17:42:47 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 00:09:49 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	cleanup_asset(t_asset *asset)
+{
+	if (asset->is_animated)
+	{
+		free_animation(&asset->anim);
+	}
+	free(asset);
+}
 
 void	asset_pixel(mlx_image_t *img, int x, int y, int color)
 {

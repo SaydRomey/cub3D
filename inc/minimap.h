@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:37:51 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 19:39:43 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 21:04:49 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define RADAR_SIZE			300
 # define RADAR_MARGIN		20
 # define RADAR_FRAME_COL	0x887251FF
-# define RADAR_BG_COL		0x000000FF //
+# define RADAR_BG_COL		0x000000FF
 
 typedef struct s_radar
 {

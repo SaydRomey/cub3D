@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 19:03:07 by oroy              #+#    #+#             */
-/*   Updated: 2024/05/01 19:34:59 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 03:15:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,11 @@ void	draw_player(t_minimap *mini, t_player *player)
 {
 	t_triangle	t;
 	t_fpoint	offset;
-	
+
 	offset.x = player->position.x * mini->tile_size + mini->offset.x;
 	offset.y = player->position.y * mini->tile_size + mini->offset.y;
 	t = init_player_icon(player, offset);
+	
 	if (!mini->highlight_player_pos)
 	{
 		draw_line(mini->img, t.base_center, t.front, HEX_BLACK);

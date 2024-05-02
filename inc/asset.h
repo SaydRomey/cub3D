@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:34:28 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 18:54:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 21:44:06 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "map.h"
 
 # define SPRITE_MAX	32
+
+# define A_FLAMES_PATH	"img/assets/flames.png"
 
 /*
 */
@@ -36,6 +38,7 @@ typedef struct s_asset
 }				t_asset;
 
 // assets_utils.c
+void	cleanup_asset(t_asset *asset);
 void	asset_pixel(mlx_image_t *img, int x, int y, int color);
 bool	is_near_elevator(t_map *map, int x, int y);
 

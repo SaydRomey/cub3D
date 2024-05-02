@@ -1,7 +1,7 @@
-NO ./img/eagle.png
-SO ./img/pikachu.png
-WE ./img/wood.png
-EA ./img/bluestone.png
+NO ./img/wolf/eagle.png
+SO ./img/pokemon/pikachu.png
+WE ./img/wolf/wood.png
+EA ./img/wolf/bluestone.png
 
 F 142,136,73
 C 109,192,195

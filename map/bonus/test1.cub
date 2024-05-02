@@ -1,9 +1,9 @@
-NO ./img/paint_wall.png
-SO ./img/window.png
-WE ./img/brick_wall.png
-EA ./img/lockers.png
+NO ./img/school/paint_wall.png
+SO ./img/school/window.png
+WE ./img/school/brick_wall.png
+EA ./img/school/lockers.png
 
-CE ./img/window.png
+CE ./img/school/window.png
 
 F 142,136,73
 C 109,192,195

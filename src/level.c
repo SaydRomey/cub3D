@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 22:21:17 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:32:14 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 21:50:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	delete_level(void *level)
 	if (lvl)
 	{
 		cleanup_map(&lvl->map);
+		if (lvl->is_segworld || lvl->assets)
+			cleanup_asset(lvl->assets);
 		mlx_delete_image(call_cub()->mlx, lvl->mini.img);
 		free(lvl);
 	}

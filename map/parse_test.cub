@@ -5,9 +5,9 @@
 
 
 
-        EA img/east.png         
+        EA img/symbols/east.png         
 
-NO img/north.png
+NO img/symbols/north.png
 
 
 
@@ -17,8 +17,8 @@ NO img/north.png
 
 
 
-SO img/south.png
-                        WE img/west.png
+SO img/symbols/south.png
+                        WE img/symbols/west.png
 
 C 255,          255,255
 

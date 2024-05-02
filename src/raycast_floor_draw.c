@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:43:59 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 19:07:55 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 23:11:02 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,11 @@ static void	draw_row_pixel(t_texture tex[2], float distance, int x, int y)
 	cub = call_cub();
 	color[0] = get_pixel(tex[0].to_draw, tex[0].pixel.x, tex[0].pixel.y);
 	color[1] = get_pixel(tex[1].to_draw, tex[1].pixel.x, tex[1].pixel.y);
+	if (!cub->vfx.textures_enabled)
+	{
+		color[0] = get_map(cub->current_level)->floor_color;
+		color[1] = get_map(cub->current_level)->ceiling_color;
+	}
 	if (cub->vfx.shadow_enabled)
 	{
 		color[0] = shadow_effect(color[0], distance, 0.0f, 3.0f);

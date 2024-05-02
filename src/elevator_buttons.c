@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   elevator_buttons.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:34:36 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 15:04:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/30 15:49:57 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static t_button	new_button(t_point pos)
 
 	mlx = call_cub()->mlx;
 	ft_memset(&button, 0, sizeof(t_button));
-	button.button_imgs[OFF] = load_png("img/elevator_btn_off.png", mlx);
-	button.button_imgs[ON] = load_png("img/elevator_btn_on.png", mlx);
+	button.button_imgs[OFF] = load_png(E_BTN_OFF_PATH, mlx);
+	button.button_imgs[ON] = load_png(E_BTN_ON_PATH, mlx);
 	button.button_imgs[OFF]->instances->x = pos.x;
 	button.button_imgs[OFF]->instances->y = pos.y;
 	button.button_imgs[ON]->instances->x = pos.x;

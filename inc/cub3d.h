@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:35:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 22:56:16 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@
 #  define MAP_CHARS	"0123NSEW"
 # endif // BONUS
 
+# define CUB_FLOOR_PATH		"img/school/checker.png"
+# define CUB_CEILING_PATH	"img/school/light.png"
+# define CUB_EVALUATOR_PATH	"img/evaluator.png"
+# define CUB_MENU_PATH		"img/ui/menu.png"
+
 /* ************************************************************************** */
 
 /*
@@ -78,6 +83,7 @@ typedef struct s_cub
 	t_vfx		vfx;
 	char		*floor_ceiling_default[COLOR_TYPE_LEN];
 	mlx_image_t	*user_img;
+	mlx_image_t	*menu_img;
 }				t_cub;
 
 /* ************************************************************************** */

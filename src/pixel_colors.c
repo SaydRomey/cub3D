@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 20:05:30 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 18:04:48 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 00:21:18 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 int	average_img_color(mlx_image_t *img)
 {
-	int	totals[4] = {0, 0, 0, 0};
+	int	totals[4];
 	int	averages[4];
 	int	count;
 
+	totals[R] = 0;
+	totals[G] = 0;
+	totals[B] = 0;
+	totals[A] = 0;
 	count = 0;
 	process_pixels(img, totals, &count);
 	compute_averages(totals, count, averages);
@@ -26,10 +30,14 @@ int	average_img_color(mlx_image_t *img)
 
 int	average_color(int *colors, int n)
 {
-	int	totals[4] = {0, 0, 0, 0};
+	int	totals[4];
 	int	averages[4];
 	int	i;
-	
+
+	totals[R] = 0;
+	totals[G] = 0;
+	totals[B] = 0;
+	totals[A] = 0;
 	i = 0;
 	while (i < n)
 	{

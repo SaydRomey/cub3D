@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:33:35 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 18:29:43 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 03:15:18 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "MLX42.h"
 # include "utils.h"
 # include "libft.h"
+# include "map.h"
 # include "parsing.h"
 
 typedef struct s_map

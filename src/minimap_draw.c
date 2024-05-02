@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:11:30 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 19:24:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 00:12:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,18 +93,11 @@ t_point *start, t_point *end)
 	end->y = ft_min(map->height, mini->center.y + half_height + 1);
 }
 
-/*
-draws a full size minimap once,
-** will serve as a reference for radar minimap
-
-*/
 void	draw_minimap(t_minimap *mini, t_map *map)
 {
-	t_player	*player;
 	t_point		start;
 	t_point		end;
 
-	player = &call_cub()->player;
 	clear_img(mini->img);
 	calculate_bounds(mini, map, &start, &end);
 	draw_tiles(mini, map, start, end);

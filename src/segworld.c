@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 20:14:16 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 11:43:45 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,17 @@ static t_map	init_segworld_map(mlx_t *mlx)
 	map.width = 8;
 	map.map_array = allocate_grid(map.height, map.width);
 	fill_segworld_array(&map);
-	map.wall_textures_img[NO] = load_png("img/segworld_1.png", mlx);
-	map.wall_textures_img[SO] = load_png("img/segworld_2.png", mlx);
-	map.wall_textures_img[EA] = load_png("img/segworld_3.png", mlx);
-	map.wall_textures_img[WE] = load_png("img/segworld_4.png", mlx);
+	map.wall_textures_img[NO] = load_png(SW_1_PATH, mlx);
+	map.wall_textures_img[SO] = load_png(SW_2_PATH, mlx);
+	map.wall_textures_img[EA] = load_png(SW_3_PATH, mlx);
+	map.wall_textures_img[WE] = load_png(SW_4_PATH, mlx);
 	return (map);
 }
 
 void	replace_with_segworld(t_level *next_lvl)
 {
-	t_cub	*cub;
 	t_level	*segworld;
 
-	cub = call_cub();
 	segworld = next_lvl;
 	segworld->filepath = "segworld";
 	cleanup_map(&segworld->map);
@@ -98,5 +96,5 @@ void	replace_with_segworld(t_level *next_lvl)
 	segworld->elevator_orientation = cardinal_to_radian('S');
 	set_segworld_elevator(segworld, segworld->elevator_position);
 	segworld->is_segworld = true;
-	segworld->assets = init_assets("img/flames.png", segworld, 8);
+	segworld->assets = init_assets(A_FLAMES_PATH, segworld, 8);
 }

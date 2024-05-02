@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 12:44:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 20:15:32 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 22:29:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,6 @@ void	error(void)
 
 /*
 mlx specific error function, uses 'mlx_errno' to identify error
-
-	** make sure this also frees other mlx allocated ressources
-	(like current images of t_cub when in init_elevator, etc.)
-
 */
 void	error_mlx(void)
 {

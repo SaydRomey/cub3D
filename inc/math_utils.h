@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:54:12 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:39:07 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 01:24:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_triangle
 {
 	float		half_base;
 	float		height;
-	t_point		centroid;
+	t_fpoint	centroid;
 	t_fpoint	front;
 	t_fpoint	left;
 	t_fpoint	right;
@@ -49,5 +49,6 @@ float	degree_to_radian(int degree);
 int		fix_angle(int angle);
 float	ft_lerp(float a, float b, float t);
 float	magnitude_between(t_fpoint a, t_fpoint b);
+t_fpoint	rotate_vector(t_fpoint vector, float angle);
 
 #endif // MATH_UTILS_H

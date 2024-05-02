@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:34:22 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:34:23 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 22:22:50 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ typedef struct s_slice
 	int			height;
 	t_point		position;
 }				t_slice;
+
+// animation_utils.c
+void		free_animation(t_animation *anim);
 
 // animation.c
 t_animation	set_animation(mlx_image_t *img, int slice_total);

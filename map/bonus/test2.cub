@@ -1,10 +1,10 @@
-NO ./img/forest.png
-SO ./img/forest.png
-WE ./img/forest.png
-EA ./img/forest.png
+NO ./img/forest/forest.png
+SO ./img/forest/forest.png
+WE ./img/forest/forest.png
+EA ./img/forest/forest.png
 
-FL ./img/forest_ground.png
-CE ./img/pokeball.png
+FL ./img/forest/forest_ground.png
+CE ./img/pokemon/pokeball.png
 
 F 142,136,73
 C 109,192,195

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:36:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 18:54:33 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 22:20:14 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,23 @@
 # include "map.h"
 
 # define BUTTON_SIZE 		64
-# define ELEVATOR_TEX_LEN	5
+# define ELEVATOR_TEX_LEN	3
 
-# define E_WALL_PATH		"img/elevator_wall.png"
-# define E_FLOOR_PATH		"img/elevator_floor.png"
-# define E_CEILING_PATH		"img/elevator_ceiling.png"
-# define E_DOOR_PATH		"img/elevator_door.png"
+# define E_WALL_PATH		"img/elevator/elevator_wall.png"
+# define E_FLOOR_PATH		"img/elevator/elevator_floor.png"
+# define E_CEILING_PATH		"img/elevator/elevator_ceiling.png"
+# define E_DOOR_PATH		"img/elevator/elevator_door.png"
+# define E_BTN_OFF_PATH		"img/elevator/elevator_btn_off.png"
+# define E_BTN_ON_PATH		"img/elevator/elevator_btn_on.png"
 
 # define CLOSE				0
 # define OPEN				1
 
-enum e_elevator_id //check this **!
+enum e_elevator_id
 {
 	E_WALL,
 	E_FLOOR,
 	E_CEILING,
-	E_BTN_OFF,
-	E_BTN_ON
 };
 
 typedef struct s_button

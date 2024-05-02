@@ -6,12 +6,20 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 22:31:13 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 11:42:29 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
+
+menu
+	adjust display_menu to adapt to img dimensions (margin)
+
+makefile
+	add the resize of the user_pic
+
+document my functions (ced)
 
 error
 	add string print in blue for parsing error ?

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:34:28 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 21:50:36 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 11:41:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "map.h"
 
 # define SPRITE_MAX	32
+
+# define A_FLAMES_PATH	"img/assets/flames.png"
 
 /*
 */

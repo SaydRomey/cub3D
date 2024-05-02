@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/30 20:06:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 22:59:32 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # define WALL_TEXTURE_LEN	4
 # define COLOR_TYPE_LEN 	2
 # define RGB_LEN			3
+
+# define MENU_SHOW			1080 - 540
+# define MENU_HIDE			1080 - 85
 
 typedef struct s_fpoint
 {
@@ -68,7 +71,7 @@ enum e_color_id
 	CEILING
 };
 
-enum e_rgba_id
+enum e_rgb_id
 {
 	R,
 	G,
@@ -87,5 +90,6 @@ void		move_img(mlx_image_t *img, int x, int y);
 int			cardinal_to_radian(char cardinal);
 void		toggle(bool *choice);
 void		change_window_title(char *filepath);
+void		display_menu(mlx_image_t *img);
 
 #endif // UTILS_H

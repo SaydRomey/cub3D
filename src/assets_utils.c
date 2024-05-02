@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 20:39:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/05/01 21:50:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 11:42:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,9 @@
 
 void	cleanup_asset(t_asset *asset)
 {
-	t_cub	*cub;
-	int		i;
-
-	cub = call_cub();
 	if (asset->is_animated)
 	{
-		i = 0;
-		while (i < asset->anim.last_frame - 1)
-		{
-			mlx_delete_image(cub->mlx, asset->anim.frames[i]);
-			free(asset->anim.frames[i]);
-			i++;
-		}
-		free(asset->anim.frames);
+		free_animation(&asset->anim);
 	}
 	free(asset);
 }

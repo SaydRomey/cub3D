@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 19:23:35 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 20:14:26 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_cub	*init_cub(char *title)
 	move_img(cub->radar_img, WIDTH - RADAR_SIZE - RADAR_MARGIN, RADAR_MARGIN);
 	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
 	cub->floor_ceiling_default[CEILING] = "img/light.png";
-	// cub->user_img = load_png("generic.png", cub->mlx);
+	cub->user_img = load_png("generic.png", cub->mlx);
 	return (cub);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 18:57:53 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:12:51 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 20:00:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 typedef struct s_vfx
 {
-	bool	textures_enabled; //add a separate flag for floor/celing ?
+	bool	textures_enabled;
 	bool	shadow_enabled;	
 }			t_vfx;
 

@@ -6,11 +6,31 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 20:39:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 17:42:47 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 21:50:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	cleanup_asset(t_asset *asset)
+{
+	t_cub	*cub;
+	int		i;
+
+	cub = call_cub();
+	if (asset->is_animated)
+	{
+		i = 0;
+		while (i < asset->anim.last_frame - 1)
+		{
+			mlx_delete_image(cub->mlx, asset->anim.frames[i]);
+			free(asset->anim.frames[i]);
+			i++;
+		}
+		free(asset->anim.frames);
+	}
+	free(asset);
+}
 
 void	asset_pixel(mlx_image_t *img, int x, int y, int color)
 {

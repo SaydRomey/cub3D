@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/05/01 15:46:38 by cdumais          ###   ########.fr        #
+#    Updated: 2024/05/02 12:49:02 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -569,133 +569,48 @@ sound:
 # **************************************************************************** #
 # **************************************************************************** #
 
-# TOCHECK: using evaluator image in sgoinfre
-# (mac only)
-# find ~/sgoinfre -name "$(whoami).JPG" -exec sh -c 'sips -s format png "$0" --out "$(pwd)/img/$(basename "$0" .JPG).png"' {} \;
-
-SGOINFRE	:= ~/sgoinfre/photos_etudiants/*/*
-PROFILE_PIC	:= $(shell whoami).JPG
-PICTURE		:= ./$(IMG_DIR)/username.png
-# PICTURE		:= ./$(IMG_DIR)/$(PROFILE_PIC:.JPG=.png)
-
-user_picture:
-	@echo "searching for $(PROFILE_PIC) in $(SGOINFRE)..."
-	@FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC)); \
-	if [ -z "$$FILE_PATH" ]; then \
-		echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
-		exit 1; \
-	else \
-		echo "Found file at $$FILE_PATH"; \
-	fi
-	@echo "Converting $$FILE_PATH to PNG..."
-	@sips -s format png "$$FILE_PATH" --out $(PICTURE); \
-	if [$$? -ne 0 ]; then \
-		echo "Error: Conversion failed."; \
-		exit 1; \
-	else \
-		echo "Conversion successful. File saved to $(PICTURE)"; \
-	fi
-
-convert:
-	@sips -s format png "./misc/$(shell whoami).JPG" --out generic.png
-
-# maybe change the file name to a generic one, to be called in cub3D ..?
-
-.PHONY: user_picture
-
-# **************************************************************************** #
-# **************************************************************************** #
-# **************************************************************************** #
-SGOINFRE := ~/sgoinfre/photos_etudiants/*/*
-PROFILE_PIC := $(shell whoami).JPG
-DESTINATION := ./$(shell whoami)_profile_copy.JPG
+SGOINFRE 		:= ~/sgoinfre/photos_etudiants/*/*
+PROFILE_PIC 	:= $(shell whoami).JPG
+DESTINATION 	:= ./$(shell whoami)_profile_copy.JPG
 PNG_DESTINATION := ./img/evaluator.png
+PIC_RESIZE		:= 256
 
 eval_pic: $(PIC_CHECK)
 
 $(PIC_CHECK):
 	@if [ ! -f $(PIC_CHECK) ]; then \
-		echo "Searching for $(PROFILE_PIC) in $(SGOINFRE)..."; \
+		echo "Searching for $(PURPLE)$(PROFILE_PIC)$(RESET) in $(CYAN)$(UNDERLINE)$(SGOINFRE)$(RESET)..."; \
 		FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC) | head -n 1); \
 		if [ -z "$$FILE_PATH" ]; then \
-			echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
+			echo "$(RED)Error$(RESET): File $(YELLOW)$(PROFILE_PIC)$(RESET) not found in $(CYAN)$(UNDERLINE)$(SGOINFRE)$(RESET)."; \
 			exit 1; \
 		else \
-			echo "Found file at $$FILE_PATH"; \
+			echo "Found file at $(CYAN)$(UNDERLINE)$$FILE_PATH$(RESET)"; \
 			cp "$$FILE_PATH" $(DESTINATION); \
-			echo "File copied to $(DESTINATION)"; \
+			echo "File copied to $(ORANGE)$(DESTINATION)$(RESET)"; \
 		fi; \
 	fi
 	@if [ ! -f $(PIC_CHECK) ]; then \
-		echo "Converting $(DESTINATION) to PNG format..."; \
+		echo "Converting $(ORANGE)$(DESTINATION)$(RESET) to $(BOLD)PNG$(RESET) format..."; \
 		sips -s format png $(DESTINATION) --out $(PNG_DESTINATION); \
 		if [ $$? -ne 0 ]; then \
-			echo "Error: Conversion failed."; \
+			echo "$(RED)Error$(RESET): Conversion failed."; \
 			exit 1; \
 		else \
-			echo "Conversion successful. PNG file saved to $(PNG_DESTINATION)"; \
-			echo "Deleting original JPEG file..."; \
-			rm $(DESTINATION); \
-			echo "JPEG file deleted."; \
+			echo "$(GREEN)Conversion successful$(RESET). $(BOLD)PNG$(RESET) file saved to $(PURPLE)$(PNG_DESTINATION)$(RESET)"; \
+			echo "$(GRAY)$(ITALIC)Deleting original JPEG file...$(RESET)"; \
+			$(REMOVE) $(DESTINATION); \
+			echo "$(BOLD)JPEG$(RESET) file $(RED)deleted$(RESET)."; \
 		fi; \
-	fi	
+	fi
+	@if [ ! -f $(PIC_CHECK) ]; then \
+		echo "Resizing $(ORANGE)$(PNG_DESTINATION)$(RESET) to $(BLUE)$(PIC_RESIZE)$(RESET)..."; \
+		sips -Z $(PIC_RESIZE) $(PNG_DESTINATION); \
+		if [ $$? -ne 0 ]; then \
+			echo "$(RED)Error$(RESET): Resizing failed."; \
+			exit 1; \
+		else \
+			echo "$(GREEN)Resizing successful$(RESET)."; \
+		fi; \
+	fi
 	@touch $(PIC_CHECK)
-
-# find_copy_profile_pic:
-# 	@echo "Searching for $(PROFILE_PIC) in $(SGOINFRE)..."
-# 	@FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC) | head -n 1); \
-# 	if [ -z "$$FILE_PATH" ]; then \
-# 		echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
-# 		exit 1; \
-# 	else \
-# 		echo "Found file at $$FILE_PATH"; \
-# 		cp "$$FILE_PATH" $(DESTINATION); \
-# 		echo "File copied to $(DESTINATION)"; \
-# 	fi
-
-# convert_to_png:
-# 	@echo "Converting $(DESTINATION) to PNG format..."
-# 	@sips -s format png $(DESTINATION) --out $(PNG_DESTINATION); \
-# 	if [ $$? -ne 0 ]; then \
-# 		echo "Error: Conversion failed."; \
-# 		exit 1; \
-# 	else \
-# 		echo "Conversion successful. PNG file saved to $(PNG_DESTINATION)"; \
-# 		echo "Deleting original JPEG file..."; \
-# 		rm $(DESTINATION); \
-# 		echo "JPEG file deleted."; \
-# 	fi
-
-# find_copy_profile_pic:
-# 	@if [ ! -f $(PIC_CHECK) ]; then \
-# 		echo "Searching for $(PROFILE_PIC) in $(SGOINFRE)..."; \
-# 		FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC) | head -n 1); \
-# 		if [ -z "$$FILE_PATH" ]; then \
-# 			echo "Error: File $(PROFILE_PIC) not found in $(SGOINFRE)."; \
-# 			exit 1; \
-# 		else \
-# 			echo "Found file at $$FILE_PATH"; \
-# 			cp "$$FILE_PATH" $(DESTINATION); \
-# 			echo "File copied to $(DESTINATION)"; \
-# 		fi; \
-# 	fi
-
-# convert_to_png:
-# 	@if [ ! -f $(PIC_CHECK) ]; then \
-# 		echo "Converting $(DESTINATION) to PNG format..."; \
-# 		sips -s format png $(DESTINATION) --out $(PNG_DESTINATION); \
-# 		if [ $$? -ne 0 ]; then \
-# 			echo "Error: Conversion failed."; \
-# 			exit 1; \
-# 		else \
-# 			echo "Conversion successful. PNG file saved to $(PNG_DESTINATION)"; \
-# 			echo "Deleting original JPEG file..."; \
-# 			rm $(DESTINATION); \
-# 			echo "JPEG file deleted."; \
-# 		fi; \
-# 	fi
-
-# evaluator_picture: find_copy_profile_pic convert_to_png
-# 	@touch $(PIC_CHECK)
-
-# .PHONY: find_copy_profile_pic convert_to_png evaluator_picture

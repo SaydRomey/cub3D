@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:35:43 by oroy              #+#    #+#             */
-/*   Updated: 2024/05/01 23:20:22 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 16:50:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ void	draw_floor_ceiling_textures(void *param)
 	int			y;
 
 	cub = (t_cub *)param;
+	if (!cub->vfx.textures_enabled || is_segworld())
+		return ;
 	ft_memset(tex, 0, sizeof (t_texture) * 4);
 	set_floor_ceiling_textures(cub, tex);
 	get_ray_bounds(cub);
 	y = HEIGHT / 2;
 	while (y < HEIGHT)
 	{
-		// if (cub->vfx.textures_enabled)
-		// 	draw_floor_ceiling_row(tex, y);
 		draw_floor_ceiling_row(tex, y);
 		y++;
 	}

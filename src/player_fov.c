@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 03:11:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/02 11:46:15 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:55:06 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_fpoint	map_to_minimap(t_fpoint map_point, void *param)
 {
 	t_minimap	*mini;
 	t_fpoint	minimap_point;
-	
+
 	mini = (t_minimap *)param;
 	minimap_point.x = map_point.x * mini->tile_size + mini->offset.x;
 	minimap_point.y = map_point.y * mini->tile_size + mini->offset.y;
@@ -50,7 +50,7 @@ float angle, t_minimap *mini)
 {
 	t_fpoint	rotated_direction;
 	t_fpoint	ray_tip;
-	
+
 	rotated_direction = rotate_vector(direction, angle);
 	rotated_direction.x *= 0.01;
 	rotated_direction.y *= 0.01;
@@ -65,9 +65,9 @@ void	draw_fov(t_minimap *mini, t_player *player)
 	t_fpoint	player_pos;
 	float		angle;
 	t_fpoint	ray;
-	
-	half_fov = player->fov / 2;
-	angle_increment = player->fov / 20;
+
+	half_fov = degree_to_radian(RADAR_FOV);
+	angle_increment = half_fov / 20;
 	player_pos = map_to_minimap(player->position, mini);
 	angle = -half_fov;
 	while (angle <= half_fov)

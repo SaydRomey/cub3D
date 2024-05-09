@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 18:52:54 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 19:12:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 18:08:14 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,13 @@ void	draw_wall_stripe(t_point ray_pos, t_render *r, int x)
 	y = line.start;
 	while (y <= line.end)
 	{
-		if (get_level(call_cub()->current_level)->is_segworld)
-			tex.pixel.y = (int)tex.pos_y & (tex.width - 1);
-		else
-			tex.pixel.y = (int)tex.pos_y % tex.height;
+		tex.pixel.y = (int)tex.pos_y % tex.height;
 		tex.pos_y += tex.step_y;
 		color = get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y);
 		distance = r->wall_perp_dist;
 		if (call_cub()->vfx.shadow_enabled)
 			color = shadow_effect(color, distance, 0.0f, 5.0f);
-		if (get_alpha(color) == 255)
-			draw_pixel(call_cub()->img, x, y, color);
+		draw_opaque_pixel(call_cub()->img, x, y, color);
 		y++;
 	}
 }

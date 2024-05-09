@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 17:05:48 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 15:05:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:43:39 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,29 +95,3 @@ void	elevator_events(void *param)
 		check_button_hover(cub->elevator.buttons);
 	update_door_animation(&cub->elevator);
 }
-
-// static	void check_near_elevator(t_fpoint pos, t_elevator *e)
-// {
-// 	int	dx;
-// 	int	dy;
-
-// 	if (e->map_change == 0)
-// 	{
-// 		dy = -1;
-// 		while (dy <= 1)
-// 		{
-// 			dx = -1;
-// 			while (dx <= 1)
-// 			{
-// 				if (check_hit(pos.x + dx, pos.y + dy) == ELEVATOR)
-// 				{
-// 					e->door = OPEN;
-// 					return ;
-// 				}
-// 				dx++;
-// 			}
-// 			dy++;
-// 		}
-// 	}
-// 	e->door = CLOSE;
-// }

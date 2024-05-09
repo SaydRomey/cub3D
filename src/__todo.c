@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/02 11:42:29 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/09 18:32:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@ TODO:
 
 menu
 	adjust display_menu to adapt to img dimensions (margin)
-
-makefile
-	add the resize of the user_pic
 
 document my functions (ced)
 
@@ -33,20 +30,16 @@ map array
 parsing
 	change string array names to ...tex_path[]
 
-pixels
-	fix color hex codes using web tools
-
 shadow
 	adjust logic so we can have shadow on floor and ceiling even without textures ...
 
 fix mouse param *!!
 
-add asset and anim cleanup (if mlx does not take care of it already)
-
-*!! add failsafe for user's picture .. (a default one if load png fails...)
-
 **************************************************************************
 Minimap:
+
+fix margin floating point exception 
+*!! bring back the clamping of map's edges like before *!!
 
 make tests with rotating the minimap instead of the player
 make tests with iso minimap

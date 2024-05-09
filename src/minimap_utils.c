@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 14:47:11 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/02 00:21:30 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:50:40 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 /*
 this has a generic version in pixel_colors.c
-
 */
 static int	compute_wall_average(int *averages, int count)
 {

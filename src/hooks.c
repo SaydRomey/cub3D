@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 22:36:36 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:44:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,6 @@ void	keyhooks(mlx_key_data_t data, void *param)
 	set_keys(data.key, &cub->keys, data.action);
 }
 
-/* **in this function we can associate keys to booleans in various structs *!!
-
-*/
 void	update_controls(void *param)
 {
 	t_cub	*cub;

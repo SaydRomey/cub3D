@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:03:48 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 21:02:39 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 14:30:53 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ static void	draw_visible_minimap(t_minimap *mini, t_radar r)
 			if (is_in_circle((t_fpoint){x, y}, r.center, r.radius))
 			{
 				color = get_pixel(mini->img, map_pixel.x, map_pixel.y);
-				if (get_alpha(color) != 255)
-					color = RADAR_BG_COL;
+				color = choose_pixel(color, RADAR_BG_COL);
 				draw_pixel(r.img, x, y, color);
 			}
 			x++;
@@ -71,7 +70,8 @@ void	draw_radar(t_minimap *mini)
 
 	radar = init_radar(mini);
 	player = &call_cub()->player;
-	clear_img(radar.img);
+	if (!is_segworld())
+		clear_img(radar.img);
 	if (player_is_in_elevator(player))
 	{
 		radar_interference(radar.img, radar.center, radar.radius);

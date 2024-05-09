@@ -6,12 +6,15 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 20:24:25 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 20:27:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/09 17:02:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+/*	look into this **
+
+*/
 static void	adjust_tile_size(t_minimap *mini, t_map *map, int margin_tiles)
 {
 	int	available_width;
@@ -20,8 +23,16 @@ static void	adjust_tile_size(t_minimap *mini, t_map *map, int margin_tiles)
 	int	tile_height;
 	int	tile_size;
 
-	tile_width = mini->img->width / map->width;
-	tile_height = mini->img->height / map->height;
+	if (margin_tiles * 2 == map->width || margin_tiles * 2 == map->height)
+	{
+		tile_width = mini->img->width / (map->width + 1);
+		tile_height = mini->img->height / (map->height + 1);	
+	}
+	else
+	{
+		tile_width = mini->img->width / map->width;
+		tile_height = mini->img->height / map->height;
+	}
 	tile_size = ft_min(tile_width, tile_height);
 	if (margin_tiles > 0)
 	{

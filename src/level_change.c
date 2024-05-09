@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   level_change.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:31:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 20:12:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:47:48 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	change_level(int index)
 		change_window_title(next_lvl->filepath);
 		lvl->mini.img->instances->enabled = false;
 		draw_minimap(&next_lvl->mini, &next_lvl->map);
-		draw_floor_ceiling(cub->img, &next_lvl->map);
 		cub->current_level = index;
+		draw_floor_ceiling(cub->bg_img, &next_lvl->map);
 		cub->player = warp_player(cub->player, lvl, next_lvl);
 		update_elevator(&cub->elevator, next_lvl);
 	}

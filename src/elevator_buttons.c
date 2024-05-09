@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   elevator_buttons.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:34:36 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/30 15:49:57 by oroy             ###   ########.fr       */
+/*   Updated: 2024/05/02 15:43:18 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	check_button_hover(t_button btn[2])
 		btn[1].button_imgs[1]->instances->enabled = false;
 }
 
-/*	**do we change button size
-*/
 static t_button	new_button(t_point pos)
 {
 	t_button	button;

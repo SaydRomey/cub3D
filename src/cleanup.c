@@ -6,14 +6,12 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 12:02:54 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 22:27:43 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:42:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/*
-*/
 void	free_map_array(int **map_array, int height)
 {
 	int	i;
@@ -31,10 +29,7 @@ void	free_map_array(int **map_array, int height)
 }
 
 /* ************************************************************************** */
-/* ************************************************************************** */
 
-/*
-*/
 void	cleanup(void *param)
 {
 	t_cub	*cub;
@@ -45,18 +40,15 @@ void	cleanup(void *param)
 		ft_lstclear(&cub->levels, delete_level);
 	}
 	cleanup_elevator(&cub->elevator);
+	mlx_delete_image(cub->mlx, cub->bg_img);
 	mlx_delete_image(cub->mlx, cub->img);
 	mlx_delete_image(cub->mlx, cub->radar_img);
 	mlx_delete_image(cub->mlx, cub->user_img);
-	// mlx_delete_image(cub->mlx, cub->menu_img);
+	mlx_delete_image(cub->mlx, cub->menu_img);
 	mlx_terminate(cub->mlx);
 	free(cub);
 }
 
-/*
-frees allocated memory in a t_scene struct
-(strings and a linked list of strings)
-*/
 void	cleanup_scene(t_scene *scene)
 {
 	int	i;
@@ -85,9 +77,6 @@ void	cleanup_scene(t_scene *scene)
 		ft_lstclear(&scene->map_list, free);
 }
 
-/*
-frees allocated memory in a t_map struct
-*/
 void	cleanup_map(t_map *map)
 {
 	int	i;

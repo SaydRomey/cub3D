@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/29 15:47:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/09 18:35:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ modifier_key_t m, void *param)
 
 	if (m == 42)
 		ft_printf("is this only a problem on linux ?\n");
+	// (void)m;
 	cub = (t_cub *)param;
 	if (btn == MLX_MOUSE_BUTTON_RIGHT && a == MLX_PRESS)
 		toggle(&cub->mouse.enabled);

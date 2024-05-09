@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:23:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:23:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 16:44:58 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,6 @@ static void	get_initial_offset(t_player *p, t_raycast *r)
 	}
 }
 
-/**
- * Cross Product here.
- * Since we use units of 1, only a division is needed in this case.
-*/
 /**
  * Cross Product here.
  * Since we use units of 1, only a division is needed in this case.
@@ -77,10 +73,6 @@ static void	init_raycast_data(t_player *p, t_raycast *r, int x)
  * 
  * The wall_perp_dist is stored in the z_buffer used to prevent assets
  * further than the walls to be drawn.
- * 
- * To do :
- * - check to have only one get_texture_info() function
- * - Recheck asset casting
 */
 void	raycast(void)
 {
@@ -95,7 +87,6 @@ void	raycast(void)
 	x = 0;
 	while (x < WIDTH)
 	{
-		r->ray_hits_opened_door = false;
 		r->ray_hits_opened_door = false;
 		init_raycast_data(&cub->player, r, x);
 		execute_dda_algo(&cub->raycast);

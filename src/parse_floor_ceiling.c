@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_floor_ceiling.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:03 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 19:47:44 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:34:45 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static bool	color_is_invalid(char *color[RGB_LEN])
 	i = 0;
 	while (i < RGB_LEN)
 	{
+		if (!ft_str_isdigit(color[i]))
+			return (true);
 		value = ft_atoi(color[i]);
 		if (value < 0 || value > 255)
 			return (true);
@@ -43,7 +45,7 @@ static void	split_rgb(int id, char *line, t_scene *scene)
 			free_split(split);
 			return ;
 		}
-		scene->colors[id][i] = ft_strtrim(split[i], " ");
+		scene->colors[id][i] = ft_strtrim(split[i], " \t");
 		i++;
 	}
 	if (split[RGB_LEN])

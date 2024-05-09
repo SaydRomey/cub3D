@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:55:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:19:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 18:55:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ static bool	map_line_is_valid(const char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
+		if (!ft_strchr(MAP_CHARS, line[i]) && !ft_isspace(line[i]))
+			return (false);
 		if (!check_contour(line, i))
 			return (false);
 		i++;
@@ -120,8 +122,9 @@ void	parse_map_line(char *cubline, t_scene *scene)
 	char	*line;
 
 	line = ft_strtrim(cubline, " \t\n");
-	if (is_map_line(line))
+	if (is_map_line(line) || call_info()->in_map == true)
 	{
+		call_info()->in_map = true;
 		if (map_line_is_valid(line))
 		{
 			store_map_line(&scene->map_list, cubline);

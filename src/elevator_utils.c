@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:27:01 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:28:42 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:43:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ static bool	check_west(int **map, int y, int x)
 
 /*
 elevator orientation is the direction the player needs to face to enter)
-
 */
 int	get_elevator_orientation(int **map, t_point *position)
 {

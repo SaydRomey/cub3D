@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 15:39:37 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 23:19:11 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 12:02:42 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,16 @@ void	change_window_title(char *filepath)
 void	display_menu(mlx_image_t *img)
 {
 	t_keys	keys;
+	int		menu_height;
+	int		menu_show;
+	int		menu_hide;
 
+	menu_height = (int)img->height;
+	menu_show = HEIGHT - menu_height;
+	menu_hide = HEIGHT - 85;
 	keys = call_cub()->keys;
-	if (keys.spacebar && img->instances->y != MENU_SHOW)
-		move_img(img, 0, MENU_SHOW);
-	if (!keys.spacebar && img->instances->y != MENU_HIDE)
-		move_img(img, 0, MENU_HIDE);
+	if (keys.spacebar && img->instances->y != menu_show)
+		move_img(img, 0, menu_show);
+	if (!keys.spacebar && img->instances->y != menu_hide)
+		move_img(img, 0, menu_hide);
 }

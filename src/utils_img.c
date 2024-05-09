@@ -6,7 +6,7 @@
 /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:18:05 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 15:42:35 by oroy             ###   ########.fr       */
+/*   Updated: 2024/05/02 15:25:18 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ mlx_image_t	*load_png(char *filepath, mlx_t *mlx)
 
 	texture = mlx_load_png(filepath);
 	if (!texture)
+	{
+		ft_printf("Failed to load texture: %s\n", filepath);
 		error_mlx();
+	}
 	img = mlx_texture_to_image(mlx, texture);
 	if (!img)
 		error_mlx();

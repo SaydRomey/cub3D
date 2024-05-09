@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/02 01:19:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:49:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ float	magnitude_between(t_fpoint a, t_fpoint b)
 	return (distance);
 }
 
-/*
-*/
 t_fpoint	rotate_vector(t_fpoint vector, float angle)
 {
 	t_fpoint	rotated;

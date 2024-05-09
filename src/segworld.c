@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/02 11:43:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 18:03:41 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ static t_map	init_segworld_map(mlx_t *mlx)
 	map.wall_textures_img[SO] = load_png(SW_2_PATH, mlx);
 	map.wall_textures_img[EA] = load_png(SW_3_PATH, mlx);
 	map.wall_textures_img[WE] = load_png(SW_4_PATH, mlx);
+	map.floor_color = SEG_FLOOR;
+	map.ceiling_color = SEG_CEILING;
 	return (map);
 }
 
@@ -97,4 +99,16 @@ void	replace_with_segworld(t_level *next_lvl)
 	set_segworld_elevator(segworld, segworld->elevator_position);
 	segworld->is_segworld = true;
 	segworld->assets = init_assets(A_FLAMES_PATH, segworld, 8);
+}
+
+bool	is_segworld(void)
+{
+	t_level	*lvl;
+
+	lvl = get_level(call_cub()->current_level);
+	if (lvl)
+	{
+		return (lvl->is_segworld);
+	}
+	return (false);
 }

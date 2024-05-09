@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 16:24:07 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 18:04:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 17:12:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,17 @@ void	compute_averages(int *totals, int count, int *averages)
 	averages[G] = totals[G] / count;
 	averages[B] = totals[B] / count;
 	averages[A] = totals[A] / count;
+}
+
+void	draw_opaque_pixel(mlx_image_t *img, int x, int y, int color)
+{
+	if (get_alpha(color) == 255)
+		draw_pixel(img, x, y, color);
+}
+
+int	choose_pixel(int color, int default_color)
+{
+	if (get_alpha(color) != 255)
+		return (default_color);
+	return (color);
 }

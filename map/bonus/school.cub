@@ -1,0 +1,15 @@
+NO ./img/school/paint_wall.png
+SO ./img/school/window.png
+WE ./img/school/brick_wall.png
+EA ./img/school/lockers.png
+
+CE ./img/school/light.png
+FL ./img/school/checker.png
+
+F 142,136,73
+C 109,192,195
+
+11111
+10011
+1N011
+11111

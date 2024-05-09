@@ -5,9 +5,9 @@
 
 
 
-        EA img/symbols/east.png         
+        EA ./img/water/water_3.png         
 
-NO img/symbols/north.png
+NO img/water/water_c.png
 
 
 
@@ -17,8 +17,8 @@ NO img/symbols/north.png
 
 
 
-SO img/symbols/south.png
-                        WE img/symbols/west.png
+SO img/water/water_f.png
+                        WE img/water/water_2.png
 
 C 42,          42,255
 

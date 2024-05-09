@@ -1,15 +1,15 @@
-NO ./src/Textures/N.png
-WE ./src/Textures/W.png
-SO ./src/Textures/S.png
-EA ./src/Textures/E.png
+NO ./img/castle/castle_library.png
+WE ./img/castle/castle_wallpaper.png
+SO ./img/castle/castle_window.png
+EA ./img/castle/castle_brick.png
 F 0,157,255
-C 0,30,0
+C 0,64,147
 
 
 
                                                         111111
                                                         11000111111111
-        		11111111111111111                       11000000000001
+                11111111111111111                       11000000000001
                 100000000000000011111111111111111111111111000000000001
                 100000000000000000000000000000000000000000000000000001
                 100000000000000011111111111111111001111111111111011111

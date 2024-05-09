@@ -6,8 +6,8 @@ EA ./img/water/water_4.png
 FL ./img/water/water_f.png
 CE ./img/water/water_c.png
 
-F 146,116,91
-C 135,206,235
+F 50,116,167
+C 200,206,235
 
 11111111111
 10000000E11

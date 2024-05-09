@@ -4,14 +4,14 @@ WE ./img/kitchen/white_brick.png
 EA ./img/kitchen/kitchen.png
 
 FL ./img/kitchen/wood.png
-CE ./img/concrete.png
+CE ./img/school/concrete.png
 
 F 146,116,91
 C 135,206,235
 
 111111
 110011
-130011
+100011
 110S11
 110011
 111111

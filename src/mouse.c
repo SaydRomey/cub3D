@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/05/09 18:35:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 16:31:10 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,12 @@ static void	set_mouse_mode(bool enabled)
 		mlx_set_cursor_mode(mlx, MLX_MOUSE_NORMAL);
 }
 
-/*
-to check, cannot void an enum on linux.. ?
-
-*/
 static void	mouse_hook(mouse_key_t btn, action_t a, \
 modifier_key_t m, void *param)
 {
 	t_cub	*cub;
 
-	if (m == 42)
-		ft_printf("is this only a problem on linux ?\n");
-	// (void)m;
+	(void)m;
 	cub = (t_cub *)param;
 	if (btn == MLX_MOUSE_BUTTON_RIGHT && a == MLX_PRESS)
 		toggle(&cub->mouse.enabled);

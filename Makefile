@@ -5,36 +5,10 @@
 #                                                     +:+ +:+         +:+      #
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/05/09 18:41:17 by cdumais          ###   ########.fr        #
+#    Created: 2024/04/29 15:53:21 by cdumais           #+#    #+#              #
+#    Updated: 2024/05/06 18:39:04 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# TODO: conditionnal eval pic (only on mac..)
-# TODO: automate required dependency check/install (brew, cmake, glfw)
-# TODO: fix automatic pull of modified submodule with make *?
-# TODO: maybe compress the img dir and unzip when we 'make' to make project lighter *!!?
-
-# https://lodev.org/cgtutor/raycasting.html
-
-# https://doomwiki.org/wiki/Doom_rendering_engine
-
-# https://pulgamecanica.herokuapp.com/posts/mlx42-intro
-
-# assets:
-# https://crusenho.itch.io/complete-gui-essential-pack
-
-
-#TODO/TOCHECK:
-# replace L_FLAGS by LDFLAGS:
-# Extra flags to give to compilers when they are supposed to invoke the linker,
-# 'ld', such as -L.
-# Non-library linker flags, such as -L, should go in the LDFLAGS variable.
-# Libraries (-lfoo) should be added to the LDLIBS variable instead.
-
-# https://www.gnu.org/software/make/manual/make.html#Conditionals
-
-# !** make a simple version of this makefile..
 
 # **************************************************************************** #
 # --------------------------------- VARIABLES -------------------------------- #
@@ -50,18 +24,12 @@ MAPS_BONUS	:=	map/bonus/school.cub \
 				map/bonus/serpent.cub \
 				map/bonus/kitchen.cub
 
-CFG_DIR		:= .cfg
 IMG_DIR		:= img
 INC_DIR		:= inc
 LIB_DIR		:= lib
 OBJ_DIR		:= obj
 SRC_DIR		:= src
 TMP_DIR		:= tmp
-WAV_DIR		:= wav
-
-# https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
-# -Ofast	-> 
-# -flto		-> link-time optimisation
 
 COMPILE		:= gcc
 OPTIMIZE	:= -Ofast -flto
@@ -74,6 +42,33 @@ REMOVE		:= rm -rf
 NPD			:= --no-print-directory
 VOID		:= /dev/null
 OS			:= $(shell uname)
+# **************************************************************************** #
+# ---------------------------------- CONFIG  --------------------------------- #
+# **************************************************************************** #
+C_FLAGS		+= -DOS_MAC
+
+GLFW_DIR	:= $(shell brew --prefix glfw)/lib
+GLFW		:= -lglfw
+FRAMEWORKS	:= -framework Cocoa -framework OpenGL -framework IOKit
+
+L_FLAGS		:= $(L_FLAGS) -L$(GLFW_DIR) $(GLFW) $(FRAMEWORKS)
+
+OPEN		:= open
+MACHINE		:= $(shell uname -n)
+
+SCREEN_W	:= 1920
+SCREEN_H	:= 1080
+C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
+# **************************************************************************** #
+# -------------------------------- SUBMODULES -------------------------------- #
+# **************************************************************************** #
+INIT_CHECK	:= $(LIB_DIR)/.init_check
+INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
+# **************************************************************************** #
+# --------------------------------- EVAL_PIC --------------------------------- #
+# **************************************************************************** #
+PIC_CHECK	:= ./$(IMG_DIR)/.pic_check
+PIC			:= $(if $(wildcard $(PIC_CHECK)),,eval_pic)
 # **************************************************************************** #
 # ---------------------------------- LIBFT ----------------------------------- #
 # **************************************************************************** #
@@ -92,102 +87,60 @@ MLX42		:= $(MLX_BLD)/libmlx42.a
 L_FLAGS		:= $(L_FLAGS) -L$(MLX_BLD) -lmlx42
 HEADERS		:= $(HEADERS) -I$(MLX_INC)
 # **************************************************************************** #
-# ---------------------------------- CONFIG  --------------------------------- #
-# **************************************************************************** #
-# TODO: adapt default to desired dimensions in config_*.mk
-# TODO: adapt eval pic to only mac *!! (linux is to ignore target)
-# 
-ifeq ($(OS),Linux)
-include $(CFG_DIR)/config_linux.mk
-else ifeq ($(OS),Darwin)
-include $(CFG_DIR)/config_mac.mk
-else
-$(error Unsupported operating system: $(OS))
-endif
-
-C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
-#
-# # (this is for reference in the mac version) # # 
-# C_FLAGS		+= -DOS_MAC
-
-# GLFW_DIR	:= $(shell brew --prefix glfw)/lib
-# GLFW		:= -lglfw
-# FRAMEWORKS	:= -framework Cocoa -framework OpenGL -framework IOKit
-
-# L_FLAGS		:= $(L_FLAGS) -L$(GLFW_DIR) $(GLFW) $(FRAMEWORKS)
-
-# OPEN		:= open
-# MACHINE		:= $(shell uname -n)
-
-# SCREEN_W	:= 1920
-# SCREEN_H	:= 1080
-# C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
-# #
-# **************************************************************************** #
-# -------------------------------- SUBMODULES  ------------------------------- #
-# **************************************************************************** #
-INIT_CHECK	:= $(LIB_DIR)/.init_check
-INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
-# **************************************************************************** #
-# --------------------------------- EVAL_PIC --------------------------------- #
-# **************************************************************************** #
-PIC_CHECK	:= ./$(IMG_DIR)/.pic_check
-PIC			:= $(if $(wildcard $(PIC_CHECK)),,eval_pic)
-# **************************************************************************** #
 # --------------------------------- H FILES ---------------------------------- #
 # **************************************************************************** #
-# INC			:=	animations		draw			math_utils		raycast		   \
-# 				asset			elevator		minimap			segworld	   \
-# 				cleanup			error			parsing			utils		   \
-# 				controls		levels			pixels			vfx			   \
-# 				cub3d			map				player
+INC			:=	animations		draw			math_utils		raycast		   \
+				asset			elevator		minimap			segworld	   \
+				cleanup			error			parsing			utils		   \
+				controls		levels			pixels			vfx			   \
+				cub3d			map				player
 # **************************************************************************** #
 # --------------------------------- C FILES ---------------------------------- #
 # **************************************************************************** #
-# SRC			:=	animation_utils				map_array						   \
-# 				animation					map_list						   \
-# 				assets_utils				map_utils						   \
-# 				assets						map								   \
-# 				cleanup						math_utils_circle				   \
-# 				draw_circle					math_utils_triangle				   \
-# 				draw_triangle				math_utils						   \
-# 				draw						minimap_draw					   \
-# 				elevator_buttons			minimap_utils					   \
-# 				elevator_events				minimap							   \
-# 				elevator_init				mouse							   \
-# 				elevator_utils				parse_cubfile					   \
-# 				error						parse_floor_ceiling				   \
-# 				hooks						parse_map						   \
-# 				info						parse_walls						   \
-# 				level_change				pixel_color_utils				   \
-# 				level_utils					pixel_colors					   \
-# 				level						pixel_utils						   \
-# 				main						pixels							   \
-# 																			   \
-# 				player_fov					radar_utils						   \
-# 				player_movement_utils		radar							   \
-# 				player_utils												   \
-# 				player														   \
-# 																			   \
-# 				raycast_assets				segworld						   \
-# 				raycast_dda					shadow							   \
-# 				raycast_floor_draw			utils_img						   \
-# 				raycast_floor				utils							   \
-# 				raycast_init				validate_map					   \
-# 				raycast_utils				validate_scene					   \
-# 				raycast_walls				validate
+SRC			:=	animation_utils				map_array						   \
+				animation					map_list						   \
+				assets_utils				map_utils						   \
+				assets						map								   \
+				cleanup						math_utils_circle				   \
+				draw_circle					math_utils_triangle				   \
+				draw_triangle				math_utils						   \
+				draw						minimap_draw					   \
+				elevator_buttons			minimap_utils					   \
+				elevator_events				minimap							   \
+				elevator_init				mouse							   \
+				elevator_utils				parse_cubfile					   \
+				error						parse_floor_ceiling				   \
+				hooks						parse_map						   \
+				info						parse_walls						   \
+				level_change				pixel_color_utils				   \
+				level_utils					pixel_colors					   \
+				level						pixel_utils						   \
+				main						pixels							   \
+																			   \
+				player_fov					radar_utils						   \
+				player_movement_utils		radar							   \
+				player_utils												   \
+				player														   \
+																			   \
+				raycast_assets				segworld						   \
+				raycast_dda					shadow							   \
+				raycast_floor_draw			utils_img						   \
+				raycast_floor				utils							   \
+				raycast_init				validate_map					   \
+				raycast_utils				validate_scene					   \
+				raycast_walls				validate
 # **************************************************************************** #
 # -------------------------------- ALL FILES --------------------------------- #
 # **************************************************************************** #
-# INCS		:=	$(addprefix $(INC_DIR)/, $(addsuffix .h, $(INC)))
-# SRCS		:=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC)))
-# OBJS		:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+INCS		:=	$(addprefix $(INC_DIR)/, $(addsuffix .h, $(INC)))
+SRCS		:=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC)))
+OBJS		:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 # **************************************************************************** #
 # -------------------------------- ALL * FILES ------------------------------- #
 # **************************************************************************** #
-INCS	:=	$(wildcard $(INC_DIR)/*.h)
-SRCS	:=	$(wildcard $(SRC_DIR)/*.c)
-OBJS	:=	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+# INCS		:=	$(wildcard $(INC_DIR)/*.h)
+# SRCS		:=	$(wildcard $(SRC_DIR)/*.c)
+# OBJS		:=	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # **************************************************************************** #
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
@@ -265,8 +218,6 @@ $(BONUS_CHECK):
 # **************************************************************************** #
 # ----------------------------------- MLX ------------------------------------ #
 # **************************************************************************** #
-# TODO: add the option to recompile MLX with debug flag in this section...
-# 
 mlxclean:
 	@if [ -f $(MLX42) ]; then \
 		$(REMOVE) $(MLX_BLD); \
@@ -354,8 +305,6 @@ pdf: | $(TMP_DIR)
 # **************************************************************************** #
 # ---------------------------------- UTILS ----------------------------------- #
 # **************************************************************************** #
-include $(CFG_DIR)/leaks.mk
-
 run: all
 	$(eval ARG := $(if $(wildcard $(BONUS_CHECK)),$(MAPS_BONUS),$(MAP)))
 	./$(NAME) $(ARG)
@@ -363,22 +312,11 @@ run: all
 $(TMP_DIR):
 	@mkdir -p $(TMP_DIR)
 
-ffclean: fclean vclean mlxclean
+ffclean: fclean mlxclean
 	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
-	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
+	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK)
 
-# **************************************************************************** #
-FORCE_FLAGS	:= \
--Wno-unused-variable \
--Wno-unused-function
-
-force: C_FLAGS += $(FORCE_FLAGS)
-force: re
-	@echo "adding flags $(YELLOW)$(FORCE_FLAGS)$(RESET)"
-	@echo "$(RED)Forced compilation$(RESET)"
-	./$(NAME) $(MAP)
-
-.PHONY: run ffclean force
+.PHONY: run ffclean
 # **************************************************************************** #
 # ---------------------------------- BACKUP (zip) ---------------------------- #
 # **************************************************************************** #
@@ -408,23 +346,17 @@ Available 'make' targets:
 
 'make [all]'   -> Compiles $(NAME) and necessary dependencies (libft and MLX42)
 'make clean'   -> Removes the $(OBJ_DIR)/ directory and other object files
-'make fclean'  -> Removes $(NAME) and $(LIBFT)
+'make fclean'  -> Removes $(NAME)
 'make re'      -> Same as fclean and all
-'make update'  -> Pulls the github version
 'make norm'    -> Runs 'norminette' on the files in $(SRC_DIR)/ and $(INC_DIR)/ (also in libft)
 'make nm'      -> Checks symbols in the executable (to check used functions)
 'make pdf'     -> Downloads/Opens a $(NAME) instruction pdf in $(TMP_DIR)/
 'make mlxref'  -> Opens the MLX42 documentation
-'make leaks'   -> (WIP) Runs Valgrind on $(NAME) $(MAP) (make supp and make suppleaks)
-'make run'     -> Same as 'make all', then './$(NAME) $(MAP)'
-'make debug'   -> (WIP) Recompiles with debug symbols
-'make force'   -> Recompiles with $(YELLOW)$(FORCE_FLAGS)$(RESET) (for testing)
-'make ffclean' -> Removes files and directories created by this makefile
+'make run'     -> Executes $(NAME) with pre-defined args
+'make ffclean' -> Removes $(LIBFT), $(MLX) and the $(TMP_DIR)/ directory
 'make zip'     -> Creates a compressed version of this project on the desktop
 'make info'    -> Prints compilation information
 'make title'   -> Prints an example version of the title
-'make spin'    -> (WIP) Animation that waits for a process to finish
-'make sound'   -> (WIP) Plays a .wav sound
 'make man'     -> Shows this message
 
 endef
@@ -437,8 +369,6 @@ man:
 # **************************************************************************** #
 # ----------------------------------- INFO ----------------------------------- #
 # **************************************************************************** #
-# This is only to make sure the compilation gets everything
-# 
 define INFO
 
 $(NAME)
@@ -498,7 +428,7 @@ or   'make man' for more options
 
 endef
 export TITLE
-
+# **************************************************************************** #
 USER		:=$(shell whoami)
 TIME		:=$(shell date "+%H:%M:%S")
 
@@ -551,65 +481,7 @@ BG_PURPLE	:= $(ESC)[105m
 BG_CYAN		:= $(ESC)[106m
 BG_WHITE	:= $(ESC)[47m
 BG_GRAY		:= $(ESC)[100m
-# **************************************************************************** #
-# ------------------------------- ANIMATIONS --------------------------------- #
-# **************************************************************************** #
-# TODO: add a chmod + x to the script
-# TODO: set this up during mlx42's compilation? or when installing brew, cmake, glfw
-# 
-# Animation shell script
-SPIN_SH		:= $(CFG_DIR)/spinner.sh
 
-# Message to display alongside the animation
-SPIN_MSG	:= "Simulating compilation and linking for five seconds..."
-
-# Create the file to stop the spinner (will be replaced by libmlx.a or something)
-SPIN_FILE	:= "$(CFG_DIR)/.tmptestfile"
-
-# spin time to stimulate duration (will be replaced by an other process)
-PROCESS		:= sleep 5
-
-spin:
-	@$(REMOVE) $(SPIN_FILE)
-	@echo "$(BOLD)$(PURPLE)Starting a long running task...$(RESET)"
-	@$(SPIN_SH) $(SPIN_MSG) $(SPIN_FILE) &
-	@$(PROCESS)
-	@touch $(SPIN_FILE)
-	@sleep 0.2
-	@printf "$(UP)$(ERASE_LINE)"
-	@echo "$(BOLD)$(GREEN)Long-running task completed.$(RESET)"
-	@$(MAKE) spin2 $(NPD)
-
-
-SPIN_MSG2	:= "Simulating something else for three seconds..."
-PROCESS2	:= sleep 3
-
-spin2:
-	@$(REMOVE) $(SPIN_FILE)
-	@echo "$(BOLD)$(PURPLE)Starting a shorter running task...$(RESET)"
-	@$(SPIN_SH) $(SPIN_MSG2) $(SPIN_FILE) &
-	@$(PROCESS2)
-	@touch $(SPIN_FILE)
-	@sleep 0.2
-	@printf "$(UP)$(ERASE_LINE)"
-	@echo "$(BOLD)$(GREEN)shorter task completed.$(RESET)"
-
-.PHONY: spin spin2
-# **************************************************************************** #
-# --------------------------------- SOUNDS ----------------------------------- #
-# **************************************************************************** #
-# https://sound-effects.bbcrewind.co.uk/
-# https://soundbible.com/
-# or convert youtube/mp3/etc. to .wav
-# 
-WAV_DESTROY	:= $(WAV_DIR)/destroy.wav
-
-sound:
-	@echo "testing a .wav sound"
-	@$(SOUND) $(WAV_DESTROY)
-	@echo "sound testing finished"
-
-.PHONY: sound
 # **************************************************************************** #
 # **************************************************************************** #
 # **************************************************************************** #
@@ -648,8 +520,6 @@ $(PIC_CHECK):
 		fi; \
 	fi
 	@touch $(PIC_CHECK)
-
-.PHONY: eval_pic
 # **************************************************************************** #
 # ------------------------------- DEPENDENCIES  ------------------------------ #
 # **************************************************************************** #

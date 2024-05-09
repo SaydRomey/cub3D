@@ -18,11 +18,12 @@
 **/tmp/
 **/obj/
 
-# misc
-generic.png
+# Misc
+img/evaluator.png
 
 # Sentinel files
 .init_check
+.pic_check
 .bonus
 
 # Executables

@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/05/02 12:49:02 by cdumais          ###   ########.fr        #
+#    Updated: 2024/05/09 18:20:17 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,10 +37,16 @@
 # **************************************************************************** #
 # --------------------------------- VARIABLES -------------------------------- #
 # **************************************************************************** #
-AUTHOR		:= cdumais & oroy
 NAME		:= cub3D
-MAP			:= map/test.cub
-MAPS_BONUS	:= map/bonus/test.cub map/bonus/test1.cub map/bonus/test2.cub map/bonus/test3.cub
+AUTHOR		:= cdumais & oroy
+
+MAP			:= 	map/base/test.cub
+MAPS_BONUS	:=	map/bonus/school.cub \
+				map/bonus/castle.cub \
+				map/bonus/water.cub \
+				map/bonus/fire.cub \
+				map/bonus/serpent.cub \
+				map/bonus/kitchen.cub
 
 CFG_DIR		:= .cfg
 IMG_DIR		:= img
@@ -56,11 +62,10 @@ WAV_DIR		:= wav
 # -flto		-> link-time optimisation
 
 COMPILE		:= gcc
-C_FLAGS		:= -Wall -Wextra -Werror -Ofast -flto
+OPTIMIZE	:= -Ofast -flto
+C_FLAGS		:= -Wall -Wextra -Werror $(OPTIMIZE)
 # C_FLAGS		:= -Wall -Wextra -Werror -g
-L_FLAGS		:= 
-# LDFLAGS		:= (non-library linker flags, such as -L)
-# LDLIBS		:= (for libraries)
+L_FLAGS		:=
 HEADERS		:= -I$(INC_DIR)
 
 REMOVE		:= rm -rf
@@ -82,14 +87,13 @@ MLX_INC		:= $(MLX_DIR)/include/MLX42
 MLX_BLD		:= $(MLX_DIR)/build
 MLX42		:= $(MLX_BLD)/libmlx42.a
 
-C_FLAGS		:= $(C_FLAGS) -Wunreachable-code -Ofast
 L_FLAGS		:= $(L_FLAGS) -L$(MLX_BLD) -lmlx42
 HEADERS		:= $(HEADERS) -I$(MLX_INC)
 # **************************************************************************** #
 # ---------------------------------- CONFIG  --------------------------------- #
 # **************************************************************************** #
 # TODO: adapt default to desired dimensions in config_*.mk
-# TOCHECK: do we need more macros, and does the norm permit compile time defined macros ?
+# TODO: adapt eval pic to only mac *!! (linux is to ignore target)
 # 
 ifeq ($(OS),Linux)
 include $(CFG_DIR)/config_linux.mk
@@ -100,22 +104,76 @@ $(error Unsupported operating system: $(OS))
 endif
 
 C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
+#
+# # (this is for reference in the mac version) # # 
+# C_FLAGS		+= -DOS_MAC
+
+# GLFW_DIR	:= $(shell brew --prefix glfw)/lib
+# GLFW		:= -lglfw
+# FRAMEWORKS	:= -framework Cocoa -framework OpenGL -framework IOKit
+
+# L_FLAGS		:= $(L_FLAGS) -L$(GLFW_DIR) $(GLFW) $(FRAMEWORKS)
+
+# OPEN		:= open
+# MACHINE		:= $(shell uname -n)
+
+# SCREEN_W	:= 1920
+# SCREEN_H	:= 1080
+# C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
+# #
 # **************************************************************************** #
 # -------------------------------- SUBMODULES  ------------------------------- #
 # **************************************************************************** #
 INIT_CHECK	:= $(LIB_DIR)/.init_check
 INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
 # **************************************************************************** #
-# PIC_CHECK	:= ./$(IMG_DIR)/.pic_check
-# PIC			:= $(if $(wildcard $(PIC_CHECK)),,eval_pic)
+# --------------------------------- EVAL_PIC --------------------------------- #
+# **************************************************************************** #
+PIC_CHECK	:= ./$(IMG_DIR)/.pic_check
+PIC			:= $(if $(wildcard $(PIC_CHECK)),,eval_pic)
 # **************************************************************************** #
 # --------------------------------- H FILES ---------------------------------- #
 # **************************************************************************** #
-# INC		:= 
+# INC			:=	animations		draw			math_utils		raycast		   \
+# 				asset			elevator		minimap			segworld	   \
+# 				cleanup			error			parsing			utils		   \
+# 				controls		levels			pixels			vfx			   \
+# 				cub3d			map				player
 # **************************************************************************** #
 # --------------------------------- C FILES ---------------------------------- #
 # **************************************************************************** #
-# SRC		:=	
+# SRC			:=	animation_utils				map_array						   \
+# 				animation					map_list						   \
+# 				assets_utils				map_utils						   \
+# 				assets						map								   \
+# 				cleanup						math_utils_circle				   \
+# 				draw_circle					math_utils_triangle				   \
+# 				draw_triangle				math_utils						   \
+# 				draw						minimap_draw					   \
+# 				elevator_buttons			minimap_utils					   \
+# 				elevator_events				minimap							   \
+# 				elevator_init				mouse							   \
+# 				elevator_utils				parse_cubfile					   \
+# 				error						parse_floor_ceiling				   \
+# 				hooks						parse_map						   \
+# 				info						parse_walls						   \
+# 				level_change				pixel_color_utils				   \
+# 				level_utils					pixel_colors					   \
+# 				level						pixel_utils						   \
+# 				main						pixels							   \
+# 																			   \
+# 				player_fov					radar_utils						   \
+# 				player_movement_utils		radar							   \
+# 				player_utils												   \
+# 				player														   \
+# 																			   \
+# 				raycast_assets				segworld						   \
+# 				raycast_dda					shadow							   \
+# 				raycast_floor_draw			utils_img						   \
+# 				raycast_floor				utils							   \
+# 				raycast_init				validate_map					   \
+# 				raycast_utils				validate_scene					   \
+# 				raycast_walls				validate
 # **************************************************************************** #
 # -------------------------------- ALL FILES --------------------------------- #
 # **************************************************************************** #
@@ -131,12 +189,13 @@ OBJS	:=	$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # **************************************************************************** #
 # ---------------------------------- RULES ----------------------------------- #
 # **************************************************************************** #
-# all: $(INIT) $(PIC) $(NAME)
-all: $(INIT) $(NAME)
+all: $(INIT) $(PIC) $(NAME)
 
 $(NAME): $(MLX42) $(LIBFT) $(OBJS) $(INCS)
 	@$(COMPILE) $(C_FLAGS) $(HEADERS) $(OBJS) $(LIBFT) $(L_FLAGS) -o $@
 	@echo "$$TITLE"
+	@echo "Compiled for $(ITALIC)$(BOLD)$(PURPLE)$(USER)$(RESET) \
+		$(CYAN)$(TIME)$(RESET)\n"
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR) $(NPD)
@@ -177,19 +236,20 @@ fclean: clean
 		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
 		$(YELLOW)No executable to remove$(RESET)"; \
 	fi
-	@$(REMOVE) $(BONUS_CHECK)
+	@$(REMOVE) $(BONUS_CHECK) $(PIC_CHECK)
+	@$(REMOVE) 
 
 re: fclean all
 
+.PHONY: all clean fclean re
+# **************************************************************************** #
+# ---------------------------------- BONUS ----------------------------------- #
 # **************************************************************************** #
 BONUS_CHECK	:= ./.bonus
 
-# bonus:
-# 	$(info Using C_FLAGS: $(C_FLAGS))
 bonus: C_FLAGS += -DBONUS=1
 bonus: re
 bonus: $(BONUS_CHECK)
-# print a different title..
 
 $(BONUS_CHECK):
 	@if [ ! -f $(BONUS_CHECK) ]; then \
@@ -199,7 +259,7 @@ $(BONUS_CHECK):
 		echo "Bonus build is up to date."; \
 	fi
 
-.PHONY: all clean fclean re bonus
+.PHONY: bonus
 # **************************************************************************** #
 # ----------------------------------- MLX ------------------------------------ #
 # **************************************************************************** #
@@ -294,16 +354,18 @@ pdf: | $(TMP_DIR)
 # **************************************************************************** #
 include $(CFG_DIR)/leaks.mk
 
-# run: all
-# 	./$(NAME) $(MAP)
-
 run: all
 	$(eval ARG := $(if $(wildcard $(BONUS_CHECK)),$(MAPS_BONUS),$(MAP)))
 	./$(NAME) $(ARG)
 
-run_bonus:
-	./$(NAME) $(MAPS_BONUS)
+$(TMP_DIR):
+	@mkdir -p $(TMP_DIR)
 
+ffclean: fclean vclean mlxclean
+	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
+	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
+
+# **************************************************************************** #
 FORCE_FLAGS	:= \
 -Wno-unused-variable \
 -Wno-unused-function
@@ -314,14 +376,7 @@ force: re
 	@echo "$(RED)Forced compilation$(RESET)"
 	./$(NAME) $(MAP)
 
-$(TMP_DIR):
-	@mkdir -p $(TMP_DIR)
-# **************************************************************************** #
-ffclean: fclean vclean mlxclean
-	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
-	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
-
-.PHONY: run debug force ffclean
+.PHONY: run ffclean force
 # **************************************************************************** #
 # ---------------------------------- BACKUP (zip) ---------------------------- #
 # **************************************************************************** #
@@ -423,14 +478,17 @@ info:
 # **************************************************************************** #
 # ----------------------------------- DECO ----------------------------------- #
 # **************************************************************************** #
-# TODO: better title (ASCII ART?)
-# 
 define TITLE
 [$(BOLD)$(PURPLE)$@$(RESET)]\t\t$(GREEN)ready$(RESET)
-$(ORANGE)
-***************
-* PLACEHOLDER *
-***************
+$(PURPLE)
+ _______  __   __  _______  _______  ______  
+|:::::::||::| |::||:::::::||:::::::||::::::| 
+|:::::::||::| |::||:|$(GREEN)▲$(PURPLE)|:::||:::::::||:::::::|
+|:::::::||::|_|::||:::::::| ___|:::||:| |:::|
+|:::::::||:::::::||::::::| |:::::::||:|_|:::|
+|:::::|_ |:::::::||:|$(GREEN)▼$(PURPLE)|:::| ___|:::||:::::::|
+|:::::::||:::::::||:::::::||:::::::||::::::| 
+ ───────  ───────  ───────  ───────  ──────
 $(RESET)
 
 type 'make run' to execute
@@ -438,21 +496,6 @@ or   'make man' for more options
 
 endef
 export TITLE
-
-define TITLE_BONUS
-[$(BOLD)$(PURPLE)$@$(RESET)]\t\t$(GREEN)ready$(RESET)
-$(ORANGE)
-***************
-* PLACEHOLDER *
-**** BONUS ****
-***************
-$(RESET)
-
-type 'make run' to execute
-or   'make man' for more options
-
-endef
-export TITLE_BONUS
 
 USER		:=$(shell whoami)
 TIME		:=$(shell date "+%H:%M:%S")
@@ -568,7 +611,6 @@ sound:
 # **************************************************************************** #
 # **************************************************************************** #
 # **************************************************************************** #
-
 SGOINFRE 		:= ~/sgoinfre/photos_etudiants/*/*
 PROFILE_PIC 	:= $(shell whoami).JPG
 DESTINATION 	:= ./$(shell whoami)_profile_copy.JPG
@@ -579,38 +621,100 @@ eval_pic: $(PIC_CHECK)
 
 $(PIC_CHECK):
 	@if [ ! -f $(PIC_CHECK) ]; then \
-		echo "Searching for $(PURPLE)$(PROFILE_PIC)$(RESET) in $(CYAN)$(UNDERLINE)$(SGOINFRE)$(RESET)..."; \
 		FILE_PATH=$$(find $(SGOINFRE) -name $(PROFILE_PIC) | head -n 1); \
 		if [ -z "$$FILE_PATH" ]; then \
-			echo "$(RED)Error$(RESET): File $(YELLOW)$(PROFILE_PIC)$(RESET) not found in $(CYAN)$(UNDERLINE)$(SGOINFRE)$(RESET)."; \
-			exit 1; \
+			echo "$(RED)Error$(RESET): File $(YELLOW)$(PROFILE_PIC)$(RESET) not found."; \
 		else \
-			echo "Found file at $(CYAN)$(UNDERLINE)$$FILE_PATH$(RESET)"; \
+			echo "$(GREEN)$(BOLD)Preparing $(ORANGE)$(NAME)$(RESET)"; \
 			cp "$$FILE_PATH" $(DESTINATION); \
-			echo "File copied to $(ORANGE)$(DESTINATION)$(RESET)"; \
 		fi; \
 	fi
 	@if [ ! -f $(PIC_CHECK) ]; then \
-		echo "Converting $(ORANGE)$(DESTINATION)$(RESET) to $(BOLD)PNG$(RESET) format..."; \
-		sips -s format png $(DESTINATION) --out $(PNG_DESTINATION); \
+		sips -s format png $(DESTINATION) --out $(PNG_DESTINATION) > $(VOID) 2>&1; \
 		if [ $$? -ne 0 ]; then \
 			echo "$(RED)Error$(RESET): Conversion failed."; \
-			exit 1; \
 		else \
-			echo "$(GREEN)Conversion successful$(RESET). $(BOLD)PNG$(RESET) file saved to $(PURPLE)$(PNG_DESTINATION)$(RESET)"; \
-			echo "$(GRAY)$(ITALIC)Deleting original JPEG file...$(RESET)"; \
 			$(REMOVE) $(DESTINATION); \
-			echo "$(BOLD)JPEG$(RESET) file $(RED)deleted$(RESET)."; \
 		fi; \
 	fi
 	@if [ ! -f $(PIC_CHECK) ]; then \
-		echo "Resizing $(ORANGE)$(PNG_DESTINATION)$(RESET) to $(BLUE)$(PIC_RESIZE)$(RESET)..."; \
-		sips -Z $(PIC_RESIZE) $(PNG_DESTINATION); \
+		sips -Z $(PIC_RESIZE) $(PNG_DESTINATION) > $(VOID) 2>&1; \
 		if [ $$? -ne 0 ]; then \
 			echo "$(RED)Error$(RESET): Resizing failed."; \
-			exit 1; \
 		else \
-			echo "$(GREEN)Resizing successful$(RESET)."; \
+			echo "$(GREEN):)$(RESET)"; \
 		fi; \
 	fi
 	@touch $(PIC_CHECK)
+
+.PHONY: eval_pic
+# **************************************************************************** #
+# ------------------------------- DEPENDENCIES  ------------------------------ #
+# **************************************************************************** #
+# **************************************************************************** # Homebrew
+CHECK_BREW := $(shell command -v brew 2> /dev/null)
+
+brew:
+ifndef CHECK_BREW
+	@echo "Installing Homebrew..."
+	curl -fsSL https://rawgit.com/kube/42homebrew/master/install.sh | zsh
+else
+	@echo "Homebrew is already installed, checking for updates..."
+	@brew update
+endif
+
+delete_brew:
+ifndef CHECK_BREW
+	@echo "Homebrew not found"
+else
+	@echo "Removing Homebrew configuration lines from ~/.zshrc..."
+	@sed -i '' \
+		-e '/^# Load Homebrew Fix script/,/^source $$HOME\/.brewconfig.zsh/d' \
+		~/.zshrc
+	@echo "Homebrew configuration removed from ~/.zshrc."
+	@echo "Deleting ~/.brewconfig.zsh file..."
+	@rm -f ~/.brewconfig.zsh
+	@echo "~/.brewconfig.zsh file deleted."
+endif
+
+brew_info:
+	@open "https://docs.brew.sh/"
+# 
+# **************************************************************************** # CMake
+CHECK_BREW := $(shell command -v brew 2> /dev/null)
+CHECK_CMAKE := $(shell command -v cmake 2> /dev/null)
+
+# Estimated time (based on when i installed it on my session)
+ESTIMATED_TIME = "$(BOLD)7 min 15 seconds$(RESET)"
+
+cmake:
+ifndef CHECK_BREW
+	@echo "Brew is needed to install CMake... run 'make brew' first."
+else
+  ifndef CHECK_CMAKE
+	@echo "Installing CMake...this might take around $(ESTIMATED_TIME)..."
+	@brew install cmake
+  else
+	@echo "CMake is already installed."
+  endif
+endif
+# 
+# **************************************************************************** # GLFW
+CHECK_GLFW := $(shell command -v glfw 2> /dev/null)
+
+# Estimated time (based on when i installed it on my session)
+ESTIMATED_TIME = "$(BOLD)10 seconds$(RESET)"
+
+glfw:
+ifndef CHECK_BREW
+	@echo "Brew is needed to install GLFW... run 'make brew' first."
+else
+  ifndef CHECK_GLFW
+	@echo "Installing GLFW...this might take around $(ESTIMATED_TIME)"
+	@brew install glfw
+  else
+	@echo "GLFW is already installed."
+  endif
+endif
+# 
+.PHONY: brew delete_brew brew_info cmake glfw

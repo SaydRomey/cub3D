@@ -6,12 +6,14 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/05/09 18:20:17 by cdumais          ###   ########.fr        #
+#    Updated: 2024/05/09 18:41:17 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# TODO: check to install GLFW in lib dir like we did with readline ?
-# or automate the installation of required dependencies (brew, cmake, glfw)
+# TODO: conditionnal eval pic (only on mac..)
+# TODO: automate required dependency check/install (brew, cmake, glfw)
+# TODO: fix automatic pull of modified submodule with make *?
+# TODO: maybe compress the img dir and unzip when we 'make' to make project lighter *!!?
 
 # https://lodev.org/cgtutor/raycasting.html
 

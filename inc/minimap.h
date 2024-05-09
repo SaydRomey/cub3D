@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:37:51 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/02 11:42:00 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:49:22 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 # define RADAR_SIZE			300
 # define RADAR_MARGIN		20
+# define RADAR_FOV			45
 # define RADAR_FRAME_COL	0x887251FF
 # define RADAR_BG_COL		0x000000FF
 

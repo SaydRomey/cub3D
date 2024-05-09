@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 22:59:32 by oroy             ###   ########.fr       */
+/*   Updated: 2024/05/02 12:02:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 # define WALL_TEXTURE_LEN	4
 # define COLOR_TYPE_LEN 	2
 # define RGB_LEN			3
-
-# define MENU_SHOW			1080 - 540
-# define MENU_HIDE			1080 - 85
 
 typedef struct s_fpoint
 {

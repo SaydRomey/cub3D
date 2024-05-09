@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 14:47:00 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/01 20:09:40 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 18:10:52 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define PIXELS_H
 
 # include "MLX42.h"
-
-// TODO: adjust color hex values with following websites:
 
 // https://imagecolorpicker.com/en
 // https://htmlcolorcodes.com/
@@ -33,22 +31,22 @@
 # define HEX_GREEN		0x00FF00FF
 # define HEX_BLUE		0x0000FFFF
 # define HEX_YELLOW		0xFFFF00FF
-# define HEX_MAGENTA	0xFF00FFFF //bright on mac
+# define HEX_MAGENTA	0xFF00FFFF
 # define HEX_CYAN		0x00FFFFFF
-// 
-# define HEX_OLILAS		0xA27CF1FF //blueish purple on mac
-# define HEX_ORANGE 	0xFF7700FF //best orange on mac
-# define HEX_PURPLE		0x800080FF //weak on MAC
-# define HEX_PINK		0xFFC0CBFF //pale pink on mac
-# define HEX_BROWN		0x663300FF //weak dark orange on mac
-// 
+# define HEX_OLILAS		0xA27CF1FF
+# define HEX_ORANGE 	0xFF7700FF
+# define HEX_PURPLE		0x740E79FF
+# define HEX_PINK		0xE44AADFF
 # define HEX_GROUND		0x8E8849FF
 # define HEX_SKY		0x6DC0C3FF
 
 // pixel_color_utils.c
 void	add_color_totals(int *totals, int color);
+void	draw_opaque_pixel(mlx_image_t *img, int x, int y, int color);
 void	process_pixels(mlx_image_t *img, int *totals, int *count);
 void	compute_averages(int *totals, int count, int *averages);
+void	draw_opaque_pixel(mlx_image_t *img, int x, int y, int color);
+int		choose_pixel(int color, int default_color);
 
 // pixel_colors.c
 int		average_img_color(mlx_image_t *img);

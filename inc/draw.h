@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:27:46 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/29 15:36:34 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 14:46:51 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ t_point origin, t_point end, int color);
 void	draw_random_rectangle(mlx_image_t *img, \
 t_point origin, t_point end, int brightness_level);
 void	draw_floor_ceiling(mlx_image_t *img, t_map *map);
+void	draw_segworld_floor_ceiling(mlx_image_t *img, t_map *map);
 
 #endif // DRAW_H

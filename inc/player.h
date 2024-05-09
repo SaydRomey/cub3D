@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:25:21 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/02 03:15:27 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:06:10 by oroy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 # include "levels.h"
 
 # define PLAYER_FOV			0.80
+# define FOV_COLOR			0xFF7700FF
 # define PLAYER_SIZE		24
 # define PLAYER_SPEED		0.1
 # define PLAYER_TURN_SPEED	0.1
+# define PLAYER_COLOR		0x00FF00FF
 # define PLAYER_ICON_ANGLE	30
-# define FOV_COLOR			0xFF7700FF
 
 typedef struct s_player
 {
@@ -40,7 +41,7 @@ typedef struct s_player
 }					t_player;
 
 // player_fov.c
-void	draw_fov(t_minimap *mini, t_player *player);
+void		draw_fov(t_minimap *mini, t_player *player);
 
 // player_movement_utils.c
 t_fpoint	get_velocity(t_player *player);

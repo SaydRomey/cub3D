@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/05/09 20:42:18 by cdumais          ###   ########.fr        #
+#    Updated: 2024/05/10 12:35:32 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,10 +59,6 @@ SRC_DIR		:= src
 TMP_DIR		:= tmp
 WAV_DIR		:= wav
 
-# https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
-# -Ofast	-> 
-# -flto		-> link-time optimisation
-
 COMPILE		:= gcc
 OPTIMIZE	:= -Ofast -flto
 C_FLAGS		:= -Wall -Wextra -Werror $(OPTIMIZE)
@@ -94,9 +90,6 @@ HEADERS		:= $(HEADERS) -I$(MLX_INC)
 # **************************************************************************** #
 # ---------------------------------- CONFIG  --------------------------------- #
 # **************************************************************************** #
-# TODO: adapt default to desired dimensions in config_*.mk
-# TODO: adapt eval pic to only mac *!! (linux is to ignore target)
-# 
 ifeq ($(OS),Linux)
 include $(CFG_DIR)/config_linux.mk
 else ifeq ($(OS),Darwin)
@@ -106,7 +99,6 @@ $(error Unsupported operating system: $(OS))
 endif
 
 C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
-
 # **************************************************************************** #
 # -------------------------------- SUBMODULES  ------------------------------- #
 # **************************************************************************** #
@@ -539,7 +531,7 @@ BG_GRAY		:= $(ESC)[100m
 # ------------------------------- ANIMATIONS --------------------------------- #
 # **************************************************************************** #
 # TODO: add a chmod + x to the script
-# TODO: set this up during mlx42's compilation? or when installing brew, cmake, glfw
+# TODO: set this up during mlx42's compilation? or when installing brew, cmake, glfw ?
 # 
 # Animation shell script
 SPIN_SH		:= $(CFG_DIR)/spinner.sh
@@ -581,7 +573,7 @@ spin2:
 .PHONY: spin spin2
 # **************************************************************************** #
 # --------------------------------- SOUNDS ----------------------------------- #
-# **************************************************************************** #
+# **************************************************************************** # *? check for elevator music when (in elevator && door is closed)
 # https://sound-effects.bbcrewind.co.uk/
 # https://soundbible.com/
 # or convert youtube/mp3/etc. to .wav
@@ -596,7 +588,7 @@ sound:
 .PHONY: sound
 # **************************************************************************** #
 # **************************************************************************** #
-# **************************************************************************** #
+# **************************************************************************** # //this should only happen when on school's macs ..*!
 SGOINFRE 		:= ~/sgoinfre/photos_etudiants/*/*
 PROFILE_PIC 	:= $(shell whoami).JPG
 DESTINATION 	:= ./$(shell whoami)_profile_copy.JPG

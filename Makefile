@@ -6,7 +6,7 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/05/09 18:41:17 by cdumais          ###   ########.fr        #
+#    Updated: 2024/05/09 20:42:18 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,23 +106,7 @@ $(error Unsupported operating system: $(OS))
 endif
 
 C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
-#
-# # (this is for reference in the mac version) # # 
-# C_FLAGS		+= -DOS_MAC
 
-# GLFW_DIR	:= $(shell brew --prefix glfw)/lib
-# GLFW		:= -lglfw
-# FRAMEWORKS	:= -framework Cocoa -framework OpenGL -framework IOKit
-
-# L_FLAGS		:= $(L_FLAGS) -L$(GLFW_DIR) $(GLFW) $(FRAMEWORKS)
-
-# OPEN		:= open
-# MACHINE		:= $(shell uname -n)
-
-# SCREEN_W	:= 1920
-# SCREEN_H	:= 1080
-# C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
-# #
 # **************************************************************************** #
 # -------------------------------- SUBMODULES  ------------------------------- #
 # **************************************************************************** #

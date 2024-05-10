@@ -6,12 +6,14 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 23:31:55 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/09 18:32:01 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/09 20:29:04 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 TODO:
+
+colors as unsigned int instead of int ?
 
 menu
 	adjust display_menu to adapt to img dimensions (margin)

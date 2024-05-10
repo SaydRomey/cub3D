@@ -6,11 +6,40 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 15:24:06 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/06 18:03:41 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/09 20:29:46 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+/*
+void	add_segworld(t_list **levels)
+{
+	t_level	*seg_lvl;
+	t_list	*node;
+
+	seg_lvl = (t_level *)ft_calloc(1, sizeof(t_level));
+	if (seg_lvl)
+	{
+		// seg_lvl->...
+	}
+	else
+		set_error("Malloc error");
+	if (!there_is_a_problem())
+	{
+		node = ft_lstnew(seg_lvl);
+		if (!node)
+		{
+			delete_level(seg_lvl);
+			set_error("Malloc error");
+		}
+		else
+			ft_lstadd_back(levels, node);
+	}
+	else
+		error();
+}
+*/
 
 static void	set_segworld_elevator(t_level *segworld, t_point pos)
 {

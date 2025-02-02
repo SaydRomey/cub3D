@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/05/06 16:21:28 by cdumais          ###   ########.fr       */
+/*   Updated: 2025/02/02 01:00:00 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@
 # define CUB_CEILING_PATH	"img/school/light.png"
 # define CUB_EVALUATOR_DFLT	"img/evaluator_dflt.png"
 # define CUB_EVALUATOR_PATH	"img/evaluator.png"
-# define CUB_EVALUATOR_DFLT	"img/evaluator_dflt.png"
 # define CUB_MENU_PATH		"img/ui/menu.png"
 
 /* ************************************************************************** */

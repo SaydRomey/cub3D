@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/06/20 16:07:54 by cdumais          ###   ########.fr       */
+/*   Updated: 2025/02/02 01:01:25 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static t_cub	*init_cub(char *title)
 	move_img(cub->radar_img, WIDTH - RADAR_SIZE - RADAR_MARGIN, RADAR_MARGIN);
 	cub->floor_ceiling_default[FLOOR] = CUB_FLOOR_PATH;
 	cub->floor_ceiling_default[CEILING] = CUB_CEILING_PATH;
-	if (read_check(CUB_EVALUATOR_PATH))
+	if (read_check(CUB_EVALUATOR_PATH) == 1)
 	{
 		cub->user_img = load_png(CUB_EVALUATOR_PATH, cub->mlx);
 		call_info()->eval_pic = true;

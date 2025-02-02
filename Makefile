@@ -6,35 +6,9 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/19 16:45:34 by cdumais           #+#    #+#              #
-#    Updated: 2024/05/10 12:35:32 by cdumais          ###   ########.fr        #
+#    Updated: 2025/02/02 00:39:28 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# TODO: conditionnal eval pic (only on mac..)
-# TODO: automate required dependency check/install (brew, cmake, glfw)
-# TODO: fix automatic pull of modified submodule with make *?
-# TODO: maybe compress the img dir and unzip when we 'make' to make project lighter *!!?
-
-# https://lodev.org/cgtutor/raycasting.html
-
-# https://doomwiki.org/wiki/Doom_rendering_engine
-
-# https://pulgamecanica.herokuapp.com/posts/mlx42-intro
-
-# assets:
-# https://crusenho.itch.io/complete-gui-essential-pack
-
-
-#TODO/TOCHECK:
-# replace L_FLAGS by LDFLAGS:
-# Extra flags to give to compilers when they are supposed to invoke the linker,
-# 'ld', such as -L.
-# Non-library linker flags, such as -L, should go in the LDFLAGS variable.
-# Libraries (-lfoo) should be added to the LDLIBS variable instead.
-
-# https://www.gnu.org/software/make/manual/make.html#Conditionals
-
-# !** make a simple version of this makefile..
 
 # **************************************************************************** #
 # --------------------------------- VARIABLES -------------------------------- #

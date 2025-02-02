@@ -1,0 +1,422 @@
+
+//config_mac.mk
+
+MLX_DIR	:= $(LIB_DIR)/minilibx/minilibx_macos
+
+L_FLAGS	:= -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+
+
+END_SRC	:= cleanup_mac.c
+# KEYSYM	:= keysym_mac.h
+
+OPEN	:= open
+
+MACHINE	:= MacOS
+
+//config_linux.mk
+
+MLX_DIR	:= $(LIB_DIR)/minilibx/minilibx_linux
+
+L_FLAGS	:= -L$(MLX_DIR) -lmlx -lbsd -lXext -lX11 -lm
+
+
+END_SRC	:= cleanup_linux.c
+# KEYSYM	:= keysym_linux.h
+
+OPEN	:= xdg-open
+
+MACHINE	:= Linux
+
+//Makefile
+
+# **************************************************************************** #
+# --------------------------------- VARIABLES -------------------------------- #
+# **************************************************************************** #
+NAME		:= cub3D
+ARGS		:= 
+
+INC_DIR		:= inc
+LIB_DIR		:= lib
+OBJ_DIR		:= obj
+SRC_DIR		:= src
+TMP_DIR		:= tmp
+
+# OS-specific configuration inclusion
+OS := $(shell uname)
+ifeq ($(OS),Linux)
+include config_linux.mk
+else ifeq ($(OS),Darwin)
+include config_mac.mk
+else
+$(error Unsupported operating system: $(OS))
+endif
+
+# Library variables
+LIBFT_DIR	:= $(LIB_DIR)/libft
+LIBFT_INC	:= $(LIBFT_DIR)/$(INC_DIR)
+LIBFT		:= $(LIBFT_DIR)/libft.a
+
+MLX			:= $(MLX_DIR)/libmlx.a
+
+# Submodules initialization check
+INIT_CHECK	:= $(LIB_DIR)/.init_check
+INIT		:= $(if $(wildcard $(INIT_CHECK)),,init_submodules)
+
+COMPILE		:= gcc
+C_FLAGS		:= -Wall -Wextra -Werror
+HEADERS		:= -I$(INC_DIR) -I$(LIBFT_INC) -I$(MLX_DIR)
+
+REMOVE		:= rm -rf
+NPD			:= --no-print-directory
+VOID		:= /dev/null
+
+# **************************************************************************** #
+# --------------------------------- H FILES ---------------------------------- #
+# **************************************************************************** #
+# INC		:= $(KEYSYM)
+# **************************************************************************** #
+# --------------------------------- C FILES ---------------------------------- #
+# **************************************************************************** #
+# SRC		:=	$(END_SRC)
+# **************************************************************************** #
+# -------------------------------- ALL FILES --------------------------------- #
+# **************************************************************************** #
+# INCS		:=	$(addprefix $(INC_DIR)/, $(addsuffix .h, $(INC)))
+# SRCS		:=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC)))
+# OBJS		:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+# **************************************************************************** #
+# -------------------------------- ALL * FILES ------------------------------- #
+# **************************************************************************** #
+INCS		:=	$(wildcard $(INC_DIR)/*.h)
+SRCS		:=	$(wildcard $(SRC_DIR)/*.c)
+OBJS		:=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+# OBJS		:=	$(SRCS:.c=.o) #instead of patsubst
+
+# INCS		:= $(wildcard $(INC_DIR)/*.h) $(INC_DIR)/$(KEYSYM)
+# SRCS		:= $(wildcard $(SRC_DIR)/*.c) $(SRC_DIR)/$(END_SRC)
+# OBJS		:= $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+# **************************************************************************** #
+# ---------------------------------- RULES ----------------------------------- #
+# **************************************************************************** #
+all: $(INIT) $(NAME)
+
+$(NAME): $(LIBFT) $(OBJS) $(INCS) $(MLX)
+	@$(COMPILE) $(C_FLAGS) $(HEADERS) $(OBJS) $(LIBFT) $(L_FLAGS) -o $@
+	@echo "$(GREEN)$$TITLE$(RESET)"
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR) $(NPD)
+
+$(MLX):
+	@echo "Building minilibx in $(CYAN)$(UNDERLINE)$(MLX_DIR)$(RESET)..."
+	@$(MAKE) -C $(MLX_DIR) > $(VOID) 2>&1 || \
+		(echo "Failed to build minilibx in $(MLX_DIR)" && exit 1)
+	@printf "$(UP)$(ERASE_LINE)"
+	@echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
+	$(GREEN)\tbuilt successfully$(RESET)"
+
+# $(info Using include paths: $(HEADERS)) #before compilation to debug the -I (debugged !)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCS) | $(OBJ_DIR)
+	@echo "$(CYAN)Compiling...$(ORANGE)\t$(notdir $<)$(RESET)"
+	@$(COMPILE) $(C_FLAGS) $(HEADERS) -c $< -o $@
+	@printf "$(UP)$(ERASE_LINE)"
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+clean:
+	@if [ -d "$(OBJ_DIR)" ]; then \
+		$(REMOVE) $(OBJ_DIR); \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)Object files removed$(RESET)"; \
+	else \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)No object files to remove$(RESET)"; \
+	fi
+	@$(MAKE) clean -C $(LIBFT_DIR) $(NPD)
+
+fclean: clean
+	@if [ -n "$(wildcard $(NAME))" ]; then \
+		$(REMOVE) $(NAME); \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)Executable removed$(RESET)"; \
+	else \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)No executable to remove$(RESET)"; \
+	fi
+
+re: fclean all
+
+.PHONY: all clean fclean re
+# **************************************************************************** #
+# ----------------------------------- GIT ------------------------------------ #
+# **************************************************************************** #
+# @touch $@ #(testing sentinel with text instead of empty file..)
+
+init_submodules: $(INIT_CHECK)
+
+$(INIT_CHECK):
+	@git submodule update --init --recursive
+	@echo "$(NAME) compiled for $(MACHINE)" > $@
+ifeq ($(OS), Linux)
+	@chmod +x $(MLX_DIR)/configure
+endif
+
+update:
+	@echo "Are you sure you want to update the repo and submodules? [y/N] " \
+	&& read ANSWER; \
+	if [ "$$ANSWER" = "y" ] || [ "$$ANSWER" = "Y" ]; then \
+		git pull origin main; \
+		$(MAKE) init_submodules; \
+		echo "Repository and submodules updated."; \
+	else \
+		echo "canceling update..."; \
+	fi
+
+.PHONY: init_submodules update
+# **************************************************************************** #
+# -------------------------------- MINILIBX ---------------------------------- #
+# **************************************************************************** #
+mlxclean:
+	@if [ -f $(MLX) ]; then \
+		make clean -C $(MLX_DIR) > $(VOID) 2>&1 || (echo "mlx clean error" \
+			&& exit 1); \
+		echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
+		$(GREEN)Library removed$(RESET)"; \
+	else \
+		echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
+		$(YELLOW)No library to remove$(RESET)"; \
+	fi
+
+.PHONY: mlxclean
+# **************************************************************************** #
+# ---------------------------------- NORME ----------------------------------- #
+# **************************************************************************** #
+norm:
+	@if which norminette > $(VOID); then \
+		echo "$(BOLD)$(YELLOW)Norminetting $(PURPLE)$(NAME)$(RESET)"; \
+		norminette -o $(INCS); \
+		norminette -o $(SRCS); \
+		$(MAKE) norm -C $(LIBFT_DIR); \
+	else \
+		echo "$(BOLD)$(YELLOW)Norminette not installed$(RESET)"; \
+	fi
+
+nm: $(NAME)
+	@echo "$(BOLD)$(YELLOW)Functions in $(PURPLE)$(UNDERLINE)$(NAME)$(RESET):"
+	@nm $(NAME) | grep U | grep -v 'ft_' \
+				| sed 's/U//g' | sed 's/__//g' | sed 's/ //g' \
+				| sort | uniq
+	@$(MAKE) nm -C $(LIBFT_DIR) $(NPD)
+
+.PHONY: norm nm
+# **************************************************************************** #
+# ---------------------------------- PDF ------------------------------------- #
+# **************************************************************************** #
+PDF		:= cub3d_en.pdf
+GIT_URL	:= https://github.com/SaydRomey/42_ressources
+PDF_URL	= $(GIT_URL)/blob/main/pdf/$(PDF)?raw=true
+
+pdf: | $(TMP_DIR)
+	@curl -# -L $(PDF_URL) -o $(TMP_DIR)/$(PDF)
+	$(OPEN) $(TMP_DIR)/$(PDF)
+
+.PHONY: pdf
+# **************************************************************************** #
+# -------------------------------- LEAKS ------------------------------------- #
+# **************************************************************************** #
+VAL_CHECK	:= $(shell which valgrind > $(VOID); echo $$?)
+
+# valgrind options
+ORIGIN		:= --track-origins=yes
+LEAK_CHECK	:= --leak-check=full
+LEAK_KIND	:= --show-leak-kinds=all
+
+# valgrind additional options
+CHILDREN	:= --trace-children=yes
+FD_TRACK	:= --track-fds=yes
+HELGRIND	:= --tool=helgrind
+NO_REACH	:= --show-reachable=no
+VERBOSE		:= --verbose
+VAL_LOG		:= valgrind-out.txt
+LOG_FILE	:= --log-file=$(VAL_LOG)
+
+# suppression-related options
+SUPP_FILE	:= suppression.supp
+SUPP_GEN	:= --gen-suppressions=all
+SUPPRESS	:= --suppressions=$(SUPP_FILE)
+
+# default valgrind tool
+BASE_TOOL	= valgrind $(ORIGIN) $(LEAK_CHECK) $(LEAK_KIND)
+# **************************************************************************** #
+# specific valgrind tool (add 'valgrind options' variables as needed)
+BASE_TOOL	+= 
+# **************************************************************************** #	TODO: check if we should put messages as an echo instead of a target
+LEAK_TOOL	= $(BASE_TOOL) $(LOG_FILE)
+SUPP_TOOL	= $(BASE_TOOL) $(SUPP_GEN) $(LOG_FILE)
+
+# run valgrind
+leaks_msg:
+	@echo "[$(BOLD)$(PURPLE)valgrind$(RESET)] \
+	$(ORANGE)\tRecompiling with debug flags$(RESET)"
+
+leaks: leaks_msg debug
+	@if [ $(VAL_CHECK) -eq 0 ]; then \
+		echo "[$(BOLD)$(PURPLE)valgrind$(RESET)] \
+		$(ORANGE)Launching valgrind\n$(RESET)#"; \
+		$(LEAK_TOOL) ./$(NAME) $(ARGS); \
+		echo "#\n[$(BOLD)$(PURPLE)valgrind$(RESET)] \
+		$(ORANGE)info in: $(CYAN)$(VAL_LOG)$(RESET)"; \
+	else \
+		echo "Please install valgrind to use the 'leaks' feature"; \
+	fi
+
+# generate suppression file
+supp_msg:
+	@echo "generating suppression file"
+supp: leaks_msg supp_msg debug
+	$(SUPP_TOOL) ./$(NAME) $(ARGS) && \
+	awk '/^{/,/^}/' valgrind-out.txt > suppression.supp
+
+# use suppression file
+suppleaks_msg:
+	@echo "launching valgrind with suppression file"
+suppleaks: debug
+	$(LEAK_TOOL) $(SUPPRESS) ./$(NAME) $(ARGS)
+
+# remove suppression and log files
+vclean:
+	@if [ -n "$(wildcard suppression.supp)" ]; then \
+		$(REMOVE) $(SUPP_FILE); \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)suppression file removed$(RESET)"; \
+	else \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)no suppression file to remove$(RESET)"; \
+	fi
+	@if [ -n "$(wildcard valgrind-out.txt)" ]; then \
+		$(REMOVE) valgrind-out.txt; \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(GREEN)log file removed$(RESET)"; \
+	else \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		$(YELLOW)no log file to remove$(RESET)"; \
+	fi
+
+.PHONY: leaks_msg leaks supp_msg supp suppleaks_msg suppleaks vclean
+# **************************************************************************** #
+# ---------------------------------- UTILS ----------------------------------- #
+# **************************************************************************** #
+run: all
+	./$(NAME) $(ARGS)
+
+debug: C_FLAGS += -g
+debug: re
+
+$(TMP_DIR):
+	@mkdir -p $(TMP_DIR)
+
+ffclean: fclean vclean mlxclean
+	@$(MAKE) fclean -C $(LIBFT_DIR) $(NPD)
+	@$(REMOVE) $(TMP_DIR) $(INIT_CHECK) $(NAME).dSYM
+
+.PHONY: run debug ffclean
+# **************************************************************************** #
+# ---------------------------------- BACKUP (zip) ---------------------------- #
+# **************************************************************************** #
+USER		:=$(shell whoami)
+ROOT_DIR	:=$(notdir $(shell pwd))
+TIMESTAMP	:=$(shell date "+%Y%m%d_%H%M%S")
+BACKUP_NAME	:=$(ROOT_DIR)_$(USER)_$(TIMESTAMP).zip
+MOVE_TO		:= ~/Desktop/$(BACKUP_NAME)
+
+zip: ffclean
+	@if which zip > $(VOID); then \
+		zip -r --quiet $(BACKUP_NAME) ./*; \
+		mv $(BACKUP_NAME) $(MOVE_TO); \
+		echo "[$(BOLD)$(PURPLE)$(NAME)$(RESET)] \
+		compressed as: $(CYAN)$(UNDERLINE)$(MOVE_TO)$(RESET)"; \
+	else \
+		echo "Please install zip to use the backup feature"; \
+	fi
+
+.PHONY: zip
+# **************************************************************************** #
+# ----------------------------------- DECO ----------------------------------- #
+# **************************************************************************** #
+define TITLE
+
+$@ is ready
+
+endef
+export TITLE
+
+# **************************************************************************** #
+# **************************************************************************** #
+ESC			:= \033
+
+RESET		:= $(ESC)[0m
+BOLD		:= $(ESC)[1m
+ITALIC		:= $(ESC)[3m
+UNDERLINE	:= $(ESC)[4m
+
+# Cursor movement
+UP			:= $(ESC)[A
+DOWN		:= $(ESC)[B
+TOP_LEFT	:= $(ESC)[1;1H
+
+# Erasing
+ERASE_REST	:= $(ESC)[K
+ERASE_LINE	:= $(ESC)[2K
+ERASE_ALL	:= $(ESC)[2J
+# **************************************************************************** #
+# ---------------------------------- COLORS ---------------------------------- #
+# **************************************************************************** #
+# Text
+BLACK		:= $(ESC)[30m
+RED			:= $(ESC)[91m
+GREEN		:= $(ESC)[32m
+YELLOW		:= $(ESC)[93m
+ORANGE		:= $(ESC)[38;5;208m
+BLUE		:= $(ESC)[94m
+PURPLE		:= $(ESC)[95m
+CYAN		:= $(ESC)[96m
+WHITE		:= $(ESC)[37m
+GRAY		:= $(ESC)[90m
+
+
+[...]
+
+//alternative makefile without config makefiles:
+
+# **************************************************************************** #
+# -------------------------------- MINILIBX (variables) ---------------------- #
+# **************************************************************************** #
+MLX_DIR		:= $(LIB_DIR)/minilibx
+
+ifeq ($(OS), Linux)
+	END_SRC := cleanup_linux.c
+	MLX_DIR := $(MLX_DIR)/minilibx_linux
+	L_FLAGS := -L$(MLX_DIR) -lmlx -lbsd -lXext -lX11 -lm
+else ifeq ($(OS), Darwin)
+	END_SRC := cleanup_mac.c
+	MLX_DIR := $(MLX_DIR)/minilibx_macos
+	L_FLAGS := -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+else
+	$(error Unsupported operating system: $(UNAME))
+endif
+
+MLX			:= $(MLX_DIR)/libmlx.a
+HEADERS		:= $(HEADERS) -I$(MLX_DIR)
+
+[...]
+
+$(MLX):
+	@echo "Building minilibx in $(CYAN)$(UNDERLINE)$(MLX_DIR)$(RESET)..."
+	@$(MAKE) -C $(MLX_DIR) > $(VOID) 2>&1 || \
+		(echo "Failed to build minilibx in $(MLX_DIR)" && exit 1)
+	@printf "$(UP)$(ERASE_LINE)"
+	@echo "[$(BOLD)$(PURPLE)minilibx$(RESET)] \
+	$(GREEN)\tbuilt successfully$(RESET)"
+	

@@ -18,9 +18,13 @@
 **/tmp/
 **/obj/
 
+# Misc
+img/evaluator.png
+
 # Sentinel files
 .init_check
-.testfile
+.pic_check
+.bonus
 
 # Executables
 cub3D

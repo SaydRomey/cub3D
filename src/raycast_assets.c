@@ -1,14 +1,14 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   raycast_assets.c                                   :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: oroy <oroy@student.42.fr>                  +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2024/03/21 13:04:20 by oroy              #+#    #+#             */
-// /*   Updated: 2024/03/29 16:29:45 by oroy             ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycast_assets.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 16:12:06 by oroy              #+#    #+#             */
+/*   Updated: 2024/04/29 18:58:25 by cdumais          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "cub3d.h"
 
@@ -55,30 +55,27 @@ static void	set_sprite_distance(t_asset *s, int total)
 	}
 }
 
-static void	draw_asset_pixels(t_cub *cub, t_asset s, float z_buffer[WIDTH])
+static void	draw_asset_pixels(t_cub *cub, t_asset s, t_texture tex, float *z)
 {
-	int			x;
-	int			y;
-	int			start_pos;
-	int			color;
-	t_point		tex;
+	int	x;
+	int	y;
 
 	x = s.h.start;
+	tex.pos_x = (x - (s.screen_x - s.h.size / 2)) * tex.step_x;
 	while (x < s.h.end)
 	{
-		// tex.x = (int)(256 * (x - (s.screen_x - s.h.size / 2)) * s.tex->width / s.h.size) / 256;
-		tex.x = ft_abs(x - (s.screen_x - s.h.size / 2)) * s.tex->width / s.h.size;
-		if (s.transform.y > 0 && x >= 0 && x < WIDTH && s.transform.y < z_buffer[x])
+		tex.pixel.x = (int)tex.pos_x % tex.width;
+		tex.pos_x += tex.step_x;
+		if (s.tf.y > 0 && x >= 0 && x < WIDTH && s.tf.y < z[x])
 		{
 			y = s.v.start;
+			tex.pos_y = (y - HEIGHT / 2 + s.v.size / 2) * tex.step_y;
 			while (y < s.v.end)
 			{
-				// start_pos = y * 256 - HEIGHT * 128 + s.v.size * 128;
-				start_pos = ft_abs(y - HEIGHT / 2 + s.v.size / 2);
-				tex.y = start_pos * s.tex->height / s.v.size;
-				color = get_pixel(s.tex, tex.x, tex.y);
-				if (get_alpha(color) == 255)
-					draw_pixel(cub->img, x, y, color);
+				tex.pixel.y = (int)tex.pos_y % tex.height;
+				tex.pos_y += tex.step_y;
+				asset_pixel(cub->img, x, y, \
+				get_pixel(tex.to_draw, tex.pixel.x, tex.pixel.y));
 				y++;
 			}
 		}
@@ -86,35 +83,45 @@ static void	draw_asset_pixels(t_cub *cub, t_asset s, float z_buffer[WIDTH])
 	}
 }
 
-void	draw_assets(float z_buffer[WIDTH])
+/**
+ * Uses the inverse camera matrix to get the asset position
+ * in camera space. Here, tf.y is actually the depth of the asset
+ * (similar to the wall perpendicular distance)
+*/
+static void	start_drawing_assets(t_cub *cub)
 {
-	t_cub		*cub;
 	t_asset		*s;
+	t_texture	tex;
 	float		inv;
 	int			total;
 	int			i;
 
-	cub = call_cub();
 	total = get_level(cub->current_level)->assets_total;
 	s = get_level(cub->current_level)->assets;
 	set_sprite_distance(s, total);
 	sort_sprites(s, total);
-	//
 	i = 0;
 	while (i < total)
 	{
 		inv = 1.0 / rot_matrix(cub->player.cam_plane, cub->player.delta);
-		s[i].transform.x = inv * rot_matrix(s[i].pos_relative, cub->player.delta);
-		s[i].transform.y = inv * rot_matrix(cub->player.cam_plane, s[i].pos_relative);
-		s[i].screen_x = (int)((WIDTH / 2) * (1 + s[i].transform.x / s[i].transform.y));
-
-		// Calculate dimensions
-		s[i].v = get_stripe_data(s[i].transform.y, HEIGHT / 2, HEIGHT);
-		s[i].h = get_stripe_data(s[i].transform.y, s[i].screen_x, WIDTH);
-
-		// Loop through all vertical stripes of the sprites
-		draw_asset_pixels(cub, s[i], z_buffer);
-		
+		s[i].tf.x = inv * rot_matrix(s[i].pos_relative, cub->player.delta);
+		s[i].tf.y = inv * rot_matrix(cub->player.cam_plane, s[i].pos_relative);
+		s[i].screen_x = (int)((WIDTH / 2) * (1 + s[i].tf.x / s[i].tf.y));
+		s[i].v = get_stripe_data(s[i].tf.y, HEIGHT / 2, HEIGHT);
+		s[i].h = get_stripe_data(s[i].tf.y, s[i].screen_x, WIDTH);
+		tex = get_texture_info(s[i].tex);
+		tex.step_x = tex.width / (float)s[i].h.size;
+		tex.step_y = tex.height / (float)s[i].v.size;
+		draw_asset_pixels(cub, s[i], tex, cub->raycast.z_buffer);
 		i++;
 	}
+}
+
+void	draw_assets(void *param)
+{
+	t_cub	*cub;
+
+	cub = (t_cub *)param;
+	if (get_level(cub->current_level)->assets)
+		start_drawing_assets(cub);
 }

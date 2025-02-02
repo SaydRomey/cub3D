@@ -6,12 +6,30 @@
 #    By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 17:11:25 by cdumais           #+#    #+#              #
-#    Updated: 2024/04/22 11:35:54 by cdumais          ###   ########.fr        #
+#    Updated: 2024/05/09 20:42:26 by cdumais          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # **************************************************************************** #
 # --------------------------------- MacOS ------------------------------------ #
+# **************************************************************************** #
+#
+# # (this is for reference in the mac version) # # 
+# C_FLAGS		+= -DOS_MAC
+
+# GLFW_DIR	:= $(shell brew --prefix glfw)/lib
+# GLFW		:= -lglfw
+# FRAMEWORKS	:= -framework Cocoa -framework OpenGL -framework IOKit
+
+# L_FLAGS		:= $(L_FLAGS) -L$(GLFW_DIR) $(GLFW) $(FRAMEWORKS)
+
+# OPEN		:= open
+# MACHINE		:= $(shell uname -n)
+
+# SCREEN_W	:= 1920
+# SCREEN_H	:= 1080
+# C_FLAGS		+= -DWIDTH=$(SCREEN_W) -DHEIGHT=$(SCREEN_H)
+# #
 # **************************************************************************** #
 # TOCHECK: does using osascript create a problem on other 42 stations?
 # 

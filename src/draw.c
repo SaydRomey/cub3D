@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:07:33 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 17:45:10 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 16:25:40 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_point origin, t_point end, int brightness_level)
 {
 	int	x;
 	int	y;
-	
+
 	y = origin.y;
 	while (y < origin.y + end.y)
 	{
@@ -74,7 +74,7 @@ void	draw_floor_ceiling(mlx_image_t *img, t_map *map)
 {
 	t_point	start;
 	t_point	end;
-	
+
 	start.x = 0;
 	start.y = img->height / 2;
 	end.x = img->width;
@@ -84,8 +84,5 @@ void	draw_floor_ceiling(mlx_image_t *img, t_map *map)
 	start.y = 0;
 	end.x = img->width;
 	end.y = img->height / 2;
-	if (get_level(call_cub()->current_level)->is_segworld)
-		draw_random_rectangle(img, start, end, SW_C_BRIGHT_LVL);
-	else
-		draw_rectangle(img, start, end, map->ceiling_color);
+	draw_rectangle(img, start, end, map->ceiling_color);
 }

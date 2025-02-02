@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:11:30 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 16:09:45 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 00:12:47 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ static int	tile_color(t_minimap *mini, t_map *map, int y, int x)
 	if (value < 0)
 		return (MINI_VOID_COL);
 	else if (value == 0)
-		return (MINI_WALK_COL);
+		return (mini->colors[WALKABLE]);
 	else if (value == 1)
-		return (MINI_WALL_COL);
+		return (mini->colors[WALL]);
 	else if (value == 2)
-		return (MINI_DOOR_COL);
+		return (mini->colors[DOOR]);
 	else if (value == 3)
-		return (MINI_ELEV_COL);
+		return (mini->colors[ELEVATOR]);
 	else
 		return (HEX_RED);
 }
@@ -93,15 +93,10 @@ t_point *start, t_point *end)
 	end->y = ft_min(map->height, mini->center.y + half_height + 1);
 }
 
-/*
-draws a full size minimap once,
-** will serve as a reference for radar minimap
-
-*/
 void	draw_minimap(t_minimap *mini, t_map *map)
 {
-	t_point	start;
-	t_point	end;
+	t_point		start;
+	t_point		end;
 
 	clear_img(mini->img);
 	calculate_bounds(mini, map, &start, &end);

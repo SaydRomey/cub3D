@@ -6,12 +6,15 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:53:13 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 20:19:56 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:09:48 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+/**
+ * Go through all assets and update their texture based on the animation.
+*/
 void	update_assets(void *param)
 {
 	t_cub	*cub;
@@ -21,34 +24,80 @@ void	update_assets(void *param)
 
 	cub = (t_cub *)param;
 	current = get_level(cub->current_level);
-	if (current->assets) // && current->assets->anim
+	if (current->assets)
 	{
 		i = 0;
 		while (i < current->assets_total)
 		{
-			update_animation(&current->assets[i].anim, GO_RIGHT);
-			idx = current->assets[i].anim.current_frame;
-			current->assets[i].tex = current->assets[i].anim.frames[idx];
+			if (current->assets[i].is_animated)
+			{
+				update_animation(&current->assets[i].anim, GO_RIGHT);
+				idx = current->assets[i].anim.current_frame;
+				current->assets[i].tex = current->assets[i].anim.frames[idx];
+			}
 			i++;
 		}
 	}
 }
 
-static void	get_assets_position(t_map map, t_fpoint pos[SPRITE_MAX], int *total)
+/**
+ * Here, the loaded texture is either the path passed in parameter
+ * or a slice in the sprite sheet.
+*/
+static void	set_anim_and_tex(t_asset *assets, int total, char *path, int slices)
+{
+	t_animation	animation;
+	mlx_image_t	*texture;
+	int			i;
+
+	texture = load_png(path, call_cub()->mlx);
+	ft_memset(&animation, 0, sizeof (t_animation));
+	if (slices > 1)
+	{
+		animation = set_animation(texture, slices);
+		mlx_delete_image(call_cub()->mlx, texture);
+	}
+	i = 0;
+	while (i < total)
+	{
+		if (slices > 1)
+		{
+			animation.current_frame = ft_rand(0, animation.last_frame);
+			texture = animation.frames[animation.current_frame];
+		}
+		assets[i].anim = animation;
+		assets[i].tex = texture;
+		i++;
+	}
+}
+
+/**
+ * We iterate through the map and place an asset according to these conditions:
+ * - The total number of assets is lower than SPRITE_MAX
+ * - The current tile is 0 ("WALKABLE")
+ * - The asset is not near the elevator
+ * 
+ * We also create a bit of randomness with ft_rand().
+*/
+static void	get_assets_pos(t_map *map, t_fpoint pos[SPRITE_MAX], int *total)
 {
 	int	x;
 	int	y;
 
 	*total = 0;
 	y = 0;
-	while (y < map.height)
+	while (y < map->height)
 	{
 		x = 0;
-		while (x < map.width)
+		while (x < map->width)
 		{
-			if (map.map_array[y][x] == 0 && ft_rand(0, 5) == 3)
+			if (*total >= SPRITE_MAX)
+				return ;
+			if (map->map_array[y][x] == 0
+				&& !is_near_elevator(map, x, y)
+				&& ft_rand(0, 5) == 3)
 			{
-				pos[*total] = (t_fpoint){x + 0.5, y + 0.5}; 
+				pos[*total] = (t_fpoint){x + 0.5, y + 0.5};
 				(*total)++;
 			}
 			x++;
@@ -57,42 +106,32 @@ static void	get_assets_position(t_map map, t_fpoint pos[SPRITE_MAX], int *total)
 	}
 }
 
+/**
+ * Currently, assets are placed randomly on the map with a max number of assets
+ * defined by SPRITE_MAX. We then set their animation and texture.
+*/
 t_asset	*init_assets(char *texture_path, void *param, int slice_total)
 {
 	t_level		*current_lvl;
-	t_fpoint	position[SPRITE_MAX];
-	t_animation	animation;
+	t_fpoint	pos[SPRITE_MAX];
 	t_asset		*assets;
-	mlx_image_t	*texture;
+	int			assets_total;
 	int			i;
 
 	current_lvl = (t_level *)param;
-	get_assets_position(current_lvl->map, position, &current_lvl->assets_total);
+	get_assets_pos(&current_lvl->map, pos, &current_lvl->assets_total);
 	assets = ft_calloc(current_lvl->assets_total, sizeof (t_asset));
 	if (!assets)
 		return (NULL);
 	i = 0;
-	while (i < current_lvl->assets_total)
+	assets_total = current_lvl->assets_total;
+	while (i < assets_total)
 	{
-		assets[i].pos = position[i];
+		if (slice_total > 1)
+			assets[i].is_animated = true;
+		assets[i].pos = pos[i];
 		i++;
 	}
-	texture = load_png(texture_path, call_cub()->mlx);
-	if (!texture)
-		return (NULL);
-	ft_memset(&animation, 0, sizeof (t_animation));
-	if (slice_total > 1)
-	{
-		animation = set_animation(texture, slice_total);
-		mlx_delete_image(call_cub()->mlx, texture);
-		texture = animation.frames[0];
-	}
-	i = 0;
-	while (i < current_lvl->assets_total)
-	{
-		assets[i].anim = animation;
-		assets[i].tex = texture;
-		i++;
-	}
+	set_anim_and_tex(assets, assets_total, texture_path, slice_total);
 	return (assets);
 }

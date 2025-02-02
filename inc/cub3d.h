@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:10 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 14:22:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/06 16:21:28 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@
 #  define MAP_CHARS	"0123NSEW"
 # endif // BONUS
 
+# define CUB_FLOOR_PATH		"img/school/checker.png"
+# define CUB_CEILING_PATH	"img/school/light.png"
+# define CUB_EVALUATOR_DFLT	"img/evaluator_dflt.png"
+# define CUB_EVALUATOR_PATH	"img/evaluator.png"
+# define CUB_EVALUATOR_DFLT	"img/evaluator_dflt.png"
+# define CUB_MENU_PATH		"img/ui/menu.png"
+
 /* ************************************************************************** */
 
 /*
@@ -54,18 +61,21 @@ typedef struct s_info
 {
 	bool	problem;
 	char	*error_msg;
+	bool	in_map;
 	bool	wall_check[WALL_TEXTURE_LEN];
 	bool	color_check[COLOR_TYPE_LEN];
 	bool	color_check_bonus[COLOR_TYPE_LEN];
 	bool	found_direction;
+	bool	eval_pic;
 }			t_info;
 
 /*
 */
 typedef struct s_cub
 {
-	mlx_t       *mlx;
-	mlx_image_t *img;
+	mlx_t		*mlx;
+	mlx_image_t	*bg_img;
+	mlx_image_t	*img;
 	mlx_image_t	*radar_img;
 	t_list		*levels;
 	int			current_level;
@@ -77,14 +87,16 @@ typedef struct s_cub
 	t_raycast	raycast;
 	t_vfx		vfx;
 	char		*floor_ceiling_default[COLOR_TYPE_LEN];
-}   			t_cub;
+	mlx_image_t	*user_img;
+	mlx_image_t	*menu_img;
+}				t_cub;
 
 /* ************************************************************************** */
 
 // info.c
 t_info	*call_info(void);
 void	free_info(void);
-bool    there_is_a_problem(void);
+bool	there_is_a_problem(void);
 void	reset_info(void);
 
 // main.c

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:23:36 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 16:32:24 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:44:35 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,6 @@ void	keyhooks(mlx_key_data_t data, void *param)
 	set_keys(data.key, &cub->keys, data.action);
 }
 
-/* **in this function we can associate keys to booleans in various structs *!!
-
-*/
 void	update_controls(void *param)
 {
 	t_cub	*cub;
@@ -93,11 +90,11 @@ void	update_controls(void *param)
 	lvl = get_level(cub->current_level);
 	if (lvl)
 	{
-		lvl->mini.img->instances->enabled = (keys->m && !keys->r);
-		lvl->mini.highlight_player_pos = (keys->m && keys->p);
+		lvl->mini.img->instances->enabled = (keys->m);
+		lvl->mini.highlight_player_pos = (keys->m);
 	}
-	cub->radar_img->instances->enabled = (keys->m && keys->r);
+	cub->radar_img->instances->enabled = (!keys->m);
 	cub->player.speedup = keys->leftshift;
 	cub->vfx.textures_enabled = !keys->one;
-	cub->vfx.shadow.enabled = keys->two;
+	cub->vfx.shadow_enabled = keys->two;
 }

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:33:35 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/24 19:22:18 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:38:15 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_map
 }				t_map;
 
 // map_array.c
-int 	**allocate_grid(int height, int width);
+int		**allocate_grid(int height, int width);
 int		**get_2d_map(t_list *map_list, int height, int width);
 
 // map_list.c

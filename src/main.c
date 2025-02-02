@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:58:15 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/25 15:35:04 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/06/20 16:07:54 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ t_cub	*call_cub(void)
 	return (cub);
 }
 
-/*	**should this function be static or not ?
-
-*/
 static t_cub	*init_cub(char *title)
 {
 	t_cub	*cub;
@@ -36,11 +33,21 @@ static t_cub	*init_cub(char *title)
 	cub->mlx = mlx_init(WIDTH, HEIGHT, title, false);
 	if (!cub->mlx)
 		error_mlx();
+	cub->bg_img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 	cub->img = new_img(cub->mlx, WIDTH, HEIGHT, true);
 	cub->radar_img = new_img(cub->mlx, RADAR_SIZE, RADAR_SIZE, true);
 	move_img(cub->radar_img, WIDTH - RADAR_SIZE - RADAR_MARGIN, RADAR_MARGIN);
-	cub->floor_ceiling_default[FLOOR] = "img/checker.png";
-	cub->floor_ceiling_default[CEILING] = "img/light.png";
+	cub->floor_ceiling_default[FLOOR] = CUB_FLOOR_PATH;
+	cub->floor_ceiling_default[CEILING] = CUB_CEILING_PATH;
+	if (read_check(CUB_EVALUATOR_PATH))
+	{
+		cub->user_img = load_png(CUB_EVALUATOR_PATH, cub->mlx);
+		call_info()->eval_pic = true;
+	}
+	else
+		cub->user_img = load_png(CUB_EVALUATOR_DFLT, cub->mlx);
+	cub->menu_img = load_png(CUB_MENU_PATH, cub->mlx);
+	cub->menu_img->instances->enabled = true;
 	return (cub);
 }
 
@@ -66,40 +73,8 @@ static void	parse_and_extract(t_cub *cub, int argc, char **argv)
 			error();
 		i++;
 	}
-	// add_segworld(&cub->levels);
 }
 
-/*
-void	add_segworld(t_list **levels)
-{
-	t_level	*seg_lvl;
-	t_list	*node;
-
-	seg_lvl = (t_level *)ft_calloc(1, sizeof(t_level));
-	if (seg_lvl)
-	{
-		// seg_lvl->...
-	}
-	else
-		set_error("Malloc error");
-	if (!there_is_a_problem())
-	{
-		node = ft_lstnew(seg_lvl);
-		if (!node)
-		{
-			delete_level(seg_lvl);
-			set_error("Malloc error");
-		}
-		else
-			ft_lstadd_back(levels, node);
-	}
-	else
-		error();
-}
-*/
-
-/*
-*/
 void	update(void *ptr)
 {
 	t_cub	*cub;
@@ -114,17 +89,17 @@ void	update(void *ptr)
 	if (lvl)
 	{
 		draw_minimap(&lvl->mini, &lvl->map);
+		draw_player(&lvl->mini, &cub->player);
+		if (cub->keys.three)
+			draw_fov(&lvl->mini, &cub->player);
 		draw_radar(&lvl->mini);
 	}
+	if (!is_segworld() || cub->vfx.textures_enabled)
+		clear_img(cub->img);
 	raycast();
+	display_menu(cub->menu_img);
 }
 
-/*
-	*(tmp)
-	ft_printf("Bonus flag: %d\n", BONUS);
-	ft_printf("Map chars:  %s\n", MAP_CHARS);
-
-*/
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -137,10 +112,10 @@ int	main(int argc, char **argv)
 	{
 		lvl = get_level(cub->current_level);
 		cub->elevator = init_elevator(lvl);
-		cub->player = init_player(&lvl->map);
+		cub->player = init_player(&lvl->map, &lvl->mini);
 		change_window_title(lvl->filepath);
 		draw_minimap(&lvl->mini, &lvl->map);
-		draw_floor_ceiling(cub->img, &lvl->map);
+		draw_floor_ceiling(cub->bg_img, &lvl->map);
 		set_mouse(cub);
 		mlx_key_hook(cub->mlx, &keyhooks, cub);
 		mlx_loop_hook(cub->mlx, update, cub);

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:56:05 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 18:52:05 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/01 19:47:56 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static void	check_walls(void)
 
 static void	check_colors(void)
 {
-	if (!call_info()->wall_check[FLOOR])
+	if (!call_info()->color_check[FLOOR])
 		set_error("Missing floor color");
-	else if (!call_info()->wall_check[CEILING])
+	else if (!call_info()->color_check[CEILING])
 		set_error("Missing ceiling color");
 }
 

@@ -6,7 +6,7 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 13:11:42 by cdumais           #+#    #+#             */
-/*   Updated: 2024/04/22 20:00:46 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/02 15:49:37 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,13 @@ float	magnitude_between(t_fpoint a, t_fpoint b)
 	delta.y = b.y - a.y;
 	distance = sqrt(delta.x * delta.x + delta.y * delta.y);
 	return (distance);
+}
+
+t_fpoint	rotate_vector(t_fpoint vector, float angle)
+{
+	t_fpoint	rotated;
+
+	rotated.x = vector.x * cos(angle) - vector.y * sin(angle);
+	rotated.y = vector.x * sin(angle) + vector.y * cos(angle);
+	return (rotated);
 }

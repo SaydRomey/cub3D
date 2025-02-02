@@ -6,26 +6,21 @@
 /*   By: cdumais <cdumais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 19:30:16 by oroy              #+#    #+#             */
-/*   Updated: 2024/04/24 16:49:31 by cdumais          ###   ########.fr       */
+/*   Updated: 2024/05/09 18:35:01 by cdumais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// static void	mouse_click_events(t_cub *cub)
-// {
-// 	if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
-// 		change_level(cub->current_level + 1);
-// 	if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
-// 		change_level(cub->current_level - 1);
-// }
-
 static void	mouse_click_events(t_cub *cub)
 {
-	if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
-		elevator_change_map(cub->current_level + 1);
-	if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
-		elevator_change_map(cub->current_level - 1);
+	if (get_level(cub->current_level)->elevator_exists)
+	{
+		if (cub->elevator.buttons[0].button_imgs[1]->instances->enabled)
+			elevator_change_map(cub->current_level + 1);
+		if (cub->elevator.buttons[1].button_imgs[1]->instances->enabled)
+			elevator_change_map(cub->current_level - 1);
+	}
 }
 
 static void	set_mouse_mode(bool enabled)
@@ -53,6 +48,7 @@ modifier_key_t m, void *param)
 
 	if (m == 42)
 		ft_printf("is this only a problem on linux ?\n");
+	// (void)m;
 	cub = (t_cub *)param;
 	if (btn == MLX_MOUSE_BUTTON_RIGHT && a == MLX_PRESS)
 		toggle(&cub->mouse.enabled);
